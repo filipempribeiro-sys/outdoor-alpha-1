@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 1.3.1 — Multi-Destination Field Test · AI Experience Composer</title>
+<title>Project Alpha 1.3.3 — Budget-First Adaptive Experience</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -92,13 +92,37 @@ textarea{min-height:90px}
 .destinationBadge{display:inline-flex;gap:7px;align-items:center;padding:7px 10px;border-radius:999px;background:#10251f;border:1px solid #315149;color:#cde8de;font-size:12px}
 @media(max-width:430px){.contribGrid{grid-template-columns:repeat(2,1fr)}}
 
+
+.tripPrefs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.choiceGroup{margin-top:12px}
+.choiceCard{padding:12px;border:1px solid #294149;border-radius:15px;background:#09191f;margin-top:8px}
+.choiceCard.primary{border-color:var(--purple);box-shadow:0 0 0 1px rgba(183,156,255,.2)}
+.choiceTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.choiceBadge{font-size:10px;border-radius:999px;padding:5px 8px;border:1px solid #43515b;color:#c7d7d1;white-space:nowrap}
+.choiceBadge.best{border-color:#6c5ca0;color:#e4dcff;background:#18142a}
+.priceTag{font-weight:900;color:var(--green);font-size:18px}
+.priceMeta{font-size:10px;color:var(--muted)}
+.scoreChip{font-size:11px;padding:5px 8px;border-radius:999px;background:#10251f;border:1px solid #315149;color:#d6eee5}
+.budgetBar{height:8px;border-radius:999px;background:#16262d;overflow:hidden;margin-top:8px}.budgetBar>i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber));width:0}
+.providerNote{border-left:3px solid var(--amber);padding:8px 10px;background:#191b18;border-radius:8px;margin-top:8px}
+@media(max-width:480px){.tripPrefs{grid-template-columns:1fr}}
+
+
+.budgetVerdict{display:flex;gap:10px;align-items:flex-start}
+.budgetVerdict .big{font-size:26px}
+.budgetTight{border-color:#7b6331!important;background:#221e12!important}
+.budgetComfort{border-color:#326b57!important;background:#10251e!important}
+.budgetWide{border-color:#65549a!important;background:#19152b!important}
+.omitted{padding:9px 11px;border:1px dashed #6b5c38;border-radius:12px;margin-top:8px;background:#1a1811}
+.included{padding:9px 11px;border:1px solid #315149;border-radius:12px;margin-top:8px;background:#0d211b}
+
 </style>
 </head>
 <body>
 <div id="toast" class="toast"></div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.3.1 · multi-destination + AI composer</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.3.3 · budget-first adaptive experience</small></div></div>
   <div class="badge">✓ TEST BUILD</div>
 </header>
 
@@ -129,7 +153,7 @@ textarea{min-height:90px}
 
 
   <div class="card tripPlanner">
-    <div class="eyebrow">Alpha 1.3.1 · Multi-Destination Field Test</div>
+    <div class="eyebrow">Alpha 1.3.3 · Budget-First Adaptive Experience</div>
     <h2>🧭 Criar a minha experiência</h2>
     <p class="muted">Escolhe o destino. A Alpha procura trails, monumentos/POIs, refeições e alojamento e cria um plano de experiência para o grupo.</p>
 
@@ -139,6 +163,46 @@ textarea{min-height:90px}
       <button class="btn purple" onclick="prepareDestination()">Preparar destino</button>
     </div>
     <div id="destinationState" class="small muted" style="margin-top:8px">Escreve qualquer destino. Não existem destinos predefinidos.</div>
+
+    <div class="sep"></div>
+    <div class="eyebrow">Preferências da experiência</div>
+    <div class="tripPrefs">
+      <div>
+        <label>Data</label>
+        <input id="tripDate" type="date">
+      </div>
+      <div>
+        <label>Noites</label>
+        <input id="tripNights" type="number" min="0" max="30" value="1">
+      </div>
+      <div>
+        <label>Pessoas</label>
+        <input id="tripPeople" type="number" min="1" max="20" value="4">
+      </div>
+      <div>
+        <label>Orçamento total (€)</label>
+        <input id="tripBudget" type="number" min="0" step="10" value="500">
+      </div>
+      <div>
+        <label>Refeição</label>
+        <select id="mealStyle">
+          <option value="balanced">Melhor equilíbrio</option>
+          <option value="budget">Económica</option>
+          <option value="quality">Melhor experiência</option>
+        </select>
+      </div>
+      <div>
+        <label>Alojamento</label>
+        <select id="stayStyle">
+          <option value="mixed">Hotel + alojamento local</option>
+          <option value="hotel">Preferir hotel</option>
+          <option value="apartment">Preferir apartamento / AL</option>
+          <option value="budget">Mais económico</option>
+        </select>
+      </div>
+    </div>
+    <p class="small muted">O orçamento é agora uma restrição central: a Alpha reduz ou expande a experiência em função do dinheiro disponível, duração e número de pessoas.</p>
+    <div id="budgetAdvice" class="aiPlanBox" style="margin-top:10px">Define o orçamento e prepara o destino. A Alpha dirá o que faz sentido incluir.</div>
 
     <div class="sep"></div>
     <div class="eyebrow">Equipa de teste · 4 participantes</div>
@@ -154,6 +218,7 @@ textarea{min-height:90px}
     <p class="small muted">O Composer Alpha é um motor local determinístico: cruza dados reais disponíveis, meteorologia e regras de preferência. Não inventa preços, disponibilidade, ratings ou horários em falta.</p>
 
     <div id="aiTripSummary" class="aiPlanBox" style="margin-top:12px">A experiência ainda não foi criada.</div>
+    <div id="smartChoices"></div>
     <div id="experiencePlanPreview"></div>
 
     <div class="sep"></div>
@@ -411,7 +476,7 @@ textarea{min-height:90px}
 
 <section id="profile" class="view">
   <div class="card">
-    <div class="eyebrow">Alpha 1.3.1</div><h2>Estado do teste</h2>
+    <div class="eyebrow">Alpha 1.3.3</div><h2>Estado do teste</h2>
     <div class="list">
       <div class="item">✓ GPS real + tracking</div>
       <div class="item">✓ Mapa vetorial real</div>
@@ -423,6 +488,13 @@ textarea{min-height:90px}
       <div class="item">◉ Equipa de teste · 4 participantes + registo de contribuições</div>
       <div class="item">◉ Multi-destino · sem presets · Portugal/Espanha/outros destinos</div>
       <div class="item">◉ Diário persistente · destinos, planos, componentes realizados e reviews</div>
+      <div class="item">◉ Future CTO Concept #02 · Smart Budget & Choice Composer</div>
+      <div class="item">◉ 2–3 alternativas por refeição e alojamento · seleção substituível</div>
+      <div class="item">◉ Hotel + apartamento/AL · preço real quando existir, PREDICTED quando estimado</div>
+      <div class="item">◉ Budget Guard · custo conhecido vs orçamento</div>
+      <div class="item">◉ Budget-First · orçamento decide o âmbito da experiência</div>
+      <div class="item">◉ Budget Advisor · aconselha remover alojamento/refeições pagas quando não cabem</div>
+      <div class="item">◉ Experience Expander · orçamento folgado acrescenta experiências/opções</div>
       <div class="item">◉ Meteorologia real via Open-Meteo</div>
       <div class="item">◉ Trail AI Decision Engine local</div>
       <div class="item">✓ Reports LIVE georreferenciados</div>
@@ -461,7 +533,7 @@ const $=id=>document.getElementById(id);
 let pos=null,watchId=null,photoData='',map=null,userMarker=null,reportMarkers=[],selectedTrailMarker=null;
 let activityRunning=false,activityStartedAt=null,activitySeconds=0,activityDistance=0,lastActivityPos=null,activityTimer=null;
 let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareFile=null;
-let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,trailDetailPhotos=[],destination=null,experiencePlaces={monuments:[],meals:[],stays:[]},currentTester='Filipe';
+let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,trailDetailPhotos=[],destination=null,experiencePlaces={monuments:[],meals:[],stays:[]},currentTester='Filipe',smartChoices={monuments:[],meals:[],stays:[]};
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
 
 const types={tree:'🌳 Árvore / obstáculo',water:'💧 Estado da água',mud:'🌧️ Lama / inundação',closure:'🚧 Caminho fechado',sign:'🪧 Sinalização',parking:'🚗 Acesso / estacionamento',other:'⚠️ Outro'};
@@ -681,13 +753,103 @@ function mapPlace(el,kind){
     website:t.website||t['contact:website']||'',
     phone:t.phone||t['contact:phone']||'',
     opening:t.opening_hours||'',cuisine:t.cuisine||'',
-    stars:t.stars||'',fee:t.fee||'',historic:t.historic||'',tourism:t.tourism||'',amenity:t.amenity||''
+    stars:t.stars||'',fee:t.fee||'',charge:t.charge||'',price:t.price||'',currency:t.currency||'EUR',
+    rating:t.rating||t['review:rating']||'',reviewCount:t['review:count']||'',
+    historic:t.historic||'',tourism:t.tourism||'',amenity:t.amenity||'',
+    brand:t.brand||'',booking:t.booking||'',reservation:t.reservation||''
   };
 }
+function tripPrefs(){
+  return{
+    date:$('tripDate')&&$('tripDate').value||new Date().toISOString().slice(0,10),
+    nights:Math.max(0,Number($('tripNights')&&$('tripNights').value||1)),
+    people:Math.max(1,Number($('tripPeople')&&$('tripPeople').value||4)),
+    budget:Math.max(0,Number($('tripBudget')&&$('tripBudget').value||0)),
+    mealStyle:$('mealStyle')&&$('mealStyle').value||'balanced',
+    stayStyle:$('stayStyle')&&$('stayStyle').value||'mixed'
+  }
+}
+function numericMoney(v){
+  if(v===null||v===undefined||v==='')return null;
+  const s=String(v).replace(',','.');const m=s.match(/(\d+(?:\.\d+)?)/);return m?Number(m[1]):null;
+}
+function exactPriceInfo(p){
+  const raw=p.charge||p.price||'';
+  const n=numericMoney(raw);
+  if(n!==null)return{value:n,label:(p.currency||'EUR')==='EUR'?n.toFixed(0)+' €':n+' '+(p.currency||''),source:'SOURCE'};
+  if(p.fee==='no')return{value:0,label:'Grátis',source:'SOURCE'};
+  return null;
+}
+function budgetTargets(){
+  const pref=tripPrefs(),b=pref.budget||0;
+  const mealShare=pref.mealStyle==='quality'?.28:pref.mealStyle==='budget'?.14:.20;
+  const stayShare=pref.stayStyle==='budget'?.30:.42;
+  return{
+    mealTotal:b?b*mealShare:null,
+    mealPerPerson:b?(b*mealShare/pref.people):null,
+    stayTotal:b&&pref.nights?b*stayShare:null,
+    stayPerNight:b&&pref.nights?(b*stayShare/pref.nights):null,
+    attractionsTotal:b?b*.12:null
+  }
+}
+function predictedPriceLabel(p){
+  const pref=tripPrefs(),t=budgetTargets(),exact=exactPriceInfo(p);if(exact)return exact;
+  if(p.kind==='meal'){
+    if(!t.mealPerPerson)return{value:null,label:'Preço a confirmar',source:'UNKNOWN'};
+    const mid=t.mealPerPerson,lo=Math.max(8,Math.round(mid*.75)),hi=Math.max(lo+3,Math.round(mid*1.25));
+    return{value:mid*pref.people,label:'alvo '+lo+'–'+hi+' €/pessoa',source:'PREDICTED'};
+  }
+  if(p.kind==='stay'){
+    if(!t.stayPerNight)return{value:null,label:'Preço a confirmar',source:'UNKNOWN'};
+    let factor=1;
+    const tp=String(p.tourism||'');
+    if(tp==='hostel')factor=.65;
+    if(tp==='guest_house')factor=.85;
+    if(tp==='apartment')factor=.9;
+    if(tp==='hotel'&&Number(p.stars)>=4)factor=1.25;
+    const mid=t.stayPerNight*factor,lo=Math.max(35,Math.round(mid*.82)),hi=Math.max(lo+10,Math.round(mid*1.18));
+    return{value:mid*pref.nights,label:'alvo '+lo+'–'+hi+' €/noite',source:'PREDICTED'};
+  }
+  if(p.kind==='monument'){
+    if(p.fee==='yes')return{value:null,label:'Entrada paga · preço a confirmar',source:'UNKNOWN'};
+    if(p.fee==='no')return{value:0,label:'Grátis',source:'SOURCE'};
+    return{value:null,label:'Preço a confirmar',source:'UNKNOWN'};
+  }
+  return{value:null,label:'Preço a confirmar',source:'UNKNOWN'};
+}
+function stayTypeLabel(p){
+  const tp=String(p.tourism||'');
+  if(tp==='apartment')return'🏠 Apartamento / AL';
+  if(tp==='guest_house')return'🏡 Guest house / AL';
+  if(tp==='hostel')return'🛏️ Hostel';
+  if(tp==='motel')return'🏨 Motel';
+  return'🏨 Hotel';
+}
+function externalSearchLink(p,provider){
+  const q=encodeURIComponent((p.name||'')+' '+(destination&&destination.query||''));
+  if(provider==='google')return'https://www.google.com/maps/search/?api=1&query='+q;
+  if(provider==='booking')return'https://www.booking.com/searchresults.html?ss='+q;
+  if(provider==='airbnb')return'https://www.airbnb.com/s/'+encodeURIComponent(destination&&destination.query||p.name||'')+'/homes';
+  return p.website||'';
+}
 function placeQuality(p){
-  let s=0;if(p.name)s+=4;if(p.website)s+=3;if(p.opening)s+=2;if(p.phone)s+=1;
-  if(p.kind==='stay'&&p.stars)s+=3;if(p.kind==='meal'&&p.cuisine)s+=2;
-  const d=placeDistance(p);s-=Math.min(8,d/2500);return s;
+  const pref=tripPrefs();let s=50;
+  if(p.name)s+=8;if(p.website)s+=5;if(p.opening)s+=4;if(p.phone)s+=2;
+  if(p.kind==='stay'&&p.stars)s+=Math.min(10,Number(p.stars)*2);
+  if(p.kind==='meal'&&p.cuisine)s+=5;
+  if(exactPriceInfo(p))s+=8;
+  const d=placeDistance(p);s-=Math.min(18,d/1500);
+  if(p.kind==='stay'){
+    const isA=['apartment','guest_house'].includes(String(p.tourism||''));
+    if(pref.stayStyle==='apartment'&&isA)s+=15;
+    if(pref.stayStyle==='hotel'&&p.tourism==='hotel')s+=15;
+    if(pref.stayStyle==='budget'&&['hostel','guest_house','apartment'].includes(String(p.tourism||'')))s+=10;
+  }
+  if(p.kind==='meal'){
+    if(pref.mealStyle==='quality'&&p.website)s+=4;
+    if(pref.mealStyle==='budget'&&['cafe','fast_food'].includes(String(p.amenity||'')))s+=6;
+  }
+  return Math.max(1,Math.round(s));
 }
 async function loadExperiencePlaces(showToast=false){
   const c=destinationCoords();
@@ -732,7 +894,13 @@ function placeSubtitle(p){
   return bits.join(' · ');
 }
 function renderPlaceCandidates(){
-  const render=(id,arr,kind)=>{$(id).innerHTML=arr.length?arr.slice(0,6).map(p=>'<div class="placeCard"><b>'+esc(p.name)+'</b><span class="small muted">'+esc(placeSubtitle(p))+'</span><div style="margin-top:7px"><button class="btn secondary" onclick="replacePlanItem(\''+kind+'\',\''+p.id+'\')">Usar na experiência</button></div></div>').join(''):'<div class="emptyData">Nenhum candidato carregado.</div>'};
+  const render=(id,arr,kind)=>{
+    $(id).innerHTML=arr.length?arr.slice(0,6).map((p,i)=>{
+      const pr=predictedPriceLabel(p),score=placeQuality(p);
+      const type=kind==='stay'?stayTypeLabel(p):kind==='meal'?'🍽️ Refeição':'🏛️ Monumento / POI';
+      return '<div class="choiceCard '+(i===0?'primary':'')+'"><div class="choiceTop"><div><span class="planType">'+type+'</span><b>'+esc(p.name)+'</b></div><span class="scoreChip">Alpha Match '+score+'</span></div><div class="small muted">'+esc(placeSubtitle(p))+'</div><div style="margin-top:6px"><span class="priceTag">'+esc(pr.label)+'</span> <span class="priceMeta">'+(pr.source==='SOURCE'?'SOURCE':pr.source==='PREDICTED'?'PREDICTED · orçamento-alvo':'sem preço disponível')+'</span></div><div class="row" style="margin-top:8px"><button class="btn secondary" onclick="replacePlanItem(\''+kind+'\',\''+p.id+'\')">Usar</button><a class="btn secondary" style="text-decoration:none" target="_blank" rel="noopener" href="'+externalSearchLink(p,'google')+'">Reviews</a>'+(kind==='stay'?'<a class="btn secondary" style="text-decoration:none" target="_blank" rel="noopener" href="'+externalSearchLink(p,'booking')+'">Booking</a>':'')+'</div></div>';
+    }).join(''):'<div class="emptyData">Nenhum candidato carregado.</div>'
+  };
   render('monumentCandidates',experiencePlaces.monuments,'monument');
   render('mealCandidates',experiencePlaces.meals,'meal');
   render('stayCandidates',experiencePlaces.stays,'stay');
@@ -748,26 +916,132 @@ function choosePlace(kind){
 function planItemFromPlace(p){
   return{id:p.id,kind:p.kind,title:p.name,status:'planned',source:'OSM',center:p.center,meta:{subtitle:placeSubtitle(p),website:p.website||'',opening:p.opening||'',stars:p.stars||'',osmType:p.osmType,osmId:p.osmId}};
 }
+
+function topChoices(){
+  const sort=a=>[...a].sort((x,y)=>placeQuality(y)-placeQuality(x)||placeDistance(x)-placeDistance(y)).slice(0,3);
+  smartChoices={
+    monuments:sort(experiencePlaces.monuments||[]),
+    meals:sort(experiencePlaces.meals||[]),
+    stays:sort(experiencePlaces.stays||[])
+  };
+  return smartChoices;
+}
+function renderSmartChoices(){
+  const host=$('smartChoices');if(!host)return;
+  const c=topChoices(),pref=tripPrefs();
+  const section=(title,arr,kind)=>{
+    if(!arr.length)return'<div class="choiceGroup"><div class="eyebrow">'+title+'</div><div class="emptyData">Sem candidatos suficientes.</div></div>';
+    return '<div class="choiceGroup"><div class="eyebrow">'+title+' · '+arr.length+' opções</div>'+arr.map((p,i)=>{
+      const pr=predictedPriceLabel(p),source=pr.source==='SOURCE'?'SOURCE':pr.source==='PREDICTED'?'PREDICTED':'A CONFIRMAR';
+      const type=kind==='stay'?stayTypeLabel(p):kind==='meal'?'🍽️ '+(p.cuisine?esc(p.cuisine.replaceAll(';',' · ')):'Restaurante'):'🏛️ POI';
+      return '<div class="choiceCard '+(i===0?'primary':'')+'"><div class="choiceTop"><div><span class="planType">'+type+'</span><b>'+esc(p.name)+'</b></div><span class="choiceBadge '+(i===0?'best':'')+'">'+(i===0?'✦ recomendado':'alternativa '+(i+1))+'</span></div><div class="small muted">'+esc(placeSubtitle(p))+'</div><div class="row" style="align-items:center;margin-top:7px"><span class="priceTag">'+esc(pr.label)+'</span><span class="choiceBadge">'+source+'</span><span class="scoreChip">Match '+placeQuality(p)+'</span></div><div class="row" style="margin-top:8px"><button class="btn secondary" onclick="replacePlanItem(\''+kind+'\',\''+p.id+'\')">Escolher</button><a class="btn secondary" style="text-decoration:none" target="_blank" rel="noopener" href="'+externalSearchLink(p,'google')+'">Ver reviews</a>'+(kind==='stay'?'<a class="btn secondary" style="text-decoration:none" target="_blank" rel="noopener" href="'+externalSearchLink(p,'booking')+'">Preço Booking</a><a class="btn secondary" style="text-decoration:none" target="_blank" rel="noopener" href="'+externalSearchLink(p,'airbnb')+'">Airbnb</a>':'')+'</div></div>';
+    }).join('')+'</div>';
+  };
+  host.innerHTML='<div class="card" style="margin-left:0;margin-right:0"><div class="eyebrow">Future CTO Concept #02</div><h3>3 escolhas antes de decidir</h3><p class="small muted">A Alpha recomenda uma opção e mostra alternativas. Reviews/preços live abrem no provider quando ainda não temos API autenticada no backend.</p>'+section('Monumentos / museus',c.monuments,'monument')+section('Refeições',c.meals,'meal')+section('Hotel + alojamento local',c.stays,'stay')+'</div>';
+}
+function knownBudgetSummary(items){
+  const pref=tripPrefs();let known=0,knownCount=0,pred=0,predCount=0;
+  items.forEach(it=>{
+    const sourceArr=it.kind==='meal'?experiencePlaces.meals:it.kind==='stay'?experiencePlaces.stays:it.kind==='monument'?experiencePlaces.monuments:[];
+    const p=sourceArr.find(x=>x.id===it.id);if(!p)return;
+    const pr=predictedPriceLabel(p);
+    if(pr.value!==null){
+      if(pr.source==='SOURCE'){known+=pr.value;knownCount++}
+      if(pr.source==='PREDICTED'){pred+=pr.value;predCount++}
+    }
+  });
+  return{known,knownCount,pred,predCount,budget:pref.budget};
+}
+
+
+function budgetBand(){
+  const p=tripPrefs(),days=Math.max(1,p.nights+1),perPersonDay=p.budget/(p.people*days);
+  if(!p.budget)return{level:'unset',perPersonDay:0,label:'Sem orçamento',icon:'◌'};
+  if(perPersonDay<15)return{level:'critical',perPersonDay,label:'Muito limitado',icon:'⚠️'};
+  if(perPersonDay<30)return{level:'tight',perPersonDay,label:'Limitado',icon:'🟠'};
+  if(perPersonDay<60)return{level:'balanced',perPersonDay,label:'Equilibrado',icon:'🟢'};
+  return{level:'wide',perPersonDay,label:'Confortável',icon:'✨'};
+}
+function freeOrCheapMonuments(){
+  return [...(experiencePlaces.monuments||[])].sort((a,b)=>{
+    const ap=exactPriceInfo(a),bp=exactPriceInfo(b);
+    const av=ap&&ap.value!==null?ap.value:(a.fee==='yes'?999:5);
+    const bv=bp&&bp.value!==null?bp.value:(b.fee==='yes'?999:5);
+    return av-bv||placeQuality(b)-placeQuality(a);
+  });
+}
+function budgetAdaptivePlan(){
+  const pref=tripPrefs(),band=budgetBand(),trail=chooseTrailForPlan();
+  const monuments=freeOrCheapMonuments(),meals=topChoices().meals,stays=topChoices().stays;
+  const items=[],omitted=[],advice=[];
+  if(trail)items.push({id:'trail-'+trail.id,kind:'trail',title:trail.name,status:'planned',source:'OSM',trailId:trail.id,center:trail.center,meta:{ref:trail.ref||'',network:trail.network||'',distance:trail.distanceTag||''}});
+  const addMon=n=>monuments.slice(0,n).forEach(x=>items.push(planItemFromPlace(x)));
+  if(band.level==='critical'){
+    addMon(Math.min(2,monuments.length));
+    if(meals[0])items.push(planItemFromPlace(meals[0]));
+    if(pref.nights>0)omitted.push('Alojamento: não recomendado com este orçamento. Considera viagem de um dia, alojamento gratuito/familiar ou aumenta o budget.');
+    advice.push('Priorizei trail/visitas gratuitas ou de baixo custo e apenas uma refeição.');
+  }else if(band.level==='tight'){
+    addMon(Math.min(2,monuments.length));
+    if(meals[0])items.push(planItemFromPlace(meals[0]));
+    if(pref.nights>0){
+      const cheapStay=[...(experiencePlaces.stays||[])].sort((a,b)=>predictedPriceLabel(a).value-predictedPriceLabel(b).value)[0];
+      const stayEstimate=cheapStay&&predictedPriceLabel(cheapStay);
+      if(cheapStay&&stayEstimate.value!==null&&stayEstimate.value<=pref.budget*.45)items.push(planItemFromPlace(cheapStay));
+      else omitted.push('Alojamento: o budget parece demasiado apertado para o incluir de forma responsável.');
+    }
+    advice.push('Plano económico: poucas atividades pagas e foco em opções gratuitas/baixo custo.');
+  }else if(band.level==='balanced'){
+    addMon(Math.min(2,monuments.length));
+    if(meals[0])items.push(planItemFromPlace(meals[0]));
+    if(stays[0]&&pref.nights>0)items.push(planItemFromPlace(stays[0]));
+    advice.push('Há margem para uma experiência equilibrada com atividade, visitas, refeição e alojamento.');
+  }else if(band.level==='wide'){
+    addMon(Math.min(3,monuments.length));
+    if(meals[0])items.push(planItemFromPlace(meals[0]));
+    if(stays[0]&&pref.nights>0)items.push(planItemFromPlace(stays[0]));
+    const extraMeal=meals[1];
+    if(extraMeal&&pref.nights>=1){
+      const x=planItemFromPlace(extraMeal);x.id=x.id+'-extra';x.title='Refeição extra · '+x.title;items.push(x);
+    }
+    advice.push('O orçamento permite enriquecer a experiência: mais POIs, melhor margem para alojamento e refeições adicionais.');
+  }else{
+    addMon(1);if(meals[0])items.push(planItemFromPlace(meals[0]));
+    advice.push('Define um orçamento para a Alpha adaptar verdadeiramente a experiência.');
+  }
+  return{items,omitted,advice,band};
+}
+function renderBudgetAdvice(result=null){
+  const host=$('budgetAdvice');if(!host)return;
+  const pref=tripPrefs(),band=result?result.band:budgetBand();
+  const cls=band.level==='critical'||band.level==='tight'?'budgetTight':band.level==='wide'?'budgetWide':'budgetComfort';
+  host.className='aiPlanBox '+cls;
+  const days=Math.max(1,pref.nights+1);
+  let body='<div class="budgetVerdict"><div class="big">'+band.icon+'</div><div><b>'+band.label+'</b><div class="small muted">'+(pref.budget?pref.budget.toFixed(0)+' € · '+pref.people+' pessoa(s) · '+days+' dia(s) · ~'+band.perPersonDay.toFixed(0)+' €/pessoa/dia':'Ainda sem orçamento definido')+'</div></div></div>';
+  if(result){
+    result.advice.forEach(x=>body+='<div class="included">✓ '+esc(x)+'</div>');
+    result.omitted.forEach(x=>body+='<div class="omitted">⚠ '+esc(x)+'</div>');
+  }else body+='<div class="small muted" style="margin-top:8px">Ao criar a experiência, este valor passa a decidir o que entra e o que fica de fora.</div>';
+  host.innerHTML=body;
+}
+
 function createAIExperience(){
   if(!destination){toast('Primeiro prepara o destino');return}
   if(!nearbyTrails.length||(!experiencePlaces.monuments.length&&!experiencePlaces.meals.length&&!experiencePlaces.stays.length)){toast('Ainda estou sem dados suficientes. Carrega o destino/locais primeiro.');return}
-  const trail=chooseTrailForPlan(),mon1=choosePlace('monument'),meal=choosePlace('meal'),stay=choosePlace('stay');
-  const mon2=experiencePlaces.monuments.find(x=>!mon1||x.id!==mon1.id)||null;
-  const items=[];
-  if(trail)items.push({id:'trail-'+trail.id,kind:'trail',title:trail.name,status:'planned',source:'OSM',trailId:trail.id,center:trail.center,meta:{ref:trail.ref||'',network:trail.network||'',distance:trail.distanceTag||''}});
-  if(mon1)items.push(planItemFromPlace(mon1));
-  if(mon2)items.push(planItemFromPlace(mon2));
-  if(meal)items.push(planItemFromPlace(meal));
-  if(stay)items.push(planItemFromPlace(stay));
-  const plan={id:'trip-'+Date.now(),name:'Experiência · '+destination.query,destination,createdBy:currentTester,createdAt:new Date().toISOString(),items};
-  saveExperiencePlan(plan);
-  upsertExperienceHistory(plan);
+  const adaptive=budgetAdaptivePlan(),items=adaptive.items;
+  const trailItem=items.find(x=>x.kind==='trail'),trail=trailItem?nearbyTrails.find(t=>String(t.id)===String(trailItem.trailId)):null;
+  const plan={id:'trip-'+Date.now(),name:'Experiência · '+destination.query,destination,preferences:tripPrefs(),budgetDecision:{level:adaptive.band.level,perPersonDay:adaptive.band.perPersonDay,advice:adaptive.advice,omitted:adaptive.omitted},createdBy:currentTester,createdAt:new Date().toISOString(),items};
+  saveExperiencePlan(plan);upsertExperienceHistory(plan);
   if(trail){selectedTrail=trail;renderTrails()}
-  logContribution('criou experiência AI',plan.id,destination.query);
-  renderExperiencePlanPreview();
+  logContribution('criou experiência AI Budget-First',plan.id,destination.query);
+  renderExperiencePlanPreview();renderBudgetAdvice(adaptive);
   const counts={trail:items.filter(x=>x.kind==='trail').length,monument:items.filter(x=>x.kind==='monument').length,meal:items.filter(x=>x.kind==='meal').length,stay:items.filter(x=>x.kind==='stay').length};
-  $('aiTripSummary').innerHTML='<b>✦ PREDICTED · Experiência criada para '+esc(destination.query)+'</b><br><span class="small muted">Plano: '+counts.trail+' trail · '+counts.monument+' monumento(s)/POI · '+counts.meal+' refeição · '+counts.stay+' alojamento. Confirma/ajusta durante o dia. Só os itens realmente concluídos entram no review final.</span>';
-  toast('✦ Experiência criada pela AI Alpha');
+  const bs=knownBudgetSummary(items),pref=tripPrefs(),parts=[];
+  if(bs.knownCount)parts.push('custos SOURCE '+bs.known.toFixed(0)+' €');
+  if(bs.predCount)parts.push('orçamento-alvo PREDICTED ~'+bs.pred.toFixed(0)+' €');
+  parts.push('budget '+pref.budget.toFixed(0)+' €');
+  $('aiTripSummary').innerHTML='<b>✦ BUDGET-FIRST · Experiência criada para '+esc(destination.query)+'</b><br><span class="small muted">A Alpha adaptou o plano ao orçamento: '+counts.trail+' trail · '+counts.monument+' monumento(s)/POI · '+counts.meal+' refeição(ões) · '+counts.stay+' alojamento(s) · '+pref.people+' pessoa(s) · '+pref.nights+' noite(s). '+esc(parts.join(' · '))+'.</span><div class="providerNote small">Se o orçamento for insuficiente, a Alpha prefere retirar componentes em vez de fingir que cabem no budget. Preços não confirmados continuam identificados como PREDICTED.</div>';
+  renderSmartChoices();toast('✦ Experiência adaptada ao teu orçamento');
 }
 function renderExperiencePlanPreview(){
   const host=$('experiencePlanPreview');if(!host)return;
@@ -795,7 +1069,7 @@ function replacePlanItem(kind,placeId){
   const idx=p.items.findIndex(x=>x.kind===kind&&x.status==='planned');
   if(idx>=0)p.items[idx]={...replacement,replaces:p.items[idx].id};
   else p.items.push(replacement);
-  saveExperiencePlan(p);upsertExperienceHistory(p);logContribution('alterou componente',replacement.id,replacement.title);renderExperiencePlanPreview();toast('Experiência atualizada');
+  saveExperiencePlan(p);upsertExperienceHistory(p);logContribution('alterou componente',replacement.id,replacement.title);renderExperiencePlanPreview();renderSmartChoices();toast('Experiência atualizada');
 }
 
 /* ---------- REAL DISCOVERY + WEATHER + TRAIL AI ---------- */
@@ -1374,6 +1648,12 @@ try{currentTester=localStorage.getItem(TESTER_KEY)||'Filipe'}catch{}
 try{destination=JSON.parse(localStorage.getItem(DEST_KEY)||'null');if(destination){$('destinationInput').value=destination.query||'';$('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span> · guardado'}}catch{}
 try{let pc=JSON.parse(localStorage.getItem(scopedPlacesCacheKey())||'null');if(pc&&pc.places){experiencePlaces=pc.places;renderPlaceCandidates()}}catch{}
 renderTesters();renderExperiencePlanPreview();renderTripHistory();
+try{
+  const d=new Date();d.setDate(d.getDate()+1);
+  if($('tripDate')&&!$('tripDate').value)$('tripDate').value=d.toISOString().slice(0,10);
+}catch{}
+['tripBudget','tripPeople','tripNights','mealStyle','stayStyle'].forEach(id=>{const el=$(id);if(el)el.addEventListener('input',()=>renderBudgetAdvice())});
+renderBudgetAdvice();
 try{let cc=JSON.parse(localStorage.getItem(scopedTrailCacheKey())||'null');if(cc&&cc.trails&&Date.now()-cc.time<21600000){nearbyTrails=cc.trails;renderTrails();$('trailStatus').textContent=nearbyTrails.length+' trails carregados do cache deste destino.'}}catch{}
 fetchWeather(false);
 if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
