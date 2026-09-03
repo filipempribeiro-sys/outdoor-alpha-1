@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 1.2.4 — Trail Detail, Discovery, AI, Experience & Wearables</title>
+<title>Project Alpha 1.3.1 — Multi-Destination Field Test · AI Experience Composer</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -73,13 +73,32 @@ textarea{min-height:90px}
 .ratingSummary{display:flex;align-items:center;gap:14px}.ratingBig{font-size:42px;font-weight:900;color:var(--green)}.ratingStars{letter-spacing:2px;color:var(--amber)}
 .factSource{font-size:11px;color:#a9beb7}.emptyData{padding:12px;border:1px dashed #36514a;border-radius:14px;color:var(--muted)}
 
+
+.tripPlanner{border:1px solid #3a3159;background:linear-gradient(180deg,#17152a,#0d1820)}
+.tripPlanner h2{margin-bottom:6px}
+.planItem{padding:12px;border:1px solid #294149;border-radius:15px;background:#09191f;margin-top:8px}
+.planItem.completed{border-color:#2e7d60;background:#0d241c}
+.planItem.skipped{opacity:.55}
+.planHead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.planType{font-size:11px;color:var(--green);font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.placeGrid{display:grid;gap:8px;margin-top:8px}
+.placeCard{padding:11px;border:1px solid #294149;border-radius:14px;background:#0a1a20}
+.placeCard b{display:block}
+.contribGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.contrib{padding:8px 5px;text-align:center;border:1px solid #294149;border-radius:12px;background:#09191f;font-size:11px}
+.contrib.active{border-color:var(--green);background:#133229}
+.contrib b{display:block;font-size:18px}
+.aiPlanBox{border:1px solid #51417d;background:linear-gradient(180deg,#17152a,#0b1720);border-radius:16px;padding:14px}
+.destinationBadge{display:inline-flex;gap:7px;align-items:center;padding:7px 10px;border-radius:999px;background:#10251f;border:1px solid #315149;color:#cde8de;font-size:12px}
+@media(max-width:430px){.contribGrid{grid-template-columns:repeat(2,1fr)}}
+
 </style>
 </head>
 <body>
 <div id="toast" class="toast"></div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.2.4 · trail detail + discovery + AI</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.3.1 · multi-destination + AI composer</small></div></div>
   <div class="badge">✓ TEST BUILD</div>
 </header>
 
@@ -108,10 +127,52 @@ textarea{min-height:90px}
     <p class="muted">O percurso pode estar adequado, mas se o objetivo principal é ver a cascata, hoje não compensa.</p>
   </div>
 
+
+  <div class="card tripPlanner">
+    <div class="eyebrow">Alpha 1.3.1 · Multi-Destination Field Test</div>
+    <h2>🧭 Criar a minha experiência</h2>
+    <p class="muted">Escolhe o destino. A Alpha procura trails, monumentos/POIs, refeições e alojamento e cria um plano de experiência para o grupo.</p>
+
+    <label>Destino</label>
+    <div class="row">
+      <input id="destinationInput" value="" placeholder="Ex.: Coimbra, Arouca, Porto, Gerês, Santiago de Compostela…" style="flex:1;min-width:180px">
+      <button class="btn purple" onclick="prepareDestination()">Preparar destino</button>
+    </div>
+    <div id="destinationState" class="small muted" style="margin-top:8px">Escreve qualquer destino. Não existem destinos predefinidos.</div>
+
+    <div class="sep"></div>
+    <div class="eyebrow">Equipa de teste · 4 participantes</div>
+    <p class="small muted">Seleciona quem está a contribuir neste momento. Cada confirmação fica registada localmente.</p>
+    <div id="testerButtons" class="contribGrid"></div>
+    <div id="contribStatus" class="small muted" style="margin-top:8px"></div>
+
+    <div class="sep"></div>
+    <div class="row">
+      <button class="btn" onclick="createAIExperience()">✦ AI · Criar experiência</button>
+      <button class="btn secondary" onclick="loadExperiencePlaces(true)">Atualizar locais</button>
+    </div>
+    <p class="small muted">O Composer Alpha é um motor local determinístico: cruza dados reais disponíveis, meteorologia e regras de preferência. Não inventa preços, disponibilidade, ratings ou horários em falta.</p>
+
+    <div id="aiTripSummary" class="aiPlanBox" style="margin-top:12px">A experiência ainda não foi criada.</div>
+    <div id="experiencePlanPreview"></div>
+
+    <div class="sep"></div>
+    <div class="eyebrow">Diário do teste</div>
+    <p class="small muted">Cada destino e cada experiência ficam guardados separadamente neste telemóvel. Podes regressar a um destino sem perder os anteriores.</p>
+    <div id="tripHistory" class="list"></div>
+
+    <details style="margin-top:12px">
+      <summary><b>Ver candidatos encontrados</b></summary>
+      <div class="eyebrow" style="margin-top:12px">Monumentos / POIs</div><div id="monumentCandidates" class="placeGrid"></div>
+      <div class="eyebrow" style="margin-top:12px">Refeições</div><div id="mealCandidates" class="placeGrid"></div>
+      <div class="eyebrow" style="margin-top:12px">Alojamento</div><div id="stayCandidates" class="placeGrid"></div>
+    </details>
+  </div>
+
   <div class="card">
     <div class="eyebrow">Discovery · dados reais</div>
     <h2>Trails perto de ti</h2>
-    <p class="muted">Rotas reais de caminhada/hiking do OpenStreetMap. A Alpha procura à volta do teu GPS e desenha-as no mapa.</p>
+    <p class="muted">Rotas reais de caminhada/hiking do OpenStreetMap. Com um destino preparado, a Alpha procura à volta desse destino; caso contrário usa o teu GPS.</p>
     <div class="row">
       <button class="btn" onclick="loadTrailsNearby(true)">Procurar trails agora</button>
       <button class="btn secondary" onclick="showSelectedTrailOnMap()">Ver no mapa</button>
@@ -294,7 +355,7 @@ textarea{min-height:90px}
   <div class="card">
     <div class="eyebrow">CMO Concept #01</div>
     <h2>Experience Review & Share</h2>
-    <p class="muted">Avalia a experiência completa: outdoor + refeição + POIs + estadia quando existir.</p>
+    <p class="muted">Avalia apenas o que foi realmente vivido: trail, monumentos/POIs, refeição e alojamento quando tiverem sido concluídos.</p>
 
     <label>Nome da experiência</label>
     <input id="expName" value="Um dia na Arrábida">
@@ -350,12 +411,18 @@ textarea{min-height:90px}
 
 <section id="profile" class="view">
   <div class="card">
-    <div class="eyebrow">Alpha 1.2.4</div><h2>Estado do teste</h2>
+    <div class="eyebrow">Alpha 1.3.1</div><h2>Estado do teste</h2>
     <div class="list">
       <div class="item">✓ GPS real + tracking</div>
       <div class="item">✓ Mapa vetorial real</div>
       <div class="item">◉ Discovery de trails reais via OpenStreetMap</div>
       <div class="item">◉ Trail Detail · ficha antes do GO com dados reais disponíveis</div>
+      <div class="item">◉ Destination Planner · pesquisa explícita + cache</div>
+      <div class="item">◉ Monumentos/POIs, refeições e alojamento via OSM/Overpass</div>
+      <div class="item">◉ AI Experience Composer local · cria plano real sem inventar dados</div>
+      <div class="item">◉ Equipa de teste · 4 participantes + registo de contribuições</div>
+      <div class="item">◉ Multi-destino · sem presets · Portugal/Espanha/outros destinos</div>
+      <div class="item">◉ Diário persistente · destinos, planos, componentes realizados e reviews</div>
       <div class="item">◉ Meteorologia real via Open-Meteo</div>
       <div class="item">◉ Trail AI Decision Engine local</div>
       <div class="item">✓ Reports LIVE georreferenciados</div>
@@ -394,8 +461,8 @@ const $=id=>document.getElementById(id);
 let pos=null,watchId=null,photoData='',map=null,userMarker=null,reportMarkers=[],selectedTrailMarker=null;
 let activityRunning=false,activityStartedAt=null,activitySeconds=0,activityDistance=0,lastActivityPos=null,activityTimer=null;
 let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareFile=null;
-let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,trailDetailPhotos=[];
-const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails';
+let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,trailDetailPhotos=[],destination=null,experiencePlaces={monuments:[],meals:[],stays:[]},currentTester='Filipe';
+const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
 
 const types={tree:'🌳 Árvore / obstáculo',water:'💧 Estado da água',mud:'🌧️ Lama / inundação',closure:'🚧 Caminho fechado',sign:'🪧 Sinalização',parking:'🚗 Acesso / estacionamento',other:'⚠️ Outro'};
 
@@ -474,9 +541,266 @@ function deleteReport(id){saveReports(reports().filter(r=>r.id!==id));renderRepo
 function clearReports(){if(confirm('Apagar todos os reports de teste deste telemóvel?')){saveReports([]);renderReports();renderMapReports();checkNearest();toast('Reports apagados')}}
 
 
+
+/* ---------- DESTINATION + EXPERIENCE COMPOSER + FAMILY FIELD TEST ---------- */
+const TESTERS=['Helena','Filipe','Daniela','André'];
+function testerContributions(){
+  try{return JSON.parse(localStorage.getItem(CONTRIB_KEY)||'[]')}catch{return[]}
+}
+function logContribution(action,itemId='',note=''){
+  const a=testerContributions();
+  a.unshift({id:Date.now(),tester:currentTester,action,itemId,note,time:new Date().toISOString()});
+  localStorage.setItem(CONTRIB_KEY,JSON.stringify(a.slice(0,200)));
+  renderTesters();
+}
+function setTester(name){
+  if(!TESTERS.includes(name))return;
+  currentTester=name;localStorage.setItem(TESTER_KEY,name);renderTesters();toast(name+' está a contribuir agora');
+}
+function renderTesters(){
+  const host=$('testerButtons');if(!host)return;
+  const logs=testerContributions();
+  host.innerHTML=TESTERS.map(n=>{
+    const count=logs.filter(x=>x.tester===n).length;
+    return '<button class="contrib '+(currentTester===n?'active':'')+'" onclick="setTester(\''+n+'\')"><b>'+count+'</b>'+n+'</button>';
+  }).join('');
+  const active=TESTERS.filter(n=>logs.some(x=>x.tester===n));
+  $('contribStatus').textContent=active.length+'/4 participantes já contribuíram nesta sessão Alpha'+(active.length===4?' · ✓ todos participaram':'');
+}
+
+function slugKey(s){
+  return String(s||'local').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,70)||'local';
+}
+function scopeKey(){
+  if(destination&&destination.query)return slugKey(destination.query);
+  if(pos)return 'gps-'+Number(pos.latitude).toFixed(2)+'-'+Number(pos.longitude).toFixed(2);
+  return 'local';
+}
+function scopedTrailCacheKey(){return TRAIL_CACHE+'_'+scopeKey()}
+function scopedPlacesCacheKey(){return PLACES_KEY+'_'+scopeKey()}
+function destinationHistory(){
+  try{return JSON.parse(localStorage.getItem(DEST_HISTORY_KEY)||'[]')}catch{return[]}
+}
+function saveDestinationHistory(d){
+  let arr=destinationHistory().filter(x=>slugKey(x.query)!==slugKey(d.query));
+  arr.unshift({...d,lastUsed:new Date().toISOString()});
+  localStorage.setItem(DEST_HISTORY_KEY,JSON.stringify(arr.slice(0,30)));
+  renderTripHistory();
+}
+function experienceHistory(){
+  try{return JSON.parse(localStorage.getItem(EXPERIENCE_HISTORY_KEY)||'[]')}catch{return[]}
+}
+function upsertExperienceHistory(plan,extra={}){
+  if(!plan||!plan.id)return;
+  let arr=experienceHistory(),idx=arr.findIndex(x=>x.id===plan.id);
+  const row={...(idx>=0?arr[idx]:{}),...JSON.parse(JSON.stringify(plan)),...extra,updatedAt:new Date().toISOString()};
+  if(idx>=0)arr[idx]=row;else arr.unshift(row);
+  localStorage.setItem(EXPERIENCE_HISTORY_KEY,JSON.stringify(arr.slice(0,60)));
+  renderTripHistory();
+}
+function renderTripHistory(){
+  const host=$('tripHistory');if(!host)return;
+  const dests=destinationHistory(), trips=experienceHistory();
+  let blocks=[];
+  if(trips.length){
+    blocks.push('<div class="small muted">Experiências guardadas</div>');
+    blocks.push(...trips.slice(0,12).map(t=>{
+      const done=(t.items||[]).filter(i=>i.status==='completed').length,total=(t.items||[]).length;
+      return '<div class="item"><b>🧭 '+esc(t.name||'Experiência')+'</b><div class="small muted">'+new Date(t.createdAt||t.updatedAt||Date.now()).toLocaleString('pt-PT')+' · '+done+'/'+total+' realizados'+(t.review&&t.review.rating?' · '+Number(t.review.rating).toFixed(1)+'★':'')+'</div><div class="row" style="margin-top:8px"><button class="btn secondary" onclick="openSavedExperience(\''+esc(t.id)+'\')">Abrir</button></div></div>';
+    }));
+  }
+  if(dests.length){
+    blocks.push('<div class="small muted" style="margin-top:8px">Destinos recentes</div>');
+    blocks.push(...dests.slice(0,10).map(d=>'<div class="item"><b>📍 '+esc(d.query)+'</b><div class="small muted">'+esc(d.label||'')+'</div><div class="row" style="margin-top:8px"><button class="btn secondary" onclick="reuseDestination(\''+esc(slugKey(d.query))+'\')">Usar novamente</button></div></div>'));
+  }
+  host.innerHTML=blocks.length?blocks.join(''):'<div class="emptyData">Ainda não existem destinos ou experiências guardados.</div>';
+}
+function reuseDestination(key){
+  const d=destinationHistory().find(x=>slugKey(x.query)===key);if(!d)return;
+  destination=d;localStorage.setItem(DEST_KEY,JSON.stringify(destination));$('destinationInput').value=d.query||'';
+  $('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span> · recuperado';
+  nearbyTrails=[];experiencePlaces={monuments:[],meals:[],stays:[]};selectedTrail=null;
+  loadDestinationBundle(true);
+}
+function openSavedExperience(id){
+  const t=experienceHistory().find(x=>x.id===id);if(!t)return;
+  saveExperiencePlan(JSON.parse(JSON.stringify(t)));
+  if(t.destination){destination=t.destination;localStorage.setItem(DEST_KEY,JSON.stringify(destination));$('destinationInput').value=destination.query||'';$('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span> · experiência recuperada';}
+  renderExperiencePlanPreview();renderExperienceRatingItems(t.review&&t.review.itemRatings||{});syncReview();toast('Experiência recuperada');
+}
+
+function destinationCoords(){
+  if(destination&&Number.isFinite(destination.lat)&&Number.isFinite(destination.lon))return{latitude:destination.lat,longitude:destination.lon};
+  return pos||{latitude:38.7805,longitude:-9.2362};
+}
+async function prepareDestination(){
+  const q=$('destinationInput').value.trim();
+  if(!q)return toast('Indica um destino');
+  $('destinationState').textContent='A localizar '+q+'…';
+  const cached=(()=>{
+    try{const d=JSON.parse(localStorage.getItem(DEST_KEY)||'null');return d&&d.query&&d.query.toLowerCase()===q.toLowerCase()?d:null}catch{return null}
+  })();
+  if(cached){destination=cached;$('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span> · cache local';await loadDestinationBundle(true);return}
+  try{
+    if(window._lastGeoSearch&&Date.now()-window._lastGeoSearch<1100)await new Promise(r=>setTimeout(r,1100-(Date.now()-window._lastGeoSearch)));
+    window._lastGeoSearch=Date.now();
+    const u='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&addressdetails=1&q='+encodeURIComponent(q);
+    const r=await fetch(u,{headers:{'Accept':'application/json'}});if(!r.ok)throw new Error('geocode '+r.status);
+    const j=await r.json();if(!j.length)throw new Error('not found');
+    destination={query:q,label:j[0].display_name,lat:Number(j[0].lat),lon:Number(j[0].lon),time:Date.now()};
+  }catch(e){
+    $('destinationState').textContent='Não foi possível localizar o destino agora. Tenta escrever o nome completo da localidade.';
+    toast('Destino não localizado');return;
+  }
+  localStorage.setItem(DEST_KEY,JSON.stringify(destination));
+  saveDestinationHistory(destination);
+  $('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span>';
+  logContribution('preparou destino','destination',q);
+  await loadDestinationBundle(true);
+}
+async function loadDestinationBundle(force=false){
+  await Promise.allSettled([loadTrailsNearby(false),loadExperiencePlaces(false),fetchWeather(false)]);
+  renderPlaceCandidates();
+  if(force)toast('Destino preparado: trails + locais carregados');
+}
+function osmPoint(el){
+  if(el.type==='node')return[el.lon,el.lat];
+  if(el.center)return[el.center.lon,el.center.lat];
+  return null;
+}
+function placeDistance(p){
+  const c=destinationCoords();if(!p.center)return 1e12;
+  return hav(c.latitude,c.longitude,p.center[1],p.center[0]);
+}
+function mapPlace(el,kind){
+  const t=el.tags||{},center=osmPoint(el);
+  return{
+    id:kind+'-'+el.type+'-'+el.id,osmType:el.type,osmId:el.id,kind,
+    name:t.name||t['name:pt']||({monument:'Local de interesse',meal:'Restaurante',stay:'Alojamento'}[kind]),
+    center,tags:t,
+    website:t.website||t['contact:website']||'',
+    phone:t.phone||t['contact:phone']||'',
+    opening:t.opening_hours||'',cuisine:t.cuisine||'',
+    stars:t.stars||'',fee:t.fee||'',historic:t.historic||'',tourism:t.tourism||'',amenity:t.amenity||''
+  };
+}
+function placeQuality(p){
+  let s=0;if(p.name)s+=4;if(p.website)s+=3;if(p.opening)s+=2;if(p.phone)s+=1;
+  if(p.kind==='stay'&&p.stars)s+=3;if(p.kind==='meal'&&p.cuisine)s+=2;
+  const d=placeDistance(p);s-=Math.min(8,d/2500);return s;
+}
+async function loadExperiencePlaces(showToast=false){
+  const c=destinationCoords();
+  if(!destination&&showToast)toast('Sem destino preparado: vou usar a posição disponível');
+  try{
+    const q=`[out:json][timeout:30];
+(
+ nwr(around:12000,${c.latitude},${c.longitude})["historic"];
+ nwr(around:12000,${c.latitude},${c.longitude})["tourism"~"attraction|museum|viewpoint"];
+ nwr(around:10000,${c.latitude},${c.longitude})["amenity"~"restaurant|cafe"];
+ nwr(around:12000,${c.latitude},${c.longitude})["tourism"~"hotel|hostel|guest_house|apartment|motel"];
+);
+out center tags 180;`;
+    const u='https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q);
+    const r=await fetch(u);if(!r.ok)throw new Error('Overpass '+r.status);const j=await r.json();
+    const all=j.elements||[],seen=new Set();
+    const uniq=(arr)=>arr.filter(p=>p.center&&p.name&&!seen.has(p.id)&&(seen.add(p.id),true));
+    const monuments=uniq(all.filter(x=>x.tags&&(x.tags.historic||['attraction','museum','viewpoint'].includes(x.tags.tourism))).map(x=>mapPlace(x,'monument')));
+    seen.clear();
+    const meals=uniq(all.filter(x=>x.tags&&['restaurant','cafe'].includes(x.tags.amenity)).map(x=>mapPlace(x,'meal')));
+    seen.clear();
+    const stays=uniq(all.filter(x=>x.tags&&['hotel','hostel','guest_house','apartment','motel'].includes(x.tags.tourism)).map(x=>mapPlace(x,'stay')));
+    const rank=a=>a.sort((x,y)=>placeQuality(y)-placeQuality(x)||placeDistance(x)-placeDistance(y)).slice(0,12);
+    experiencePlaces={monuments:rank(monuments),meals:rank(meals),stays:rank(stays)};
+    localStorage.setItem(scopedPlacesCacheKey(),JSON.stringify({time:Date.now(),destination,places:experiencePlaces}));
+    renderPlaceCandidates();
+    if(showToast)toast('Locais atualizados: '+experiencePlaces.monuments.length+' POIs · '+experiencePlaces.meals.length+' refeições · '+experiencePlaces.stays.length+' alojamentos');
+  }catch(e){
+    try{
+      const cch=JSON.parse(localStorage.getItem(scopedPlacesCacheKey())||'null');
+      if(cch&&cch.places){experiencePlaces=cch.places;renderPlaceCandidates();if(showToast)toast('API indisponível · a usar cache de locais');return}
+    }catch{}
+    if(showToast)toast('Não foi possível carregar monumentos/refeições/alojamento agora');
+  }
+}
+function placeSubtitle(p){
+  const bits=[];
+  if(p.kind==='monument'){if(p.historic)bits.push(p.historic);if(p.tourism)bits.push(p.tourism);if(p.fee)bits.push('fee '+p.fee)}
+  if(p.kind==='meal'){if(p.cuisine)bits.push(p.cuisine.replaceAll(';',' · '));if(p.opening)bits.push('horário OSM disponível')}
+  if(p.kind==='stay'){if(p.stars)bits.push(p.stars+'★ classificação');if(p.tourism)bits.push(p.tourism)}
+  bits.push(distanceLabel(placeDistance(p)));
+  return bits.join(' · ');
+}
+function renderPlaceCandidates(){
+  const render=(id,arr,kind)=>{$(id).innerHTML=arr.length?arr.slice(0,6).map(p=>'<div class="placeCard"><b>'+esc(p.name)+'</b><span class="small muted">'+esc(placeSubtitle(p))+'</span><div style="margin-top:7px"><button class="btn secondary" onclick="replacePlanItem(\''+kind+'\',\''+p.id+'\')">Usar na experiência</button></div></div>').join(''):'<div class="emptyData">Nenhum candidato carregado.</div>'};
+  render('monumentCandidates',experiencePlaces.monuments,'monument');
+  render('mealCandidates',experiencePlaces.meals,'meal');
+  render('stayCandidates',experiencePlaces.stays,'stay');
+}
+function chooseTrailForPlan(){
+  if(!nearbyTrails.length)return null;
+  return nearbyTrails.map(t=>({t,s:detailScores(t).today})).sort((a,b)=>b.s-a.s||((trailDistanceFromUser(a.t)||1e12)-(trailDistanceFromUser(b.t)||1e12)))[0].t;
+}
+function choosePlace(kind){
+  const key=kind==='monument'?'monuments':kind==='meal'?'meals':'stays';
+  return experiencePlaces[key]&&experiencePlaces[key][0]||null;
+}
+function planItemFromPlace(p){
+  return{id:p.id,kind:p.kind,title:p.name,status:'planned',source:'OSM',center:p.center,meta:{subtitle:placeSubtitle(p),website:p.website||'',opening:p.opening||'',stars:p.stars||'',osmType:p.osmType,osmId:p.osmId}};
+}
+function createAIExperience(){
+  if(!destination){toast('Primeiro prepara o destino');return}
+  if(!nearbyTrails.length||(!experiencePlaces.monuments.length&&!experiencePlaces.meals.length&&!experiencePlaces.stays.length)){toast('Ainda estou sem dados suficientes. Carrega o destino/locais primeiro.');return}
+  const trail=chooseTrailForPlan(),mon1=choosePlace('monument'),meal=choosePlace('meal'),stay=choosePlace('stay');
+  const mon2=experiencePlaces.monuments.find(x=>!mon1||x.id!==mon1.id)||null;
+  const items=[];
+  if(trail)items.push({id:'trail-'+trail.id,kind:'trail',title:trail.name,status:'planned',source:'OSM',trailId:trail.id,center:trail.center,meta:{ref:trail.ref||'',network:trail.network||'',distance:trail.distanceTag||''}});
+  if(mon1)items.push(planItemFromPlace(mon1));
+  if(mon2)items.push(planItemFromPlace(mon2));
+  if(meal)items.push(planItemFromPlace(meal));
+  if(stay)items.push(planItemFromPlace(stay));
+  const plan={id:'trip-'+Date.now(),name:'Experiência · '+destination.query,destination,createdBy:currentTester,createdAt:new Date().toISOString(),items};
+  saveExperiencePlan(plan);
+  upsertExperienceHistory(plan);
+  if(trail){selectedTrail=trail;renderTrails()}
+  logContribution('criou experiência AI',plan.id,destination.query);
+  renderExperiencePlanPreview();
+  const counts={trail:items.filter(x=>x.kind==='trail').length,monument:items.filter(x=>x.kind==='monument').length,meal:items.filter(x=>x.kind==='meal').length,stay:items.filter(x=>x.kind==='stay').length};
+  $('aiTripSummary').innerHTML='<b>✦ PREDICTED · Experiência criada para '+esc(destination.query)+'</b><br><span class="small muted">Plano: '+counts.trail+' trail · '+counts.monument+' monumento(s)/POI · '+counts.meal+' refeição · '+counts.stay+' alojamento. Confirma/ajusta durante o dia. Só os itens realmente concluídos entram no review final.</span>';
+  toast('✦ Experiência criada pela AI Alpha');
+}
+function renderExperiencePlanPreview(){
+  const host=$('experiencePlanPreview');if(!host)return;
+  const p=getExperiencePlan();
+  if(!p||!Array.isArray(p.items)||!p.items.length){host.innerHTML='';return}
+  const icons={trail:'🥾',monument:'🏛️',meal:'🍽️',stay:'🏨',poi:'📍',activity:'🧭'};
+  host.innerHTML='<div class="eyebrow" style="margin-top:14px">Plano da experiência</div>'+p.items.map(it=>{
+    const who=it.completedBy?' · '+esc(it.completedBy):'';
+    const label=it.status==='completed'?'✓ Realizado'+who:it.status==='skipped'?'↷ Não realizado':'Planeado';
+    return '<div class="planItem '+esc(it.status)+'"><div class="planHead"><div><span class="planType">'+esc(it.kind)+'</span><b style="display:block">'+(icons[it.kind]||'•')+' '+esc(it.title)+'</b><span class="small muted">'+esc(it.meta&&it.meta.subtitle||it.meta&&it.meta.distance||'')+'</span></div><span class="sourceTag">'+label+'</span></div><div class="row" style="margin-top:8px"><button class="btn" onclick="markExperienceItem(\''+esc(it.id)+'\',\'completed\')">✓ Fizemos</button><button class="btn secondary" onclick="markExperienceItem(\''+esc(it.id)+'\',\'skipped\')">Não fizemos</button>'+(it.kind==='trail'&&it.trailId?'<button class="btn secondary" onclick="selectTrail('+Number(it.trailId)+')">Detalhes</button>':'')+'</div></div>';
+  }).join('');
+}
+function markExperienceItem(id,status){
+  const p=getExperiencePlan(),it=p.items.find(x=>x.id===id);if(!it)return;
+  it.status=status;
+  if(status==='completed'){it.completedBy=currentTester;it.completedAt=new Date().toISOString();logContribution('confirmou componente',id,it.title)}
+  else{it.skippedBy=currentTester;it.skippedAt=new Date().toISOString();logContribution('marcou não realizado',id,it.title)}
+  saveExperiencePlan(p);upsertExperienceHistory(p);renderExperiencePlanPreview();renderExperienceRatingItems();syncReview();
+}
+function replacePlanItem(kind,placeId){
+  const keys={monument:'monuments',meal:'meals',stay:'stays'};
+  const p=getExperiencePlan();if(!p||!Array.isArray(p.items))return;
+  const cand=(experiencePlaces[keys[kind]]||[]).find(x=>x.id===placeId);if(!cand)return;
+  const replacement=planItemFromPlace(cand);
+  const idx=p.items.findIndex(x=>x.kind===kind&&x.status==='planned');
+  if(idx>=0)p.items[idx]={...replacement,replaces:p.items[idx].id};
+  else p.items.push(replacement);
+  saveExperiencePlan(p);upsertExperienceHistory(p);logContribution('alterou componente',replacement.id,replacement.title);renderExperiencePlanPreview();toast('Experiência atualizada');
+}
+
 /* ---------- REAL DISCOVERY + WEATHER + TRAIL AI ---------- */
 async function fetchWeather(showToast=false){
-  const c=pos||{latitude:38.7805,longitude:-9.2362};
+  const c=destinationCoords();
   try{
     const u='https://api.open-meteo.com/v1/forecast?latitude='+c.latitude+'&longitude='+c.longitude+'&current=temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&timezone=auto';
     const r=await fetch(u); if(!r.ok) throw new Error('weather '+r.status); const j=await r.json(); weatherNow=j.current||null;
@@ -486,9 +810,9 @@ async function fetchWeather(showToast=false){
 }
 function weatherLabel(code){if(code===0)return'Céu limpo';if(code<=3)return'Parcialmente nublado';if(code<=48)return'Nevoeiro';if(code<=57)return'Chuvisco';if(code<=67)return'Chuva';if(code<=77)return'Neve';if(code<=82)return'Aguaceiros';if(code<=99)return'Trovoada';return'Condição variável'}
 function trailCenter(rel){let pts=[];(rel.members||[]).forEach(m=>(m.geometry||[]).forEach(g=>pts.push([g.lon,g.lat])));if(!pts.length&&rel.center)return[rel.center.lon,rel.center.lat];if(!pts.length)return null;let a=pts.reduce((z,p)=>[z[0]+p[0],z[1]+p[1]],[0,0]);return[a[0]/pts.length,a[1]/pts.length]}
-function trailDistanceFromUser(t){if(!pos||!t.center)return null;return hav(pos.latitude,pos.longitude,t.center[1],t.center[0])}
+function trailDistanceFromUser(t){const c=destination?destinationCoords():pos;if(!c||!t.center)return null;return hav(c.latitude,c.longitude,t.center[1],t.center[0])}
 async function loadTrailsNearby(force=true){
-  const c=pos||{latitude:38.7805,longitude:-9.2362};
+  const c=destinationCoords();
   $('trailStatus').textContent='A procurar rotas reais…';
   try{
     const q='[out:json][timeout:25];relation(around:30000,'+c.latitude+','+c.longitude+')["type"="route"]["route"~"hiking|foot"];out body geom 50;';
@@ -509,17 +833,17 @@ async function loadTrailsNearby(force=true){
       };
     }).filter(t=>t.center);
     nearbyTrails.sort((a,b)=>(trailDistanceFromUser(a)||1e12)-(trailDistanceFromUser(b)||1e12)); nearbyTrails=nearbyTrails.slice(0,15);
-    localStorage.setItem(TRAIL_CACHE,JSON.stringify({time:Date.now(),trails:nearbyTrails}));renderTrails();renderTrailLayer();
+    localStorage.setItem(scopedTrailCacheKey(),JSON.stringify({time:Date.now(),destination,trails:nearbyTrails}));renderTrails();renderTrailLayer();
     $('trailStatus').textContent=nearbyTrails.length?nearbyTrails.length+' trails reais encontrados num raio de 30 km.':'Não encontrei relações de hiking/foot nesta zona.';
     if(force)toast(nearbyTrails.length?nearbyTrails.length+' trails carregados':'Sem trails mapeados nesta zona');
   }catch(e){
-    try{let cch=JSON.parse(localStorage.getItem(TRAIL_CACHE)||'null');if(cch&&cch.trails&&cch.trails.length){nearbyTrails=cch.trails;renderTrails();renderTrailLayer();$('trailStatus').textContent='API indisponível — a mostrar último cache local ('+nearbyTrails.length+').';return}}catch{}
+    try{let cch=JSON.parse(localStorage.getItem(scopedTrailCacheKey())||'null');if(cch&&cch.trails&&cch.trails.length){nearbyTrails=cch.trails;renderTrails();renderTrailLayer();$('trailStatus').textContent='API indisponível — a mostrar último cache local ('+nearbyTrails.length+').';return}}catch{}
     $('trailStatus').textContent='Não foi possível carregar trails agora. Tenta novamente.';if(force)toast('Serviço de trails indisponível')
   }
 }
 function renderTrails(){
   const box=$('trailList');if(!box)return;if(!nearbyTrails.length){box.innerHTML='';return}
-  box.innerHTML=nearbyTrails.slice(0,8).map((t,i)=>{let d=trailDistanceFromUser(t);return '<div class="trailCard '+(selectedTrail&&selectedTrail.id===t.id?'selected':'')+'" onclick="selectTrail('+t.id+')"><div class="trailTitle"><b>'+esc(t.name)+'</b><span class="sourceTag">OSM · VERIFIED SOURCE</span></div><div class="trailMeta">'+(t.ref?'<span class="pill">'+esc(t.ref)+'</span>':'')+(t.network?'<span class="pill">'+esc(t.network.toUpperCase())+'</span>':'')+(t.distanceTag?'<span class="pill">↔ '+esc(t.distanceTag)+'</span>':'')+(d!==null?'<span class="pill">◎ '+distanceLabel(d)+'</span>':'')+'</div></div>'}).join('')
+  box.innerHTML=nearbyTrails.slice(0,8).map((t,i)=>{let d=trailDistanceFromUser(t);return '<div class="trailCard '+(selectedTrail&&selectedTrail.id===t.id?'selected':'')+'" onclick="selectTrail('+t.id+')"><div class="trailTitle"><b>'+esc(t.name)+'</b><span class="sourceTag">OSM · MAP DATA</span></div><div class="trailMeta">'+(t.ref?'<span class="pill">'+esc(t.ref)+'</span>':'')+(t.network?'<span class="pill">'+esc(t.network.toUpperCase())+'</span>':'')+(t.distanceTag?'<span class="pill">↔ '+esc(t.distanceTag)+'</span>':'')+(d!==null?'<span class="pill">◎ '+distanceLabel(d)+'</span>':'')+'</div></div>'}).join('')
 }
 
 function selectedTrailGeoJSON(){
@@ -748,7 +1072,8 @@ function saveSelectedTrail(){
 }
 function startSelectedTrail(){
   if(!selectedTrail)return;
-  setExperienceFromTrail(selectedTrail.name);
+  setExperienceFromTrail(selectedTrail.name,'planned');
+  logContribution('iniciou GO','trail-'+selectedTrail.id,selectedTrail.name);
   go('field');
   const tryFocus=()=>{if(map&&map.isStyleLoaded()){focusSelectedTrail(true);return}setTimeout(tryFocus,180)};
   setTimeout(tryFocus,180);
@@ -768,7 +1093,7 @@ function runTrailAI(){
   if(!nearbyTrails.length){$('aiOutput').textContent='Ainda não tenho trails reais para comparar. Carrega “Trails perto de ti” primeiro.';return}
   computeGlobalRating();const intent=$('aiIntent').value,effort=$('aiEffort').value;let scored=nearbyTrails.map(t=>{let s=72;let d=trailDistanceFromUser(t);if(d!==null)s-=Math.min(18,d/3000);if(t.network==='lwn')s+=effort==='easy'?8:2;if(t.network==='rwn')s+=effort==='medium'?6:0;if(t.network==='nwn'||t.network==='iwn')s+=effort==='hard'?7:-4;if(weatherNow){if(weatherNow.precipitation>1)s-=12;if(weatherNow.wind_speed_10m>35)s-=10;if(weatherNow.temperature_2m>32)s-=8;if(weatherNow.temperature_2m>=12&&weatherNow.temperature_2m<=26)s+=5}let active=reports().filter(r=>t.center&&hav(t.center[1],t.center[0],r.lat,r.lon)<3000);s-=active.reduce((a,r)=>a+(r.severity==='major'?18:r.severity==='significant'?10:4),0);if(intent==='family'&&effort==='easy')s+=t.network==='lwn'?7:0;if(intent==='water')s-=5;return{t,score:Math.max(5,Math.min(96,Math.round(s))),active}}).sort((a,b)=>b.score-a.score);let best=scored[0];selectedTrail=best.t;renderTrails();let why=[];let d=trailDistanceFromUser(best.t);if(d!==null)why.push('fica a '+distanceLabel(d)+' da tua posição');if(best.t.network)why.push('rede '+best.t.network.toUpperCase());if(weatherNow)why.push(weatherLabel(weatherNow.weather_code).toLowerCase()+', '+Math.round(weatherNow.temperature_2m)+'°C');if(best.active.length)why.push(best.active.length+' report(s) local(is) próximo(s)');else why.push('sem reports locais próximos nesta Alpha');let caution=intent==='water'?'Para água/cascatas ainda não tenho um sensor/estado hidrológico real, por isso não posso afirmar que exista água.':'';
   $('aiOutput').textContent='✦ PREDICTED · Melhor opção agora: '+best.t.name+'\nToday Fit experimental: '+best.score+'%\nPorque: '+why.join(' · ')+'.\n'+caution+'\n\nA recomendação usa apenas dados disponíveis; não é uma garantia de segurança.';
-  if(map){renderSelectedTrail()}toast('Trail AI atualizada')
+  if(map){renderSelectedTrail()}if($('aiOutput'))$('aiOutput').innerHTML += '<br><br><button class="btn purple" onclick="openTrailDetail()">Ver detalhes desta recomendação</button>';toast('Trail AI atualizada')
 }
 
 /* ---------- FUTURE CTO CONCEPT #01: ACTIVITY & WEARABLES DEMO ---------- */
@@ -789,9 +1114,16 @@ function toggleActivity(){
 }
 function stopActivity(){
   const plan=getExperiencePlan();
-  if(!plan.items.some(i=>i.kind==='trail'&&i.status==='completed')) plan.items.unshift({id:'trail-'+Date.now(),kind:'trail',title:'Trail / atividade outdoor',status:'completed'});
+  let trailItem=plan.items.find(i=>i.kind==='trail'&&(selectedTrail?i.title===selectedTrail.name:true));
+  if(!trailItem){
+    trailItem={id:'trail-'+Date.now(),kind:'trail',title:selectedTrail?selectedTrail.name:'Trail / atividade outdoor',status:'completed'};
+    plan.items.unshift(trailItem);
+  }
+  trailItem.status='completed';trailItem.completedBy=currentTester;trailItem.completedAt=new Date().toISOString();
   saveExperiencePlan(plan);
-  renderExperienceRatingItems();
+  upsertExperienceHistory(plan);
+  logContribution('terminou trail',trailItem.id,trailItem.title);
+  renderExperienceRatingItems();renderExperiencePlanPreview();
   activityRunning=false;clearInterval(activityTimer);activityTimer=null;$('activityBtn').textContent='Iniciar atividade';
   saveActivity();toast('Atividade terminada e guardada');syncReview()
 }
@@ -837,9 +1169,7 @@ function defaultExperiencePlan(){
   return {
     id:'alpha-current',
     name:'Experiência outdoor',
-    items:[
-      {id:'trail-main',kind:'trail',title:'Trail / atividade outdoor',status:'completed'}
-    ]
+    items:[]
   };
 }
 function getExperiencePlan(){
@@ -857,19 +1187,20 @@ function saveExperiencePlan(plan){
 function completedExperienceItems(){
   return getExperiencePlan().items.filter(i=>i.status==='completed');
 }
-function setExperienceFromTrail(trailName){
+function setExperienceFromTrail(trailName,status='planned'){
   const plan=getExperiencePlan();
   const existing=plan.items.find(i=>i.kind==='trail');
   if(existing){
     existing.title=trailName||'Trail / atividade outdoor';
-    existing.status='completed';
+    existing.status=status;
   }else{
-    plan.items.unshift({id:'trail-'+Date.now(),kind:'trail',title:trailName||'Trail / atividade outdoor',status:'completed'});
+    plan.items.unshift({id:'trail-'+Date.now(),kind:'trail',title:trailName||'Trail / atividade outdoor',status});
   }
   plan.name=trailName ? 'Experiência · '+trailName : plan.name;
   saveExperiencePlan(plan);
   if($('expName')) $('expName').value=plan.name;
   renderExperienceRatingItems();
+  renderExperiencePlanPreview();
 }
 function renderExperienceRatingItems(savedRatings){
   const host=$('experienceItems'); if(!host) return;
@@ -955,7 +1286,8 @@ function saveExperience(){
     return r?{...p,rating:r}:p;
   });
   saveExperiencePlan(plan);
-  toast('Experiência guardada neste telemóvel');syncReview()
+  upsertExperienceHistory(plan,{review:{rating:e.rating,itemRatings:e.itemRatings,text:e.text,time:e.time}});
+  toast('Experiência guardada neste telemóvel e no diário do teste');syncReview()
 }
 function migrateLegacyExperience(e){
   if(!e || e.items) return e;
@@ -1038,7 +1370,11 @@ async function shareExperience(){
 async function copyExperience(){try{await navigator.clipboard.writeText(experienceText());toast('Resumo copiado')}catch{toast('Não foi possível copiar')}}
 
 renderReports();loadActivity();loadExperience();syncReview();
-try{let cc=JSON.parse(localStorage.getItem(TRAIL_CACHE)||'null');if(cc&&cc.trails&&Date.now()-cc.time<21600000){nearbyTrails=cc.trails;renderTrails();$('trailStatus').textContent=nearbyTrails.length+' trails carregados do cache local.'}}catch{}
+try{currentTester=localStorage.getItem(TESTER_KEY)||'Filipe'}catch{}
+try{destination=JSON.parse(localStorage.getItem(DEST_KEY)||'null');if(destination){$('destinationInput').value=destination.query||'';$('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span> · guardado'}}catch{}
+try{let pc=JSON.parse(localStorage.getItem(scopedPlacesCacheKey())||'null');if(pc&&pc.places){experiencePlaces=pc.places;renderPlaceCandidates()}}catch{}
+renderTesters();renderExperiencePlanPreview();renderTripHistory();
+try{let cc=JSON.parse(localStorage.getItem(scopedTrailCacheKey())||'null');if(cc&&cc.trails&&Date.now()-cc.time<21600000){nearbyTrails=cc.trails;renderTrails();$('trailStatus').textContent=nearbyTrails.length+' trails carregados do cache deste destino.'}}catch{}
 fetchWeather(false);
 if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
