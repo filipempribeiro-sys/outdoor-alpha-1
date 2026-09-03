@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 1.4.4 — Evidence + Temporal Reality</title>
+<title>Project Alpha 1.4.5 — Evidence + Temporal Reality</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -25,14 +25,14 @@ body{padding-bottom:96px}
 .card{background:linear-gradient(180deg,#11242b,#0b1c22);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0}
 .hero h1{font-size:38px;line-height:1;margin:8px 0 10px}.hero h1 span,.green{color:var(--green)}.red{color:var(--red)}.amber{color:var(--amber)}
 .eyebrow{font-size:11px;color:var(--green);font-weight:800;letter-spacing:.12em;text-transform:uppercase}
-.btn{border:0;border-radius:13px;padding:12px 14px;font-weight:800;background:var(--green);color:#071116;cursor:pointer}
+.btn{border:0;border-radius:13px;padding:12px 14px;font-weight:800;background:var(--green);color:#fff;cursor:pointer}
 .btn.secondary{background:#142a31;color:var(--text);border:1px solid #2d4850}
 .btn.warn{background:#2b2020;color:#ffd2d2;border:1px solid #653b3b}
-.btn.purple{background:var(--purple);color:#120d1c}
+.btn.purple{background:var(--purple);color:#fff}
 .grid2,.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .metric{background:#0a1a20;border:1px solid #223940;border-radius:15px;padding:12px}.metric b{font-size:24px;display:block}.metric small{color:var(--muted)}
 .row{display:flex;gap:8px;flex-wrap:wrap}.list{display:grid;gap:9px}.item{padding:12px;border-radius:15px;background:#0a1a20;border:1px solid #223940}
-.bottom{position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(740px,calc(100% - 16px));display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:7px;background:rgba(8,18,23,.95);border:1px solid #294149;border-radius:18px;backdrop-filter:blur(12px);z-index:30}
+.bottom{position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(740px,calc(100% - 16px));display:grid;grid-template-columns:repeat(var(--nav-count,5),1fr);gap:6px;padding:7px;background:rgba(8,18,23,.95);border:1px solid #294149;border-radius:18px;backdrop-filter:blur(12px);z-index:30}.nav.hidden{display:none}
 .nav{border:0;background:transparent;color:#8ca19b;padding:9px 4px;border-radius:12px;font-size:11px}.nav.active{background:#17372f;color:#e7fff5}
 #realMap{height:430px;border-radius:18px;overflow:hidden;background:#091512;border:1px solid #1d3a32}
 .maplibregl-ctrl-attrib{font-size:10px;background:rgba(7,17,22,.82)!important;color:#c6d8d1!important}.maplibregl-ctrl-attrib a{color:#8fdcc0!important}.maplibregl-ctrl-group{background:#0d1a21!important;border:1px solid #294149!important;box-shadow:none!important}.maplibregl-ctrl button{background-color:#0d1a21!important}.maplibregl-ctrl button+button{border-top:1px solid #294149!important}.maplibregl-ctrl-icon{filter:invert(1) opacity(.86)}
@@ -85,9 +85,10 @@ textarea{min-height:90px}
 .placeCard{padding:11px;border:1px solid #294149;border-radius:14px;background:#0a1a20}
 .placeCard b{display:block}
 .contribGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.contrib{padding:8px 5px;text-align:center;border:1px solid #294149;border-radius:12px;background:#09191f;font-size:11px}
-.contrib.active{border-color:var(--green);background:#133229}
-.contrib b{display:block;font-size:18px}
+.contrib{padding:8px 5px;text-align:center;border:1px solid #294149;border-radius:12px;background:#09191f;color:var(--text);font-size:11px}
+.contrib.active{border-color:var(--green);background:#176046;color:#fff!important}
+.contrib b{display:block;font-size:18px;color:inherit}
+.contrib.active b{color:#fff!important}
 .aiPlanBox{border:1px solid #51417d;background:linear-gradient(180deg,#17152a,#0b1720);border-radius:16px;padding:14px}
 .destinationBadge{display:inline-flex;gap:7px;align-items:center;padding:7px 10px;border-radius:999px;background:#10251f;border:1px solid #315149;color:#cde8de;font-size:12px}
 @media(max-width:430px){.contribGrid{grid-template-columns:repeat(2,1fr)}}
@@ -117,20 +118,29 @@ textarea{min-height:90px}
 .included{padding:9px 11px;border:1px solid #315149;border-radius:12px;margin-top:8px;background:#0d211b}
 
 
-/* Alpha 1.4.4 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
+/* Alpha 1.4.5 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
 .authGate{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at top,#123b32,#071116 55%);display:none;overflow:auto;padding:24px 14px}.authGate.show{display:grid;place-items:center}.authBox{width:min(520px,100%);background:#0d1a21;border:1px solid #294149;border-radius:24px;padding:22px}.tierBadge{font-size:11px;font-weight:900;padding:7px 10px;border-radius:999px;border:1px solid #315149}.tier-free{color:#d7e4df}.tier-silver{color:#e6edf0;border-color:#82919a}.tier-gold{color:#ffe08a;border-color:#9b7b28}.tier-platinum{color:#eadfff;border-color:#8064b5}.tier-organization{color:#9ed1ff;border-color:#477aa6}.membershipHero{border:1px solid #3c5360;background:linear-gradient(135deg,#10262e,#0c171d)}.pointsBig{font-size:46px;font-weight:900;color:var(--green)}.premiumOnly,.silverOnly,.platinumOnly,.orgOnly{display:none}.entitled{display:block}.view.premiumOnly.entitled{display:none}.view.premiumOnly.entitled.active{display:block}.premiumNav{color:#e4dcff!important}.premiumNav.active{background:#251d3b!important}.logoutLink{border:0;background:transparent;color:var(--muted);text-decoration:underline;padding:6px}.miniProgress{height:9px;border-radius:99px;background:#17282e;overflow:hidden}.miniProgress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber))}.authNote{font-size:11px;color:var(--muted);margin-top:10px}.roleCard{border-left:3px solid var(--green)}
 .mediaPicker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:7px}
-.mediaAction{min-height:64px;border:1px solid #31515a;border-radius:17px;background:#0b1b21;color:#edf8f4;font:inherit;font-weight:800;display:flex;align-items:center;justify-content:center;gap:9px;padding:12px;cursor:pointer}
+.mediaAction{width:100%;min-height:48px}
 .mediaAction:active{transform:scale(.985)}
-.mediaAction .mediaIcon{font-size:22px}.mediaAction.gallery{background:#10242a}.mediaHint{font-size:11px;color:var(--muted);margin-top:8px}
-@media(max-width:390px){.mediaPicker{grid-template-columns:1fr}.mediaAction{min-height:56px}}
+.mediaHint{font-size:11px;color:var(--muted);margin-top:8px}
+@media(max-width:390px){.mediaPicker{grid-template-columns:1fr 1fr;gap:8px}.mediaAction{padding:11px 8px;font-size:13px}}
+/* Contraste consistente em todos os estados interativos */
+button.active,button.selected,.btn.active,.btn.selected{color:#fff!important}
+button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!important}
+
+.premiumIntro{border-color:#5d4d86;background:linear-gradient(145deg,#17142a,#0d1a21)}
+.tierExplain{border:1px solid #30464e;border-radius:18px;padding:16px;margin-top:12px;background:#0b171d}
+.tierExplain.silver{border-color:#6f7e86}.tierExplain.gold{border-color:#8b712d;background:linear-gradient(145deg,#1d1a10,#111820)}
+.planGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}.planChip{border:1px solid #5e5131;border-radius:12px;padding:10px 5px;text-align:center;font-weight:800;font-size:12px;background:#17160f;color:#fff}
+@media(max-width:430px){.planGrid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
 <div id="toast" class="toast"></div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.4 · Family Login</small></div></div>
+    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.5 · Family Login</small></div></div>
     <div class="sep"></div><div class="eyebrow">Bem-vindo</div><h1 style="margin:8px 0">Vale a pena ir hoje?</h1>
     <p class="muted">Alpha familiar com 4 contas locais de teste. Usa apenas o primeiro nome e o PIN <b>1234</b>. Ainda não existe backend/sincronização entre telemóveis.</p>
     <label>Utilizador</label>
@@ -143,12 +153,12 @@ textarea{min-height:90px}
     </select>
     <label>PIN de teste</label><input id="loginPin" type="password" inputmode="numeric" maxlength="4" placeholder="1234" autocomplete="current-password">
     <button class="btn" style="width:100%;margin-top:14px" onclick="alphaLogin()">Entrar</button>
-    <p class="authNote">Tiers iniciais de teste, pela ordem inversa definida: Helena = EARLY GOLD · Filipe = SILVER · Daniela = FREE · André = FREE. O PIN 1234 é apenas para a Alpha e não representa segurança de produção.</p>
+    <p class="authNote">Teste 1.4.5: Helena = EARLY GOLD por 2 dias · Filipe = EARLY GOLD por 2 dias + 100 TrailScore (suficiente para SILVER 7 dias) · Daniela = FREE · André = FREE. O PIN 1234 é apenas para a Alpha e não representa segurança de produção.</p>
   </div>
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.4 · family login + entitlements</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.5 · family login + entitlements</small></div></div>
   <div id="headerTier" class="tierBadge tier-free">FREE</div>
 </header>
 
@@ -431,8 +441,8 @@ textarea{min-height:90px}
     <textarea id="desc" placeholder="Ex.: árvore caída ocupa metade do trilho; dá para passar pelo lado."></textarea>
     <label>Adicionar evidência</label>
     <div class="mediaPicker">
-      <button type="button" class="mediaAction" onclick="document.getElementById('photoCameraInput').click()"><span class="mediaIcon">📷</span><span>Tirar foto</span></button>
-      <button type="button" class="mediaAction gallery" onclick="document.getElementById('photoInput').click()"><span class="mediaIcon">🖼️</span><span>Adicionar da galeria</span></button>
+      <button type="button" class="btn secondary mediaAction" onclick="document.getElementById('photoCameraInput').click()">Tirar foto</button>
+      <button type="button" class="btn secondary mediaAction" onclick="document.getElementById('photoInput').click()">Galeria</button>
     </div>
     <div class="mediaHint">A fotografia ajuda a validar o estado real da ocorrência.</div>
     <input id="photoCameraInput" type="file" accept="image/*" capture="environment" style="display:none">
@@ -510,6 +520,30 @@ textarea{min-height:90px}
   </div>
 </section>
 
+
+<section id="premiumInfo" class="view">
+  <div class="card premiumIntro">
+    <div class="eyebrow">✦ Membership</div><h1 id="premiumInfoTitle">Escolhe como queres evoluir</h1>
+    <p id="premiumInfoLead" class="muted">A versão FREE mantém o núcleo outdoor. O Premium acrescenta benefícios por contribuição ou funcionalidades avançadas — sem retirar segurança essencial.</p>
+  </div>
+  <div class="card">
+    <div id="silverOffer" class="tierExplain silver">
+      <div class="eyebrow">SILVER · CONTRIBUTOR</div><h2>Contribui. Ganha pontos. Troca por SILVER.</h2>
+      <p class="muted">O SILVER não se compra. Parte sempre de FREE: reports úteis e validados geram TrailScore. Os pontos podem ser trocados por tempo de SILVER; terminado esse período, a conta regressa a FREE.</p>
+      <div class="row"><span class="tierBadge tier-silver">100 pts · 7 dias</span><span class="tierBadge tier-silver">220 pts · 15 dias</span><span class="tierBadge tier-silver">400 pts · 30 dias</span></div>
+      <button class="btn secondary" style="width:100%;margin-top:12px" onclick="go('profile')">Ver TrailScore e SILVER</button>
+    </div>
+    <div id="goldOffer" class="tierExplain gold">
+      <div class="eyebrow">GOLD · PREMIUM</div><h2>Premium pelo tempo que escolheres.</h2>
+      <p class="muted">O GOLD pode ser adquirido a partir de FREE ou SILVER e dá acesso à experiência Premium: AI Experience, Budget-First, planeamento avançado e restantes módulos GOLD. O período comprado termina automaticamente — sem renovação automática.</p>
+      <div class="planGrid"><div class="planChip">1 mês</div><div class="planChip">2 meses</div><div class="planChip">4 meses</div><div class="planChip">8 meses</div><div class="planChip">12 meses</div></div>
+      <p class="small muted" style="margin-top:12px">Alpha: pagamentos reais ainda não estão ativos. Os planos ficam já definidos na UX para o futuro checkout.</p>
+      <button class="btn purple" style="width:100%" onclick="previewGold()">Escolher GOLD</button>
+    </div>
+  </div>
+  <div id="renewalRule" class="card"><div class="eyebrow">A nossa regra</div><h2>Sem renovações surpresa.</h2><p class="muted">No último dia avisamos que o GOLD termina. Depois de expirar, podes renovar escolhendo novamente a duração ou continuar em FREE. Nunca perdes os dias que já compraste.</p></div>
+</section>
+
 <section id="profile" class="view">
   <div class="card membershipHero">
     <div class="eyebrow">Conta & Membership</div>
@@ -524,7 +558,7 @@ textarea{min-height:90px}
     <div class="row"><button class="btn secondary" onclick="simulateTier('FREE')">FREE</button><button class="btn secondary" onclick="simulateSilverEarned()">SILVER</button><button class="btn purple" onclick="simulateTier('GOLD')">EARLY GOLD</button><button class="btn secondary" onclick="simulateTier('PLATINUM')">PLATINUM</button><button class="btn secondary" onclick="simulateTier('ORGANIZATION')">ORGANIZATIONS</button></div>
   </div>
   <div class="card">
-    <div class="eyebrow">Alpha 1.4.4</div><h2>Estado do teste</h2>
+    <div class="eyebrow">Alpha 1.4.5</div><h2>Estado do teste</h2>
     <div class="list">
       <div class="item">✓ GPS real + tracking</div>
       <div class="item">✓ Mapa vetorial real</div>
@@ -572,7 +606,7 @@ textarea{min-height:90px}
   <button class="nav active" data-id="home" onclick="go('home')">⌂<br>Descobrir</button>
   <button class="nav" data-id="field" onclick="go('field')">▶<br>Mapa/GO</button>
   <button class="nav" data-id="report" onclick="go('report')">⚑<br>LIVE</button>
-  <button id="premiumNav" class="nav premiumNav" data-id="experience" onclick="openPremium()">✦<br>Premium</button>
+  <button id="premiumNav" class="nav premiumNav" data-id="premiumInfo" onclick="openPremium()">✦<br>Premium</button>
   <button class="nav" data-id="profile" onclick="go('profile')">●<br>Perfil</button>
 </nav>
 
@@ -585,13 +619,24 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
 
 /* ---------- FAMILY LOGIN + ENTITLEMENT ENGINE 1.4.3 ---------- */
-const AUTH_KEY='alpha_auth_user', ENT_PREFIX='alpha_entitlements_', POINTS_PREFIX='alpha_trailscore_points_';
+const AUTH_KEY='alpha_auth_user', ENT_PREFIX='alpha_entitlements_', POINTS_PREFIX='alpha_trailscore_points_', LAST_GOLD_PREFIX='alpha_last_gold_expired_';
 const FAMILY_USERS={
-  Helena:{id:'helena',name:'Helena Ribeiro',shortName:'Helena',initialTier:'GOLD',initialDays:30},
-  Filipe:{id:'filipe',name:'Filipe Ribeiro',shortName:'Filipe',initialTier:'SILVER',initialDays:7},
+  Helena:{id:'helena',name:'Helena Ribeiro',shortName:'Helena',initialTier:'GOLD',initialDays:2},
+  Filipe:{id:'filipe',name:'Filipe Ribeiro',shortName:'Filipe',initialTier:'GOLD',initialDays:2,initialPoints:100},
   Daniela:{id:'daniela',name:'Daniela Ribeiro',shortName:'Daniela',initialTier:'FREE'},
   'André':{id:'andre',name:'André Ribeiro',shortName:'André',initialTier:'FREE'}
 };
+const FAMILY_TEST_SEED='alpha_family_test_seed_1_4_5';
+function seedFamilyExpiryTest(profile){
+  if(!profile||!['helena','filipe'].includes(profile.id))return;
+  const key=FAMILY_TEST_SEED+'_'+profile.id;
+  if(localStorage.getItem(key))return;
+  const now=Date.now();
+  localStorage.setItem(ENT_PREFIX+profile.id,JSON.stringify({tier:'GOLD',expiresAt:new Date(now+2*86400000).toISOString(),source:'alpha-1.4.5-expiry-test'}));
+  if(profile.id==='filipe')localStorage.setItem(POINTS_PREFIX+profile.id,'100');
+  localStorage.removeItem(LAST_GOLD_PREFIX+profile.id);
+  localStorage.setItem(key,'1');
+}
 const TIER_RANK={FREE:0,SILVER:1,GOLD:2,PLATINUM:3,ORGANIZATION:4};
 function authUser(){try{return JSON.parse(localStorage.getItem(AUTH_KEY)||'null')}catch{return null}}
 function userKey(prefix){const u=authUser();return prefix+(u?.id||'guest')}
@@ -617,24 +662,99 @@ function alphaLogin(){
   if(!profile)return toast('Escolhe um dos 4 utilizadores de teste');
   if(pin!=='1234')return toast('PIN incorreto');
   localStorage.setItem(AUTH_KEY,JSON.stringify({id:profile.id,name:profile.name,shortName:profile.shortName,createdAt:new Date().toISOString(),alphaFamily:true}));
+  seedFamilyExpiryTest(profile);
   const entKey=ENT_PREFIX+profile.id;
   if(!localStorage.getItem(entKey))localStorage.setItem(entKey,JSON.stringify(createInitialEntitlement(profile)));
   currentTester=profile.shortName;localStorage.setItem(TESTER_KEY,currentTester);
   $('loginPin').value='';$('authGate').classList.remove('show');applyEntitlements();toast('Bem-vindo, '+profile.shortName+' · '+tierLabel(effectiveTier()));
 }
 function alphaLogout(){localStorage.removeItem(AUTH_KEY);$('authGate').classList.add('show');$('loginPin').value='';go('home')}
-function effectiveTier(){let e=entState(),now=Date.now();if(e.tier==='GOLD'&&e.expiresAt&&new Date(e.expiresAt).getTime()<=now){e={tier:e.resumeSilverUntil&&new Date(e.resumeSilverUntil).getTime()>now?'SILVER':'FREE',expiresAt:e.resumeSilverUntil||null};localStorage.setItem(userKey(ENT_PREFIX),JSON.stringify(e));return e.tier}if(e.tier==='SILVER'&&e.expiresAt&&new Date(e.expiresAt).getTime()<=now){e={tier:'FREE'};localStorage.setItem(userKey(ENT_PREFIX),JSON.stringify(e));return 'FREE'}return e.tier||'FREE'}
+function lastGoldExpiredAt(){const u=authUser();if(!u)return 0;return Number(localStorage.getItem(LAST_GOLD_PREFIX+u.id)||0)}
+function rememberGoldExpiry(ts){const u=authUser();if(u)localStorage.setItem(LAST_GOLD_PREFIX+u.id,String(ts||Date.now()))}
+function clearGoldExpiryNotice(){const u=authUser();if(u)localStorage.removeItem(LAST_GOLD_PREFIX+u.id)}
+function effectiveTier(){
+  let e=entState(),now=Date.now();
+  if(e.tier==='GOLD'&&e.expiresAt&&new Date(e.expiresAt).getTime()<=now){
+    rememberGoldExpiry(new Date(e.expiresAt).getTime());
+    e={tier:e.resumeSilverUntil&&new Date(e.resumeSilverUntil).getTime()>now?'SILVER':'FREE',expiresAt:e.resumeSilverUntil||null,source:'gold-expired'};
+    localStorage.setItem(userKey(ENT_PREFIX),JSON.stringify(e));
+    return e.tier;
+  }
+  if(e.tier==='SILVER'&&e.expiresAt&&new Date(e.expiresAt).getTime()<=now){e={tier:'FREE',source:'silver-expired'};localStorage.setItem(userKey(ENT_PREFIX),JSON.stringify(e));return 'FREE'}
+  return e.tier||'FREE'
+}
 function hasGold(){return ['GOLD','PLATINUM','ORGANIZATION'].includes(effectiveTier())}
 function hasSilver(){return ['SILVER','GOLD','PLATINUM','ORGANIZATION'].includes(effectiveTier())}
 function tierLabel(t){return t==='GOLD'?'GOLD · Early':t==='ORGANIZATION'?'ORGANIZATIONS':t}
-function applyEntitlements(){const t=effectiveTier();document.querySelectorAll('.premiumOnly').forEach(x=>x.classList.toggle('entitled',hasGold()));document.querySelectorAll('.silverOnly').forEach(x=>x.classList.toggle('entitled',hasSilver()));document.querySelectorAll('.platinumOnly').forEach(x=>x.classList.toggle('entitled',['PLATINUM','ORGANIZATION'].includes(t)));document.querySelectorAll('.orgOnly').forEach(x=>x.classList.toggle('entitled',t==='ORGANIZATION'));['headerTier','profileTier'].forEach(id=>{let el=$(id);if(el){el.textContent=tierLabel(t);el.className='tierBadge tier-'+t.toLowerCase()}});renderMembership()}
-function openPremium(){if(hasGold())return go('experience');go('profile');toast(effectiveTier()==='SILVER'?'SILVER ativo · GOLD é o Premium pago':'Descobre GOLD no teu Perfil')}
+function goldExpiresToday(){
+  const e=entState(); if(e.tier!=='GOLD'||!e.expiresAt)return false;
+  const d=new Date(e.expiresAt),n=new Date();
+  return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate();
+}
+function recentGoldExpiry(){const ts=lastGoldExpiredAt();return ts>0 && Date.now()-ts<48*60*60*1000}
+function premiumInfoMode(){
+  const t=effectiveTier();
+  if(t==='GOLD'&&goldExpiresToday())return 'GOLD_EXPIRING';
+  if((t==='FREE'||t==='SILVER')&&recentGoldExpiry())return 'GOLD_EXPIRED';
+  if(t==='FREE')return 'FREE';
+  if(t==='SILVER')return 'SILVER';
+  return 'HIDDEN';
+}
+function renderPremiumInfo(){
+  const mode=premiumInfoMode(),silver=$('silverOffer'),gold=$('goldOffer'),rule=$('renewalRule'),title=$('premiumInfoTitle'),lead=$('premiumInfoLead');
+  if(!silver||!gold)return;
+  silver.style.display=mode==='FREE'?'block':'none';
+  gold.style.display=['FREE','SILVER','GOLD_EXPIRING','GOLD_EXPIRED'].includes(mode)?'block':'none';
+  if(rule)rule.style.display=gold.style.display;
+  if(mode==='FREE'){title.textContent='Escolhe como queres evoluir';lead.textContent='Podes conquistar SILVER através das tuas contribuições ou escolher GOLD pelo período que quiseres. O núcleo outdoor e a segurança essencial continuam FREE.'}
+  else if(mode==='SILVER'){title.textContent='Queres evoluir para GOLD?';lead.textContent='Já conquistaste SILVER como Contributor. O próximo nível disponível é GOLD, adquirido pelo período que escolheres e sem renovação automática.'}
+  else if(mode==='GOLD_EXPIRING'){title.textContent='O teu GOLD termina hoje';lead.textContent='Continua GOLD até ao fim do período. Se quiseres continuar, escolhe novamente 1, 2, 4, 8 ou 12 meses. Não existe renovação automática.'}
+  else if(mode==='GOLD_EXPIRED'){title.textContent='O teu GOLD terminou';lead.textContent='O Premium está bloqueado. Podes renovar ou continuar com o nível que estiver agora ativo. A renovação nunca é automática.'}
+  const goldBtn=gold.querySelector('button.btn.purple');
+  if(goldBtn){
+    if(mode==='GOLD_EXPIRING')goldBtn.textContent='Renovar GOLD · 1 mês · 0 € (teste)';
+    else if(mode==='GOLD_EXPIRED')goldBtn.textContent='Renovar GOLD · 1 mês · 0 € (teste)';
+    else goldBtn.textContent='Escolher GOLD';
+  }
+}
+function updatePremiumNav(){
+  const nav=$('premiumNav'),mode=premiumInfoMode(); if(!nav)return;
+  const visible=mode!=='HIDDEN'; nav.classList.toggle('hidden',!visible);
+  const bottom=nav.closest('.bottom'); if(bottom)bottom.style.setProperty('--nav-count',visible?5:4);
+  if(!visible&&nav.classList.contains('active'))go('home');
+}
+function applyEntitlements(){
+  const t=effectiveTier();
+  document.querySelectorAll('.premiumOnly').forEach(x=>x.classList.toggle('entitled',hasGold()));
+  document.querySelectorAll('.silverOnly').forEach(x=>x.classList.toggle('entitled',hasSilver()));
+  document.querySelectorAll('.platinumOnly').forEach(x=>x.classList.toggle('entitled',['PLATINUM','ORGANIZATION'].includes(t)));
+  document.querySelectorAll('.orgOnly').forEach(x=>x.classList.toggle('entitled',t==='ORGANIZATION'));
+  ['headerTier','profileTier'].forEach(id=>{let el=$(id);if(el){el.textContent=tierLabel(t);el.className='tierBadge tier-'+t.toLowerCase()}});
+  renderMembership();renderPremiumInfo();updatePremiumNav();
+}
+function openPremium(){const mode=premiumInfoMode();if(mode==='HIDDEN')return go('home');renderPremiumInfo();go('premiumInfo')}
+function previewGold(){
+  const mode=premiumInfoMode();
+  if(mode==='GOLD_EXPIRING'||mode==='GOLD_EXPIRED')return renewGoldAlpha();
+  toast('Checkout GOLD ainda é simulado nesta Alpha. Helena e Filipe têm o teste de expiração/renovação ativo.');
+}
+function renewGoldAlpha(){
+  const mode=premiumInfoMode();
+  if(!['GOLD_EXPIRING','GOLD_EXPIRED'].includes(mode))return toast('A renovação Alpha fica disponível no último dia ou após expirar');
+  const now=Date.now(),e=entState();
+  let start=now;
+  if(mode==='GOLD_EXPIRING'&&e.tier==='GOLD'&&e.expiresAt)start=Math.max(now,new Date(e.expiresAt).getTime());
+  clearGoldExpiryNotice();
+  saveEnt({tier:'GOLD',expiresAt:new Date(start+30*86400000).toISOString(),source:'alpha-renewal-zero-cost',testPrice:0,testPeriod:'1 mês'});
+  toast('Teste concluído · GOLD renovado por 1 mês · custo 0 €');
+  go('home');
+}
 function openEntitlementLab(){$('entitlementLab').style.display=$('entitlementLab').style.display==='none'?'block':'none'}
-function simulateTier(t){let e={tier:t,source:'alpha-lab'};if(t==='GOLD')e.expiresAt=new Date(Date.now()+30*86400000).toISOString();saveEnt(e);toast('UX '+tierLabel(t)+' ativada para teste')}
+function simulateTier(t){clearGoldExpiryNotice();let e={tier:t,source:'alpha-lab'};if(t==='GOLD')e.expiresAt=new Date(Date.now()+30*86400000).toISOString();saveEnt(e);toast('UX '+tierLabel(t)+' ativada para teste')}
 function simulateSilverEarned(){saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+7*86400000).toISOString(),source:'alpha-test'});toast('SILVER de teste ativo por 7 dias')}
 function redeemSilver(days,cost){if(effectiveTier()!=='FREE')return toast('SILVER por pontos é ativado a partir de FREE');if(points()<cost)return toast('Ainda não tens pontos suficientes');localStorage.setItem(userKey(POINTS_PREFIX),String(points()-cost));saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+days*86400000).toISOString(),source:'points',cost});toast('SILVER ativado por '+days+' dias')}
-function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 1.4.4: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button></div>':'')}}
-function bootAuth(){const u=authUser();if(!u){$('authGate').classList.add('show')}else{currentTester=u.shortName||u.name||'Filipe';localStorage.setItem(TESTER_KEY,currentTester);$('authGate').classList.remove('show')}sweepReportPointMaturity();applyEntitlements()}
+function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 1.4.5: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button></div>':'')}}
+function bootAuth(){const u=authUser();if(!u){$('authGate').classList.add('show')}else{const profile=familyProfileById(u.id);seedFamilyExpiryTest(profile);currentTester=u.shortName||u.name||'Filipe';localStorage.setItem(TESTER_KEY,currentTester);$('authGate').classList.remove('show')}sweepReportPointMaturity();applyEntitlements()}
 
 const types={tree:'🌳 Árvore / obstáculo',water:'💧 Estado da água',mud:'🌧️ Lama / inundação',closure:'🚧 Caminho fechado',sign:'🪧 Sinalização',parking:'🚗 Acesso / estacionamento',animal:'🐄 Animal / gado no trilho',other:'⚠️ Outro'};
 
