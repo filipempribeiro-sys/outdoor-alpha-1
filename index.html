@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 1.3.3 — Budget-First Adaptive Experience</title>
+<title>Project Alpha 1.4.4 — Evidence + Temporal Reality</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -116,14 +116,40 @@ textarea{min-height:90px}
 .omitted{padding:9px 11px;border:1px dashed #6b5c38;border-radius:12px;margin-top:8px;background:#1a1811}
 .included{padding:9px 11px;border:1px solid #315149;border-radius:12px;margin-top:8px;background:#0d211b}
 
+
+/* Alpha 1.4.4 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
+.authGate{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at top,#123b32,#071116 55%);display:none;overflow:auto;padding:24px 14px}.authGate.show{display:grid;place-items:center}.authBox{width:min(520px,100%);background:#0d1a21;border:1px solid #294149;border-radius:24px;padding:22px}.tierBadge{font-size:11px;font-weight:900;padding:7px 10px;border-radius:999px;border:1px solid #315149}.tier-free{color:#d7e4df}.tier-silver{color:#e6edf0;border-color:#82919a}.tier-gold{color:#ffe08a;border-color:#9b7b28}.tier-platinum{color:#eadfff;border-color:#8064b5}.tier-organization{color:#9ed1ff;border-color:#477aa6}.membershipHero{border:1px solid #3c5360;background:linear-gradient(135deg,#10262e,#0c171d)}.pointsBig{font-size:46px;font-weight:900;color:var(--green)}.premiumOnly,.silverOnly,.platinumOnly,.orgOnly{display:none}.entitled{display:block}.view.premiumOnly.entitled{display:none}.view.premiumOnly.entitled.active{display:block}.premiumNav{color:#e4dcff!important}.premiumNav.active{background:#251d3b!important}.logoutLink{border:0;background:transparent;color:var(--muted);text-decoration:underline;padding:6px}.miniProgress{height:9px;border-radius:99px;background:#17282e;overflow:hidden}.miniProgress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber))}.authNote{font-size:11px;color:var(--muted);margin-top:10px}.roleCard{border-left:3px solid var(--green)}
+.mediaPicker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:7px}
+.mediaAction{min-height:64px;border:1px solid #31515a;border-radius:17px;background:#0b1b21;color:#edf8f4;font:inherit;font-weight:800;display:flex;align-items:center;justify-content:center;gap:9px;padding:12px;cursor:pointer}
+.mediaAction:active{transform:scale(.985)}
+.mediaAction .mediaIcon{font-size:22px}.mediaAction.gallery{background:#10242a}.mediaHint{font-size:11px;color:var(--muted);margin-top:8px}
+@media(max-width:390px){.mediaPicker{grid-template-columns:1fr}.mediaAction{min-height:56px}}
 </style>
 </head>
 <body>
 <div id="toast" class="toast"></div>
+<div id="authGate" class="authGate">
+  <div class="authBox">
+    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.4 · Family Login</small></div></div>
+    <div class="sep"></div><div class="eyebrow">Bem-vindo</div><h1 style="margin:8px 0">Vale a pena ir hoje?</h1>
+    <p class="muted">Alpha familiar com 4 contas locais de teste. Usa apenas o primeiro nome e o PIN <b>1234</b>. Ainda não existe backend/sincronização entre telemóveis.</p>
+    <label>Utilizador</label>
+    <select id="loginName" autocomplete="username">
+      <option value="">Escolher utilizador…</option>
+      <option value="Helena">Helena</option>
+      <option value="Filipe">Filipe</option>
+      <option value="Daniela">Daniela</option>
+      <option value="André">André</option>
+    </select>
+    <label>PIN de teste</label><input id="loginPin" type="password" inputmode="numeric" maxlength="4" placeholder="1234" autocomplete="current-password">
+    <button class="btn" style="width:100%;margin-top:14px" onclick="alphaLogin()">Entrar</button>
+    <p class="authNote">Tiers iniciais de teste, pela ordem inversa definida: Helena = EARLY GOLD · Filipe = SILVER · Daniela = FREE · André = FREE. O PIN 1234 é apenas para a Alpha e não representa segurança de produção.</p>
+  </div>
+</div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.3.3 · budget-first adaptive experience</small></div></div>
-  <div class="badge">✓ TEST BUILD</div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.4 · family login + entitlements</small></div></div>
+  <div id="headerTier" class="tierBadge tier-free">FREE</div>
 </header>
 
 <section id="home" class="view active">
@@ -138,21 +164,23 @@ textarea{min-height:90px}
   </div>
 
   <div class="card">
-    <div class="eyebrow">Caso piloto</div>
-    <h2>Cascatas de Anços</h2>
-    <div class="metrics">
-      <div class="metric"><b>91%</b><small>Trail Fit</small></div>
-      <div class="metric"><b>82%</b><small>Today Fit</small></div>
-      <div class="metric"><b class="red">18%</b><small>Worth It</small></div>
-      <div class="metric"><b>96%</b><small>Reality Pulse</small></div>
-    </div>
-    <div class="sep"></div>
-    <b class="red">💧 Sem água</b>
-    <p class="muted">O percurso pode estar adequado, mas se o objetivo principal é ver a cascata, hoje não compensa.</p>
+    <div class="eyebrow">FREE · Outdoor Core</div>
+    <h2>Descobre. Decide. Vai.</h2>
+    <p class="muted">Trails reais, mapa, GPS/GO, tracking, condições, reports LIVE e segurança essencial — sem Premium obrigatório.</p>
+    <div class="row"><button class="btn" onclick="loadTrailsNearby(true)">Trails perto de mim</button><button class="btn secondary" onclick="go('report');requestLocation()">Reportar condição</button></div>
   </div>
 
+  <div class="card silverOnly" data-entitlement="silver">
+    <div class="eyebrow">SILVER · Contributor</div><h2>O teu contributo melhora o terreno</h2>
+    <p class="muted">SILVER é conquistado. Continua a confirmar e reportar condições úteis para alimentar a comunidade.</p>
+    <div id="silverHomeStats" class="item">TrailScore e impacto disponíveis no Perfil.</div>
+  </div>
 
-  <div class="card tripPlanner">
+  <div class="card platinumOnly" data-entitlement="platinum"><div class="eyebrow">PLATINUM · Founder</div><h2>Founders Edition</h2><p class="muted">Reconhecimento e benefícios de crowdfunder/founder. Regras finais serão definidas antes da campanha.</p></div>
+  <div class="card orgOnly" data-entitlement="organization"><div class="eyebrow">ORGANIZATIONS</div><h2>Espaço da organização</h2><p class="muted">Arquitetura preparada para membros, eventos, missões, permissões e dashboard organizacional.</p></div>
+
+
+  <div class="card tripPlanner premiumOnly" data-entitlement="gold">
     <div class="eyebrow">Alpha 1.3.3 · Budget-First Adaptive Experience</div>
     <h2>🧭 Criar a minha experiência</h2>
     <p class="muted">Escolhe o destino. A Alpha procura trails, monumentos/POIs, refeições e alojamento e cria um plano de experiência para o grupo.</p>
@@ -246,8 +274,8 @@ textarea{min-height:90px}
     <div id="trailList" class="list"></div>
   </div>
 
-  <div class="card">
-    <div class="eyebrow">TRAIL AI · Alpha Decision Engine</div>
+  <div class="card premiumOnly" data-entitlement="gold">
+    <div class="eyebrow">TRAIL AI · Early Gold</div>
     <h2>O que te apetece viver?</h2>
     <label>Objetivo</label>
     <select id="aiIntent">
@@ -265,8 +293,8 @@ textarea{min-height:90px}
     <p class="small muted">✦ PREDICTED — nesta fase é um motor local de decisão. Não usa ainda um LLM externo nem inventa dados ausentes.</p>
   </div>
 
-  <div class="card">
-    <div class="eyebrow">Experience Composer · demonstração</div>
+  <div class="card premiumOnly" data-entitlement="gold">
+    <div class="eyebrow">Experience Composer · Early Gold</div>
     <h2>Um dia completo, não apenas um trail</h2>
     <div class="list">
       <div class="item">🥾 Trail / atividade outdoor</div>
@@ -350,17 +378,17 @@ textarea{min-height:90px}
   </div>
 
   <div class="card wearable">
-    <div class="eyebrow">Future CTO Concept #01</div>
-    <h2>⌚ Outdoor Activity & Wearables</h2>
-    <p class="muted"><span id="wearDot" class="statusDot"></span> <span id="wearState">Wearable demo desligado</span></p>
+    <div class="eyebrow">GO · atividade</div>
+    <h2>🥾 Registo de atividade</h2>
+    <p class="muted">GPS, duração, distância e passos estimados são FREE. <span class="premiumOnly" data-entitlement="gold"><span id="wearDot" class="statusDot"></span> <span id="wearState">Wearable demo desligado</span></span></p>
     <div class="metrics">
       <div class="metric"><b id="actTime">00:00</b><small>Duração</small></div>
       <div class="metric"><b id="actDist">0.00 km</b><small>Distância GPS</small></div>
       <div class="metric"><b id="actSteps">0</b><small>Passos estimados</small></div>
-      <div class="metric"><b id="actHr">—</b><small>Cardio demo</small></div>
+      <div class="metric premiumOnly" data-entitlement="gold"><b id="actHr">—</b><small>Cardio demo · GOLD</small></div>
     </div>
     <div class="row" style="margin-top:12px">
-      <button class="btn purple" id="wearBtn" onclick="toggleWearable()">Ligar smartwatch demo</button>
+      <button class="btn purple premiumOnly" data-entitlement="gold" id="wearBtn" onclick="toggleWearable()">Ligar smartwatch demo · GOLD</button>
       <button class="btn" id="activityBtn" onclick="toggleActivity()">Iniciar atividade</button>
     </div>
     <p class="small muted">Nesta Alpha o relógio/cardio são simulados. A distância usa GPS real quando existe tracking. Dados de saúde continuam opt-in.</p>
@@ -391,6 +419,7 @@ textarea{min-height:90px}
       <option value="closure">🚧 Caminho fechado</option>
       <option value="sign">🪧 Sinalização</option>
       <option value="parking">🚗 Acesso / estacionamento</option>
+      <option value="animal">🐄 Animal / gado no trilho</option>
       <option value="other">⚠️ Outro</option>
     </select>
     <label>Severidade</label>
@@ -400,14 +429,21 @@ textarea{min-height:90px}
     </select>
     <label>Descrição</label>
     <textarea id="desc" placeholder="Ex.: árvore caída ocupa metade do trilho; dá para passar pelo lado."></textarea>
-    <label>Fotografia / câmara</label>
-    <input id="photoInput" type="file" accept="image/*" capture="environment">
+    <label>Adicionar evidência</label>
+    <div class="mediaPicker">
+      <button type="button" class="mediaAction" onclick="document.getElementById('photoCameraInput').click()"><span class="mediaIcon">📷</span><span>Tirar foto</span></button>
+      <button type="button" class="mediaAction gallery" onclick="document.getElementById('photoInput').click()"><span class="mediaIcon">🖼️</span><span>Adicionar da galeria</span></button>
+    </div>
+    <div class="mediaHint">A fotografia ajuda a validar o estado real da ocorrência.</div>
+    <input id="photoCameraInput" type="file" accept="image/*" capture="environment" style="display:none">
+    <input id="photoInput" type="file" accept="image/*" style="display:none">
     <img id="photoPreview" class="photo">
+    <input id="validationPhotoInput" type="file" accept="image/*" capture="environment" style="display:none">
     <div class="grid2" style="margin-top:10px">
       <button class="btn secondary" onclick="requestLocation()">◎ Confirmar GPS</button>
       <button class="btn" onclick="saveReport()">Publicar report</button>
     </div>
-    <p class="small muted">Reports LIVE ≠ avaliações. Um report descreve uma condição temporal e deve expirar/ser resolvido.</p>
+    <p class="small muted">Reports LIVE ≠ avaliações. Confirmar/fechar exige evidência no local: GPS, hora e fotografia quando a política da ocorrência o exige. O motor distingue ocorrências persistentes, variáveis, dinâmicas e efémeras. Máximo de 2 validadores distintos. Sem qualquer validação, o TrailScore é libertado após 48h; a relevância LIVE continua a depender do tipo e idade da ocorrência.</p>
   </div>
   <div class="card">
     <div class="eyebrow">Reports deste telemóvel</div>
@@ -416,7 +452,7 @@ textarea{min-height:90px}
   </div>
 </section>
 
-<section id="experience" class="view">
+<section id="experience" class="view premiumOnly" data-entitlement="gold">
   <div class="card">
     <div class="eyebrow">CMO Concept #01</div>
     <h2>Experience Review & Share</h2>
@@ -475,8 +511,20 @@ textarea{min-height:90px}
 </section>
 
 <section id="profile" class="view">
+  <div class="card membershipHero">
+    <div class="eyebrow">Conta & Membership</div>
+    <div class="row" style="justify-content:space-between;align-items:center"><div><h2 id="memberName" style="margin-bottom:4px">Utilizador</h2><div id="memberEmail" class="small muted"></div></div><span id="profileTier" class="tierBadge tier-free">FREE</span></div>
+    <div id="membershipMessage" class="item" style="margin-top:12px"></div>
+    <div id="silverWallet" style="margin-top:12px"></div>
+    <div class="row" style="margin-top:12px"><button class="btn secondary" onclick="openEntitlementLab()">Teste de tiers</button><button class="logoutLink" onclick="alphaLogout()">Terminar sessão</button></div>
+  </div>
+  <div id="entitlementLab" class="card" style="display:none">
+    <div class="eyebrow">Alpha Lab · simulação</div><h2>LOGIN → ENTITLEMENTS → UX</h2>
+    <p class="small muted">Ferramenta temporária para a família testar cada UX. Em produção o utilizador não escolhe o tier manualmente.</p>
+    <div class="row"><button class="btn secondary" onclick="simulateTier('FREE')">FREE</button><button class="btn secondary" onclick="simulateSilverEarned()">SILVER</button><button class="btn purple" onclick="simulateTier('GOLD')">EARLY GOLD</button><button class="btn secondary" onclick="simulateTier('PLATINUM')">PLATINUM</button><button class="btn secondary" onclick="simulateTier('ORGANIZATION')">ORGANIZATIONS</button></div>
+  </div>
   <div class="card">
-    <div class="eyebrow">Alpha 1.3.3</div><h2>Estado do teste</h2>
+    <div class="eyebrow">Alpha 1.4.4</div><h2>Estado do teste</h2>
     <div class="list">
       <div class="item">✓ GPS real + tracking</div>
       <div class="item">✓ Mapa vetorial real</div>
@@ -521,11 +569,11 @@ textarea{min-height:90px}
 </div>
 
 <nav class="bottom">
-  <button class="nav active" data-id="home" onclick="go('home')">⌂<br>Hoje</button>
-  <button class="nav" data-id="field" onclick="go('field')">▶<br>GO</button>
+  <button class="nav active" data-id="home" onclick="go('home')">⌂<br>Descobrir</button>
+  <button class="nav" data-id="field" onclick="go('field')">▶<br>Mapa/GO</button>
   <button class="nav" data-id="report" onclick="go('report')">⚑<br>LIVE</button>
-  <button class="nav" data-id="experience" onclick="go('experience')">★<br>Experiência</button>
-  <button class="nav" data-id="profile" onclick="go('profile')">●<br>Teste</button>
+  <button id="premiumNav" class="nav premiumNav" data-id="experience" onclick="openPremium()">✦<br>Premium</button>
+  <button class="nav" data-id="profile" onclick="go('profile')">●<br>Perfil</button>
 </nav>
 
 <script>
@@ -536,7 +584,59 @@ let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareF
 let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,trailDetailPhotos=[],destination=null,experiencePlaces={monuments:[],meals:[],stays:[]},currentTester='Filipe',smartChoices={monuments:[],meals:[],stays:[]};
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
 
-const types={tree:'🌳 Árvore / obstáculo',water:'💧 Estado da água',mud:'🌧️ Lama / inundação',closure:'🚧 Caminho fechado',sign:'🪧 Sinalização',parking:'🚗 Acesso / estacionamento',other:'⚠️ Outro'};
+/* ---------- FAMILY LOGIN + ENTITLEMENT ENGINE 1.4.3 ---------- */
+const AUTH_KEY='alpha_auth_user', ENT_PREFIX='alpha_entitlements_', POINTS_PREFIX='alpha_trailscore_points_';
+const FAMILY_USERS={
+  Helena:{id:'helena',name:'Helena Ribeiro',shortName:'Helena',initialTier:'GOLD',initialDays:30},
+  Filipe:{id:'filipe',name:'Filipe Ribeiro',shortName:'Filipe',initialTier:'SILVER',initialDays:7},
+  Daniela:{id:'daniela',name:'Daniela Ribeiro',shortName:'Daniela',initialTier:'FREE'},
+  'André':{id:'andre',name:'André Ribeiro',shortName:'André',initialTier:'FREE'}
+};
+const TIER_RANK={FREE:0,SILVER:1,GOLD:2,PLATINUM:3,ORGANIZATION:4};
+function authUser(){try{return JSON.parse(localStorage.getItem(AUTH_KEY)||'null')}catch{return null}}
+function userKey(prefix){const u=authUser();return prefix+(u?.id||'guest')}
+function entState(){try{return JSON.parse(localStorage.getItem(userKey(ENT_PREFIX))||'null')||{tier:'FREE'}}catch{return {tier:'FREE'}}}
+function saveEnt(e){localStorage.setItem(userKey(ENT_PREFIX),JSON.stringify(e));applyEntitlements()}
+function points(){return Math.max(0,Number(localStorage.getItem(userKey(POINTS_PREFIX))||0))}
+function addPoints(n,reason){if(n<=0)return;localStorage.setItem(userKey(POINTS_PREFIX),String(points()+n));toast('+'+n+' TrailScore · '+reason);renderMembership()}
+function pointsForUser(userId){return Math.max(0,Number(localStorage.getItem(POINTS_PREFIX+userId)||0))}
+function addPointsToUser(userId,n,reason){if(!userId||n<=0)return;localStorage.setItem(POINTS_PREFIX+userId,String(pointsForUser(userId)+n));const u=authUser();if(u&&u.id===userId){toast('+'+n+' TrailScore · '+reason);renderMembership()}}
+function familyProfileById(id){return Object.values(FAMILY_USERS).find(x=>x.id===id)||null}
+function reportPointValue(r){return r.photo?25:15}
+function awardReportPoints(r,reason){if(r.pointsAwarded)return false;const n=Number(r.pendingPoints||reportPointValue(r));addPointsToUser(r.reporterId,n,reason);r.pointsAwarded=true;r.pointsAwardedAt=new Date().toISOString();r.pointsAwardReason=reason;r.pendingPoints=0;return true}
+function sweepReportPointMaturity(){let rs=reports(),changed=false,now=Date.now();rs.forEach(r=>{const vals=Array.isArray(r.validations)?r.validations:[];if(!r.pointsAwarded&&!r.temporalReview&&vals.length===0&&new Date(r.time).getTime()+48*3600000<=now){if(awardReportPoints(r,'TrailScore libertado após 48h sem validação de terceiros'))changed=true}});if(changed)saveReports(rs)}
+function createInitialEntitlement(profile){
+  const now=Date.now();
+  if(profile.initialTier==='GOLD')return {tier:'GOLD',expiresAt:new Date(now+(profile.initialDays||30)*86400000).toISOString(),source:'family-alpha-initial'};
+  if(profile.initialTier==='SILVER')return {tier:'SILVER',expiresAt:new Date(now+(profile.initialDays||7)*86400000).toISOString(),source:'family-alpha-initial'};
+  return {tier:'FREE',source:'family-alpha-initial'};
+}
+function alphaLogin(){
+  const chosen=$('loginName').value, pin=$('loginPin').value.trim();
+  const profile=FAMILY_USERS[chosen];
+  if(!profile)return toast('Escolhe um dos 4 utilizadores de teste');
+  if(pin!=='1234')return toast('PIN incorreto');
+  localStorage.setItem(AUTH_KEY,JSON.stringify({id:profile.id,name:profile.name,shortName:profile.shortName,createdAt:new Date().toISOString(),alphaFamily:true}));
+  const entKey=ENT_PREFIX+profile.id;
+  if(!localStorage.getItem(entKey))localStorage.setItem(entKey,JSON.stringify(createInitialEntitlement(profile)));
+  currentTester=profile.shortName;localStorage.setItem(TESTER_KEY,currentTester);
+  $('loginPin').value='';$('authGate').classList.remove('show');applyEntitlements();toast('Bem-vindo, '+profile.shortName+' · '+tierLabel(effectiveTier()));
+}
+function alphaLogout(){localStorage.removeItem(AUTH_KEY);$('authGate').classList.add('show');$('loginPin').value='';go('home')}
+function effectiveTier(){let e=entState(),now=Date.now();if(e.tier==='GOLD'&&e.expiresAt&&new Date(e.expiresAt).getTime()<=now){e={tier:e.resumeSilverUntil&&new Date(e.resumeSilverUntil).getTime()>now?'SILVER':'FREE',expiresAt:e.resumeSilverUntil||null};localStorage.setItem(userKey(ENT_PREFIX),JSON.stringify(e));return e.tier}if(e.tier==='SILVER'&&e.expiresAt&&new Date(e.expiresAt).getTime()<=now){e={tier:'FREE'};localStorage.setItem(userKey(ENT_PREFIX),JSON.stringify(e));return 'FREE'}return e.tier||'FREE'}
+function hasGold(){return ['GOLD','PLATINUM','ORGANIZATION'].includes(effectiveTier())}
+function hasSilver(){return ['SILVER','GOLD','PLATINUM','ORGANIZATION'].includes(effectiveTier())}
+function tierLabel(t){return t==='GOLD'?'GOLD · Early':t==='ORGANIZATION'?'ORGANIZATIONS':t}
+function applyEntitlements(){const t=effectiveTier();document.querySelectorAll('.premiumOnly').forEach(x=>x.classList.toggle('entitled',hasGold()));document.querySelectorAll('.silverOnly').forEach(x=>x.classList.toggle('entitled',hasSilver()));document.querySelectorAll('.platinumOnly').forEach(x=>x.classList.toggle('entitled',['PLATINUM','ORGANIZATION'].includes(t)));document.querySelectorAll('.orgOnly').forEach(x=>x.classList.toggle('entitled',t==='ORGANIZATION'));['headerTier','profileTier'].forEach(id=>{let el=$(id);if(el){el.textContent=tierLabel(t);el.className='tierBadge tier-'+t.toLowerCase()}});renderMembership()}
+function openPremium(){if(hasGold())return go('experience');go('profile');toast(effectiveTier()==='SILVER'?'SILVER ativo · GOLD é o Premium pago':'Descobre GOLD no teu Perfil')}
+function openEntitlementLab(){$('entitlementLab').style.display=$('entitlementLab').style.display==='none'?'block':'none'}
+function simulateTier(t){let e={tier:t,source:'alpha-lab'};if(t==='GOLD')e.expiresAt=new Date(Date.now()+30*86400000).toISOString();saveEnt(e);toast('UX '+tierLabel(t)+' ativada para teste')}
+function simulateSilverEarned(){saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+7*86400000).toISOString(),source:'alpha-test'});toast('SILVER de teste ativo por 7 dias')}
+function redeemSilver(days,cost){if(effectiveTier()!=='FREE')return toast('SILVER por pontos é ativado a partir de FREE');if(points()<cost)return toast('Ainda não tens pontos suficientes');localStorage.setItem(userKey(POINTS_PREFIX),String(points()-cost));saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+days*86400000).toISOString(),source:'points',cost});toast('SILVER ativado por '+days+' dias')}
+function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 1.4.4: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button></div>':'')}}
+function bootAuth(){const u=authUser();if(!u){$('authGate').classList.add('show')}else{currentTester=u.shortName||u.name||'Filipe';localStorage.setItem(TESTER_KEY,currentTester);$('authGate').classList.remove('show')}sweepReportPointMaturity();applyEntitlements()}
+
+const types={tree:'🌳 Árvore / obstáculo',water:'💧 Estado da água',mud:'🌧️ Lama / inundação',closure:'🚧 Caminho fechado',sign:'🪧 Sinalização',parking:'🚗 Acesso / estacionamento',animal:'🐄 Animal / gado no trilho',other:'⚠️ Outro'};
 
 function toast(m){let t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.remove('show'),2800)}
 function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();if(map){map.resize();renderMapReports();renderTrailLayer();renderSelectedTrail();}},120);if(id==='experience')syncReview()}
@@ -563,7 +663,7 @@ function renderMapReports(){
   if(!map)return;reportMarkers.forEach(m=>m.remove());reportMarkers=[];
   reports().forEach(r=>{
     let e=document.createElement('div');e.className='marker';e.textContent=(types[r.type]||'⚠️').split(' ')[0];
-    let pop=new maplibregl.Popup({offset:20}).setHTML('<b>'+esc(types[r.type]||r.type)+'</b><br>'+esc(r.desc||'Sem descrição')+'<br><small>'+new Date(r.time).toLocaleString('pt-PT')+'</small>');
+    let pop=new maplibregl.Popup({offset:20}).setHTML('<b>'+esc(types[r.type]||r.type)+'</b><br>'+esc(r.desc||'Sem descrição')+'<br><small>'+new Date(r.time).toLocaleString('pt-PT')+' · '+(r.status==='closed'?'FECHADO':temporalState(r).label)+'</small>');
     reportMarkers.push(new maplibregl.Marker({element:e}).setLngLat([r.lon,r.lat]).setPopup(pop).addTo(map))
   })
 }
@@ -587,7 +687,7 @@ function toggleWatch(){
   $('watchBtn').textContent='Parar tracking';toast('Tracking iniciado')
 }
 function checkNearest(){
-  let rs=reports();
+  let rs=reports().filter(r=>reportIsRelevant(r));
   if(!pos||!rs.length){$('nearTitle').textContent='Sem reports locais';$('nearText').textContent='Cria um report para o veres no mapa.';return}
   let best=rs.map(r=>({r,d:hav(pos.latitude,pos.longitude,r.lat,r.lon)})).sort((a,b)=>a.d-b.d)[0];
   $('nearTitle').textContent=(types[best.r.type]||best.r.type)+' · '+distanceLabel(best.d);$('nearText').textContent=best.r.desc||'Sem descrição';
@@ -595,19 +695,112 @@ function checkNearest(){
   if(best.d>650)window._near=false
 }
 
-$('photoInput').addEventListener('change',e=>compressImage(e.target.files[0],data=>{photoData=data;$('photoPreview').src=data;$('photoPreview').style.display='block'}));
+function handleReportPhotoFile(f){compressImage(f,data=>{photoData=data;$('photoPreview').src=data;$('photoPreview').style.display='block'})}
+$('photoCameraInput').addEventListener('change',e=>handleReportPhotoFile(e.target.files[0]));
+$('photoInput').addEventListener('change',e=>handleReportPhotoFile(e.target.files[0]));
 $('expPhotoInput').addEventListener('change',e=>compressImage(e.target.files[0],data=>{expPhotoData=data;$('expPhotoPreview').src=data;$('expPhotoPreview').style.display='block'}));
 function compressImage(f,done){
   if(!f)return;let rd=new FileReader();rd.onload=()=>{let im=new Image();im.onload=()=>{let c=document.createElement('canvas'),max=1100,scale=Math.min(1,max/im.width);c.width=im.width*scale;c.height=im.height*scale;c.getContext('2d').drawImage(im,0,0,c.width,c.height);done(c.toDataURL('image/jpeg',.78))};im.src=rd.result};rd.readAsDataURL(f)
 }
+function currentTrailIdentity(){
+  if(selectedTrail)return {trailId:String(selectedTrail.id||selectedTrail.osmId||selectedTrail.name||'selected'),trailName:selectedTrail.name||selectedTrail.ref||'Trail selecionado'};
+  return {trailId:'local-gps',trailName:'Percurso local / GPS'};
+}
+const TEMPORAL_POLICIES={
+  tree:{className:'PERSISTENTE',photoRequired:true,closeReviewMinutes:30,staleHours:72,expireHours:null},
+  closure:{className:'PERSISTENTE',photoRequired:true,closeReviewMinutes:30,staleHours:72,expireHours:null},
+  sign:{className:'ESTRUTURAL',photoRequired:true,closeReviewMinutes:60,staleHours:168,expireHours:null},
+  mud:{className:'VARIÁVEL',photoRequired:true,closeReviewMinutes:10,staleHours:12,expireHours:48},
+  water:{className:'VARIÁVEL',photoRequired:true,closeReviewMinutes:10,staleHours:12,expireHours:48},
+  parking:{className:'DINÂMICO',photoRequired:true,closeReviewMinutes:0,staleHours:1,expireHours:4},
+  animal:{className:'EFÉMERO',photoRequired:false,closeReviewMinutes:0,staleHours:.5,expireHours:2},
+  other:{className:'VARIÁVEL',photoRequired:true,closeReviewMinutes:10,staleHours:12,expireHours:48}
+};
+function temporalPolicy(r){return TEMPORAL_POLICIES[r.type]||TEMPORAL_POLICIES.other}
+function temporalState(r){
+  const p=temporalPolicy(r),ageH=Math.max(0,(Date.now()-new Date(r.time).getTime())/3600000);
+  if(p.expireHours!==null&&ageH>=p.expireHours)return {code:'expired',label:'EXPIRADO',ageH};
+  if(ageH>=p.staleHours)return {code:'stale',label:'DESATUALIZADO',ageH};
+  if(ageH<1)return {code:'live',label:'LIVE',ageH};
+  return {code:'recent',label:'RECENTE',ageH};
+}
+function reportIsRelevant(r){const t=temporalState(r);return r.status!=='closed'&&t.code!=='expired'}
+function temporalCloseAssessment(r){
+  const p=temporalPolicy(r),mins=Math.max(0,(Date.now()-new Date(r.time).getTime())/60000);
+  return {needsReview:p.closeReviewMinutes>0&&mins<p.closeReviewMinutes,minutes:mins,policy:p};
+}
+let pendingValidation=null,validationPhotoData='';
+$('validationPhotoInput').addEventListener('change',e=>{
+  const f=e.target.files&&e.target.files[0];
+  if(!pendingValidation){e.target.value='';return}
+  if(!f){toast('Validação cancelada');pendingValidation=null;return}
+  compressImage(f,data=>{validationPhotoData=data;finalizeReportValidation()});
+});
+function canValidateReport(r){
+  const u=authUser();if(!u)return {ok:false,msg:'Faz login primeiro'};
+  if(r.reporterId===u.id)return {ok:false,msg:'O autor não pode validar o próprio report'};
+  if(r.status==='closed')return {ok:false,msg:'Este report já está fechado'};
+  const vals=Array.isArray(r.validations)?r.validations:[];
+  if(vals.some(v=>v.userId===u.id))return {ok:false,msg:'Já validaste este report'};
+  if(vals.length>=2)return {ok:false,msg:'Este report já atingiu o máximo de 2 validadores'};
+  if(!pos)return {ok:false,msg:'Confirma primeiro a tua posição GPS'};
+  const d=hav(pos.latitude,pos.longitude,r.lat,r.lon);
+  if(d>250)return {ok:false,msg:'Tens de estar junto da ocorrência (até 250 m nesta Alpha)'};
+  if(r.trailId&&r.trailId!=='local-gps'&&selectedTrail){
+    const here=String(selectedTrail.id||selectedTrail.osmId||selectedTrail.name||'selected');
+    if(here!==String(r.trailId))return {ok:false,msg:'Seleciona o mesmo trail do report antes de validar'};
+  }
+  return {ok:true,d};
+}
+function startReportValidation(id,action){
+  let r=reports().find(x=>x.id===id);if(!r)return toast('Report não encontrado');
+  const c=canValidateReport(r);if(!c.ok)return toast(c.msg);
+  const p=temporalPolicy(r);pendingValidation={id,action,d:c.d};validationPhotoData='';
+  if(p.photoRequired){
+    toast((action==='close'?'Fechar':'Confirmar')+' exige fotografia atual + GPS + hora');
+    const inp=$('validationPhotoInput');inp.value='';inp.click();
+  }else{
+    if(confirm('Esta ocorrência é efémera. Confirma apenas se a observaste no local agora. Não te aproximes de animais para obter fotografia.'))finalizeReportValidation();
+    else pendingValidation=null;
+  }
+}
+function finalizeReportValidation(){
+  if(!pendingValidation)return;
+  let rs=reports(),r=rs.find(x=>x.id===pendingValidation.id);if(!r){pendingValidation=null;return toast('Report não encontrado')}
+  const c=canValidateReport(r);if(!c.ok){pendingValidation=null;validationPhotoData='';return toast(c.msg)}
+  const u=authUser(),action=pendingValidation.action,p=temporalPolicy(r),assessment=temporalCloseAssessment(r);
+  if(p.photoRequired&&!validationPhotoData){pendingValidation=null;return toast('É necessária fotografia atual para esta validação')}
+  r.validations=Array.isArray(r.validations)?r.validations:[];
+  const validation={userId:u.id,userName:u.name,action:action==='close'?'closed':'confirmed',time:new Date().toISOString(),distanceM:Math.round(c.d),photo:validationPhotoData||'',temporalClass:p.className,temporalReview:false};
+  let awarded=false;
+  if(action==='close'&&assessment.needsReview){
+    validation.action='close_review';validation.temporalReview=true;
+    r.temporalReview=true;r.status='open';r.reviewReason='Fecho muito próximo temporalmente do report para uma ocorrência '+p.className.toLowerCase();
+    r.validations.push(validation);
+    toast('Fecho recebido com evidência · ficou em revisão temporal e os pontos continuam pendentes');
+  }else{
+    r.validations.push(validation);
+    if(action==='close'){r.status='closed';r.closedAt=new Date().toISOString();r.closedBy=u.id;r.temporalReview=false}
+    else {r.status='open';r.temporalReview=false}
+    awarded=awardReportPoints(r,action==='close'?'report concluído com evidência por outro utilizador':'report confirmado com evidência por outro utilizador');
+    toast(action==='close'?'Report fechado com evidência'+(awarded?' · pontos atribuídos ao autor':''):'Report confirmado com evidência'+(awarded?' · pontos atribuídos ao autor':''));
+  }
+  saveReports(rs);renderReports();renderMapReports();checkNearest();
+  logContribution(action==='close'?'validou fecho com evidência':'confirmou report com evidência',String(r.id),r.type);
+  pendingValidation=null;validationPhotoData='';$('validationPhotoInput').value='';
+}
+function validateReport(id,action){startReportValidation(id,action)}
 function saveReport(){
   if(!pos)return toast('Confirma primeiro a posição GPS');
-  let r={id:Date.now(),type:$('rtype').value,severity:$('severity').value,desc:$('desc').value.trim(),lat:pos.latitude,lon:pos.longitude,accuracy:pos.accuracy,time:new Date().toISOString(),photo:photoData};
-  let rs=reports();rs.unshift(r);try{saveReports(rs)}catch(e){r.photo='';rs[0]=r;saveReports(rs);toast('Report guardado sem foto: armazenamento cheio')}
-  renderReports();renderMapReports();checkNearest();$('desc').value='';$('photoInput').value='';$('photoPreview').style.display='none';photoData='';toast('Report LIVE guardado')
+  const u=authUser();if(!u)return toast('Faz login primeiro');
+  const trail=currentTrailIdentity();
+  let r={id:Date.now(),type:$('rtype').value,severity:$('severity').value,desc:$('desc').value.trim(),lat:pos.latitude,lon:pos.longitude,accuracy:pos.accuracy,time:new Date().toISOString(),photo:photoData,reporterId:u.id,reporterName:u.name,trailId:trail.trailId,trailName:trail.trailName,status:'open',validations:[],pendingPoints:photoData?25:15,pointsAwarded:false,temporalClass:temporalPolicy({type:$('rtype').value}).className};
+  let rs=reports();rs.unshift(r);try{saveReports(rs)}catch(e){r.photo='';r.pendingPoints=15;rs[0]=r;saveReports(rs);toast('Report guardado sem foto: armazenamento cheio')}
+  renderReports();renderMapReports();checkNearest();$('desc').value='';$('photoInput').value='';$('photoCameraInput').value='';$('photoPreview').style.display='none';photoData='';logContribution('publicou report LIVE',String(r.id),r.type);toast('Report LIVE guardado · pontos pendentes de validação')
 }
 function renderReports(){
-  let rs=reports();$('reportsList').innerHTML=rs.length?rs.map(r=>'<div class="item"><b>'+esc(types[r.type]||r.type)+'</b><div class="small muted">'+new Date(r.time).toLocaleString('pt-PT')+' · GPS ±'+Math.round(r.accuracy)+' m · '+r.lat.toFixed(5)+', '+r.lon.toFixed(5)+'</div><p>'+esc(r.desc||'Sem descrição')+'</p>'+(r.photo?'<img class="reportPhoto" src="'+r.photo+'">':'')+'<br><button class="btn secondary" onclick="deleteReport('+r.id+')">Eliminar</button></div>').join(''):'<div class="muted">Ainda não existem reports neste telemóvel.</div>'
+  sweepReportPointMaturity();let rs=reports(),u=authUser();
+  $('reportsList').innerHTML=rs.length?rs.map(r=>{const vals=Array.isArray(r.validations)?r.validations:[];const mine=u&&r.reporterId===u.id;const remaining=Math.max(0,2-vals.length);const age=Date.now()-new Date(r.time).getTime();const autoIn=Math.max(0,48*3600000-age);const hrs=Math.ceil(autoIn/3600000);const ts=temporalState(r),pol=temporalPolicy(r);const pointState=r.pointsAwarded?'✅ '+(r.pointsAwardReason||'TrailScore atribuído'):(r.temporalReview?'🟠 TrailScore em revisão temporal':'⏳ '+(r.pendingPoints||reportPointValue(r))+' pts pendentes · '+(hrs>0?'libertação em ~'+hrs+'h se ninguém validar':'a validar'));const validationText=vals.length?vals.map(v=>(v.action==='closed'?'✓ fechado':v.action==='close_review'?'⚠ fecho em revisão':'✓ confirmado')+' por '+esc(v.userName)+(v.photo?' · 📷 evidência':'')).join(' · '):'Sem validações ainda';let actions='';if(!mine&&r.status!=='closed'&&remaining>0){actions='<div class="row" style="margin-top:8px"><button class="btn secondary" onclick="startReportValidation('+r.id+',&quot;confirm&quot;)">Confirmar + evidência</button><button class="btn warn" onclick="startReportValidation('+r.id+',&quot;close&quot;)">Fechar + evidência</button></div>'}return '<div class="item"><b>'+esc(types[r.type]||r.type)+'</b> · <span class="small '+(r.status==='closed'?'muted':'green')+'">'+(r.status==='closed'?'FECHADO':'ABERTO')+'</span> <span class="pill">'+pol.className+' · '+ts.label+'</span><div class="small muted">'+new Date(r.time).toLocaleString('pt-PT')+' · '+esc(r.trailName||'Percurso local')+' · por '+esc(r.reporterName||'utilizador')+' · GPS ±'+Math.round(r.accuracy)+' m</div><p>'+esc(r.desc||'Sem descrição')+'</p>'+(r.photo?'<img class="reportPhoto" src="'+r.photo+'">':'')+(r.reviewReason?'<div class="providerNote small">⚠ '+esc(r.reviewReason)+' · não assumimos automaticamente report falso nem atribuímos pontos até existir evidência suficiente.</div>':'')+'<div class="small" style="margin-top:8px">'+pointState+'</div><div class="small muted">'+validationText+' · '+remaining+' validação(ões) disponível(is)</div>'+actions+(mine?'<br><button class="btn secondary" onclick="deleteReport('+r.id+')">Eliminar report de teste</button>':'')+'</div>'}).join(''):'<div class="muted">Ainda não existem reports neste telemóvel.</div>'
 }
 function deleteReport(id){saveReports(reports().filter(r=>r.id!==id));renderReports();renderMapReports();checkNearest()}
 function clearReports(){if(confirm('Apagar todos os reports de teste deste telemóvel?')){saveReports([]);renderReports();renderMapReports();checkNearest();toast('Reports apagados')}}
@@ -1251,7 +1444,7 @@ function detailScores(t){
     if(weatherNow.temperature_2m>32)today-=8;
     if(weatherNow.temperature_2m>=12&&weatherNow.temperature_2m<=26)today+=4;
   }
-  const active=reports().filter(r=>t.center&&hav(t.center[1],t.center[0],r.lat,r.lon)<3000);
+  const active=reports().filter(r=>reportIsRelevant(r)&&t.center&&hav(t.center[1],t.center[0],r.lat,r.lon)<3000);
   today-=active.reduce((a,r)=>a+(r.severity==='major'?18:r.severity==='significant'?10:4),0);
   today=Math.max(5,Math.min(96,Math.round(today)));
   const intent=$('aiIntent')?$('aiIntent').value:'walk';
@@ -1365,7 +1558,7 @@ function renderTrailLayer(){
 }
 function runTrailAI(){
   if(!nearbyTrails.length){$('aiOutput').textContent='Ainda não tenho trails reais para comparar. Carrega “Trails perto de ti” primeiro.';return}
-  computeGlobalRating();const intent=$('aiIntent').value,effort=$('aiEffort').value;let scored=nearbyTrails.map(t=>{let s=72;let d=trailDistanceFromUser(t);if(d!==null)s-=Math.min(18,d/3000);if(t.network==='lwn')s+=effort==='easy'?8:2;if(t.network==='rwn')s+=effort==='medium'?6:0;if(t.network==='nwn'||t.network==='iwn')s+=effort==='hard'?7:-4;if(weatherNow){if(weatherNow.precipitation>1)s-=12;if(weatherNow.wind_speed_10m>35)s-=10;if(weatherNow.temperature_2m>32)s-=8;if(weatherNow.temperature_2m>=12&&weatherNow.temperature_2m<=26)s+=5}let active=reports().filter(r=>t.center&&hav(t.center[1],t.center[0],r.lat,r.lon)<3000);s-=active.reduce((a,r)=>a+(r.severity==='major'?18:r.severity==='significant'?10:4),0);if(intent==='family'&&effort==='easy')s+=t.network==='lwn'?7:0;if(intent==='water')s-=5;return{t,score:Math.max(5,Math.min(96,Math.round(s))),active}}).sort((a,b)=>b.score-a.score);let best=scored[0];selectedTrail=best.t;renderTrails();let why=[];let d=trailDistanceFromUser(best.t);if(d!==null)why.push('fica a '+distanceLabel(d)+' da tua posição');if(best.t.network)why.push('rede '+best.t.network.toUpperCase());if(weatherNow)why.push(weatherLabel(weatherNow.weather_code).toLowerCase()+', '+Math.round(weatherNow.temperature_2m)+'°C');if(best.active.length)why.push(best.active.length+' report(s) local(is) próximo(s)');else why.push('sem reports locais próximos nesta Alpha');let caution=intent==='water'?'Para água/cascatas ainda não tenho um sensor/estado hidrológico real, por isso não posso afirmar que exista água.':'';
+  computeGlobalRating();const intent=$('aiIntent').value,effort=$('aiEffort').value;let scored=nearbyTrails.map(t=>{let s=72;let d=trailDistanceFromUser(t);if(d!==null)s-=Math.min(18,d/3000);if(t.network==='lwn')s+=effort==='easy'?8:2;if(t.network==='rwn')s+=effort==='medium'?6:0;if(t.network==='nwn'||t.network==='iwn')s+=effort==='hard'?7:-4;if(weatherNow){if(weatherNow.precipitation>1)s-=12;if(weatherNow.wind_speed_10m>35)s-=10;if(weatherNow.temperature_2m>32)s-=8;if(weatherNow.temperature_2m>=12&&weatherNow.temperature_2m<=26)s+=5}let active=reports().filter(r=>reportIsRelevant(r)&&t.center&&hav(t.center[1],t.center[0],r.lat,r.lon)<3000);s-=active.reduce((a,r)=>a+(r.severity==='major'?18:r.severity==='significant'?10:4),0);if(intent==='family'&&effort==='easy')s+=t.network==='lwn'?7:0;if(intent==='water')s-=5;return{t,score:Math.max(5,Math.min(96,Math.round(s))),active}}).sort((a,b)=>b.score-a.score);let best=scored[0];selectedTrail=best.t;renderTrails();let why=[];let d=trailDistanceFromUser(best.t);if(d!==null)why.push('fica a '+distanceLabel(d)+' da tua posição');if(best.t.network)why.push('rede '+best.t.network.toUpperCase());if(weatherNow)why.push(weatherLabel(weatherNow.weather_code).toLowerCase()+', '+Math.round(weatherNow.temperature_2m)+'°C');if(best.active.length)why.push(best.active.length+' report(s) local(is) próximo(s)');else why.push('sem reports locais próximos nesta Alpha');let caution=intent==='water'?'Para água/cascatas ainda não tenho um sensor/estado hidrológico real, por isso não posso afirmar que exista água.':'';
   $('aiOutput').textContent='✦ PREDICTED · Melhor opção agora: '+best.t.name+'\nToday Fit experimental: '+best.score+'%\nPorque: '+why.join(' · ')+'.\n'+caution+'\n\nA recomendação usa apenas dados disponíveis; não é uma garantia de segurança.';
   if(map){renderSelectedTrail()}if($('aiOutput'))$('aiOutput').innerHTML += '<br><br><button class="btn purple" onclick="openTrailDetail()">Ver detalhes desta recomendação</button>';toast('Trail AI atualizada')
 }
@@ -1643,7 +1836,7 @@ async function shareExperience(){
 }
 async function copyExperience(){try{await navigator.clipboard.writeText(experienceText());toast('Resumo copiado')}catch{toast('Não foi possível copiar')}}
 
-renderReports();loadActivity();loadExperience();syncReview();
+bootAuth();renderReports();loadActivity();loadExperience();syncReview();
 try{currentTester=localStorage.getItem(TESTER_KEY)||'Filipe'}catch{}
 try{destination=JSON.parse(localStorage.getItem(DEST_KEY)||'null');if(destination){$('destinationInput').value=destination.query||'';$('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span> · guardado'}}catch{}
 try{let pc=JSON.parse(localStorage.getItem(scopedPlacesCacheKey())||'null');if(pc&&pc.places){experiencePlaces=pc.places;renderPlaceCandidates()}}catch{}
