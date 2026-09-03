@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 1.4.9 — Gold Renew + Cancel Test</title>
+<title>Project Alpha 1.4.10 — Payment Method Launch Test</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -118,7 +118,7 @@ textarea{min-height:90px}
 .included{padding:9px 11px;border:1px solid #315149;border-radius:12px;margin-top:8px;background:#0d211b}
 
 
-/* Alpha 1.4.9 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
+/* Alpha 1.4.10 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
 .authGate{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at top,#123b32,#071116 55%);display:none;overflow:auto;padding:24px 14px}.authGate.show{display:grid;place-items:center}.authBox{width:min(520px,100%);background:#0d1a21;border:1px solid #294149;border-radius:24px;padding:22px}.tierBadge{font-size:11px;font-weight:900;padding:7px 10px;border-radius:999px;border:1px solid #315149}.tier-free{color:#d7e4df}.tier-silver{color:#e6edf0;border-color:#82919a}.tier-gold{color:#ffe08a;border-color:#9b7b28}.tier-platinum{color:#eadfff;border-color:#8064b5}.tier-organization{color:#9ed1ff;border-color:#477aa6}.membershipHero{border:1px solid #3c5360;background:linear-gradient(135deg,#10262e,#0c171d)}.pointsBig{font-size:46px;font-weight:900;color:var(--green)}.premiumOnly,.silverOnly,.platinumOnly,.orgOnly{display:none}.entitled{display:block}.view.premiumOnly.entitled{display:none}.view.premiumOnly.entitled.active{display:block}.premiumNav{color:#e4dcff!important}.premiumNav.active{background:#251d3b!important}.logoutLink{border:0;background:transparent;color:var(--muted);text-decoration:underline;padding:6px}.miniProgress{height:9px;border-radius:99px;background:#17282e;overflow:hidden}.miniProgress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber))}.authNote{font-size:11px;color:var(--muted);margin-top:10px}.roleCard{border-left:3px solid var(--green)}
 .mediaPicker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:7px}
 .mediaAction{width:100%;min-height:48px}
@@ -135,7 +135,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 .planGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}.planChip{border:1px solid #5e5131;border-radius:12px;padding:10px 5px;text-align:center;font-weight:800;font-size:12px;background:#17160f;color:#fff}.planChip{cursor:pointer}.planChip.selected,.goldPlanChoice.selected{background:var(--green);border-color:var(--green);color:#fff!important}.planChip small{font-size:11px;opacity:.9}.paymentChoice.selected{background:var(--green)!important;border-color:var(--green)!important;color:#fff!important}
 @media(max-width:430px){.planGrid{grid-template-columns:repeat(3,1fr)}}
 
-/* Alpha 1.4.9 — Payment UX Simulator + Gold Renew/Cancel Test */
+/* Alpha 1.4.10 — Payment Method Launch Test + Gold Renew/Cancel Test */
 .paymentChoice.selected{background:var(--lime)!important;color:#fff!important;border-color:var(--lime)!important}
 .paymentPanel{display:none;margin-top:14px}.paymentPanel.active{display:block}
 .payBox{border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(255,255,255,.025);margin-top:12px}
@@ -154,7 +154,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 <div id="toast" class="toast"></div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.9 · Family Login</small></div></div>
+    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.10 · Family Login</small></div></div>
     <div class="sep"></div><div class="eyebrow">Bem-vindo</div><h1 style="margin:8px 0">Vale a pena ir hoje?</h1>
     <p class="muted">Alpha familiar com 4 contas locais de teste. Usa apenas o primeiro nome e o PIN <b>1234</b>. Ainda não existe backend/sincronização entre telemóveis.</p>
     <label>Utilizador</label>
@@ -167,12 +167,12 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     </select>
     <label>PIN de teste</label><input id="loginPin" type="password" inputmode="numeric" maxlength="4" placeholder="1234" autocomplete="current-password">
     <button class="btn" style="width:100%;margin-top:14px" onclick="alphaLogin()">Entrar</button>
-    <p class="authNote">Teste 1.4.9: Helena = EARLY GOLD por 2 dias · Filipe = SILVER por 2 dias + 100 TrailScore guardados (suficientes para novo SILVER 7 dias após expirar) · Daniela = FREE · André = FREE. O PIN 1234 é apenas para a Alpha e não representa segurança de produção.</p>
+    <p class="authNote">Teste 1.4.10: Helena = EARLY GOLD por 2 dias · Filipe = SILVER por 2 dias + 100 TrailScore guardados (suficientes para novo SILVER 7 dias após expirar) · Daniela = FREE · André = FREE. O PIN 1234 é apenas para a Alpha e não representa segurança de produção.</p>
   </div>
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.9 · family login + entitlements</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.10 · family login + entitlements</small></div></div>
   <div id="headerTier" class="tierBadge tier-free">FREE</div>
 </header>
 
@@ -591,28 +591,28 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     <p class="small muted">Alpha: interfaces simuladas. Não introduzas dados reais de cartão ou credenciais.</p>
 
     <div id="pay-mbway" class="paymentPanel active">
-      <div class="payBox"><div class="paymentBrand"><b>MB WAY</b><span class="tierBadge tier-free">SIMULAÇÃO</span></div><p class="muted">No produto real, o pedido segue para o provider MB WAY e é autorizado no telemóvel.</p><label class="demoLabel">Número de telemóvel</label><input class="demoInput" inputmode="tel" placeholder="9XX XXX XXX · usar apenas dados fictícios"><button class="btn purple" style="width:100%;margin-top:12px" disabled>Pagar com MB WAY · indisponível na Alpha</button></div>
+      <div class="payBox"><div class="paymentBrand"><b>MB WAY</b><span class="tierBadge tier-free">TESTE APP</span></div><p class="muted">Helena pode testar a passagem para a app MB WAY. Não é criado qualquer pedido de pagamento: uma compra MB WAY real exige integração de merchant/provider.</p><label class="demoLabel">Número de telemóvel</label><input class="demoInput" inputmode="tel" placeholder="9XX XXX XXX · usar apenas dados fictícios"><button id="mbwayLaunchBtn" class="btn purple" style="width:100%;margin-top:12px" onclick="launchPaymentMethodAlpha('MB WAY')">Tentar abrir MB WAY · TESTE</button><div id="mbwayTestState" class="small muted" style="margin-top:8px">Ainda não testado.</div></div>
     </div>
     <div id="pay-multibanco" class="paymentPanel">
-      <div class="payBox"><div class="paymentBrand"><b>Multibanco</b><span class="tierBadge tier-free">REFERÊNCIA DEMO</span></div><p class="small muted">Referência gerada apenas para validar a apresentação. Não efetuar pagamento.</p><div class="item"><span class="muted">Entidade</span><div class="demoRef">99999</div></div><div class="item"><span class="muted">Referência</span><div class="demoRef" id="demoMbRef">000 000 000</div></div><div class="item"><span class="muted">Montante</span><div class="demoRef" id="demoMbAmount">5,99 €</div></div><button class="btn purple" style="width:100%;margin-top:12px" disabled>Concluir compra · pagamento não recebido</button></div>
+      <div class="payBox"><div class="paymentBrand"><b>Multibanco</b><span class="tierBadge tier-free">REFERÊNCIA DEMO</span></div><p class="small muted">Entidade e referência são fictícias. Para Helena o montante é 0,00 €. Serve apenas para testar o percurso da UX.</p><div class="item"><span class="muted">Entidade</span><div class="demoRef">99999</div></div><div class="item"><span class="muted">Referência</span><div class="demoRef" id="demoMbRef">000 000 000</div></div><div class="item"><span class="muted">Montante</span><div class="demoRef" id="demoMbAmount">5,99 €</div></div><button class="btn purple" style="width:100%;margin-top:12px" onclick="simulatePaymentApprovalAlpha('Multibanco')">Marcar referência como paga · TESTE</button><div id="multibancoTestState" class="small muted" style="margin-top:8px">Ainda não testado.</div></div>
     </div>
     <div id="pay-card" class="paymentPanel">
-      <div class="payBox"><div class="paymentBrand"><b>Visa / Mastercard</b><span class="tierBadge tier-free">SIMULAÇÃO</span></div><div class="demoWarn">Não introduzas um cartão real. Estes campos servem apenas para testar a UX e não guardam nem transmitem dados.</div><div class="payGrid" style="margin-top:12px"><div class="full"><label class="demoLabel">Número do cartão</label><input class="demoInput" inputmode="numeric" placeholder="0000 0000 0000 0000"></div><div><label class="demoLabel">Validade</label><input class="demoInput" placeholder="MM/AA"></div><div><label class="demoLabel">CVC</label><input class="demoInput" inputmode="numeric" placeholder="000"></div><div class="full"><label class="demoLabel">Nome no cartão</label><input class="demoInput" placeholder="NOME DE TESTE"></div></div><button class="btn purple" style="width:100%;margin-top:12px" disabled>Pagar · indisponível na Alpha</button></div>
+      <div class="payBox"><div class="paymentBrand"><b>Visa / Mastercard</b><span class="tierBadge tier-free">SIMULAÇÃO</span></div><div class="demoWarn">Não introduzas um cartão real. Estes campos são visuais e não guardam nem transmitem dados.</div><div class="payGrid" style="margin-top:12px"><div class="full"><label class="demoLabel">Número do cartão</label><input class="demoInput" inputmode="numeric" placeholder="0000 0000 0000 0000"></div><div><label class="demoLabel">Validade</label><input class="demoInput" placeholder="MM/AA"></div><div><label class="demoLabel">CVC</label><input class="demoInput" inputmode="numeric" placeholder="000"></div><div class="full"><label class="demoLabel">Nome no cartão</label><input class="demoInput" placeholder="NOME DE TESTE"></div></div><button class="btn purple" style="width:100%;margin-top:12px" onclick="simulatePaymentApprovalAlpha('Visa / Mastercard')">Autorizar cartão fictício · TESTE</button><div id="cardTestState" class="small muted" style="margin-top:8px">Ainda não testado.</div></div>
     </div>
     <div id="pay-paypal" class="paymentPanel">
-      <div class="payBox"><div class="paymentBrand"><b>PayPal</b><span class="tierBadge tier-free">SIMULAÇÃO</span></div><p class="muted">No checkout real, a autenticação acontece no PayPal. A app nunca deve pedir nem guardar a password PayPal.</p><button class="btn secondary" style="width:100%" onclick="toast('Alpha · redirecionamento PayPal simulado')">Continuar para PayPal</button><button class="btn purple" style="width:100%;margin-top:10px" disabled>Concluir compra · aguarda PayPal</button></div>
+      <div class="payBox"><div class="paymentBrand"><b>PayPal</b><span class="tierBadge tier-free">TESTE EXTERNO</span></div><p class="muted">Abre o ambiente PayPal Sandbox para testar a passagem para o provider. Não é criada uma ordem e não existe cobrança; uma integração real exige credenciais de merchant e backend.</p><button class="btn purple" style="width:100%" onclick="launchPaymentMethodAlpha('PayPal')">Abrir PayPal Sandbox · TESTE</button><div id="paypalTestState" class="small muted" style="margin-top:8px">Ainda não testado.</div></div>
     </div>
     <div id="pay-apple" class="paymentPanel">
-      <div class="payBox"><div class="paymentBrand"><b>Apple Pay</b><span class="tierBadge tier-free">SIMULAÇÃO</span></div><div class="item">GOLD <span id="applePayAmount" style="float:right;font-weight:900">5,99 €</span></div><p class="small muted">No iPhone compatível, o produto real abrirá a folha Apple Pay para autorização.</p><button class="btn purple" style="width:100%" disabled>Pagar com Apple Pay · Alpha</button></div>
+      <div class="payBox"><div class="paymentBrand"><b>Apple Pay</b><span class="tierBadge tier-free">DEVICE CHECK</span></div><div class="item">GOLD <span id="applePayAmount" style="float:right;font-weight:900">5,99 €</span></div><p class="small muted">A Alpha verifica se Apple Pay está disponível neste dispositivo. A folha real de pagamento não pode ser iniciada corretamente sem Merchant ID, domínio verificado e validação de merchant no servidor.</p><button class="btn purple" style="width:100%" onclick="launchPaymentMethodAlpha('Apple Pay')">Testar Apple Pay neste dispositivo</button><div id="appleTestState" class="small muted" style="margin-top:8px">Ainda não testado.</div></div>
     </div>
     <div id="pay-google" class="paymentPanel">
-      <div class="payBox"><div class="paymentBrand"><b>Google Pay</b><span class="tierBadge tier-free">SIMULAÇÃO</span></div><div class="item">GOLD <span id="googlePayAmount" style="float:right;font-weight:900">5,99 €</span></div><p class="small muted">No Android compatível, o produto real abrirá a folha Google Pay para autorização.</p><button class="btn purple" style="width:100%" disabled>Pagar com Google Pay · Alpha</button></div>
+      <div class="payBox"><div class="paymentBrand"><b>Google Pay / Wallet</b><span class="tierBadge tier-free">TESTE APP</span></div><div class="item">GOLD <span id="googlePayAmount" style="float:right;font-weight:900">5,99 €</span></div><p class="small muted">No Android tentamos abrir a Google Wallet para validar a passagem de app. Isto não cria uma transação Google Pay; o checkout real exige integração Google Pay/PSP.</p><button class="btn purple" style="width:100%" onclick="launchPaymentMethodAlpha('Google Pay')">Tentar abrir Google Wallet · TESTE</button><div id="googleTestState" class="small muted" style="margin-top:8px">Ainda não testado.</div></div>
     </div>
     <div id="pay-revolut" class="paymentPanel">
-      <div class="payBox"><div class="paymentBrand"><b>Revolut</b><span class="tierBadge tier-free">LINK DO PROJETO</span></div><p class="muted">Podemos reutilizar o destino Revolut já usado no PT•HUB. Nesta Alpha o link abre apenas o perfil Revolut, sem ativar GOLD automaticamente.</p><a class="btn secondary" style="display:block;text-align:center;text-decoration:none" href="https://revolut.me/filipem1pw" target="_blank" rel="noopener noreferrer">Abrir Revolut</a><button class="btn purple" style="width:100%;margin-top:10px" disabled>Concluir compra · aguarda confirmação</button></div>
+      <div class="payBox"><div class="paymentBrand"><b>Revolut</b><span class="tierBadge tier-free">REVOLUT.ME</span></div><p class="muted">A ligação genérica <b>revolut.me/filipem1pw</b> abre o perfil/página de pagamento e pode mostrar QR/partilha. Isso é o comportamento normal do link genérico; para abrir um pedido com montante pré-definido é necessário criar um Payment Link específico na Revolut.</p><button class="btn purple" style="width:100%" onclick="launchPaymentMethodAlpha('Revolut Pay')">Abrir revolut.me/filipem1pw</button><button class="btn secondary" style="width:100%;margin-top:8px" onclick="copyRevolutLinkAlpha()">Copiar ligação Revolut</button><div id="revolutTestState" class="small muted" style="margin-top:8px">Ainda não testado.</div></div>
     </div>
     <div id="pay-crypto" class="paymentPanel">
-      <div class="payBox"><div class="paymentBrand"><b>Bitcoin / Ethereum</b><span class="tierBadge tier-free">WALLET ALPHA</span></div><p class="muted">Fluxo preparado para deep link/QR de wallet. Os endereços merchant ainda não estão configurados, por isso não é possível abrir uma transferência real nesta Alpha.</p><div class="walletChoice"><div class="walletCard"><b>Bitcoin</b><div class="small muted">BTC · endereço merchant por configurar</div><button class="btn secondary" style="width:100%;margin-top:10px" disabled>Abrir wallet BTC</button></div><div class="walletCard"><b>Ethereum</b><div class="small muted">ETH · endereço merchant por configurar</div><button class="btn secondary" style="width:100%;margin-top:10px" disabled>Abrir wallet ETH</button></div></div><button class="btn purple" style="width:100%;margin-top:12px" disabled>Concluir compra · aguarda blockchain</button></div>
+      <div class="payBox"><div class="paymentBrand"><b>Bitcoin / Ethereum</b><span class="tierBadge tier-free">WALLET ALPHA</span></div><p class="muted">Ainda não existem endereços merchant. Para testar a UX sem risco, simulamos a seleção da wallet mas não construímos uma transferência sem destinatário.</p><div class="walletChoice"><div class="walletCard"><b>Bitcoin</b><div class="small muted">BTC · endereço merchant por configurar</div><button class="btn secondary" style="width:100%;margin-top:10px" onclick="simulatePaymentApprovalAlpha('Bitcoin')">Testar seleção BTC</button></div><div class="walletCard"><b>Ethereum</b><div class="small muted">ETH · endereço merchant por configurar</div><button class="btn secondary" style="width:100%;margin-top:10px" onclick="simulatePaymentApprovalAlpha('Ethereum')">Testar seleção ETH</button></div></div><div id="cryptoTestState" class="small muted" style="margin-top:8px">Ainda não testado.</div></div>
     </div>
   </div>
   <div class="card">
@@ -640,7 +640,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     <div class="row"><button class="btn secondary" onclick="simulateTier('FREE')">FREE</button><button class="btn secondary" onclick="simulateSilverEarned()">SILVER</button><button class="btn purple" onclick="simulateTier('GOLD')">EARLY GOLD</button><button class="btn secondary" onclick="simulateTier('PLATINUM')">PLATINUM</button><button class="btn secondary" onclick="simulateTier('ORGANIZATION')">ORGANIZATIONS</button></div>
   </div>
   <div class="card">
-    <div class="eyebrow">Alpha 1.4.9</div><h2>Estado do teste</h2>
+    <div class="eyebrow">Alpha 1.4.10</div><h2>Estado do teste</h2>
     <div class="list">
       <div class="item">✓ GPS real + tracking</div>
       <div class="item">✓ Mapa vetorial real</div>
@@ -708,18 +708,20 @@ const FAMILY_USERS={
   Daniela:{id:'daniela',name:'Daniela Ribeiro',shortName:'Daniela',initialTier:'FREE'},
   'André':{id:'andre',name:'André Ribeiro',shortName:'André',initialTier:'FREE'}
 };
-const FAMILY_TEST_SEED='alpha_family_test_seed_1_4_8';
+const FAMILY_TEST_SEED='alpha_family_expiry_test_seed_v2';
 function seedFamilyExpiryTest(profile){
   if(!profile||!['helena','filipe'].includes(profile.id))return;
   const key=FAMILY_TEST_SEED+'_'+profile.id;
   if(localStorage.getItem(key))return;
+  const entKey=ENT_PREFIX+profile.id;
+  if(localStorage.getItem(entKey)){localStorage.setItem(key,'1');return;}
   const now=Date.now();
   if(profile.id==='helena'){
-    localStorage.setItem(ENT_PREFIX+profile.id,JSON.stringify({tier:'GOLD',expiresAt:new Date(now+2*86400000).toISOString(),source:'alpha-1.4.9-gold-expiry-test'}));
+    localStorage.setItem(ENT_PREFIX+profile.id,JSON.stringify({tier:'GOLD',expiresAt:new Date(now+2*86400000).toISOString(),source:'alpha-1.4.10-gold-expiry-test'}));
     localStorage.removeItem(LAST_GOLD_PREFIX+profile.id);
   }
   if(profile.id==='filipe'){
-    localStorage.setItem(ENT_PREFIX+profile.id,JSON.stringify({tier:'SILVER',expiresAt:new Date(now+2*86400000).toISOString(),source:'alpha-1.4.9-silver-expiry-test'}));
+    localStorage.setItem(ENT_PREFIX+profile.id,JSON.stringify({tier:'SILVER',expiresAt:new Date(now+2*86400000).toISOString(),source:'alpha-1.4.10-silver-expiry-test'}));
     localStorage.setItem(POINTS_PREFIX+profile.id,'100');
   }
   localStorage.setItem(key,'1');
@@ -842,7 +844,7 @@ function cancelGoldAlpha(){
   if(!confirm('TESTE ALPHA: cancelar o GOLD imediatamente? O acesso Premium termina agora para poderes testar outro período.'))return;
   premiumRenewalOpen=false;
   rememberGoldExpiry(Date.now());
-  saveEnt({tier:'FREE',source:'alpha-1.4.9-immediate-cancel-test',cancelledAt:new Date().toISOString()});
+  saveEnt({tier:'FREE',source:'alpha-1.4.10-immediate-cancel-test',cancelledAt:new Date().toISOString()});
   toast('GOLD cancelado imediatamente · TESTE ALPHA');
   go('profile');
 }
@@ -852,6 +854,41 @@ function eur(v){return Number(v).toLocaleString('pt-PT',{style:'currency',curren
 function selectGoldPlan(months){selectedGoldMonths=Number(months)||1;document.querySelectorAll('.goldPlanChoice').forEach(x=>x.classList.toggle('selected',Number(x.dataset.months)===selectedGoldMonths))}
 function paymentPanelId(name){return {'MB WAY':'pay-mbway','Multibanco':'pay-multibanco','Visa / Mastercard':'pay-card','PayPal':'pay-paypal','Apple Pay':'pay-apple','Google Pay':'pay-google','Revolut Pay':'pay-revolut','Bitcoin / Ethereum':'pay-crypto'}[name]||'pay-mbway'}
 function selectPaymentMethod(el,name){selectedPaymentMethod=name;document.querySelectorAll('.paymentChoice').forEach(x=>x.classList.remove('selected'));if(el)el.classList.add('selected');document.querySelectorAll('.paymentPanel').forEach(x=>x.classList.remove('active'));const p=$(paymentPanelId(name));if(p)p.classList.add('active')}
+function paymentStateEl(method){return $({'MB WAY':'mbwayTestState','Multibanco':'multibancoTestState','Visa / Mastercard':'cardTestState','PayPal':'paypalTestState','Apple Pay':'appleTestState','Google Pay':'googleTestState','Revolut Pay':'revolutTestState','Bitcoin / Ethereum':'cryptoTestState','Bitcoin':'cryptoTestState','Ethereum':'cryptoTestState'}[method]||'')}
+function setPaymentTestState(method,text,ok=true){const el=paymentStateEl(method);if(el){el.textContent=text;el.className='small '+(ok?'green':'amber')}try{localStorage.setItem('alpha_payment_method_test_'+String(method).replace(/\W+/g,'_').toLowerCase(),JSON.stringify({method,text,ok,time:new Date().toISOString(),userId:authUser()?.id||null}))}catch{}}
+function helenaPaymentMethodTestAllowed(){return authUser()?.id==='helena'}
+function requireHelenaPaymentTest(method){if(helenaPaymentMethodTestAllowed())return true;toast(method+' · teste externo disponível apenas para Helena nesta Alpha');return false}
+function simulatePaymentApprovalAlpha(method){if(!requireHelenaPaymentTest(method))return;selectedPaymentMethod=method==='Bitcoin'||method==='Ethereum'?'Bitcoin / Ethereum':method;setPaymentTestState(selectedPaymentMethod,'✓ Fluxo aprovado em SIMULAÇÃO · 0,00 €');toast(selectedPaymentMethod+' · simulação aprovada · 0,00 €')}
+function openExternalAlpha(url,method){try{const w=window.open(url,'_blank','noopener,noreferrer');if(w){setPaymentTestState(method,'↗ Abertura externa solicitada · TESTE');return true}}catch{}setPaymentTestState(method,'Não foi possível abrir automaticamente. Verifica bloqueio de pop-ups.',false);return false}
+function launchPaymentMethodAlpha(method){
+  if(!requireHelenaPaymentTest(method))return;
+  selectedPaymentMethod=method;
+  if(method==='MB WAY'){
+    setPaymentTestState(method,'A tentar abrir a app MB WAY…');
+    const fallback=()=>{if(document.visibilityState==='visible')openExternalAlpha('https://www.mbway.pt/',method)};
+    try{window.location.href='intent://#Intent;package=pt.sibs.android.mbway;end';setTimeout(fallback,1400)}catch{fallback()}
+    return;
+  }
+  if(method==='PayPal'){
+    openExternalAlpha('https://www.sandbox.paypal.com/',method);return;
+  }
+  if(method==='Apple Pay'){
+    if(!window.ApplePaySession){setPaymentTestState(method,'Apple Pay JS não está disponível neste browser/dispositivo.',false);toast('Apple Pay não disponível neste browser');return}
+    let ok=false;try{ok=ApplePaySession.canMakePayments()}catch{}
+    setPaymentTestState(method,ok?'✓ Apple Pay disponível neste dispositivo. Merchant validation ainda não configurada.':'Apple Pay API existe, mas este dispositivo não indica capacidade de pagamento.',ok);
+    toast(ok?'Apple Pay disponível · teste de capacidade OK':'Apple Pay indisponível para pagamento neste dispositivo');return;
+  }
+  if(method==='Google Pay'){
+    setPaymentTestState(method,'A tentar abrir Google Wallet…');
+    const fallback=()=>{if(document.visibilityState==='visible')openExternalAlpha('https://wallet.google.com/',method)};
+    try{window.location.href='intent://#Intent;package=com.google.android.apps.walletnfcrel;end';setTimeout(fallback,1400)}catch{fallback()}
+    return;
+  }
+  if(method==='Revolut Pay'){
+    openExternalAlpha('https://revolut.me/filipem1pw',method);return;
+  }
+}
+async function copyRevolutLinkAlpha(){if(!requireHelenaPaymentTest('Revolut Pay'))return;try{await navigator.clipboard.writeText('https://revolut.me/filipem1pw');setPaymentTestState('Revolut Pay','✓ Ligação copiada: revolut.me/filipem1pw');toast('Ligação Revolut copiada')}catch{toast('Não foi possível copiar a ligação')}}
 function demoMbReference(){const seed=String(selectedGoldMonths).padStart(2,'0')+String(Math.floor(Date.now()/86400000)%1000000).padStart(6,'0');return (seed+'0').slice(0,9).replace(/(\d{3})(\d{3})(\d{3})/,'$1 $2 $3')}
 function refreshCheckoutAmounts(price){['demoMbAmount','applePayAmount','googlePayAmount'].forEach(id=>{if($(id))$(id).textContent=eur(price)});if($('demoMbRef'))$('demoMbRef').textContent=demoMbReference()}
 function helenaRenewalTestEligible(){
@@ -874,7 +911,7 @@ function previewGold(){
   selectedPaymentMethod='MB WAY';document.querySelectorAll('.paymentChoice').forEach((x,i)=>x.classList.toggle('selected',i===0));document.querySelectorAll('.paymentPanel').forEach(x=>x.classList.remove('active'));if($('pay-mbway'))$('pay-mbway').classList.add('active');
   const notice=$('alphaCheckoutNotice'),action=$('alphaCheckoutAction');
   if(helenaTest){
-    notice.innerHTML='<b>Teste completo Helena:</b> podes escolher <b>1, 2, 4, 8 ou 12 meses</b>. O valor é sempre <b>0,00 €</b> e, ao concluir, a Alpha atribui exatamente o período selecionado. Nenhum pagamento é enviado.';
+    notice.innerHTML='<b>Teste completo Helena:</b> podes escolher <b>1, 2, 4, 8 ou 12 meses</b> a <b>0,00 €</b>. Os botões dos métodos estão ativos para testar abertura/fluxo quando tecnicamente possível. Apple Pay/Google Pay/MB WAY reais exigem integração de merchant; aqui apenas testamos capacidade, app ou provider. A conclusão continua local e simulada.';
     action.textContent='Concluir compra simulada · 0,00 €';action.disabled=false;
   }else{
     notice.innerHTML='<b>Checkout Alpha:</b> podes percorrer e testar todos os métodos, mas não existe cobrança nem ativação automática do GOLD.';
@@ -889,7 +926,7 @@ function completeGoldCheckoutAlpha(){
   localStorage.setItem('alpha_last_payment_simulation_helena',JSON.stringify(tx));
   clearGoldExpiryNotice();
   premiumRenewalOpen=false;
-  saveEnt({tier:'GOLD',expiresAt:end.toISOString(),source:'alpha-1.4.9-helena-renewal-simulation',payment:tx});
+  saveEnt({tier:'GOLD',expiresAt:end.toISOString(),source:'alpha-1.4.10-helena-renewal-simulation',payment:tx});
   toast('Compra simulada concluída · Helena GOLD +'+selectedGoldMonths+' '+(selectedGoldMonths===1?'mês':'meses')+' · 0,00 €');
   go('home');
 }
@@ -897,7 +934,7 @@ function openEntitlementLab(){$('entitlementLab').style.display=$('entitlementLa
 function simulateTier(t){clearGoldExpiryNotice();let e={tier:t,source:'alpha-lab'};if(t==='GOLD')e.expiresAt=new Date(Date.now()+30*86400000).toISOString();saveEnt(e);toast('UX '+tierLabel(t)+' ativada para teste')}
 function simulateSilverEarned(){saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+7*86400000).toISOString(),source:'alpha-test'});toast('SILVER de teste ativo por 7 dias')}
 function redeemSilver(days,cost){if(effectiveTier()!=='FREE')return toast('SILVER por pontos é ativado a partir de FREE');if(points()<cost)return toast('Ainda não tens pontos suficientes');localStorage.setItem(userKey(POINTS_PREFIX),String(points()-cost));saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+days*86400000).toISOString(),source:'points',cost});toast('SILVER ativado por '+days+' dias')}
-function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('goldProfileActions'))$('goldProfileActions').style.display=t==='GOLD'?'flex':'none';if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 1.4.9: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button></div>':(t==='SILVER'&&p>=100?'<div class="item"><b>'+p+' pontos guardados.</b> Quando o SILVER atual expirar e regressares a FREE, podes trocá-los por um novo período SILVER.</div>':''))}}
+function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('goldProfileActions'))$('goldProfileActions').style.display=t==='GOLD'?'flex':'none';if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 1.4.10: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button></div>':(t==='SILVER'&&p>=100?'<div class="item"><b>'+p+' pontos guardados.</b> Quando o SILVER atual expirar e regressares a FREE, podes trocá-los por um novo período SILVER.</div>':''))}}
 function bootAuth(){const u=authUser();if(!u){$('authGate').classList.add('show')}else{const profile=familyProfileById(u.id);seedFamilyExpiryTest(profile);currentTester=u.shortName||u.name||'Filipe';localStorage.setItem(TESTER_KEY,currentTester);$('authGate').classList.remove('show')}sweepReportPointMaturity();applyEntitlements()}
 
 const types={tree:'🌳 Árvore / obstáculo',water:'💧 Estado da água',mud:'🌧️ Lama / inundação',closure:'🚧 Caminho fechado',sign:'🪧 Sinalização',parking:'🚗 Acesso / estacionamento',animal:'🐄 Animal / gado no trilho',other:'⚠️ Outro'};
