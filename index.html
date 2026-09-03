@@ -7,43 +7,493 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 1.1.1 — Outdoor Map</title>
+<title>Project Alpha 1.2 — Experience & Wearables Test</title>
 <style>
-:root{--bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;--text:#eff7f3;--muted:#93a9a2;--green:#39d69b;--red:#ff6b6b;--blue:#68a8ff}
-*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}body{padding-bottom:92px}.app{max-width:760px;margin:auto;padding:12px}.top{position:sticky;top:0;z-index:20;background:rgba(7,17,22,.94);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:10px 0 12px}.brand{display:flex;gap:10px;align-items:center}.logo{width:40px;height:40px;border-radius:13px;background:conic-gradient(from 200deg,var(--green),var(--blue),var(--green));position:relative}.logo:after{content:'▲';position:absolute;inset:0;display:grid;place-items:center;color:#061014;font-weight:900}.brand b{display:block}.brand small,.muted{color:var(--muted)}.badge{font-size:11px;padding:7px 9px;border-radius:999px;border:1px solid #315149;color:#bfe9d8;background:#10231f}.view{display:none}.view.active{display:block}.card{background:linear-gradient(180deg,#11242b,#0b1c22);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0}.hero h1{font-size:38px;line-height:1;margin:8px 0 10px}.hero h1 span,.green{color:var(--green)}.red{color:var(--red)}.eyebrow{font-size:11px;color:var(--green);font-weight:800;letter-spacing:.12em;text-transform:uppercase}.btn{border:0;border-radius:13px;padding:12px 14px;font-weight:800;background:var(--green);color:#071116}.btn.secondary{background:#142a31;color:var(--text);border:1px solid #2d4850}.btn.warn{background:#2b2020;color:#ffd2d2;border:1px solid #653b3b}.grid2,.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:#0a1a20;border:1px solid #223940;border-radius:15px;padding:12px}.metric b{font-size:24px;display:block}.metric small{color:var(--muted)}.row{display:flex;gap:8px;flex-wrap:wrap}.list{display:grid;gap:9px}.item{padding:12px;border-radius:15px;background:#0a1a20;border:1px solid #223940}.bottom{position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(740px,calc(100% - 16px));display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:7px;background:rgba(8,18,23,.95);border:1px solid #294149;border-radius:18px;backdrop-filter:blur(12px);z-index:30}.nav{border:0;background:transparent;color:#8ca19b;padding:9px 4px;border-radius:12px;font-size:11px}.nav.active{background:#17372f;color:#e7fff5}#realMap{height:430px;border-radius:18px;overflow:hidden;background:#091512;border:1px solid #1d3a32}.maplibregl-ctrl-attrib{font-size:10px;background:rgba(7,17,22,.82)!important;color:#c6d8d1!important}.maplibregl-ctrl-attrib a{color:#8fdcc0!important}.maplibregl-ctrl-group{background:#0d1a21!important;border:1px solid #294149!important;box-shadow:none!important}.maplibregl-ctrl button{background-color:#0d1a21!important}.maplibregl-ctrl button+button{border-top:1px solid #294149!important}.maplibregl-ctrl-icon{filter:invert(1) opacity(.86)}label{display:block;font-size:12px;color:#9fb2ac;margin:10px 0 5px}input,select,textarea{width:100%;background:#071319;color:var(--text);border:1px solid #29434b;border-radius:12px;padding:11px;font:inherit}textarea{min-height:90px}.photo{width:100%;max-height:260px;object-fit:cover;border-radius:14px;margin-top:10px;display:none}.reportPhoto{width:100%;max-height:300px;object-fit:cover;border-radius:14px;margin-top:10px}.toast{position:fixed;top:75px;right:12px;left:12px;max-width:500px;margin:auto;background:#113027;border:1px solid #2e6f59;padding:12px;border-radius:12px;z-index:50;opacity:0;transform:translateY(-12px);transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:none}.small{font-size:12px}.sep{height:1px;background:#1f343b;margin:12px 0}.marker{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#10231f;border:2px solid var(--green);font-size:16px}.userMarker{width:22px;height:22px;border-radius:50%;background:var(--blue);border:4px solid white;box-shadow:0 0 0 8px rgba(104,168,255,.18)}@media(min-width:700px){.metrics{grid-template-columns:repeat(4,1fr)}}
+:root{
+  --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
+  --text:#eff7f3;--muted:#93a9a2;--green:#39d69b;--red:#ff6b6b;
+  --blue:#68a8ff;--amber:#f6c85f;--purple:#b79cff
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+body{padding-bottom:96px}
+.app{max-width:760px;margin:auto;padding:12px}
+.top{position:sticky;top:0;z-index:20;background:rgba(7,17,22,.94);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:10px 0 12px}
+.brand{display:flex;gap:10px;align-items:center}.logo{width:40px;height:40px;border-radius:13px;background:conic-gradient(from 200deg,var(--green),var(--blue),var(--green));position:relative}.logo:after{content:'▲';position:absolute;inset:0;display:grid;place-items:center;color:#061014;font-weight:900}.brand b{display:block}.brand small,.muted{color:var(--muted)}
+.badge{font-size:11px;padding:7px 9px;border-radius:999px;border:1px solid #315149;color:#bfe9d8;background:#10231f}
+.view{display:none}.view.active{display:block}
+.card{background:linear-gradient(180deg,#11242b,#0b1c22);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0}
+.hero h1{font-size:38px;line-height:1;margin:8px 0 10px}.hero h1 span,.green{color:var(--green)}.red{color:var(--red)}.amber{color:var(--amber)}
+.eyebrow{font-size:11px;color:var(--green);font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.btn{border:0;border-radius:13px;padding:12px 14px;font-weight:800;background:var(--green);color:#071116;cursor:pointer}
+.btn.secondary{background:#142a31;color:var(--text);border:1px solid #2d4850}
+.btn.warn{background:#2b2020;color:#ffd2d2;border:1px solid #653b3b}
+.btn.purple{background:var(--purple);color:#120d1c}
+.grid2,.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metric{background:#0a1a20;border:1px solid #223940;border-radius:15px;padding:12px}.metric b{font-size:24px;display:block}.metric small{color:var(--muted)}
+.row{display:flex;gap:8px;flex-wrap:wrap}.list{display:grid;gap:9px}.item{padding:12px;border-radius:15px;background:#0a1a20;border:1px solid #223940}
+.bottom{position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(740px,calc(100% - 16px));display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:7px;background:rgba(8,18,23,.95);border:1px solid #294149;border-radius:18px;backdrop-filter:blur(12px);z-index:30}
+.nav{border:0;background:transparent;color:#8ca19b;padding:9px 4px;border-radius:12px;font-size:11px}.nav.active{background:#17372f;color:#e7fff5}
+#realMap{height:430px;border-radius:18px;overflow:hidden;background:#091512;border:1px solid #1d3a32}
+.maplibregl-ctrl-attrib{font-size:10px;background:rgba(7,17,22,.82)!important;color:#c6d8d1!important}.maplibregl-ctrl-attrib a{color:#8fdcc0!important}.maplibregl-ctrl-group{background:#0d1a21!important;border:1px solid #294149!important;box-shadow:none!important}.maplibregl-ctrl button{background-color:#0d1a21!important}.maplibregl-ctrl button+button{border-top:1px solid #294149!important}.maplibregl-ctrl-icon{filter:invert(1) opacity(.86)}
+label{display:block;font-size:12px;color:#9fb2ac;margin:10px 0 5px}
+input,select,textarea{width:100%;background:#071319;color:var(--text);border:1px solid #29434b;border-radius:12px;padding:11px;font:inherit}
+input[type="range"]{padding:0}
+textarea{min-height:90px}
+.photo{width:100%;max-height:260px;object-fit:cover;border-radius:14px;margin-top:10px;display:none}.reportPhoto{width:100%;max-height:300px;object-fit:cover;border-radius:14px;margin-top:10px}
+.toast{position:fixed;top:75px;right:12px;left:12px;max-width:500px;margin:auto;background:#113027;border:1px solid #2e6f59;padding:12px;border-radius:12px;z-index:50;opacity:0;transform:translateY(-12px);transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:none}
+.small{font-size:12px}.sep{height:1px;background:#1f343b;margin:12px 0}.marker{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#10231f;border:2px solid var(--green);font-size:16px}.userMarker{width:22px;height:22px;border-radius:50%;background:var(--blue);border:4px solid white;box-shadow:0 0 0 8px rgba(104,168,255,.18)}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #2a4840;background:#10251f;border-radius:999px;padding:6px 9px;font-size:12px;margin:2px}
+.stars{display:flex;gap:5px;font-size:28px}.star{cursor:pointer;filter:grayscale(1);opacity:.45}.star.on{filter:none;opacity:1}
+.wearable{border:1px solid #3a3159;background:linear-gradient(180deg,#17152a,#0d1820)}
+.sharePreview{background:radial-gradient(circle at top right,#1a5143 0,#0a171c 45%,#071116 100%);border:1px solid #2d4a43;border-radius:18px;padding:18px;min-height:260px;display:flex;flex-direction:column;justify-content:space-between}
+.sharePreview h2{font-size:30px;margin:8px 0}.sharePreview .score{font-size:48px;font-weight:900;color:var(--green)}
+.component{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.rangeValue{font-weight:800;color:var(--green);min-width:34px;text-align:right}
+.statusDot{width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--muted)}.statusDot.on{background:var(--green);box-shadow:0 0 10px rgba(57,214,155,.7)}
+@media(min-width:700px){.metrics{grid-template-columns:repeat(4,1fr)}}
 </style>
-</head><body><div id="toast" class="toast"></div><div class="app">
-<header class="top"><div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.1.1 · outdoor map</small></div></div><div class="badge">✓ HTTPS</div></header>
-<section id="home" class="view active"><div class="card hero"><div class="eyebrow">Pergunta central</div><h1>Vale a pena <span>ir hoje?</span></h1><p class="muted">Alpha de campo com GPS, mapa geográfico real e reports LIVE georreferenciados.</p><div class="row"><button class="btn" onclick="go('field');requestLocation()">Abrir mapa real</button><button class="btn secondary" onclick="requestLocation()">Ativar GPS</button></div></div><div class="card"><div class="eyebrow">Caso piloto</div><h2>Cascatas de Anços</h2><div class="metrics"><div class="metric"><b>91%</b><small>Trail Fit</small></div><div class="metric"><b>82%</b><small>Today Fit</small></div><div class="metric"><b class="red">18%</b><small>Worth It</small></div><div class="metric"><b>96%</b><small>Live confidence</small></div></div><div class="sep"></div><b class="red">💧 Sem água</b></div></section>
-<section id="field" class="view"><div class="card"><div class="eyebrow">GO · teste de campo</div><h2 id="gpsState">GPS desligado</h2><div class="metrics"><div class="metric"><b id="lat">—</b><small>Latitude</small></div><div class="metric"><b id="lon">—</b><small>Longitude</small></div><div class="metric"><b id="acc">—</b><small>Precisão</small></div><div class="metric"><b id="spd">—</b><small>Velocidade filtrada</small></div></div><div class="row" style="margin-top:12px"><button class="btn" onclick="requestLocation()">Centrar no meu GPS</button><button class="btn secondary" onclick="toggleWatch()" id="watchBtn">Iniciar tracking</button></div></div><div class="card"><div class="eyebrow">Mapa outdoor real</div><div id="realMap"></div><p class="small muted">Base topográfica OpenTopoMap / OpenStreetMap. Ponto azul = posição GPS. Pins = reports guardados neste telemóvel. O relevo, trilhos e curvas de nível têm prioridade visual nesta Alpha.</p></div><div class="card"><div class="eyebrow">Ocorrência mais próxima</div><h3 id="nearTitle">Sem reports locais</h3><p id="nearText" class="muted">Cria um report para o veres no mapa.</p></div></section>
-<section id="report" class="view"><div class="card"><div class="eyebrow">Report LIVE</div><h2>O que encontraste?</h2><label>Tipo</label><select id="rtype"><option value="tree">🌳 Árvore / obstáculo</option><option value="water">💧 Estado da água</option><option value="mud">🌧️ Lama / inundação</option><option value="closure">🚧 Caminho fechado</option><option value="sign">🪧 Sinalização</option><option value="parking">🚗 Acesso / estacionamento</option><option value="other">⚠️ Outro</option></select><label>Severidade</label><select id="severity"><option value="info">Informação</option><option value="minor">Ligeira</option><option value="significant">Significativa</option><option value="major">Grave / bloqueado</option></select><label>Descrição</label><textarea id="desc" placeholder="Ex.: árvore caída ocupa metade do trilho; dá para passar pelo lado."></textarea><label>Fotografia / câmara</label><input id="photoInput" type="file" accept="image/*" capture="environment"><img id="photoPreview" class="photo"><div class="grid2" style="margin-top:10px"><button class="btn secondary" onclick="requestLocation()">◎ Confirmar GPS</button><button class="btn" onclick="saveReport()">Publicar report</button></div><p class="small muted">Nesta fase os reports continuam guardados apenas neste dispositivo.</p></div><div class="card"><div class="eyebrow">Reports deste telemóvel</div><div id="reportsList" class="list"></div><button class="btn warn" style="margin-top:12px" onclick="clearReports()">Apagar reports de teste</button></div></section>
-<section id="decision" class="view"><div class="card"><div class="eyebrow">Outdoor Intelligence Core</div><h2>Decisão atual</h2><div class="metrics"><div class="metric"><b>91%</b><small>Trail Fit</small></div><div class="metric"><b>82%</b><small>Today Fit</small></div><div class="metric"><b class="red">18%</b><small>Worth It</small></div><div class="metric"><b>96%</b><small>Reality confidence</small></div></div></div></section>
-<section id="profile" class="view"><div class="card"><div class="eyebrow">Alpha 1.1</div><h2>Estado</h2><div class="list"><div class="item">✓ GPS real</div><div class="item">✓ Mapa real</div><div class="item">✓ Reports no mapa</div><div class="item">✓ Persistência local</div><div class="item">✓ Distâncias m/km</div><div class="item">✓ Filtro de velocidade parado</div></div></div></section>
-</div><nav class="bottom"><button class="nav active" data-id="home" onclick="go('home')">⌂<br>Hoje</button><button class="nav" data-id="field" onclick="go('field')">▶<br>GO</button><button class="nav" data-id="report" onclick="go('report')">⚑<br>Report</button><button class="nav" data-id="decision" onclick="go('decision')">◉<br>Decisão</button><button class="nav" data-id="profile" onclick="go('profile')">●<br>Teste</button></nav>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+<div class="app">
+<header class="top">
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.2 · experiências + wearables</small></div></div>
+  <div class="badge">✓ TEST BUILD</div>
+</header>
+
+<section id="home" class="view active">
+  <div class="card hero">
+    <div class="eyebrow">Pergunta central</div>
+    <h1>Vale a pena <span>ir hoje?</span></h1>
+    <p class="muted">Outdoor Intelligence: decisão, mapa, GPS, Reality Pulse, atividade e experiência completa.</p>
+    <div class="row">
+      <button class="btn" onclick="go('field');requestLocation()">Abrir GO</button>
+      <button class="btn secondary" onclick="go('experience')">Experiência</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">Caso piloto</div>
+    <h2>Cascatas de Anços</h2>
+    <div class="metrics">
+      <div class="metric"><b>91%</b><small>Trail Fit</small></div>
+      <div class="metric"><b>82%</b><small>Today Fit</small></div>
+      <div class="metric"><b class="red">18%</b><small>Worth It</small></div>
+      <div class="metric"><b>96%</b><small>Reality Pulse</small></div>
+    </div>
+    <div class="sep"></div>
+    <b class="red">💧 Sem água</b>
+    <p class="muted">O percurso pode estar adequado, mas se o objetivo principal é ver a cascata, hoje não compensa.</p>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">Experience Composer · demonstração</div>
+    <h2>Um dia completo, não apenas um trail</h2>
+    <div class="list">
+      <div class="item">🥾 Trail / atividade outdoor</div>
+      <div class="item">🍽️ Almoço ou jantar</div>
+      <div class="item">📍 POIs / momento especial</div>
+      <div class="item">🏨 Estadia, quando aplicável</div>
+    </div>
+    <button class="btn purple" style="margin-top:12px" onclick="go('experience')">Avaliar experiência</button>
+  </div>
+</section>
+
+<section id="field" class="view">
+  <div class="card">
+    <div class="eyebrow">GO · teste de campo</div>
+    <h2 id="gpsState">GPS desligado</h2>
+    <div class="metrics">
+      <div class="metric"><b id="lat">—</b><small>Latitude</small></div>
+      <div class="metric"><b id="lon">—</b><small>Longitude</small></div>
+      <div class="metric"><b id="acc">—</b><small>Precisão</small></div>
+      <div class="metric"><b id="spd">—</b><small>Velocidade filtrada</small></div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn" onclick="requestLocation()">Centrar no meu GPS</button>
+      <button class="btn secondary" onclick="toggleWatch()" id="watchBtn">Iniciar tracking</button>
+    </div>
+  </div>
+
+  <div class="card wearable">
+    <div class="eyebrow">Future CTO Concept #01</div>
+    <h2>⌚ Outdoor Activity & Wearables</h2>
+    <p class="muted"><span id="wearDot" class="statusDot"></span> <span id="wearState">Wearable demo desligado</span></p>
+    <div class="metrics">
+      <div class="metric"><b id="actTime">00:00</b><small>Duração</small></div>
+      <div class="metric"><b id="actDist">0.00 km</b><small>Distância GPS</small></div>
+      <div class="metric"><b id="actSteps">0</b><small>Passos estimados</small></div>
+      <div class="metric"><b id="actHr">—</b><small>Cardio demo</small></div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn purple" id="wearBtn" onclick="toggleWearable()">Ligar smartwatch demo</button>
+      <button class="btn" id="activityBtn" onclick="toggleActivity()">Iniciar atividade</button>
+    </div>
+    <p class="small muted">Nesta Alpha o relógio/cardio são simulados. A distância usa GPS real quando existe tracking. Dados de saúde continuam opt-in.</p>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">Mapa outdoor real</div>
+    <div id="realMap"></div>
+    <p class="small muted">OpenTopoMap / OpenStreetMap com relevo e caminhos. Ponto azul = GPS. Pins = reports LIVE guardados neste telemóvel.</p>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">Ocorrência mais próxima</div>
+    <h3 id="nearTitle">Sem reports locais</h3>
+    <p id="nearText" class="muted">Cria um report para o veres no mapa.</p>
+  </div>
+</section>
+
+<section id="report" class="view">
+  <div class="card">
+    <div class="eyebrow">Report LIVE</div>
+    <h2>O que encontraste?</h2>
+    <label>Tipo</label>
+    <select id="rtype">
+      <option value="tree">🌳 Árvore / obstáculo</option>
+      <option value="water">💧 Estado da água</option>
+      <option value="mud">🌧️ Lama / inundação</option>
+      <option value="closure">🚧 Caminho fechado</option>
+      <option value="sign">🪧 Sinalização</option>
+      <option value="parking">🚗 Acesso / estacionamento</option>
+      <option value="other">⚠️ Outro</option>
+    </select>
+    <label>Severidade</label>
+    <select id="severity">
+      <option value="info">Informação</option><option value="minor">Ligeira</option>
+      <option value="significant">Significativa</option><option value="major">Grave / bloqueado</option>
+    </select>
+    <label>Descrição</label>
+    <textarea id="desc" placeholder="Ex.: árvore caída ocupa metade do trilho; dá para passar pelo lado."></textarea>
+    <label>Fotografia / câmara</label>
+    <input id="photoInput" type="file" accept="image/*" capture="environment">
+    <img id="photoPreview" class="photo">
+    <div class="grid2" style="margin-top:10px">
+      <button class="btn secondary" onclick="requestLocation()">◎ Confirmar GPS</button>
+      <button class="btn" onclick="saveReport()">Publicar report</button>
+    </div>
+    <p class="small muted">Reports LIVE ≠ avaliações. Um report descreve uma condição temporal e deve expirar/ser resolvido.</p>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Reports deste telemóvel</div>
+    <div id="reportsList" class="list"></div>
+    <button class="btn warn" style="margin-top:12px" onclick="clearReports()">Apagar reports de teste</button>
+  </div>
+</section>
+
+<section id="experience" class="view">
+  <div class="card">
+    <div class="eyebrow">CMO Concept #01</div>
+    <h2>Experience Review & Share</h2>
+    <p class="muted">Avalia a experiência completa: outdoor + refeição + POIs + estadia quando existir.</p>
+
+    <label>Nome da experiência</label>
+    <input id="expName" value="Um dia na Arrábida">
+
+    <label>Avaliação global</label>
+    <div class="stars" id="globalStars">
+      <span class="star" data-v="1" onclick="setRating(1)">⭐</span>
+      <span class="star" data-v="2" onclick="setRating(2)">⭐</span>
+      <span class="star" data-v="3" onclick="setRating(3)">⭐</span>
+      <span class="star" data-v="4" onclick="setRating(4)">⭐</span>
+      <span class="star" data-v="5" onclick="setRating(5)">⭐</span>
+    </div>
+
+    <div class="sep"></div>
+    <div class="component"><div>🥾 Trail / atividade</div><div class="row"><input id="rateTrail" type="range" min="1" max="5" step="1" value="5" oninput="syncReview()"><span class="rangeValue" id="rateTrailV">5★</span></div></div>
+    <div class="component"><div>🍽️ Refeição</div><div class="row"><input id="rateMeal" type="range" min="1" max="5" step="1" value="4" oninput="syncReview()"><span class="rangeValue" id="rateMealV">4★</span></div></div>
+    <div class="component"><div>📍 POIs / momentos</div><div class="row"><input id="ratePoi" type="range" min="1" max="5" step="1" value="5" oninput="syncReview()"><span class="rangeValue" id="ratePoiV">5★</span></div></div>
+    <div class="component"><div>🏨 Estadia</div><div class="row"><input id="rateStay" type="range" min="0" max="5" step="1" value="0" oninput="syncReview()"><span class="rangeValue" id="rateStayV">N/A</span></div></div>
+
+    <label>Como foi a experiência?</label>
+    <textarea id="expText" placeholder="O que valeu mais a pena? O que melhorarias?">Dia fantástico, ótimo percurso e almoço. Voltava a repetir.</textarea>
+
+    <label>Fotografia para o Experience Story (opcional)</label>
+    <input id="expPhotoInput" type="file" accept="image/*">
+    <img id="expPhotoPreview" class="photo">
+
+    <label><input id="includeHealth" type="checkbox" style="width:auto;margin-right:8px" checked> Incluir métricas da atividade no resumo</label>
+
+    <div class="row" style="margin-top:12px">
+      <button class="btn" onclick="saveExperience()">Guardar avaliação</button>
+      <button class="btn purple" onclick="buildShareCard()">Gerar Experience Story</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">Experience Story · pré-visualização</div>
+    <div id="sharePreview" class="sharePreview">
+      <div>
+        <div class="eyebrow">A minha experiência</div>
+        <h2 id="shareName">Um dia na Arrábida</h2>
+        <div class="score"><span id="shareScore">—</span>★</div>
+      </div>
+      <div id="shareDetails" class="muted">Avalia a experiência para gerar o resumo.</div>
+      <div class="small green"><b>Planeado com PROJECT ALPHA</b> · Vale a pena viver?</div>
+    </div>
+    <canvas id="shareCanvas" width="1080" height="1920" style="display:none"></canvas>
+    <div class="row" style="margin-top:12px">
+      <button class="btn purple" onclick="shareExperience()">Partilhar</button>
+      <button class="btn secondary" onclick="copyExperience()">Copiar resumo</button>
+    </div>
+    <p class="small muted">A partilha usa o menu nativo do telemóvel. O utilizador escolhe Instagram, Facebook, WhatsApp ou outra app compatível. Nada é publicado automaticamente.</p>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">Growth Loop</div>
+    <p><b>DESCOBRIR → PLANEAR → VIVER → REGISTAR → AVALIAR → PARTILHAR → INSPIRAR → NOVO UTILIZADOR</b></p>
+    <div class="item">🔗 Próxima fase: <b>“Queres viver esta experiência?”</b> → abrir uma página pública e adaptar a experiência ao novo utilizador.</div>
+  </div>
+</section>
+
+<section id="profile" class="view">
+  <div class="card">
+    <div class="eyebrow">Alpha 1.2</div><h2>Estado do teste</h2>
+    <div class="list">
+      <div class="item">✓ GPS real + tracking</div>
+      <div class="item">✓ Mapa outdoor real</div>
+      <div class="item">✓ Reports LIVE georreferenciados</div>
+      <div class="item">✓ Persistência local dos reports</div>
+      <div class="item">✓ Trail Fit / Today Fit / Worth It / Reality Pulse</div>
+      <div class="item">◉ Wearable demo + resumo de atividade</div>
+      <div class="item">◉ Experience Review global + componentes</div>
+      <div class="item">◉ Experience Story + partilha nativa</div>
+      <div class="item">○ Backend / sync entre utilizadores ainda não implementado</div>
+      <div class="item">○ Integração real Health Connect / Apple Health / fabricantes ainda não implementada</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Princípios congelados</div>
+    <div class="list">
+      <div class="item">🛡️ Segurança nunca é Premium.</div>
+      <div class="item">◉ A IA não inventa realidade.</div>
+      <div class="item">🔐 Saúde, localização e partilha são opt-in.</div>
+      <div class="item">⚡ Complexidade disponível nunca é complexidade obrigatória.</div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<nav class="bottom">
+  <button class="nav active" data-id="home" onclick="go('home')">⌂<br>Hoje</button>
+  <button class="nav" data-id="field" onclick="go('field')">▶<br>GO</button>
+  <button class="nav" data-id="report" onclick="go('report')">⚑<br>LIVE</button>
+  <button class="nav" data-id="experience" onclick="go('experience')">★<br>Experiência</button>
+  <button class="nav" data-id="profile" onclick="go('profile')">●<br>Teste</button>
+</nav>
+
 <script>
-const $=id=>document.getElementById(id);let pos=null,watchId=null,photoData='',map=null,userMarker=null,reportMarkers=[];const KEY='alpha_reports';
+const $=id=>document.getElementById(id);
+let pos=null,watchId=null,photoData='',map=null,userMarker=null,reportMarkers=[];
+let activityRunning=false,activityStartedAt=null,activitySeconds=0,activityDistance=0,lastActivityPos=null,activityTimer=null;
+let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareFile=null;
+const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience';
+
 const types={tree:'🌳 Árvore / obstáculo',water:'💧 Estado da água',mud:'🌧️ Lama / inundação',closure:'🚧 Caminho fechado',sign:'🪧 Sinalização',parking:'🚗 Acesso / estacionamento',other:'⚠️ Outro'};
-function toast(m){let t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.remove('show'),2600)}
-function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();map&&map.resize();renderMapReports()},80)}
+
+function toast(m){let t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.remove('show'),2800)}
+function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();map&&map.resize();renderMapReports()},80);if(id==='experience')syncReview()}
 function reports(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
 function saveReports(r){localStorage.setItem(KEY,JSON.stringify(r))}
-function initMap(){if(map||!window.maplibregl)return;if(!window.maplibregl){toast('Não foi possível carregar o mapa');return}map=new maplibregl.Map({container:'realMap',center:[-9.14,38.72],zoom:9,style:{version:8,sources:{outdoor:{type:'raster',tiles:['https://a.tile.opentopomap.org/{z}/{x}/{y}.png','https://b.tile.opentopomap.org/{z}/{x}/{y}.png','https://c.tile.opentopomap.org/{z}/{x}/{y}.png'],tileSize:256,attribution:'© OpenStreetMap contributors · SRTM · OpenTopoMap'}},layers:[{id:'outdoor',type:'raster',source:'outdoor',paint:{'raster-saturation':-.18,'raster-contrast':.08,'raster-brightness-min':.08,'raster-brightness-max':.92}}]}});map.addControl(new maplibregl.NavigationControl({showCompass:false,visualizePitch:false}),'top-right');map.on('load',()=>{renderMapReports();if(pos)updateUserMarker(true)})}
-function updateUserMarker(center=false){if(!map||!pos)return;if(!userMarker){let e=document.createElement('div');e.className='userMarker';userMarker=new maplibregl.Marker({element:e}).setLngLat([pos.longitude,pos.latitude]).addTo(map)}else userMarker.setLngLat([pos.longitude,pos.latitude]);if(center)map.easeTo({center:[pos.longitude,pos.latitude],zoom:15})}
-function renderMapReports(){if(!map)return;reportMarkers.forEach(m=>m.remove());reportMarkers=[];reports().forEach(r=>{let e=document.createElement('div');e.className='marker';e.textContent=(types[r.type]||'⚠️').split(' ')[0];let pop=new maplibregl.Popup({offset:20}).setHTML('<b>'+esc(types[r.type]||r.type)+'</b><br>'+esc(r.desc||'Sem descrição')+'<br><small>'+new Date(r.time).toLocaleString('pt-PT')+'</small>');reportMarkers.push(new maplibregl.Marker({element:e}).setLngLat([r.lon,r.lat]).setPopup(pop).addTo(map))})}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function initMap(){
+  if(map||!window.maplibregl)return;
+  map=new maplibregl.Map({
+    container:'realMap',center:[-9.14,38.72],zoom:9,
+    style:{version:8,sources:{outdoor:{type:'raster',tiles:[
+      'https://a.tile.opentopomap.org/{z}/{x}/{y}.png',
+      'https://b.tile.opentopomap.org/{z}/{x}/{y}.png',
+      'https://c.tile.opentopomap.org/{z}/{x}/{y}.png'
+    ],tileSize:256,attribution:'© OpenStreetMap contributors · SRTM · OpenTopoMap'}},
+    layers:[{id:'outdoor',type:'raster',source:'outdoor',paint:{
+      'raster-saturation':-.18,'raster-contrast':.08,'raster-brightness-min':.08,'raster-brightness-max':.92
+    }}]}
+  });
+  map.addControl(new maplibregl.NavigationControl({showCompass:false,visualizePitch:false}),'top-right');
+  map.on('load',()=>{renderMapReports();if(pos)updateUserMarker(true)})
+}
+function updateUserMarker(center=false){
+  if(!map||!pos)return;
+  if(!userMarker){let e=document.createElement('div');e.className='userMarker';userMarker=new maplibregl.Marker({element:e}).setLngLat([pos.longitude,pos.latitude]).addTo(map)}
+  else userMarker.setLngLat([pos.longitude,pos.latitude]);
+  if(center)map.easeTo({center:[pos.longitude,pos.latitude],zoom:15})
+}
+function renderMapReports(){
+  if(!map)return;reportMarkers.forEach(m=>m.remove());reportMarkers=[];
+  reports().forEach(r=>{
+    let e=document.createElement('div');e.className='marker';e.textContent=(types[r.type]||'⚠️').split(' ')[0];
+    let pop=new maplibregl.Popup({offset:20}).setHTML('<b>'+esc(types[r.type]||r.type)+'</b><br>'+esc(r.desc||'Sem descrição')+'<br><small>'+new Date(r.time).toLocaleString('pt-PT')+'</small>');
+    reportMarkers.push(new maplibregl.Marker({element:e}).setLngLat([r.lon,r.lat]).setPopup(pop).addTo(map))
+  })
+}
 function fmt(v,n=5){return Number.isFinite(v)?v.toFixed(n):'—'}
 function filteredSpeed(c){if(!Number.isFinite(c.speed))return null;let k=c.speed*3.6;if(k<2.2||c.accuracy>35)return 0;return k}
-function updatePosition(p){pos=p.coords;$('lat').textContent=fmt(pos.latitude);$('lon').textContent=fmt(pos.longitude);$('acc').textContent=Math.round(pos.accuracy)+' m';let s=filteredSpeed(pos);$('spd').textContent=s===null?'—':s.toFixed(1)+' km/h';$('gpsState').innerHTML='<span class="green">GPS ativo</span> · '+new Date(p.timestamp).toLocaleTimeString('pt-PT');initMap();updateUserMarker(true);checkNearest()}
-function geoError(e){$('gpsState').innerHTML='<span class="red">GPS indisponível</span>';toast('GPS: '+e.message)}
-function requestLocation(){if(!navigator.geolocation)return toast('Geolocalização não suportada');navigator.geolocation.getCurrentPosition(updatePosition,geoError,{enableHighAccuracy:true,timeout:15000,maximumAge:0})}
-function toggleWatch(){if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;$('watchBtn').textContent='Iniciar tracking';return toast('Tracking parado')}watchId=navigator.geolocation.watchPosition(p=>{updatePosition(p);updateUserMarker(false)},geoError,{enableHighAccuracy:true,maximumAge:1000,timeout:20000});$('watchBtn').textContent='Parar tracking';toast('Tracking iniciado')}
 function hav(a,b,c,d){const R=6371000,q=x=>x*Math.PI/180,x=q(c-a),y=q(d-b),A=Math.sin(x/2)**2+Math.cos(q(a))*Math.cos(q(c))*Math.sin(y/2)**2;return 2*R*Math.atan2(Math.sqrt(A),Math.sqrt(1-A))}
 function distanceLabel(m){return m>=1000?(m/1000).toFixed(1)+' km':Math.round(m)+' m'}
-function checkNearest(){let rs=reports();if(!pos||!rs.length){$('nearTitle').textContent='Sem reports locais';$('nearText').textContent='Cria um report para o veres no mapa.';return}let best=rs.map(r=>({r,d:hav(pos.latitude,pos.longitude,r.lat,r.lon)})).sort((a,b)=>a.d-b.d)[0];$('nearTitle').textContent=(types[best.r.type]||best.r.type)+' · '+distanceLabel(best.d);$('nearText').textContent=best.r.desc||'Sem descrição';if(best.d<=500&&!window._near){window._near=true;toast('⚠️ Ocorrência a '+distanceLabel(best.d)+': '+(types[best.r.type]||best.r.type))}if(best.d>650)window._near=false}
-function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-$('photoInput').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let rd=new FileReader();rd.onload=()=>{let im=new Image();im.onload=()=>{let c=document.createElement('canvas'),max=900,scale=Math.min(1,max/im.width);c.width=im.width*scale;c.height=im.height*scale;c.getContext('2d').drawImage(im,0,0,c.width,c.height);photoData=c.toDataURL('image/jpeg',.72);$('photoPreview').src=photoData;$('photoPreview').style.display='block'};im.src=rd.result};rd.readAsDataURL(f)});
-function saveReport(){if(!pos)return toast('Confirma primeiro a posição GPS');let r={id:Date.now(),type:$('rtype').value,severity:$('severity').value,desc:$('desc').value.trim(),lat:pos.latitude,lon:pos.longitude,accuracy:pos.accuracy,time:new Date().toISOString(),photo:photoData};let rs=reports();rs.unshift(r);try{saveReports(rs)}catch(e){r.photo='';rs[0]=r;saveReports(rs);toast('Report guardado sem foto: armazenamento cheio')}renderReports();renderMapReports();checkNearest();$('desc').value='';$('photoInput').value='';$('photoPreview').style.display='none';photoData='';toast('Report LIVE guardado');}
-function renderReports(){let rs=reports();$('reportsList').innerHTML=rs.length?rs.map(r=>'<div class="item"><b>'+esc(types[r.type]||r.type)+'</b><div class="small muted">'+new Date(r.time).toLocaleString('pt-PT')+' · GPS ±'+Math.round(r.accuracy)+' m · '+r.lat.toFixed(5)+', '+r.lon.toFixed(5)+'</div><p>'+esc(r.desc||'Sem descrição')+'</p>'+(r.photo?'<img class="reportPhoto" src="'+r.photo+'">':'')+'<br><button class="btn secondary" onclick="deleteReport('+r.id+')">Eliminar</button></div>').join(''):'<div class="muted">Ainda não existem reports neste telemóvel.</div>'}
+
+function updatePosition(p){
+  pos=p.coords;
+  $('lat').textContent=fmt(pos.latitude);$('lon').textContent=fmt(pos.longitude);$('acc').textContent=Math.round(pos.accuracy)+' m';
+  let s=filteredSpeed(pos);$('spd').textContent=s===null?'—':s.toFixed(1)+' km/h';
+  $('gpsState').innerHTML='<span class="green">GPS ativo</span> · '+new Date(p.timestamp).toLocaleTimeString('pt-PT');
+  initMap();updateUserMarker(true);checkNearest();updateActivityFromGPS(pos)
+}
+function geoError(e){$('gpsState').innerHTML='<span class="red">GPS indisponível</span>';toast('GPS: '+e.message)}
+function requestLocation(){if(!navigator.geolocation)return toast('Geolocalização não suportada');navigator.geolocation.getCurrentPosition(updatePosition,geoError,{enableHighAccuracy:true,timeout:15000,maximumAge:0})}
+function toggleWatch(){
+  if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null;$('watchBtn').textContent='Iniciar tracking';return toast('Tracking parado')}
+  watchId=navigator.geolocation.watchPosition(p=>{updatePosition(p);updateUserMarker(false)},geoError,{enableHighAccuracy:true,maximumAge:1000,timeout:20000});
+  $('watchBtn').textContent='Parar tracking';toast('Tracking iniciado')
+}
+function checkNearest(){
+  let rs=reports();
+  if(!pos||!rs.length){$('nearTitle').textContent='Sem reports locais';$('nearText').textContent='Cria um report para o veres no mapa.';return}
+  let best=rs.map(r=>({r,d:hav(pos.latitude,pos.longitude,r.lat,r.lon)})).sort((a,b)=>a.d-b.d)[0];
+  $('nearTitle').textContent=(types[best.r.type]||best.r.type)+' · '+distanceLabel(best.d);$('nearText').textContent=best.r.desc||'Sem descrição';
+  if(best.d<=500&&!window._near){window._near=true;toast('⚠️ Ocorrência a '+distanceLabel(best.d)+': '+(types[best.r.type]||best.r.type))}
+  if(best.d>650)window._near=false
+}
+
+$('photoInput').addEventListener('change',e=>compressImage(e.target.files[0],data=>{photoData=data;$('photoPreview').src=data;$('photoPreview').style.display='block'}));
+$('expPhotoInput').addEventListener('change',e=>compressImage(e.target.files[0],data=>{expPhotoData=data;$('expPhotoPreview').src=data;$('expPhotoPreview').style.display='block'}));
+function compressImage(f,done){
+  if(!f)return;let rd=new FileReader();rd.onload=()=>{let im=new Image();im.onload=()=>{let c=document.createElement('canvas'),max=1100,scale=Math.min(1,max/im.width);c.width=im.width*scale;c.height=im.height*scale;c.getContext('2d').drawImage(im,0,0,c.width,c.height);done(c.toDataURL('image/jpeg',.78))};im.src=rd.result};rd.readAsDataURL(f)
+}
+function saveReport(){
+  if(!pos)return toast('Confirma primeiro a posição GPS');
+  let r={id:Date.now(),type:$('rtype').value,severity:$('severity').value,desc:$('desc').value.trim(),lat:pos.latitude,lon:pos.longitude,accuracy:pos.accuracy,time:new Date().toISOString(),photo:photoData};
+  let rs=reports();rs.unshift(r);try{saveReports(rs)}catch(e){r.photo='';rs[0]=r;saveReports(rs);toast('Report guardado sem foto: armazenamento cheio')}
+  renderReports();renderMapReports();checkNearest();$('desc').value='';$('photoInput').value='';$('photoPreview').style.display='none';photoData='';toast('Report LIVE guardado')
+}
+function renderReports(){
+  let rs=reports();$('reportsList').innerHTML=rs.length?rs.map(r=>'<div class="item"><b>'+esc(types[r.type]||r.type)+'</b><div class="small muted">'+new Date(r.time).toLocaleString('pt-PT')+' · GPS ±'+Math.round(r.accuracy)+' m · '+r.lat.toFixed(5)+', '+r.lon.toFixed(5)+'</div><p>'+esc(r.desc||'Sem descrição')+'</p>'+(r.photo?'<img class="reportPhoto" src="'+r.photo+'">':'')+'<br><button class="btn secondary" onclick="deleteReport('+r.id+')">Eliminar</button></div>').join(''):'<div class="muted">Ainda não existem reports neste telemóvel.</div>'
+}
 function deleteReport(id){saveReports(reports().filter(r=>r.id!==id));renderReports();renderMapReports();checkNearest()}
 function clearReports(){if(confirm('Apagar todos os reports de teste deste telemóvel?')){saveReports([]);renderReports();renderMapReports();checkNearest();toast('Reports apagados')}}
-renderReports();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
-</script></body></html>
+
+/* ---------- FUTURE CTO CONCEPT #01: ACTIVITY & WEARABLES DEMO ---------- */
+function toggleWearable(){
+  wearableConnected=!wearableConnected;
+  $('wearDot').classList.toggle('on',wearableConnected);
+  $('wearState').textContent=wearableConnected?'Smartwatch demo ligado':'Wearable demo desligado';
+  $('wearBtn').textContent=wearableConnected?'Desligar smartwatch demo':'Ligar smartwatch demo';
+  if(!wearableConnected){heartRate=null;$('actHr').textContent='—'}
+  else{heartRate=112+Math.floor(Math.random()*18);$('actHr').textContent=heartRate+' bpm';toast('⌚ Smartwatch demo ligado')}
+}
+function toggleActivity(){
+  if(activityRunning){stopActivity();return}
+  activityRunning=true;activityStartedAt=Date.now();lastActivityPos=pos?{lat:pos.latitude,lon:pos.longitude,accuracy:pos.accuracy}:null;
+  $('activityBtn').textContent='Terminar atividade';toast('Atividade iniciada');
+  if(watchId===null)toggleWatch();
+  activityTimer=setInterval(tickActivity,1000);tickActivity()
+}
+function stopActivity(){
+  activityRunning=false;clearInterval(activityTimer);activityTimer=null;$('activityBtn').textContent='Iniciar atividade';
+  saveActivity();toast('Atividade terminada e guardada');syncReview()
+}
+function tickActivity(){
+  if(!activityRunning)return;
+  activitySeconds=Math.floor((Date.now()-activityStartedAt)/1000);
+  $('actTime').textContent=formatDuration(activitySeconds);
+  $('actSteps').textContent=Math.round(activityDistance/0.78).toLocaleString('pt-PT');
+  if(wearableConnected){heartRate=Math.max(85,Math.min(172,(heartRate||118)+Math.round((Math.random()-.5)*8)));$('actHr').textContent=heartRate+' bpm'}
+}
+function updateActivityFromGPS(c){
+  if(!activityRunning)return;
+  if(c.accuracy>35)return;
+  if(lastActivityPos){
+    let d=hav(lastActivityPos.lat,lastActivityPos.lon,c.latitude,c.longitude);
+    if(d>=3 && d<=80)activityDistance+=d
+  }
+  lastActivityPos={lat:c.latitude,lon:c.longitude,accuracy:c.accuracy};
+  $('actDist').textContent=(activityDistance/1000).toFixed(2)+' km';
+  $('actSteps').textContent=Math.round(activityDistance/0.78).toLocaleString('pt-PT')
+}
+function formatDuration(sec){let h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;return h?String(h).padStart(2,'0')+':'+String(m).padStart(2,'0'):String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
+function saveActivity(){
+  let a={time:new Date().toISOString(),seconds:activitySeconds,distance:activityDistance,steps:Math.round(activityDistance/0.78),heartRate:heartRate,wearable:wearableConnected};
+  localStorage.setItem(ACT_KEY,JSON.stringify(a))
+}
+function loadActivity(){
+  try{let a=JSON.parse(localStorage.getItem(ACT_KEY)||'null');if(!a)return;activitySeconds=a.seconds||0;activityDistance=a.distance||0;heartRate=a.heartRate||null;
+  $('actTime').textContent=formatDuration(activitySeconds);$('actDist').textContent=(activityDistance/1000).toFixed(2)+' km';$('actSteps').textContent=(a.steps||0).toLocaleString('pt-PT');$('actHr').textContent=a.heartRate?a.heartRate+' bpm':'—'}catch{}
+}
+
+/* ---------- CMO CONCEPT #01: EXPERIENCE REVIEW & SHARE ---------- */
+function setRating(v){globalRating=v;document.querySelectorAll('#globalStars .star').forEach(s=>s.classList.toggle('on',Number(s.dataset.v)<=v));syncReview()}
+function syncReview(){
+  ['Trail','Meal','Poi','Stay'].forEach(k=>{let v=Number($('rate'+k).value);$('rate'+k+'V').textContent=(k==='Stay'&&v===0)?'N/A':v+'★'});
+  $('shareName').textContent=$('expName').value||'A minha experiência';$('shareScore').textContent=globalRating||'—';
+  let a=currentActivity();
+  let bits=['🥾 '+$('rateTrail').value+'★','🍽️ '+$('rateMeal').value+'★','📍 '+$('ratePoi').value+'★'];
+  if(Number($('rateStay').value)>0)bits.push('🏨 '+$('rateStay').value+'★');
+  if($('includeHealth').checked && a){
+    if(a.distance)bits.push('🚶 '+(a.distance/1000).toFixed(1)+' km');
+    if(a.steps)bits.push('👣 '+a.steps.toLocaleString('pt-PT')+' passos');
+    if(a.heartRate)bits.push('❤️ '+a.heartRate+' bpm');
+  }
+  $('shareDetails').textContent=bits.join(' · ')
+}
+function currentActivity(){try{return JSON.parse(localStorage.getItem(ACT_KEY)||'null')}catch{return null}}
+function saveExperience(){
+  let e={name:$('expName').value.trim(),rating:globalRating,trail:+$('rateTrail').value,meal:+$('rateMeal').value,poi:+$('ratePoi').value,stay:+$('rateStay').value,text:$('expText').value.trim(),photo:expPhotoData,time:new Date().toISOString(),includeHealth:$('includeHealth').checked,activity:currentActivity()};
+  try{localStorage.setItem(EXP_KEY,JSON.stringify(e))}catch(err){e.photo='';localStorage.setItem(EXP_KEY,JSON.stringify(e));toast('Avaliação guardada sem foto: armazenamento cheio');return}
+  toast('Experiência guardada neste telemóvel');syncReview()
+}
+function loadExperience(){
+  try{
+    let e=JSON.parse(localStorage.getItem(EXP_KEY)||'null');if(!e){setRating(5);return}
+    $('expName').value=e.name||'Um dia na Arrábida';$('rateTrail').value=e.trail||5;$('rateMeal').value=e.meal||4;$('ratePoi').value=e.poi||5;$('rateStay').value=e.stay||0;$('expText').value=e.text||'';$('includeHealth').checked=e.includeHealth!==false;
+    if(e.photo){expPhotoData=e.photo;$('expPhotoPreview').src=e.photo;$('expPhotoPreview').style.display='block'}
+    setRating(e.rating||5);syncReview()
+  }catch{setRating(5)}
+}
+function experienceText(){
+  let a=currentActivity(),name=$('expName').value||'A minha experiência';
+  let lines=[name,'⭐ '+globalRating+'/5','🥾 Trail '+$('rateTrail').value+'/5','🍽️ Refeição '+$('rateMeal').value+'/5','📍 POIs '+$('ratePoi').value+'/5'];
+  if(Number($('rateStay').value)>0)lines.push('🏨 Estadia '+$('rateStay').value+'/5');
+  if($('includeHealth').checked&&a){if(a.distance)lines.push('🚶 '+(a.distance/1000).toFixed(2)+' km');if(a.steps)lines.push('👣 '+a.steps.toLocaleString('pt-PT')+' passos');if(a.heartRate)lines.push('❤️ '+a.heartRate+' bpm')}
+  if($('expText').value.trim())lines.push('“'+$('expText').value.trim()+'”');
+  lines.push('Planeado com PROJECT ALPHA · Vale a pena viver?');
+  return lines.join('\n')
+}
+async function buildShareCard(){
+  syncReview();saveExperience();
+  let c=$('shareCanvas'),ctx=c.getContext('2d'),W=c.width,H=c.height;
+  let g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#123b32');g.addColorStop(.55,'#071116');g.addColorStop(1,'#102633');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  if(expPhotoData){await drawCover(ctx,expPhotoData,0,0,W,760);ctx.fillStyle='rgba(7,17,22,.35)';ctx.fillRect(0,0,W,760)}
+  ctx.fillStyle='#39d69b';ctx.font='800 34px system-ui';ctx.fillText('A MINHA EXPERIÊNCIA',70,expPhotoData?840:150);
+  ctx.fillStyle='#eff7f3';ctx.font='800 72px system-ui';wrapText(ctx,$('expName').value||'A minha experiência',70,expPhotoData?930:245,940,86);
+  ctx.fillStyle='#39d69b';ctx.font='900 145px system-ui';ctx.fillText(globalRating.toFixed(1)+'★',70,expPhotoData?1150:480);
+  ctx.fillStyle='#c6d8d1';ctx.font='500 38px system-ui';
+  let y=expPhotoData?1250:590;
+  let bits=['🥾 '+$('rateTrail').value+'★','🍽️ '+$('rateMeal').value+'★','📍 '+$('ratePoi').value+'★'];if(Number($('rateStay').value)>0)bits.push('🏨 '+$('rateStay').value+'★');
+  bits.forEach(b=>{ctx.fillText(b,70,y);y+=64});
+  let a=currentActivity();if($('includeHealth').checked&&a){if(a.distance){ctx.fillText('🚶 '+(a.distance/1000).toFixed(2)+' km',70,y);y+=64}if(a.steps){ctx.fillText('👣 '+a.steps.toLocaleString('pt-PT')+' passos',70,y);y+=64}if(a.heartRate){ctx.fillText('❤️ '+a.heartRate+' bpm',70,y);y+=64}}
+  ctx.fillStyle='#eff7f3';ctx.font='500 32px system-ui';wrapText(ctx,$('expText').value.trim(),70,y+30,930,48);
+  ctx.fillStyle='#39d69b';ctx.font='800 34px system-ui';ctx.fillText('PROJECT ALPHA · VALE A PENA VIVER?',70,H-100);
+  await new Promise(res=>c.toBlob(blob=>{shareFile=blob?new File([blob],'project-alpha-experience.png',{type:'image/png'}):null;res()},'image/png'));
+  toast('Experience Story gerado')
+}
+function drawCover(ctx,src,x,y,w,h){return new Promise(res=>{let im=new Image();im.onload=()=>{let s=Math.max(w/im.width,h/im.height),sw=w/s,sh=h/s,sx=(im.width-sw)/2,sy=(im.height-sh)/2;ctx.drawImage(im,sx,sy,sw,sh,x,y,w,h);res()};im.onerror=res;im.src=src})}
+function wrapText(ctx,text,x,y,maxWidth,lineHeight){if(!text)return y;let words=text.split(/\s+/),line='';for(let i=0;i<words.length;i++){let test=line+words[i]+' ';if(ctx.measureText(test).width>maxWidth&&i>0){ctx.fillText(line,x,y);line=words[i]+' ';y+=lineHeight}else line=test}ctx.fillText(line,x,y);return y}
+async function shareExperience(){
+  if(!shareFile)await buildShareCard();
+  let text=experienceText();
+  try{
+    if(navigator.canShare&&shareFile&&navigator.canShare({files:[shareFile]})){await navigator.share({title:$('expName').value,text,files:[shareFile]});return}
+    if(navigator.share){await navigator.share({title:$('expName').value,text});return}
+    await navigator.clipboard.writeText(text);toast('Partilha não suportada: resumo copiado')
+  }catch(e){if(e&&e.name!=='AbortError')toast('Não foi possível abrir a partilha')}
+}
+async function copyExperience(){try{await navigator.clipboard.writeText(experienceText());toast('Resumo copiado')}catch{toast('Não foi possível copiar')}}
+
+renderReports();loadActivity();loadExperience();syncReview();
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body>
+</html>
