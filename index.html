@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 1.4.8 — Evidence + Temporal Reality</title>
+<title>Project Alpha 1.4.9 — Gold Renew + Cancel Test</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -118,7 +118,7 @@ textarea{min-height:90px}
 .included{padding:9px 11px;border:1px solid #315149;border-radius:12px;margin-top:8px;background:#0d211b}
 
 
-/* Alpha 1.4.8 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
+/* Alpha 1.4.9 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
 .authGate{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at top,#123b32,#071116 55%);display:none;overflow:auto;padding:24px 14px}.authGate.show{display:grid;place-items:center}.authBox{width:min(520px,100%);background:#0d1a21;border:1px solid #294149;border-radius:24px;padding:22px}.tierBadge{font-size:11px;font-weight:900;padding:7px 10px;border-radius:999px;border:1px solid #315149}.tier-free{color:#d7e4df}.tier-silver{color:#e6edf0;border-color:#82919a}.tier-gold{color:#ffe08a;border-color:#9b7b28}.tier-platinum{color:#eadfff;border-color:#8064b5}.tier-organization{color:#9ed1ff;border-color:#477aa6}.membershipHero{border:1px solid #3c5360;background:linear-gradient(135deg,#10262e,#0c171d)}.pointsBig{font-size:46px;font-weight:900;color:var(--green)}.premiumOnly,.silverOnly,.platinumOnly,.orgOnly{display:none}.entitled{display:block}.view.premiumOnly.entitled{display:none}.view.premiumOnly.entitled.active{display:block}.premiumNav{color:#e4dcff!important}.premiumNav.active{background:#251d3b!important}.logoutLink{border:0;background:transparent;color:var(--muted);text-decoration:underline;padding:6px}.miniProgress{height:9px;border-radius:99px;background:#17282e;overflow:hidden}.miniProgress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber))}.authNote{font-size:11px;color:var(--muted);margin-top:10px}.roleCard{border-left:3px solid var(--green)}
 .mediaPicker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:7px}
 .mediaAction{width:100%;min-height:48px}
@@ -135,7 +135,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 .planGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}.planChip{border:1px solid #5e5131;border-radius:12px;padding:10px 5px;text-align:center;font-weight:800;font-size:12px;background:#17160f;color:#fff}.planChip{cursor:pointer}.planChip.selected,.goldPlanChoice.selected{background:var(--green);border-color:var(--green);color:#fff!important}.planChip small{font-size:11px;opacity:.9}.paymentChoice.selected{background:var(--green)!important;border-color:var(--green)!important;color:#fff!important}
 @media(max-width:430px){.planGrid{grid-template-columns:repeat(3,1fr)}}
 
-/* Alpha 1.4.8 — Payment UX Simulator */
+/* Alpha 1.4.9 — Payment UX Simulator + Gold Renew/Cancel Test */
 .paymentChoice.selected{background:var(--lime)!important;color:#fff!important;border-color:var(--lime)!important}
 .paymentPanel{display:none;margin-top:14px}.paymentPanel.active{display:block}
 .payBox{border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(255,255,255,.025);margin-top:12px}
@@ -154,7 +154,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 <div id="toast" class="toast"></div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.8 · Family Login</small></div></div>
+    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.9 · Family Login</small></div></div>
     <div class="sep"></div><div class="eyebrow">Bem-vindo</div><h1 style="margin:8px 0">Vale a pena ir hoje?</h1>
     <p class="muted">Alpha familiar com 4 contas locais de teste. Usa apenas o primeiro nome e o PIN <b>1234</b>. Ainda não existe backend/sincronização entre telemóveis.</p>
     <label>Utilizador</label>
@@ -172,7 +172,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.8 · family login + entitlements</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.9 · family login + entitlements</small></div></div>
   <div id="headerTier" class="tierBadge tier-free">FREE</div>
 </header>
 
@@ -715,11 +715,11 @@ function seedFamilyExpiryTest(profile){
   if(localStorage.getItem(key))return;
   const now=Date.now();
   if(profile.id==='helena'){
-    localStorage.setItem(ENT_PREFIX+profile.id,JSON.stringify({tier:'GOLD',expiresAt:new Date(now+2*86400000).toISOString(),source:'alpha-1.4.8-gold-expiry-test'}));
+    localStorage.setItem(ENT_PREFIX+profile.id,JSON.stringify({tier:'GOLD',expiresAt:new Date(now+2*86400000).toISOString(),source:'alpha-1.4.9-gold-expiry-test'}));
     localStorage.removeItem(LAST_GOLD_PREFIX+profile.id);
   }
   if(profile.id==='filipe'){
-    localStorage.setItem(ENT_PREFIX+profile.id,JSON.stringify({tier:'SILVER',expiresAt:new Date(now+2*86400000).toISOString(),source:'alpha-1.4.8-silver-expiry-test'}));
+    localStorage.setItem(ENT_PREFIX+profile.id,JSON.stringify({tier:'SILVER',expiresAt:new Date(now+2*86400000).toISOString(),source:'alpha-1.4.9-silver-expiry-test'}));
     localStorage.setItem(POINTS_PREFIX+profile.id,'100');
   }
   localStorage.setItem(key,'1');
