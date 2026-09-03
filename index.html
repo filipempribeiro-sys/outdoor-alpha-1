@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 1.2.2 — Discovery, AI, Experience & Wearables</title>
+<title>Project Alpha 1.2.3 — Discovery, AI, Experience & Wearables</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -67,7 +67,7 @@ textarea{min-height:90px}
 <div id="toast" class="toast"></div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.2.2 · discovery + AI + experiências</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.2.3 · discovery + AI + experiências</small></div></div>
   <div class="badge">✓ TEST BUILD</div>
 </header>
 
@@ -102,7 +102,7 @@ textarea{min-height:90px}
     <p class="muted">Rotas reais de caminhada/hiking do OpenStreetMap. A Alpha procura à volta do teu GPS e desenha-as no mapa.</p>
     <div class="row">
       <button class="btn" onclick="loadTrailsNearby(true)">Procurar trails agora</button>
-      <button class="btn secondary" onclick="go('field');setTimeout(()=>map&&map.resize(),100)">Ver no mapa</button>
+      <button class="btn secondary" onclick="showSelectedTrailOnMap()">Ver no mapa</button>
     </div>
     <p id="trailStatus" class="small muted">Ainda não carregado.</p>
     <div id="trailList" class="list"></div>
@@ -283,7 +283,7 @@ textarea{min-height:90px}
 
 <section id="profile" class="view">
   <div class="card">
-    <div class="eyebrow">Alpha 1.2.2</div><h2>Estado do teste</h2>
+    <div class="eyebrow">Alpha 1.2.3</div><h2>Estado do teste</h2>
     <div class="list">
       <div class="item">✓ GPS real + tracking</div>
       <div class="item">✓ Mapa vetorial real</div>
@@ -323,7 +323,7 @@ textarea{min-height:90px}
 
 <script>
 const $=id=>document.getElementById(id);
-let pos=null,watchId=null,photoData='',map=null,userMarker=null,reportMarkers=[];
+let pos=null,watchId=null,photoData='',map=null,userMarker=null,reportMarkers=[],selectedTrailMarker=null;
 let activityRunning=false,activityStartedAt=null,activitySeconds=0,activityDistance=0,lastActivityPos=null,activityTimer=null;
 let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareFile=null;
 let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false;
@@ -332,7 +332,7 @@ const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience',
 const types={tree:'🌳 Árvore / obstáculo',water:'💧 Estado da água',mud:'🌧️ Lama / inundação',closure:'🚧 Caminho fechado',sign:'🪧 Sinalização',parking:'🚗 Acesso / estacionamento',other:'⚠️ Outro'};
 
 function toast(m){let t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.remove('show'),2800)}
-function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();map&&map.resize();renderMapReports()},80);if(id==='experience')syncReview()}
+function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();if(map){map.resize();renderMapReports();renderTrailLayer();renderSelectedTrail();}},120);if(id==='experience')syncReview()}
 function reports(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
 function saveReports(r){localStorage.setItem(KEY,JSON.stringify(r))}
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -344,7 +344,7 @@ function initMap(){
     style:'https://tiles.openfreemap.org/styles/liberty'
   });
   map.addControl(new maplibregl.NavigationControl({showCompass:false,visualizePitch:false}),'top-right');
-  map.on('load',()=>{renderMapReports();renderTrailLayer();if(pos)updateUserMarker(true)})
+  map.on('load',()=>{renderMapReports();renderTrailLayer();renderSelectedTrail();if(pos)updateUserMarker(!selectedTrail);if(selectedTrail)setTimeout(()=>focusSelectedTrail(false),120)})
 }
 function updateUserMarker(center=false){
   if(!map||!pos)return;
@@ -440,13 +440,118 @@ function renderTrails(){
   const box=$('trailList');if(!box)return;if(!nearbyTrails.length){box.innerHTML='';return}
   box.innerHTML=nearbyTrails.slice(0,8).map((t,i)=>{let d=trailDistanceFromUser(t);return '<div class="trailCard '+(selectedTrail&&selectedTrail.id===t.id?'selected':'')+'" onclick="selectTrail('+t.id+')"><div class="trailTitle"><b>'+esc(t.name)+'</b><span class="sourceTag">OSM · VERIFIED SOURCE</span></div><div class="trailMeta">'+(t.ref?'<span class="pill">'+esc(t.ref)+'</span>':'')+(t.network?'<span class="pill">'+esc(t.network.toUpperCase())+'</span>':'')+(t.distanceTag?'<span class="pill">↔ '+esc(t.distanceTag)+'</span>':'')+(d!==null?'<span class="pill">◎ '+distanceLabel(d)+'</span>':'')+'</div></div>'}).join('')
 }
+
+function selectedTrailGeoJSON(){
+  if(!selectedTrail)return{type:'FeatureCollection',features:[]};
+  const features=[];
+  (selectedTrail.members||[]).forEach(m=>{
+    if(!m.geometry||m.geometry.length<2)return;
+    features.push({
+      type:'Feature',
+      properties:{id:selectedTrail.id,name:selectedTrail.name},
+      geometry:{type:'LineString',coordinates:m.geometry.map(g=>[g.lon,g.lat])}
+    });
+  });
+  return{type:'FeatureCollection',features};
+}
+function selectedTrailBounds(){
+  if(!selectedTrail)return null;
+  const coords=[];
+  (selectedTrail.members||[]).forEach(m=>(m.geometry||[]).forEach(g=>coords.push([g.lon,g.lat])));
+  if(!coords.length&&selectedTrail.center)coords.push(selectedTrail.center);
+  if(!coords.length)return null;
+  const b=new maplibregl.LngLatBounds(coords[0],coords[0]);
+  coords.slice(1).forEach(c=>b.extend(c));
+  return b;
+}
+function renderSelectedTrail(){
+  if(!map||!map.isStyleLoaded())return;
+  const data=selectedTrailGeoJSON();
+
+  if(map.getSource('selected-trail')){
+    map.getSource('selected-trail').setData(data);
+  }else{
+    map.addSource('selected-trail',{type:'geojson',data});
+    map.addLayer({
+      id:'selected-trail-halo',
+      type:'line',
+      source:'selected-trail',
+      paint:{
+        'line-color':'#071116',
+        'line-width':['interpolate',['linear'],['zoom'],9,7,15,13],
+        'line-opacity':.92
+      }
+    });
+    map.addLayer({
+      id:'selected-trail-line',
+      type:'line',
+      source:'selected-trail',
+      paint:{
+        'line-color':'#b79cff',
+        'line-width':['interpolate',['linear'],['zoom'],9,4,15,7],
+        'line-opacity':1
+      }
+    });
+  }
+
+  if(selectedTrailMarker){selectedTrailMarker.remove();selectedTrailMarker=null}
+  if(selectedTrail&&selectedTrail.center){
+    const e=document.createElement('div');
+    e.className='marker';
+    e.style.width='38px';e.style.height='38px';
+    e.style.background='#b79cff';e.style.borderColor='#ffffff';
+    e.style.color='#071116';e.style.fontWeight='900';
+    e.textContent='🥾';
+    const popup=new maplibregl.Popup({offset:24}).setHTML(
+      '<b>'+esc(selectedTrail.name)+'</b><br><small>Trail selecionado · OSM</small>'
+    );
+    selectedTrailMarker=new maplibregl.Marker({element:e})
+      .setLngLat(selectedTrail.center)
+      .setPopup(popup)
+      .addTo(map);
+  }
+}
+function focusSelectedTrail(openPopup=true){
+  if(!selectedTrail||!map)return;
+  renderTrailLayer();
+  renderSelectedTrail();
+  const b=selectedTrailBounds();
+  if(b){
+    map.fitBounds(b,{padding:{top:80,bottom:90,left:45,right:45},maxZoom:15,duration:900});
+  }else if(selectedTrail.center){
+    map.easeTo({center:selectedTrail.center,zoom:14,duration:800});
+  }
+  if(openPopup&&selectedTrailMarker)setTimeout(()=>selectedTrailMarker.togglePopup(),950);
+}
+function showSelectedTrailOnMap(){
+  if(!selectedTrail&&nearbyTrails.length)selectedTrail=nearbyTrails[0];
+  if(!selectedTrail){toast('Seleciona ou pede uma recomendação de trail primeiro');return}
+  go('field');
+  const tryFocus=()=>{
+    if(map&&map.isStyleLoaded()){focusSelectedTrail(true);return}
+    setTimeout(tryFocus,180);
+  };
+  setTimeout(tryFocus,180);
+}
+
 function selectTrail(id){
-  try{if(id&&typeof id==='object')setExperienceFromTrail(id.name||id.tags?.name);else if(typeof id==='string')setExperienceFromTrail(id);}catch{}
-selectedTrail=nearbyTrails.find(t=>t.id===id)||null;renderTrails();if(selectedTrail&&map){map.easeTo({center:selectedTrail.center,zoom:13});go('field')}if(selectedTrail)toast(selectedTrail.name+' selecionado')}
+  selectedTrail=nearbyTrails.find(t=>t.id===id)||null;
+  if(!selectedTrail)return;
+  setExperienceFromTrail(selectedTrail.name);
+  renderTrails();
+  renderSelectedTrail();
+  go('field');
+  const tryFocus=()=>{
+    if(map&&map.isStyleLoaded()){focusSelectedTrail(true);return}
+    setTimeout(tryFocus,180);
+  };
+  setTimeout(tryFocus,180);
+  toast(selectedTrail.name+' selecionado');
+}
 function trailGeoJSON(){let fs=[];nearbyTrails.forEach(t=>(t.members||[]).forEach(m=>{if(!m.geometry||m.geometry.length<2)return;fs.push({type:'Feature',properties:{id:t.id,name:t.name},geometry:{type:'LineString',coordinates:m.geometry.map(g=>[g.lon,g.lat])}})}));return{type:'FeatureCollection',features:fs}}
 function renderTrailLayer(){
   if(!map||!map.isStyleLoaded())return;let data=trailGeoJSON();
-  if(map.getSource('real-trails')){map.getSource('real-trails').setData(data);return}
+  if(map.getSource('real-trails')){map.getSource('real-trails').setData(data);renderSelectedTrail();return}
   map.addSource('real-trails',{type:'geojson',data});
   map.addLayer({id:'real-trails-halo',type:'line',source:'real-trails',paint:{'line-color':'#071116','line-width':['interpolate',['linear'],['zoom'],9,3,15,8],'line-opacity':.75}});
   map.addLayer({id:'real-trails-line',type:'line',source:'real-trails',paint:{'line-color':'#39d69b','line-width':['interpolate',['linear'],['zoom'],9,1.8,15,4.5],'line-opacity':.95}});
@@ -456,7 +561,7 @@ function runTrailAI(){
   if(!nearbyTrails.length){$('aiOutput').textContent='Ainda não tenho trails reais para comparar. Carrega “Trails perto de ti” primeiro.';return}
   computeGlobalRating();const intent=$('aiIntent').value,effort=$('aiEffort').value;let scored=nearbyTrails.map(t=>{let s=72;let d=trailDistanceFromUser(t);if(d!==null)s-=Math.min(18,d/3000);if(t.network==='lwn')s+=effort==='easy'?8:2;if(t.network==='rwn')s+=effort==='medium'?6:0;if(t.network==='nwn'||t.network==='iwn')s+=effort==='hard'?7:-4;if(weatherNow){if(weatherNow.precipitation>1)s-=12;if(weatherNow.wind_speed_10m>35)s-=10;if(weatherNow.temperature_2m>32)s-=8;if(weatherNow.temperature_2m>=12&&weatherNow.temperature_2m<=26)s+=5}let active=reports().filter(r=>t.center&&hav(t.center[1],t.center[0],r.lat,r.lon)<3000);s-=active.reduce((a,r)=>a+(r.severity==='major'?18:r.severity==='significant'?10:4),0);if(intent==='family'&&effort==='easy')s+=t.network==='lwn'?7:0;if(intent==='water')s-=5;return{t,score:Math.max(5,Math.min(96,Math.round(s))),active}}).sort((a,b)=>b.score-a.score);let best=scored[0];selectedTrail=best.t;renderTrails();let why=[];let d=trailDistanceFromUser(best.t);if(d!==null)why.push('fica a '+distanceLabel(d)+' da tua posição');if(best.t.network)why.push('rede '+best.t.network.toUpperCase());if(weatherNow)why.push(weatherLabel(weatherNow.weather_code).toLowerCase()+', '+Math.round(weatherNow.temperature_2m)+'°C');if(best.active.length)why.push(best.active.length+' report(s) local(is) próximo(s)');else why.push('sem reports locais próximos nesta Alpha');let caution=intent==='water'?'Para água/cascatas ainda não tenho um sensor/estado hidrológico real, por isso não posso afirmar que exista água.':'';
   $('aiOutput').textContent='✦ PREDICTED · Melhor opção agora: '+best.t.name+'\nToday Fit experimental: '+best.score+'%\nPorque: '+why.join(' · ')+'.\n'+caution+'\n\nA recomendação usa apenas dados disponíveis; não é uma garantia de segurança.';
-  if(map&&best.t.center)map.easeTo({center:best.t.center,zoom:13});toast('Trail AI atualizada')
+  if(map){renderSelectedTrail()}toast('Trail AI atualizada')
 }
 
 /* ---------- FUTURE CTO CONCEPT #01: ACTIVITY & WEARABLES DEMO ---------- */
