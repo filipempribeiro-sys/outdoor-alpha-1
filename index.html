@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 1.4.5 — Evidence + Temporal Reality</title>
+<title>Project Alpha 1.4.6 — Evidence + Temporal Reality</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -118,7 +118,7 @@ textarea{min-height:90px}
 .included{padding:9px 11px;border:1px solid #315149;border-radius:12px;margin-top:8px;background:#0d211b}
 
 
-/* Alpha 1.4.5 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
+/* Alpha 1.4.6 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
 .authGate{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at top,#123b32,#071116 55%);display:none;overflow:auto;padding:24px 14px}.authGate.show{display:grid;place-items:center}.authBox{width:min(520px,100%);background:#0d1a21;border:1px solid #294149;border-radius:24px;padding:22px}.tierBadge{font-size:11px;font-weight:900;padding:7px 10px;border-radius:999px;border:1px solid #315149}.tier-free{color:#d7e4df}.tier-silver{color:#e6edf0;border-color:#82919a}.tier-gold{color:#ffe08a;border-color:#9b7b28}.tier-platinum{color:#eadfff;border-color:#8064b5}.tier-organization{color:#9ed1ff;border-color:#477aa6}.membershipHero{border:1px solid #3c5360;background:linear-gradient(135deg,#10262e,#0c171d)}.pointsBig{font-size:46px;font-weight:900;color:var(--green)}.premiumOnly,.silverOnly,.platinumOnly,.orgOnly{display:none}.entitled{display:block}.view.premiumOnly.entitled{display:none}.view.premiumOnly.entitled.active{display:block}.premiumNav{color:#e4dcff!important}.premiumNav.active{background:#251d3b!important}.logoutLink{border:0;background:transparent;color:var(--muted);text-decoration:underline;padding:6px}.miniProgress{height:9px;border-radius:99px;background:#17282e;overflow:hidden}.miniProgress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber))}.authNote{font-size:11px;color:var(--muted);margin-top:10px}.roleCard{border-left:3px solid var(--green)}
 .mediaPicker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:7px}
 .mediaAction{width:100%;min-height:48px}
@@ -132,7 +132,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 .premiumIntro{border-color:#5d4d86;background:linear-gradient(145deg,#17142a,#0d1a21)}
 .tierExplain{border:1px solid #30464e;border-radius:18px;padding:16px;margin-top:12px;background:#0b171d}
 .tierExplain.silver{border-color:#6f7e86}.tierExplain.gold{border-color:#8b712d;background:linear-gradient(145deg,#1d1a10,#111820)}
-.planGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}.planChip{border:1px solid #5e5131;border-radius:12px;padding:10px 5px;text-align:center;font-weight:800;font-size:12px;background:#17160f;color:#fff}
+.planGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}.planChip{border:1px solid #5e5131;border-radius:12px;padding:10px 5px;text-align:center;font-weight:800;font-size:12px;background:#17160f;color:#fff}.planChip{cursor:pointer}.planChip.selected,.goldPlanChoice.selected{background:var(--green);border-color:var(--green);color:#fff!important}.planChip small{font-size:11px;opacity:.9}.paymentChoice.selected{background:var(--green)!important;border-color:var(--green)!important;color:#fff!important}
 @media(max-width:430px){.planGrid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
@@ -140,7 +140,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 <div id="toast" class="toast"></div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.5 · Family Login</small></div></div>
+    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.6 · Family Login</small></div></div>
     <div class="sep"></div><div class="eyebrow">Bem-vindo</div><h1 style="margin:8px 0">Vale a pena ir hoje?</h1>
     <p class="muted">Alpha familiar com 4 contas locais de teste. Usa apenas o primeiro nome e o PIN <b>1234</b>. Ainda não existe backend/sincronização entre telemóveis.</p>
     <label>Utilizador</label>
@@ -153,12 +153,12 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     </select>
     <label>PIN de teste</label><input id="loginPin" type="password" inputmode="numeric" maxlength="4" placeholder="1234" autocomplete="current-password">
     <button class="btn" style="width:100%;margin-top:14px" onclick="alphaLogin()">Entrar</button>
-    <p class="authNote">Teste 1.4.5: Helena = EARLY GOLD por 2 dias · Filipe = EARLY GOLD por 2 dias + 100 TrailScore (suficiente para SILVER 7 dias) · Daniela = FREE · André = FREE. O PIN 1234 é apenas para a Alpha e não representa segurança de produção.</p>
+    <p class="authNote">Teste 1.4.6: Helena = EARLY GOLD por 2 dias · Filipe = SILVER por 2 dias + 100 TrailScore guardados (suficientes para novo SILVER 7 dias após expirar) · Daniela = FREE · André = FREE. O PIN 1234 é apenas para a Alpha e não representa segurança de produção.</p>
   </div>
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.5 · family login + entitlements</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.6 · family login + entitlements</small></div></div>
   <div id="headerTier" class="tierBadge tier-free">FREE</div>
 </header>
 
@@ -536,12 +536,51 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     <div id="goldOffer" class="tierExplain gold">
       <div class="eyebrow">GOLD · PREMIUM</div><h2>Premium pelo tempo que escolheres.</h2>
       <p class="muted">O GOLD pode ser adquirido a partir de FREE ou SILVER e dá acesso à experiência Premium: AI Experience, Budget-First, planeamento avançado e restantes módulos GOLD. O período comprado termina automaticamente — sem renovação automática.</p>
-      <div class="planGrid"><div class="planChip">1 mês</div><div class="planChip">2 meses</div><div class="planChip">4 meses</div><div class="planChip">8 meses</div><div class="planChip">12 meses</div></div>
-      <p class="small muted" style="margin-top:12px">Alpha: pagamentos reais ainda não estão ativos. Os planos ficam já definidos na UX para o futuro checkout.</p>
+      <div class="planGrid">
+        <button class="planChip goldPlanChoice selected" data-months="1" data-price="5.99" onclick="selectGoldPlan(1)">1 mês<br><small>5,99 €</small></button>
+        <button class="planChip goldPlanChoice" data-months="2" data-price="10.99" onclick="selectGoldPlan(2)">2 meses<br><small>10,99 €</small></button>
+        <button class="planChip goldPlanChoice" data-months="4" data-price="19.99" onclick="selectGoldPlan(4)">4 meses<br><small>19,99 €</small></button>
+        <button class="planChip goldPlanChoice" data-months="8" data-price="35.99" onclick="selectGoldPlan(8)">8 meses<br><small>35,99 €</small></button>
+        <button class="planChip goldPlanChoice" data-months="12" data-price="47.99" onclick="selectGoldPlan(12)">12 meses<br><small>47,99 €</small></button>
+      </div>
+      <p class="small muted" style="margin-top:12px">Preços Alpha simulados para testar a UX. Não são ainda preços comerciais finais. Sem renovação automática.</p>
       <button class="btn purple" style="width:100%" onclick="previewGold()">Escolher GOLD</button>
     </div>
   </div>
   <div id="renewalRule" class="card"><div class="eyebrow">A nossa regra</div><h2>Sem renovações surpresa.</h2><p class="muted">No último dia avisamos que o GOLD termina. Depois de expirar, podes renovar escolhendo novamente a duração ou continuar em FREE. Nunca perdes os dias que já compraste.</p></div>
+</section>
+
+<section id="goldCheckout" class="view">
+  <div class="card premiumIntro">
+    <div class="eyebrow">GOLD · CHECKOUT ALPHA</div><h1>Confirmar plano</h1>
+    <p class="muted">Página de teste. Nenhum pagamento real é processado nesta Alpha.</p>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Plano escolhido</div>
+    <h2 id="checkoutPlanTitle">GOLD · 1 mês</h2>
+    <div class="score" id="checkoutPlanPrice">5,99 €</div>
+    <p id="checkoutPlanDates" class="muted"></p>
+    <div class="item"><b>Renovação automática:</b> NÃO</div>
+  </div>
+  <div class="card">
+    <div class="eyebrow">Método de pagamento · demonstração</div>
+    <div class="row" id="paymentMethodChoices">
+      <button class="btn secondary paymentChoice selected" onclick="selectPaymentMethod(this,'MB WAY')">MB WAY</button>
+      <button class="btn secondary paymentChoice" onclick="selectPaymentMethod(this,'Multibanco')">Multibanco</button>
+      <button class="btn secondary paymentChoice" onclick="selectPaymentMethod(this,'Visa / Mastercard')">Visa / Mastercard</button>
+      <button class="btn secondary paymentChoice" onclick="selectPaymentMethod(this,'PayPal')">PayPal</button>
+      <button class="btn secondary paymentChoice" onclick="selectPaymentMethod(this,'Apple Pay')">Apple Pay</button>
+      <button class="btn secondary paymentChoice" onclick="selectPaymentMethod(this,'Google Pay')">Google Pay</button>
+      <button class="btn secondary paymentChoice" onclick="selectPaymentMethod(this,'Revolut Pay')">Revolut Pay</button>
+      <button class="btn secondary paymentChoice" onclick="selectPaymentMethod(this,'Bitcoin / Ethereum')">Bitcoin / Ethereum</button>
+    </div>
+    <p class="small muted">A disponibilidade real será filtrada por país, dispositivo e provider quando o Payment Engine estiver ligado.</p>
+  </div>
+  <div class="card">
+    <div id="alphaCheckoutNotice" class="item">Teste apenas · não haverá cobrança nem finalização real.</div>
+    <button id="alphaCheckoutAction" class="btn purple" style="width:100%;margin-top:12px" onclick="completeGoldCheckoutAlpha()">Finalização indisponível na Alpha</button>
+    <button class="btn secondary" style="width:100%;margin-top:8px" onclick="go('premiumInfo')">Voltar aos planos</button>
+  </div>
 </section>
 
 <section id="profile" class="view">
@@ -558,7 +597,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     <div class="row"><button class="btn secondary" onclick="simulateTier('FREE')">FREE</button><button class="btn secondary" onclick="simulateSilverEarned()">SILVER</button><button class="btn purple" onclick="simulateTier('GOLD')">EARLY GOLD</button><button class="btn secondary" onclick="simulateTier('PLATINUM')">PLATINUM</button><button class="btn secondary" onclick="simulateTier('ORGANIZATION')">ORGANIZATIONS</button></div>
   </div>
   <div class="card">
-    <div class="eyebrow">Alpha 1.4.5</div><h2>Estado do teste</h2>
+    <div class="eyebrow">Alpha 1.4.6</div><h2>Estado do teste</h2>
     <div class="list">
       <div class="item">✓ GPS real + tracking</div>
       <div class="item">✓ Mapa vetorial real</div>
@@ -622,19 +661,24 @@ const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience',
 const AUTH_KEY='alpha_auth_user', ENT_PREFIX='alpha_entitlements_', POINTS_PREFIX='alpha_trailscore_points_', LAST_GOLD_PREFIX='alpha_last_gold_expired_';
 const FAMILY_USERS={
   Helena:{id:'helena',name:'Helena Ribeiro',shortName:'Helena',initialTier:'GOLD',initialDays:2},
-  Filipe:{id:'filipe',name:'Filipe Ribeiro',shortName:'Filipe',initialTier:'GOLD',initialDays:2,initialPoints:100},
+  Filipe:{id:'filipe',name:'Filipe Ribeiro',shortName:'Filipe',initialTier:'SILVER',initialDays:2,initialPoints:100},
   Daniela:{id:'daniela',name:'Daniela Ribeiro',shortName:'Daniela',initialTier:'FREE'},
   'André':{id:'andre',name:'André Ribeiro',shortName:'André',initialTier:'FREE'}
 };
-const FAMILY_TEST_SEED='alpha_family_test_seed_1_4_5';
+const FAMILY_TEST_SEED='alpha_family_test_seed_1_4_6';
 function seedFamilyExpiryTest(profile){
   if(!profile||!['helena','filipe'].includes(profile.id))return;
   const key=FAMILY_TEST_SEED+'_'+profile.id;
   if(localStorage.getItem(key))return;
   const now=Date.now();
-  localStorage.setItem(ENT_PREFIX+profile.id,JSON.stringify({tier:'GOLD',expiresAt:new Date(now+2*86400000).toISOString(),source:'alpha-1.4.5-expiry-test'}));
-  if(profile.id==='filipe')localStorage.setItem(POINTS_PREFIX+profile.id,'100');
-  localStorage.removeItem(LAST_GOLD_PREFIX+profile.id);
+  if(profile.id==='helena'){
+    localStorage.setItem(ENT_PREFIX+profile.id,JSON.stringify({tier:'GOLD',expiresAt:new Date(now+2*86400000).toISOString(),source:'alpha-1.4.6-gold-expiry-test'}));
+    localStorage.removeItem(LAST_GOLD_PREFIX+profile.id);
+  }
+  if(profile.id==='filipe'){
+    localStorage.setItem(ENT_PREFIX+profile.id,JSON.stringify({tier:'SILVER',expiresAt:new Date(now+2*86400000).toISOString(),source:'alpha-1.4.6-silver-expiry-test'}));
+    localStorage.setItem(POINTS_PREFIX+profile.id,'100');
+  }
   localStorage.setItem(key,'1');
 }
 const TIER_RANK={FREE:0,SILVER:1,GOLD:2,PLATINUM:3,ORGANIZATION:4};
@@ -712,8 +756,8 @@ function renderPremiumInfo(){
   else if(mode==='GOLD_EXPIRED'){title.textContent='O teu GOLD terminou';lead.textContent='O Premium está bloqueado. Podes renovar ou continuar com o nível que estiver agora ativo. A renovação nunca é automática.'}
   const goldBtn=gold.querySelector('button.btn.purple');
   if(goldBtn){
-    if(mode==='GOLD_EXPIRING')goldBtn.textContent='Renovar GOLD · 1 mês · 0 € (teste)';
-    else if(mode==='GOLD_EXPIRED')goldBtn.textContent='Renovar GOLD · 1 mês · 0 € (teste)';
+    if(mode==='GOLD_EXPIRING')goldBtn.textContent='Escolher renovação GOLD';
+    else if(mode==='GOLD_EXPIRED')goldBtn.textContent='Escolher renovação GOLD';
     else goldBtn.textContent='Escolher GOLD';
   }
 }
@@ -733,27 +777,44 @@ function applyEntitlements(){
   renderMembership();renderPremiumInfo();updatePremiumNav();
 }
 function openPremium(){const mode=premiumInfoMode();if(mode==='HIDDEN')return go('home');renderPremiumInfo();go('premiumInfo')}
+const GOLD_PLANS={1:5.99,2:10.99,4:19.99,8:35.99,12:47.99};
+let selectedGoldMonths=1,selectedPaymentMethod='MB WAY';
+function eur(v){return Number(v).toLocaleString('pt-PT',{style:'currency',currency:'EUR'})}
+function selectGoldPlan(months){selectedGoldMonths=Number(months)||1;document.querySelectorAll('.goldPlanChoice').forEach(x=>x.classList.toggle('selected',Number(x.dataset.months)===selectedGoldMonths))}
+function selectPaymentMethod(el,name){selectedPaymentMethod=name;document.querySelectorAll('.paymentChoice').forEach(x=>x.classList.remove('selected'));if(el)el.classList.add('selected')}
 function previewGold(){
-  const mode=premiumInfoMode();
-  if(mode==='GOLD_EXPIRING'||mode==='GOLD_EXPIRED')return renewGoldAlpha();
-  toast('Checkout GOLD ainda é simulado nesta Alpha. Helena e Filipe têm o teste de expiração/renovação ativo.');
+  const mode=premiumInfoMode(),u=authUser(),price=GOLD_PLANS[selectedGoldMonths]||GOLD_PLANS[1];
+  $('checkoutPlanTitle').textContent='GOLD · '+selectedGoldMonths+' '+(selectedGoldMonths===1?'mês':'meses');
+  $('checkoutPlanPrice').textContent=eur(price);
+  const start=(mode==='GOLD_EXPIRING'&&entState().expiresAt)?new Date(entState().expiresAt):new Date();
+  const end=new Date(start);end.setMonth(end.getMonth()+selectedGoldMonths);
+  $('checkoutPlanDates').textContent='Período previsto: '+start.toLocaleDateString('pt-PT')+' → '+end.toLocaleDateString('pt-PT');
+  const helenaRenew=u?.id==='helena'&&(mode==='GOLD_EXPIRING'||mode==='GOLD_EXPIRED');
+  const action=$('alphaCheckoutAction'),notice=$('alphaCheckoutNotice');
+  if(helenaRenew){
+    selectedGoldMonths=1;selectGoldPlan(1);$('checkoutPlanTitle').textContent='GOLD · 1 mês';$('checkoutPlanPrice').textContent=eur(GOLD_PLANS[1]);
+    notice.innerHTML='<b>Teste Helena:</b> preço de referência '+eur(GOLD_PLANS[1])+' · cobrança Alpha <b>0,00 €</b>. Ao confirmar, GOLD fica ativo por mais 1 mês.';
+    action.textContent='Simular renovação · 1 mês · 0 €';action.disabled=false;action.dataset.mode='helena-renew';
+  }else{
+    notice.innerHTML='<b>Checkout de teste:</b> plano e método podem ser escolhidos, mas a compra não será finalizada nem o GOLD ativado.';
+    action.textContent='Finalização indisponível na Alpha';action.disabled=true;action.dataset.mode='preview-only';
+  }
+  go('goldCheckout');
 }
-function renewGoldAlpha(){
-  const mode=premiumInfoMode();
-  if(!['GOLD_EXPIRING','GOLD_EXPIRED'].includes(mode))return toast('A renovação Alpha fica disponível no último dia ou após expirar');
-  const now=Date.now(),e=entState();
-  let start=now;
+function completeGoldCheckoutAlpha(){
+  const action=$('alphaCheckoutAction');if(action?.dataset.mode!=='helena-renew')return;
+  const mode=premiumInfoMode();if(!['GOLD_EXPIRING','GOLD_EXPIRED'].includes(mode))return toast('Teste de renovação disponível apenas no fim do GOLD da Helena');
+  const now=Date.now(),e=entState();let start=now;
   if(mode==='GOLD_EXPIRING'&&e.tier==='GOLD'&&e.expiresAt)start=Math.max(now,new Date(e.expiresAt).getTime());
   clearGoldExpiryNotice();
-  saveEnt({tier:'GOLD',expiresAt:new Date(start+30*86400000).toISOString(),source:'alpha-renewal-zero-cost',testPrice:0,testPeriod:'1 mês'});
-  toast('Teste concluído · GOLD renovado por 1 mês · custo 0 €');
-  go('home');
+  saveEnt({tier:'GOLD',expiresAt:new Date(start+30*86400000).toISOString(),source:'alpha-renewal-zero-cost',testPrice:0,testPeriod:'1 mês',paymentMethod:selectedPaymentMethod});
+  toast('Teste concluído · GOLD renovado por 1 mês · custo 0 €');go('home');
 }
 function openEntitlementLab(){$('entitlementLab').style.display=$('entitlementLab').style.display==='none'?'block':'none'}
 function simulateTier(t){clearGoldExpiryNotice();let e={tier:t,source:'alpha-lab'};if(t==='GOLD')e.expiresAt=new Date(Date.now()+30*86400000).toISOString();saveEnt(e);toast('UX '+tierLabel(t)+' ativada para teste')}
 function simulateSilverEarned(){saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+7*86400000).toISOString(),source:'alpha-test'});toast('SILVER de teste ativo por 7 dias')}
 function redeemSilver(days,cost){if(effectiveTier()!=='FREE')return toast('SILVER por pontos é ativado a partir de FREE');if(points()<cost)return toast('Ainda não tens pontos suficientes');localStorage.setItem(userKey(POINTS_PREFIX),String(points()-cost));saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+days*86400000).toISOString(),source:'points',cost});toast('SILVER ativado por '+days+' dias')}
-function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 1.4.5: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button></div>':'')}}
+function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 1.4.6: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button></div>':(t==='SILVER'&&p>=100?'<div class="item"><b>'+p+' pontos guardados.</b> Quando o SILVER atual expirar e regressares a FREE, podes trocá-los por um novo período SILVER.</div>':''))}}
 function bootAuth(){const u=authUser();if(!u){$('authGate').classList.add('show')}else{const profile=familyProfileById(u.id);seedFamilyExpiryTest(profile);currentTester=u.shortName||u.name||'Filipe';localStorage.setItem(TESTER_KEY,currentTester);$('authGate').classList.remove('show')}sweepReportPointMaturity();applyEntitlements()}
 
 const types={tree:'🌳 Árvore / obstáculo',water:'💧 Estado da água',mud:'🌧️ Lama / inundação',closure:'🚧 Caminho fechado',sign:'🪧 Sinalização',parking:'🚗 Acesso / estacionamento',animal:'🐄 Animal / gado no trilho',other:'⚠️ Outro'};
