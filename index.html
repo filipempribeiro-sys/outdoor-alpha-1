@@ -8,7 +8,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 2.0.1.1 — Live Navigation</title>
+<title>Project Alpha 2.0.4 — GPS Weather Header</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -22,6 +22,11 @@ body{padding-bottom:96px}
 .top{position:sticky;top:0;z-index:20;background:rgba(7,17,22,.94);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:10px 0 12px}
 .brand{display:flex;gap:10px;align-items:center}.logo{width:40px;height:40px;border-radius:13px;background:conic-gradient(from 200deg,var(--green),var(--blue),var(--green));position:relative}.logo:after{content:'▲';position:absolute;inset:0;display:grid;place-items:center;color:#061014;font-weight:900}.brand b{display:block}.brand small,.muted{color:var(--muted)}
 .badge{font-size:11px;padding:7px 9px;border-radius:999px;border:1px solid #315149;color:#bfe9d8;background:#10231f}
+.headerWeather{appearance:none;border:1px solid #315149;background:linear-gradient(135deg,#173b4d,#1f5d73);color:#f7fbff;border-radius:18px;padding:8px 11px;display:grid;grid-template-columns:auto auto auto;gap:9px;align-items:center;min-width:250px;max-width:330px;text-align:left;box-shadow:0 8px 22px rgba(0,0,0,.18);cursor:pointer}
+.headerWeather:active{transform:scale(.99)}
+.headerWeatherIcon{font-size:30px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}.headerWeatherMain,.headerWeatherSide{display:flex;flex-direction:column;min-width:0}.headerWeatherMain b{font-size:24px;line-height:1}.headerWeatherMain small,.headerWeatherSide small{color:#d5e8ee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.headerWeatherSide{border-left:1px solid rgba(255,255,255,.2);padding-left:9px;align-items:flex-end}.headerWeatherSide b{font-size:12px;white-space:nowrap}.headerWeatherSide small{font-size:10px}
+@media(max-width:620px){.top{align-items:center;gap:8px}.brand small{display:none}.headerWeather{min-width:0;width:58%;grid-template-columns:auto auto;gap:7px;padding:7px 9px}.headerWeatherSide{display:none}.headerWeatherMain b{font-size:21px}.headerWeatherIcon{font-size:25px}.brand b{font-size:15px}.logo{width:36px;height:36px}}
+@media(orientation:landscape) and (max-height:520px){.top{padding:5px 0 7px}.headerWeather{max-width:310px;padding:5px 9px;border-radius:14px}.headerWeatherIcon{font-size:23px}.headerWeatherMain b{font-size:19px}}
 .view{display:none}.view.active{display:block}
 .card{background:linear-gradient(180deg,#11242b,#0b1c22);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0}
 .hero h1{font-size:38px;line-height:1;margin:8px 0 10px}.hero h1 span,.green{color:var(--green)}.red{color:var(--red)}.amber{color:var(--amber)}
@@ -119,7 +124,7 @@ textarea{min-height:90px}
 .included{padding:9px 11px;border:1px solid #315149;border-radius:12px;margin-top:8px;background:#0d211b}
 
 
-/* Alpha 2.0.1 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
+/* Alpha 2.0.4 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
 .authGate{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at top,#123b32,#071116 55%);display:none;overflow:auto;padding:24px 14px}.authGate.show{display:grid;place-items:center}.authBox{width:min(520px,100%);background:#0d1a21;border:1px solid #294149;border-radius:24px;padding:22px}.tierBadge{font-size:11px;font-weight:900;padding:7px 10px;border-radius:999px;border:1px solid #315149}.tier-free{color:#d7e4df}.tier-silver{color:#e6edf0;border-color:#82919a}.tier-gold{color:#ffe08a;border-color:#9b7b28}.tier-platinum{color:#eadfff;border-color:#8064b5}.tier-organization{color:#9ed1ff;border-color:#477aa6}.membershipHero{border:1px solid #3c5360;background:linear-gradient(135deg,#10262e,#0c171d)}.pointsBig{font-size:46px;font-weight:900;color:var(--green)}.premiumOnly,.silverOnly,.platinumOnly,.orgOnly{display:none}.entitled{display:block}.view.premiumOnly.entitled{display:none}.view.premiumOnly.entitled.active{display:block}.premiumNav{color:#e4dcff!important}.premiumNav.active{background:#251d3b!important}.logoutLink{border:0;background:transparent;color:var(--muted);text-decoration:underline;padding:6px}.miniProgress{height:9px;border-radius:99px;background:#17282e;overflow:hidden}.miniProgress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber))}.authNote{font-size:11px;color:var(--muted);margin-top:10px}.roleCard{border-left:3px solid var(--green)}
 .mediaPicker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:7px}
 .mediaAction{width:100%;min-height:48px}
@@ -136,7 +141,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 .planGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}.planChip{border:1px solid #5e5131;border-radius:12px;padding:10px 5px;text-align:center;font-weight:800;font-size:12px;background:#17160f;color:#fff}.planChip{cursor:pointer}.planChip.selected,.goldPlanChoice.selected{background:var(--green);border-color:var(--green);color:#fff!important}.planChip small{font-size:11px;opacity:.9}.paymentChoice.selected{background:var(--green)!important;border-color:var(--green)!important;color:#fff!important}
 @media(max-width:430px){.planGrid{grid-template-columns:repeat(3,1fr)}}
 
-/* Alpha 2.0.1 — Payment Method Launch Test + Gold Renew/Cancel Test */
+/* Alpha 2.0.3 — Payment Method Launch Test + Gold Renew/Cancel Test */
 .paymentChoice.selected{background:var(--lime)!important;color:#fff!important;border-color:var(--lime)!important}
 .paymentPanel{display:none;margin-top:14px}.paymentPanel.active{display:block}
 .payBox{border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(255,255,255,.025);margin-top:12px}
@@ -150,22 +155,22 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 @media(max-width:560px){.payGrid,.walletChoice{grid-template-columns:1fr}}
 
 
-/* Alpha 2.0.1 — GOLD EXPLORE · CURATED */
+/* Alpha 2.0.3 — GOLD EXPLORE · CURATED */
 .exploreGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:12px}.exploreCard{overflow:hidden;border:1px solid #294149;border-radius:18px;background:#0d1a21}.explorePhoto{width:100%;height:150px;object-fit:cover;background:#14262d;display:block}.exploreBody{padding:13px}.exploreBody h3{margin:3px 0 7px}.exploreCats{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.exploreChip{border:1px solid #3a515b;background:#10232a;color:#dbe8e3;border-radius:999px;padding:8px 10px;font-weight:800}.exploreChip.active{background:var(--lime);color:#fff;border-color:var(--lime)}.exploreSelected{outline:2px solid var(--lime)}.exploreMapMarker{width:30px;height:30px;border-radius:50%;background:#7bd389;border:3px solid #fff;display:grid;place-items:center;font-size:15px;box-shadow:0 2px 8px #0008}.exploreMapMarker.selected{background:#ffd166}.exploreEmpty{padding:18px;border:1px dashed #3a515b;border-radius:14px;color:var(--muted)}.exploreDetail{margin-top:14px;border:1px solid #3a515b;border-radius:18px;padding:15px;background:#0b171d}.exploreRouteBox{margin-top:12px;border:1px solid #5a4f82;border-radius:16px;padding:14px;background:#151126}.routeStat{display:inline-block;margin:4px 7px 4px 0;padding:7px 10px;border-radius:999px;background:#10232a;border:1px solid #35515a;font-weight:800}
 
-/* Alpha 2.0.1 — Navigation chooser */
+/* Alpha 2.0.3 — Navigation chooser */
 .navChooser{position:fixed;inset:0;background:#000a;z-index:9999;display:flex;align-items:flex-end;justify-content:center;padding:14px}.navChooserSheet{width:min(560px,100%);background:#0d1a21;border:1px solid #294149;border-radius:22px;padding:18px;box-shadow:0 18px 50px #000b}.navChooserOptions{display:grid;gap:10px;margin-top:14px}.navChoice{width:100%;display:flex;align-items:center;justify-content:space-between;text-align:left;padding:14px 16px;border-radius:16px}.navChoice b{font-size:16px}.navChoice small{display:block;color:var(--muted);margin-top:2px}
 
-/* Alpha 2.0.1 — LIVE NAVIGATION · MAP-FIRST */
+/* Alpha 2.0.3 — LIVE NAVIGATION · MAP-FIRST */
 .mapShell{position:relative;border-radius:18px;overflow:hidden;background:#071116}.mapToolbar{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 0}.navMode{flex:1 1 105px;min-height:44px}.navMode.active{background:var(--green);color:#fff;border-color:var(--green)}.mapNavHud{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.mapNavHud .metric b{font-size:18px}.mapLiveBadge{position:absolute;left:12px;top:12px;z-index:8;background:rgba(7,17,22,.90);border:1px solid #315149;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:900;display:none;backdrop-filter:blur(8px)}.mapLiveBadge.on{display:block}.mapFsBtn{position:absolute;right:10px;bottom:10px;z-index:9;border:1px solid #315149;background:rgba(7,17,22,.9);color:#fff;border-radius:12px;padding:10px 12px;font-weight:900}.navRouteInfo{margin-top:10px;padding:10px 12px;border:1px solid #28434b;border-radius:14px;background:#0a1a20}.userMarker.navActive{width:26px;height:26px;box-shadow:0 0 0 10px rgba(77,157,255,.20);border-color:#fff;background:#2f8cff}.mapNavOverlay{display:none;position:absolute;inset:0;z-index:20;pointer-events:none;padding:12px;flex-direction:column;justify-content:space-between}.mapNavOverlayTop,.mapNavOverlayBottom{display:flex;gap:8px;align-items:center;justify-content:space-between}.mapNavOverlayTop{padding-right:72px}.navGlass{pointer-events:auto;background:rgba(7,17,22,.90);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:10px 12px;color:#fff;backdrop-filter:blur(10px);box-shadow:0 6px 22px rgba(0,0,0,.25)}.navGlass strong{display:block;font-size:16px;line-height:1.1}.navGlass small{display:block;color:#b9ccc5;margin-top:3px}.navGlassBtn{pointer-events:auto;border:1px solid rgba(255,255,255,.16);background:rgba(7,17,22,.92);color:#fff;border-radius:14px;min-width:48px;min-height:48px;padding:9px 12px;font-weight:900;backdrop-filter:blur(10px)}.navGlassBtn.primary{background:#2f8cff;border-color:#2f8cff}.mapShell.routeReady .mapNavOverlay,.mapShell.liveNavigating .mapNavOverlay,.mapShell:fullscreen .mapNavOverlay,.mapShell.mapShellFallbackFull .mapNavOverlay{display:flex}.mapShell:fullscreen,.mapShell.mapShellFallbackFull{background:#071116!important;border-radius:0!important}.mapShell:fullscreen #realMap,.mapShell.mapShellFallbackFull #realMap{height:100%!important;min-height:100%!important;border-radius:0!important;border:0!important}.mapShell.mapShellFallbackFull{position:fixed!important;inset:0!important;z-index:1000!important}.mapShell:fullscreen .mapFsBtn,.mapShell.mapShellFallbackFull .mapFsBtn{display:none}.navMiniStats{display:flex;gap:6px;flex-wrap:wrap}.navMiniStats span{font-size:12px;font-weight:900;padding:7px 9px;border-radius:999px;background:rgba(7,17,22,.90);border:1px solid rgba(255,255,255,.15);color:#fff;backdrop-filter:blur(8px)}
 @media(max-width:520px){#realMap{height:500px}.mapNavHud{grid-template-columns:1fr 1fr 1fr}.mapToolbar .btn{flex:1 1 130px}.mapNavOverlay{padding:10px}.navGlass{max-width:72%;padding:9px 10px}.navGlass strong{font-size:14px}.navGlassBtn{min-width:44px;min-height:44px;padding:8px 10px}}
 
-/* Alpha 2.0.1 — MODE-AWARE NAVIGATOR */
+/* Alpha 2.0.3 — MODE-AWARE NAVIGATOR */
 .userMarker{width:38px!important;height:38px!important;border-radius:50%!important;background:#fff!important;border:3px solid #fff!important;box-shadow:0 3px 14px #0008,0 0 0 6px rgba(104,168,255,.20)!important;display:grid!important;place-items:center!important;font-size:22px!important;line-height:1!important}
 .userMarker.navActive{background:#fff!important;border-color:#fff!important;box-shadow:0 3px 14px #0008,0 0 0 8px rgba(57,214,155,.22)!important}
 .userMarker .navVehicleIcon{display:block;transform:rotate(var(--nav-heading,0deg));transition:transform .25s linear;filter:drop-shadow(0 1px 1px #0005)}
 
-/* Alpha 2.0.1 — TURN-BY-TURN + LIVE ROUTE EVENTS */
+/* Alpha 2.0.3 — TURN-BY-TURN + LIVE ROUTE EVENTS */
 .navManeuver{pointer-events:auto;display:flex;align-items:center;gap:10px;max-width:min(440px,78vw);background:rgba(7,17,22,.94);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:10px 13px;color:#fff;backdrop-filter:blur(12px);box-shadow:0 6px 24px #0006}.navManeuverIcon{font-size:34px;min-width:42px;text-align:center}.navManeuverText strong{font-size:17px;line-height:1.15}.navManeuverText small{color:#c7d7d1;margin-top:3px;display:block}.routeEventMarker{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#18242b;border:2px solid #fff;box-shadow:0 2px 10px #0009;font-size:17px}.routeEventMarker.warn{background:#d88722}.routeEventMarker.danger{background:#c84444}.mapShell.liveNavigating .mapLiveBadge{display:none!important}
 
 
@@ -174,7 +179,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 @media(max-width:430px){.vehicleGrid,.reportGrid{grid-template-columns:repeat(3,1fr)}.vehicleChoice,.reportChoice{font-size:11px;min-height:90px}.vehicleChoice .iconBox,.reportChoice .iconBox{width:42px;height:42px}}
 
 
-/* Alpha 2.0.1 — RESPONSIVE ORIENTATION */
+/* Alpha 2.0.3 — RESPONSIVE ORIENTATION */
 @media (orientation: landscape){
   body{padding-bottom:12px}
   .app{max-width:none;padding:8px 12px}
@@ -215,7 +220,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 <div id="toast" class="toast"></div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 2.0.1 · Family Login</small></div></div>
+    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 2.0.3 · Family Login</small></div></div>
     <div class="sep"></div><div class="eyebrow">Bem-vindo</div><h1 style="margin:8px 0">Vale a pena ir hoje?</h1>
     <p class="muted">Alpha familiar com 4 contas locais de teste. Usa apenas o primeiro nome e o PIN <b>1234</b>. Ainda não existe backend/sincronização entre telemóveis.</p>
     <label>Utilizador</label>
@@ -233,8 +238,12 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 2.0.1 · family login + entitlements</small></div></div>
-  <div id="headerTier" class="tierBadge tier-free">FREE</div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 2.0.4 · outdoor intelligence</small></div></div>
+  <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
+    <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
+    <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
+    <span class="headerWeatherSide"><b id="headerWeatherLabel">Tempo</b><small id="headerWeatherRange">GPS automático</small></span>
+  </button>
 </header>
 
 <section id="home" class="view active">
@@ -797,7 +806,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     <div class="row"><button class="btn secondary" onclick="simulateTier('FREE')">FREE</button><button class="btn secondary" onclick="simulateSilverEarned()">SILVER</button><button class="btn purple" onclick="simulateTier('GOLD')">EARLY GOLD</button><button class="btn secondary" onclick="simulateTier('PLATINUM')">PLATINUM</button><button class="btn secondary" onclick="simulateTier('ORGANIZATION')">ORGANIZATIONS</button></div>
   </div>
   <div class="card">
-    <div class="eyebrow">Alpha 2.0.1</div><h2>Estado do teste</h2>
+    <div class="eyebrow">Alpha 2.0.3</div><h2>Estado do teste</h2>
     <div class="list">
       <div class="item">✓ GPS real + tracking</div>
       <div class="item">✓ Mapa vetorial real</div>
@@ -855,8 +864,9 @@ let pos=null,watchId=null,photoData='',map=null,userMarker=null,reportMarkers=[]
 let activityRunning=false,activityStartedAt=null,activitySeconds=0,activityDistance=0,lastActivityPos=null,activityTimer=null;
 let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareFile=null;
 let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,trailDetailPhotos=[],destination=null,experiencePlaces={monuments:[],meals:[],stays:[]},currentTester='Filipe',smartChoices={monuments:[],meals:[],stays:[]};
+let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[];
-const APP_VERSION='2.0.0',ACTIVE_ROUTE_KEY='alpha_active_route_v4';
+const APP_VERSION='2.0.4',ACTIVE_ROUTE_KEY='alpha_active_route_v4';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1104,7 +1114,7 @@ function simulateTier(t){clearGoldExpiryNotice();let e={tier:t,source:'alpha-lab
 function simulateSilverEarned(){saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+7*86400000).toISOString(),source:'alpha-test'});toast('SILVER de teste ativo por 7 dias')}
 function redeemSilver(days,cost){if(effectiveTier()!=='FREE')return toast('SILVER por pontos é ativado a partir de FREE');if(points()<cost)return toast('Ainda não tens pontos suficientes');localStorage.setItem(userKey(POINTS_PREFIX),String(points()-cost));saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+days*86400000).toISOString(),purchasedDays:days,source:'points',cost});renderMembership();toast('SILVER ativado por '+days+' dias · perfil atualizado');go('profile')}
 function resetSilverAlphaTest(){if(authUser()?.id!=='filipe')return;localStorage.setItem(userKey(POINTS_PREFIX),'2000');saveEnt({tier:'FREE',source:'alpha-1.4.17-silver-redemption-reset'});renderMembership();toast('Teste SILVER reposto · 2000 TrailScore');go('profile')}
-function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('goldProfileActions'))$('goldProfileActions').style.display=t==='GOLD'?'flex':'none';if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.purchasedDays?' · período escolhido: '+e.purchasedDays+' dias':'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.purchasedMonths?' · período escolhido: '+e.purchasedMonths+' '+(e.purchasedMonths===1?'mês':'meses'):'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 2.0.1: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button><button class="btn secondary" onclick="redeemSilver(60,720)">720 pts → 60 dias</button><button class="btn secondary" onclick="redeemSilver(90,1000)">1000 pts → 90 dias</button></div>':(t==='SILVER'&&p>=100?'<div class="item"><b>'+p+' pontos guardados.</b> Quando o SILVER atual expirar e regressares a FREE, podes trocá-los por um novo período SILVER.</div>'+(u.id==='filipe'?'<button class="btn secondary" style="width:100%;margin-top:10px" onclick="resetSilverAlphaTest()">Repor teste SILVER · 2000 pts</button>':''):''))}}
+function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('goldProfileActions'))$('goldProfileActions').style.display=t==='GOLD'?'flex':'none';if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.purchasedDays?' · período escolhido: '+e.purchasedDays+' dias':'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.purchasedMonths?' · período escolhido: '+e.purchasedMonths+' '+(e.purchasedMonths===1?'mês':'meses'):'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 2.0.3: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button><button class="btn secondary" onclick="redeemSilver(60,720)">720 pts → 60 dias</button><button class="btn secondary" onclick="redeemSilver(90,1000)">1000 pts → 90 dias</button></div>':(t==='SILVER'&&p>=100?'<div class="item"><b>'+p+' pontos guardados.</b> Quando o SILVER atual expirar e regressares a FREE, podes trocá-los por um novo período SILVER.</div>'+(u.id==='filipe'?'<button class="btn secondary" style="width:100%;margin-top:10px" onclick="resetSilverAlphaTest()">Repor teste SILVER · 2000 pts</button>':''):''))}}
 function bootAuth(){const u=authUser();if(!u){$('authGate').classList.add('show')}else{const profile=familyProfileById(u.id);seedFamilyExpiryTest(profile);currentTester=u.shortName||u.name||'Filipe';localStorage.setItem(TESTER_KEY,currentTester);$('authGate').classList.remove('show')}sweepReportPointMaturity();applyEntitlements()}
 
 const types={traffic:'Trânsito',police:'Polícia / autoridade',crash:'Acidente',hazard:'Perigo',roadworks:'Obras',blocked:'Faixa / passagem bloqueada',weather:'Mau tempo',fire:'Incêndio',tree:'Árvore / obstáculo',water:'Estado da água',mud:'Lama / inundação',landslide:'Deslizamento',closure:'Caminho / estrada fechada',sign:'Sinalização',parking:'Acesso / estacionamento',animal:'Animal / gado',other:'Outro'};
@@ -1202,7 +1212,7 @@ function updatePosition(p){
   let sp=filteredSpeed(pos);$('spd').textContent=sp===null?'—':sp.toFixed(1)+' km/h';if($('navLiveSpeed'))$('navLiveSpeed').textContent=sp===null?'—':sp.toFixed(1)+' km/h';
   $('gpsState').innerHTML='<span class="green">GPS ativo</span> · '+new Date(p.timestamp).toLocaleTimeString('pt-PT');
   if(liveNavActive){appendLiveTrack(pos,prev);}
-  initMap();updateUserMarker(false);if(liveNavActive&&!exploreRouteGeoJSON)rebuildActiveRouteFromJourney();updateNavigationOverlay();if(liveNavActive&&navFollow)followCurrentPosition();checkNearest();updateActivityFromGPS(pos);if(!weatherNow)fetchWeather();if(!nearbyTrails.length)loadTrailsNearby(false)
+  initMap();updateUserMarker(false);if(liveNavActive&&!exploreRouteGeoJSON)rebuildActiveRouteFromJourney();updateNavigationOverlay();if(liveNavActive&&navFollow)followCurrentPosition();checkNearest();updateActivityFromGPS(pos);updateHeaderWeatherAt(pos.latitude,pos.longitude,false,false);if(!weatherNow)fetchWeather();if(!nearbyTrails.length)loadTrailsNearby(false)
 }
 function geoError(e){$('gpsState').innerHTML='<span class="red">GPS indisponível</span>';toast('GPS: '+e.message)}
 function requestLocation(){if(!navigator.geolocation)return toast('Geolocalização não suportada');navigator.geolocation.getCurrentPosition(updatePosition,geoError,{enableHighAccuracy:true,timeout:15000,maximumAge:0})}
@@ -1498,8 +1508,41 @@ async function enrichExplorePlace(p){
   }catch{}
   return p;
 }
+let exploreHomeCountryCode='';
+async function reverseCountryCode(lat,lon){
+  try{
+    const u='https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=5&addressdetails=1&lat='+encodeURIComponent(lat)+'&lon='+encodeURIComponent(lon);
+    const r=await fetch(u,{headers:{Accept:'application/json'},cache:'no-store'});
+    if(!r.ok)return '';const j=await r.json();return String(j.address&&j.address.country_code||'').toLowerCase();
+  }catch{return ''}
+}
+async function currentCountryCode(){
+  if(exploreHomeCountryCode)return exploreHomeCountryCode;
+  try{const saved=JSON.parse(localStorage.getItem('alpha_geo_country_v1')||'null');if(saved&&saved.code&&Date.now()-saved.time<86400000){exploreHomeCountryCode=saved.code;return saved.code}}catch{}
+  let lat=pos&&pos.latitude,lon=pos&&pos.longitude;
+  if(!Number.isFinite(lat)||!Number.isFinite(lon)){
+    try{const gp=await new Promise((ok,fail)=>navigator.geolocation.getCurrentPosition(ok,fail,{enableHighAccuracy:false,timeout:5000,maximumAge:600000}));lat=gp.coords.latitude;lon=gp.coords.longitude}catch{}
+  }
+  if(Number.isFinite(lat)&&Number.isFinite(lon)){const code=await reverseCountryCode(lat,lon);if(code){exploreHomeCountryCode=code;try{localStorage.setItem('alpha_geo_country_v1',JSON.stringify({code,time:Date.now()}))}catch{}return code}}
+  return '';
+}
+function explicitCountryCode(q){
+  const x=(' '+String(q||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')+' ');
+  const aliases={pt:[' portugal ',' pt '],es:[' espanha ',' spain ',' espana ',' es '],fr:[' franca ',' france ',' fr '],br:[' brasil ',' brazil ',' br '],it:[' italia ',' italy ',' it '],de:[' alemanha ',' germany ',' deutschland ',' de '],gb:[' reino unido ',' united kingdom ',' uk ',' inglaterra '],ie:[' irlanda ',' ireland '],ch:[' suica ',' switzerland '],ad:[' andorra '],ma:[' marrocos ',' morocco ']};
+  for(const [code,names] of Object.entries(aliases))if(names.some(n=>x.includes(n)))return code;return '';
+}
+async function nominatimSearchPlace(q,countryCode=''){
+  const params=new URLSearchParams({format:'jsonv2',limit:'5',addressdetails:'1','accept-language':'pt-PT,pt,en'});params.set('q',q);if(countryCode)params.set('countrycodes',countryCode);
+  const r=await fetch('https://nominatim.openstreetmap.org/search?'+params.toString(),{headers:{Accept:'application/json'},cache:'no-store'});if(!r.ok)throw new Error('geocode');return await r.json();
+}
 async function geocodeExplore(q){
-  const u='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&addressdetails=1&q='+encodeURIComponent(q);const r=await fetch(u,{headers:{Accept:'application/json'}});if(!r.ok)throw new Error('geocode');const j=await r.json();if(!j.length)throw new Error('not found');return {lat:Number(j[0].lat),lon:Number(j[0].lon),label:j[0].display_name};
+  const explicit=explicitCountryCode(q),home=await currentCountryCode();
+  let j=await nominatimSearchPlace(q,explicit||home);
+  // Local-first: só abre a pesquisa global se não existir resultado no país atual.
+  if(!j.length&&!explicit)j=await nominatimSearchPlace(q,'');
+  if(!j.length)throw new Error('not found');
+  const hit=j[0],code=String(hit.address&&hit.address.country_code||explicit||home||'').toLowerCase();
+  return {lat:Number(hit.lat),lon:Number(hit.lon),label:hit.display_name,countryCode:code,homeCountryCode:home,explicitCountry:!!explicit};
 }
 async function exploreSearch(){if(!hasGold())return toast('EXPLORE é uma funcionalidade GOLD');const q=$('exploreDestinationInput').value.trim();if(!q)return toast('Indica uma localidade');$('exploreState').textContent='A localizar '+q+'…';try{exploreCenter=await geocodeExplore(q);await loadExplorePlaces()}catch{$('exploreState').textContent='Não foi possível localizar o destino.';toast('Destino não localizado')}}
 function exploreNearMe(){if(!hasGold())return toast('EXPLORE é uma funcionalidade GOLD');if(pos){exploreCenter={lat:pos.latitude,lon:pos.longitude,label:'Perto de mim'};loadExplorePlaces();return}if(!navigator.geolocation)return toast('GPS indisponível');$('exploreState').textContent='A obter GPS…';navigator.geolocation.getCurrentPosition(p=>{updatePosition(p);exploreCenter={lat:p.coords.latitude,lon:p.coords.longitude,label:'Perto de mim'};loadExplorePlaces()},geoError,{enableHighAccuracy:true,timeout:15000})}
@@ -1536,10 +1579,20 @@ async function fetchExploreWikipediaSearch(c,signal){
   if(!r.ok)throw new Error('Wikipedia search '+r.status);const j=await r.json();
   return Object.values((j.query&&j.query.pages)||{});
 }
+async function fetchExploreWikipediaTargeted(c,signal){
+  const city=String(c.label||'').split(',')[0].trim();if(!city||city==='Perto de mim')return[];
+  const terms=['universidade','biblioteca','museu','mosteiro','igreja','catedral','palácio','castelo','ruínas','arqueológico','jardim botânico','monumento'];
+  const out=[];
+  for(const term of terms){
+    const params=new URLSearchParams({action:'query',generator:'search',gsrsearch:city+' '+term,gsrnamespace:'0',gsrlimit:'6',prop:'coordinates|pageimages|extracts|info',inprop:'url',exintro:'1',explaintext:'1',exsentences:'4',piprop:'thumbnail',pithumbsize:'720',format:'json',origin:'*'});
+    try{const r=await fetch('https://pt.wikipedia.org/w/api.php?'+params.toString(),{signal,cache:'no-store'});if(!r.ok)continue;const j=await r.json();out.push(...Object.values((j.query&&j.query.pages)||{}))}catch{}
+  }
+  return out;
+}
 async function fetchExploreWikipedia(c){
-  const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),10000);
+  const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),12000);
   try{
-    const settled=await Promise.allSettled([fetchExploreWikipediaGeo(c,ctrl.signal),fetchExploreWikipediaSearch(c,ctrl.signal)]),out=[],seen=new Set();
+    const settled=await Promise.allSettled([fetchExploreWikipediaGeo(c,ctrl.signal),fetchExploreWikipediaSearch(c,ctrl.signal),fetchExploreWikipediaTargeted(c,ctrl.signal)]),out=[],seen=new Set();
     settled.forEach(x=>{if(x.status!=='fulfilled')return;(x.value||[]).forEach(pg=>{const key=String(pg.pageid||pg.title||'');if(!key||seen.has(key))return;seen.add(key);out.push(pg)})});
     if(!out.length)throw new Error('Wikipedia sem resultados');
     return out;
@@ -1555,7 +1608,7 @@ function explorePageLooksVisitable(name,desc){
 async function loadExplorePlaces(){
   const c=exploreCenter;if(!c)return;
   exploreSelected.clear();exploreRouteGeoJSON=null;exploreRouteOrdered=[];renderExploreSelectedSummary();
-  const cacheKey='alpha_explore_hybrid_v3_'+Math.round(c.lat*1000)+'_'+Math.round(c.lon*1000);
+  const cacheKey='alpha_explore_hybrid_v5_local_first_'+(c.countryCode||'xx')+'_'+Math.round(c.lat*1000)+'_'+Math.round(c.lon*1000);
   try{
     const cached=JSON.parse(localStorage.getItem(cacheKey)||'null');
     if(cached&&Date.now()-cached.time<21600000&&Array.isArray(cached.places)&&cached.places.length){
@@ -1570,12 +1623,15 @@ async function loadExplorePlaces(){
       const name=pg.title.trim(),key=name.toLowerCase();if(seen.has(key))return null;seen.add(key);
       const desc=(pg.extract||'').trim().slice(0,480);
       if(!explorePageLooksVisitable(name,desc))return null;
+      const lon=Number(co.lon),lat=Number(co.lat),distanceM=hav(c.lat,c.lon,lat,lon);
+      if(!Number.isFinite(distanceM)||distanceM>25000)return null;
       const cat=exploreWikiCategory(name,desc);
-      return {id:'explore-wiki-'+pg.pageid,name,center:[Number(co.lon),Number(co.lat)],tags:{wikipedia:'pt:'+name},cat,description:desc||exploreCategoryLabel(cat)+' com interesse para visita.',photo:pg.thumbnail&&pg.thumbnail.source||'',wikipediaUrl:pg.fullurl||('https://pt.wikipedia.org/?curid='+pg.pageid),wikiMatched:true,website:'',opening:'',fee:''};
+      return {id:'explore-wiki-'+pg.pageid,name,center:[lon,lat],distanceM,tags:{wikipedia:'pt:'+name},cat,description:desc||exploreCategoryLabel(cat)+' com interesse para visita.',photo:pg.thumbnail&&pg.thumbnail.source||'',wikipediaUrl:pg.fullurl||('https://pt.wikipedia.org/?curid='+pg.pageid),wikiMatched:true,website:'',opening:'',fee:''};
     }).filter(Boolean);
     places.sort((a,b)=>exploreWikiScore(b)-exploreWikiScore(a));
     explorePlaces=places.slice(0,40);
     if(!explorePlaces.length)throw new Error('sem resultados');
+    if(explorePlaces.length<8)console.warn('EXPLORE: poucos resultados locais para',c.label,explorePlaces.length);
     localStorage.setItem(cacheKey,JSON.stringify({time:Date.now(),places:explorePlaces}));
     $('exploreState').textContent=explorePlaces.length+' locais para visitar · raio até 25 km · '+c.label+' · seleciona os que quiseres';
     renderExploreResults();
@@ -2095,6 +2151,65 @@ function replacePlanItem(kind,placeId){
   if(idx>=0)p.items[idx]={...replacement,replaces:p.items[idx].id};
   else p.items.push(replacement);
   saveExperiencePlan(p);upsertExperienceHistory(p);logContribution('alterou componente',replacement.id,replacement.title);renderExperiencePlanPreview();renderSmartChoices();toast('Experiência atualizada');
+}
+
+/* ---------- GPS WEATHER HEADER 2.0.4 ---------- */
+function headerWeatherSymbol(code,isDay=1){
+  if(code===0)return isDay?'☀️':'🌙';
+  if(code<=3)return code===1?'🌤️':'⛅';
+  if(code<=48)return'🌫️';
+  if(code<=57)return'🌦️';
+  if(code<=67)return'🌧️';
+  if(code<=77)return'🌨️';
+  if(code<=82)return'🌦️';
+  if(code<=86)return'🌨️';
+  if(code<=99)return'⛈️';
+  return'🌡️';
+}
+function headerWeatherNeedsUpdate(lat,lon,force=false){
+  if(force||!headerWeatherLast)return true;
+  const moved=hav(headerWeatherLast.lat,headerWeatherLast.lon,lat,lon);
+  return moved>=2500 || Date.now()-headerWeatherLast.time>=10*60*1000;
+}
+async function reverseWeatherPlace(lat,lon){
+  try{
+    const u='https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+encodeURIComponent(lat)+'&lon='+encodeURIComponent(lon)+'&zoom=13&addressdetails=1&accept-language=pt';
+    const r=await fetch(u,{headers:{'Accept':'application/json'}});if(!r.ok)throw new Error();const j=await r.json(),a=j.address||{};
+    return a.city||a.town||a.village||a.municipality||a.suburb||a.county||'Local atual';
+  }catch{return'Local atual'}
+}
+async function updateHeaderWeatherAt(lat,lon,force=false,showToast=false){
+  if(headerWeatherBusy||!headerWeatherNeedsUpdate(lat,lon,force))return;
+  headerWeatherBusy=true;
+  try{
+    const u='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,apparent_temperature,weather_code,is_day&daily=temperature_2m_max,temperature_2m_min&forecast_days=1&timezone=auto';
+    const [wr,place]=await Promise.all([fetch(u,{cache:'no-store'}),reverseWeatherPlace(lat,lon)]);
+    if(!wr.ok)throw new Error('weather '+wr.status);const j=await wr.json(),w=j.current||{},d=j.daily||{};
+    const max=Array.isArray(d.temperature_2m_max)?d.temperature_2m_max[0]:null,min=Array.isArray(d.temperature_2m_min)?d.temperature_2m_min[0]:null;
+    if($('headerWeatherIcon'))$('headerWeatherIcon').textContent=headerWeatherSymbol(w.weather_code,w.is_day);
+    if($('headerWeatherTemp'))$('headerWeatherTemp').textContent=Number.isFinite(w.temperature_2m)?Math.round(w.temperature_2m)+'°':'--°';
+    if($('headerWeatherPlace'))$('headerWeatherPlace').textContent='⌖ '+place;
+    if($('headerWeatherLabel'))$('headerWeatherLabel').textContent=weatherLabel(w.weather_code);
+    if($('headerWeatherRange'))$('headerWeatherRange').textContent=(Number.isFinite(max)?'↑'+Math.round(max)+'°':'')+(Number.isFinite(max)&&Number.isFinite(min)?' / ':'')+(Number.isFinite(min)?'↓'+Math.round(min)+'°':'');
+    headerWeatherLast={lat,lon,time:Date.now(),place};
+    if(showToast)toast('Meteorologia atualizada por GPS · '+place);
+  }catch(e){
+    if($('headerWeatherPlace'))$('headerWeatherPlace').textContent='Meteorologia indisponível';
+    if(showToast)toast('Não foi possível atualizar a meteorologia');
+  }finally{headerWeatherBusy=false}
+}
+function refreshHeaderWeather(showToast=false){
+  if(pos&&Number.isFinite(pos.latitude)&&Number.isFinite(pos.longitude))return updateHeaderWeatherAt(pos.latitude,pos.longitude,true,showToast);
+  if(!navigator.geolocation){if(showToast)toast('Geolocalização não suportada');return}
+  navigator.geolocation.getCurrentPosition(p=>updateHeaderWeatherAt(p.coords.latitude,p.coords.longitude,true,showToast),()=>{if(showToast)toast('GPS indisponível')},{enableHighAccuracy:false,timeout:12000,maximumAge:60000});
+}
+function startHeaderWeatherGPS(){
+  if(!navigator.geolocation||headerWeatherWatchId!==null)return;
+  navigator.geolocation.getCurrentPosition(p=>updateHeaderWeatherAt(p.coords.latitude,p.coords.longitude,true,false),()=>{}, {enableHighAccuracy:false,timeout:12000,maximumAge:60000});
+  headerWeatherWatchId=navigator.geolocation.watchPosition(p=>{
+    const c=p.coords;if(!c)return;
+    updateHeaderWeatherAt(c.latitude,c.longitude,false,false);
+  },()=>{}, {enableHighAccuracy:false,maximumAge:60000,timeout:20000});
 }
 
 /* ---------- REAL DISCOVERY + WEATHER + TRAIL AI ---------- */
@@ -2677,7 +2792,7 @@ async function checkForFreshBuild(force=false){
 function setupFreshPWA(){
   if(!('serviceWorker'in navigator))return;
   navigator.serviceWorker.register('./sw.js?v='+encodeURIComponent(APP_VERSION),{updateViaCache:'none'}).then(reg=>{reg.update().catch(()=>{});navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!sessionStorage.getItem('alpha_controller_reload')){sessionStorage.setItem('alpha_controller_reload','1');location.reload()}})}).catch(()=>{});
-  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){navigator.serviceWorker.getRegistration().then(r=>r&&r.update().catch(()=>{}));checkForFreshBuild(true);restoreActiveRoute();if(map)renderExploreRoute();}});
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){navigator.serviceWorker.getRegistration().then(r=>r&&r.update().catch(()=>{}));checkForFreshBuild(true);restoreActiveRoute();refreshHeaderWeather(false);if(map)renderExploreRoute();}});
   window.addEventListener('pageshow',()=>checkForFreshBuild(false));window.addEventListener('focus',()=>checkForFreshBuild(false));
 }
 restoreActiveRoute();
@@ -2695,6 +2810,7 @@ try{
 renderBudgetAdvice();
 try{let cc=JSON.parse(localStorage.getItem(scopedTrailCacheKey())||'null');if(cc&&cc.trails&&Date.now()-cc.time<21600000){nearbyTrails=cc.trails;renderTrails();$('trailStatus').textContent=nearbyTrails.length+' trails carregados do cache deste destino.'}}catch{}
 fetchWeather(false);
+startHeaderWeatherGPS();
 setupFreshPWA();checkForFreshBuild(false);
 
 function adaptOrientation(){
