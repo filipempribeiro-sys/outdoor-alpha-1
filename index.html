@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 1.4.18 — Gold Explore AI Route</title>
+<title>Project Alpha 1.4.19 — Gold Explore AI Route</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -118,7 +118,7 @@ textarea{min-height:90px}
 .included{padding:9px 11px;border:1px solid #315149;border-radius:12px;margin-top:8px;background:#0d211b}
 
 
-/* Alpha 1.4.18 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
+/* Alpha 1.4.19 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
 .authGate{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at top,#123b32,#071116 55%);display:none;overflow:auto;padding:24px 14px}.authGate.show{display:grid;place-items:center}.authBox{width:min(520px,100%);background:#0d1a21;border:1px solid #294149;border-radius:24px;padding:22px}.tierBadge{font-size:11px;font-weight:900;padding:7px 10px;border-radius:999px;border:1px solid #315149}.tier-free{color:#d7e4df}.tier-silver{color:#e6edf0;border-color:#82919a}.tier-gold{color:#ffe08a;border-color:#9b7b28}.tier-platinum{color:#eadfff;border-color:#8064b5}.tier-organization{color:#9ed1ff;border-color:#477aa6}.membershipHero{border:1px solid #3c5360;background:linear-gradient(135deg,#10262e,#0c171d)}.pointsBig{font-size:46px;font-weight:900;color:var(--green)}.premiumOnly,.silverOnly,.platinumOnly,.orgOnly{display:none}.entitled{display:block}.view.premiumOnly.entitled{display:none}.view.premiumOnly.entitled.active{display:block}.premiumNav{color:#e4dcff!important}.premiumNav.active{background:#251d3b!important}.logoutLink{border:0;background:transparent;color:var(--muted);text-decoration:underline;padding:6px}.miniProgress{height:9px;border-radius:99px;background:#17282e;overflow:hidden}.miniProgress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber))}.authNote{font-size:11px;color:var(--muted);margin-top:10px}.roleCard{border-left:3px solid var(--green)}
 .mediaPicker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:7px}
 .mediaAction{width:100%;min-height:48px}
@@ -135,7 +135,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 .planGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}.planChip{border:1px solid #5e5131;border-radius:12px;padding:10px 5px;text-align:center;font-weight:800;font-size:12px;background:#17160f;color:#fff}.planChip{cursor:pointer}.planChip.selected,.goldPlanChoice.selected{background:var(--green);border-color:var(--green);color:#fff!important}.planChip small{font-size:11px;opacity:.9}.paymentChoice.selected{background:var(--green)!important;border-color:var(--green)!important;color:#fff!important}
 @media(max-width:430px){.planGrid{grid-template-columns:repeat(3,1fr)}}
 
-/* Alpha 1.4.18 — Payment Method Launch Test + Gold Renew/Cancel Test */
+/* Alpha 1.4.19 — Payment Method Launch Test + Gold Renew/Cancel Test */
 .paymentChoice.selected{background:var(--lime)!important;color:#fff!important;border-color:var(--lime)!important}
 .paymentPanel{display:none;margin-top:14px}.paymentPanel.active{display:block}
 .payBox{border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(255,255,255,.025);margin-top:12px}
@@ -149,7 +149,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 @media(max-width:560px){.payGrid,.walletChoice{grid-template-columns:1fr}}
 
 
-/* Alpha 1.4.18 — GOLD EXPLORE · CURATED */
+/* Alpha 1.4.19 — GOLD EXPLORE · CURATED */
 .exploreGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:12px}.exploreCard{overflow:hidden;border:1px solid #294149;border-radius:18px;background:#0d1a21}.explorePhoto{width:100%;height:150px;object-fit:cover;background:#14262d;display:block}.exploreBody{padding:13px}.exploreBody h3{margin:3px 0 7px}.exploreCats{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.exploreChip{border:1px solid #3a515b;background:#10232a;color:#dbe8e3;border-radius:999px;padding:8px 10px;font-weight:800}.exploreChip.active{background:var(--lime);color:#fff;border-color:var(--lime)}.exploreSelected{outline:2px solid var(--lime)}.exploreMapMarker{width:30px;height:30px;border-radius:50%;background:#7bd389;border:3px solid #fff;display:grid;place-items:center;font-size:15px;box-shadow:0 2px 8px #0008}.exploreMapMarker.selected{background:#ffd166}.exploreEmpty{padding:18px;border:1px dashed #3a515b;border-radius:14px;color:var(--muted)}.exploreDetail{margin-top:14px;border:1px solid #3a515b;border-radius:18px;padding:15px;background:#0b171d}.exploreRouteBox{margin-top:12px;border:1px solid #5a4f82;border-radius:16px;padding:14px;background:#151126}.routeStat{display:inline-block;margin:4px 7px 4px 0;padding:7px 10px;border-radius:999px;background:#10232a;border:1px solid #35515a;font-weight:800}
 </style>
 </head>
@@ -157,7 +157,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 <div id="toast" class="toast"></div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.18 · Family Login</small></div></div>
+    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.19 · Family Login</small></div></div>
     <div class="sep"></div><div class="eyebrow">Bem-vindo</div><h1 style="margin:8px 0">Vale a pena ir hoje?</h1>
     <p class="muted">Alpha familiar com 4 contas locais de teste. Usa apenas o primeiro nome e o PIN <b>1234</b>. Ainda não existe backend/sincronização entre telemóveis.</p>
     <label>Utilizador</label>
@@ -170,12 +170,12 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     </select>
     <label>PIN de teste</label><input id="loginPin" type="password" inputmode="numeric" maxlength="4" placeholder="1234" autocomplete="current-password">
     <button class="btn" style="width:100%;margin-top:14px" onclick="alphaLogin()">Entrar</button>
-    <p class="authNote">Teste 1.4.18: Helena mantém o teste GOLD · Filipe = SILVER com expiração em 24h + 2000 TrailScore guardados para, depois de expirar, experimentar vários períodos SILVER · Daniela = FREE · André = FREE. O PIN 1234 é apenas para a Alpha e não representa segurança de produção.</p>
+    <p class="authNote">Teste 1.4.19: Helena mantém o teste GOLD · Filipe = SILVER com expiração em 24h + 2000 TrailScore guardados para, depois de expirar, experimentar vários períodos SILVER · Daniela = FREE · André = FREE. O PIN 1234 é apenas para a Alpha e não representa segurança de produção.</p>
   </div>
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.18 · family login + entitlements</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.19 · family login + entitlements</small></div></div>
   <div id="headerTier" class="tierBadge tier-free">FREE</div>
 </header>
 
@@ -220,6 +220,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     <div class="row"><button class="btn secondary" onclick="showExploreOnMap(false)">Ver todos no mapa</button><button class="btn" onclick="showExploreOnMap(true)">Ver escolhidos no mapa</button></div>
     <div id="exploreSelectedSummary" class="small muted" style="margin-top:8px">Ainda não escolheste locais.</div>
     <div id="exploreAIRouteBox" class="exploreRouteBox" style="display:none"></div>
+    <div class="row" style="margin-top:10px"><button class="btn secondary" onclick="openNextStopNavigation()">Carro · próximo destino</button><button class="btn secondary" onclick="markCarStopVisited()">Marcar visitado</button></div>
     <div id="exploreDetail" class="exploreDetail" style="display:none"></div>
     <div id="exploreResults" class="exploreGrid"><div class="exploreEmpty">Pesquisa uma localidade para começar.</div></div>
   </div>
@@ -660,7 +661,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     <div class="row"><button class="btn secondary" onclick="simulateTier('FREE')">FREE</button><button class="btn secondary" onclick="simulateSilverEarned()">SILVER</button><button class="btn purple" onclick="simulateTier('GOLD')">EARLY GOLD</button><button class="btn secondary" onclick="simulateTier('PLATINUM')">PLATINUM</button><button class="btn secondary" onclick="simulateTier('ORGANIZATION')">ORGANIZATIONS</button></div>
   </div>
   <div class="card">
-    <div class="eyebrow">Alpha 1.4.18</div><h2>Estado do teste</h2>
+    <div class="eyebrow">Alpha 1.4.19</div><h2>Estado do teste</h2>
     <div class="list">
       <div class="item">✓ GPS real + tracking</div>
       <div class="item">✓ Mapa vetorial real</div>
@@ -718,7 +719,7 @@ let pos=null,watchId=null,photoData='',map=null,userMarker=null,reportMarkers=[]
 let activityRunning=false,activityStartedAt=null,activitySeconds=0,activityDistance=0,lastActivityPos=null,activityTimer=null;
 let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareFile=null;
 let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,trailDetailPhotos=[],destination=null,experiencePlaces={monuments:[],meals:[],stays:[]},currentTester='Filipe',smartChoices={monuments:[],meals:[],stays:[]};
-let explorePlaces=[],exploreSelected=new Set(),exploreCategory='all',exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null;
+let explorePlaces=[],exploreSelected=new Set(),exploreCategory='all',exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[];
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
 
 /* ---------- FAMILY LOGIN + ENTITLEMENT ENGINE 1.4.3 ---------- */
@@ -964,7 +965,7 @@ function simulateTier(t){clearGoldExpiryNotice();let e={tier:t,source:'alpha-lab
 function simulateSilverEarned(){saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+7*86400000).toISOString(),source:'alpha-test'});toast('SILVER de teste ativo por 7 dias')}
 function redeemSilver(days,cost){if(effectiveTier()!=='FREE')return toast('SILVER por pontos é ativado a partir de FREE');if(points()<cost)return toast('Ainda não tens pontos suficientes');localStorage.setItem(userKey(POINTS_PREFIX),String(points()-cost));saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+days*86400000).toISOString(),purchasedDays:days,source:'points',cost});renderMembership();toast('SILVER ativado por '+days+' dias · perfil atualizado');go('profile')}
 function resetSilverAlphaTest(){if(authUser()?.id!=='filipe')return;localStorage.setItem(userKey(POINTS_PREFIX),'2000');saveEnt({tier:'FREE',source:'alpha-1.4.17-silver-redemption-reset'});renderMembership();toast('Teste SILVER reposto · 2000 TrailScore');go('profile')}
-function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('goldProfileActions'))$('goldProfileActions').style.display=t==='GOLD'?'flex':'none';if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.purchasedDays?' · período escolhido: '+e.purchasedDays+' dias':'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.purchasedMonths?' · período escolhido: '+e.purchasedMonths+' '+(e.purchasedMonths===1?'mês':'meses'):'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 1.4.18: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button><button class="btn secondary" onclick="redeemSilver(60,720)">720 pts → 60 dias</button><button class="btn secondary" onclick="redeemSilver(90,1000)">1000 pts → 90 dias</button></div>':(t==='SILVER'&&p>=100?'<div class="item"><b>'+p+' pontos guardados.</b> Quando o SILVER atual expirar e regressares a FREE, podes trocá-los por um novo período SILVER.</div>'+(u.id==='filipe'?'<button class="btn secondary" style="width:100%;margin-top:10px" onclick="resetSilverAlphaTest()">Repor teste SILVER · 2000 pts</button>':''):''))}}
+function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('goldProfileActions'))$('goldProfileActions').style.display=t==='GOLD'?'flex':'none';if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.purchasedDays?' · período escolhido: '+e.purchasedDays+' dias':'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.purchasedMonths?' · período escolhido: '+e.purchasedMonths+' '+(e.purchasedMonths===1?'mês':'meses'):'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 1.4.19: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button><button class="btn secondary" onclick="redeemSilver(60,720)">720 pts → 60 dias</button><button class="btn secondary" onclick="redeemSilver(90,1000)">1000 pts → 90 dias</button></div>':(t==='SILVER'&&p>=100?'<div class="item"><b>'+p+' pontos guardados.</b> Quando o SILVER atual expirar e regressares a FREE, podes trocá-los por um novo período SILVER.</div>'+(u.id==='filipe'?'<button class="btn secondary" style="width:100%;margin-top:10px" onclick="resetSilverAlphaTest()">Repor teste SILVER · 2000 pts</button>':''):''))}}
 function bootAuth(){const u=authUser();if(!u){$('authGate').classList.add('show')}else{const profile=familyProfileById(u.id);seedFamilyExpiryTest(profile);currentTester=u.shortName||u.name||'Filipe';localStorage.setItem(TESTER_KEY,currentTester);$('authGate').classList.remove('show')}sweepReportPointMaturity();applyEntitlements()}
 
 const types={tree:'🌳 Árvore / obstáculo',water:'💧 Estado da água',mud:'🌧️ Lama / inundação',closure:'🚧 Caminho fechado',sign:'🪧 Sinalização',parking:'🚗 Acesso / estacionamento',animal:'🐄 Animal / gado no trilho',other:'⚠️ Outro'};
@@ -1372,13 +1373,20 @@ async function buildExploreAIRoute(){
   try{
     const raw=[start,...chosen.map(p=>p.center)],table=await osrmTable(raw),order=bestVisitOrder(table.distances,chosen.length),ordered=order.map(i=>chosen[i]),optPoints=[start,...ordered.map(p=>p.center)];
     const [optRoute,baseRoute]=await Promise.all([osrmRoute(optPoints),osrmRoute(raw)]);
-    exploreRouteGeoJSON=optRoute.geometry;
+    exploreRouteGeoJSON=optRoute.geometry;exploreRouteOrdered=ordered.slice();
     const km=optRoute.distance/1000,mins=Math.round(optRoute.duration/60),saved=Math.max(0,(baseRoute.distance-optRoute.distance)/1000);
-    if(box){box.innerHTML='<div class="eyebrow">AI EXPERIENCE · ROTA OTIMIZADA</div><h3 style="margin:7px 0">Menos quilómetros, menor consumo</h3><span class="routeStat">'+km.toFixed(1)+' km</span><span class="routeStat">≈ '+mins+' min</span>'+(saved>=.1?'<span class="routeStat">− '+saved.toFixed(1)+' km vs ordem escolhida</span>':'')+'<p class="small muted">Sequência calculada pela distância rodoviária disponível. O objetivo é reduzir deslocações desnecessárias; trânsito, portagens, estacionamento e consumo real podem alterar o custo final.</p><ol>'+ordered.map(p=>'<li><b>'+esc(p.name)+'</b></li>').join('')+'</ol><button class="btn" onclick="showExploreAIRouteOnMap()">Ver melhor rota no mapa</button>'}
+    if(box){box.innerHTML='<div class="eyebrow">AI EXPERIENCE · ROTA OTIMIZADA</div><h3 style="margin:7px 0">Menos quilómetros, menor consumo</h3><span class="routeStat">'+km.toFixed(1)+' km</span><span class="routeStat">≈ '+mins+' min</span>'+(saved>=.1?'<span class="routeStat">− '+saved.toFixed(1)+' km vs ordem escolhida</span>':'')+'<p class="small muted">Sequência calculada pela distância rodoviária disponível. O objetivo é reduzir deslocações desnecessárias; trânsito, portagens, estacionamento e consumo real podem alterar o custo final.</p><ol>'+ordered.map(p=>'<li><b>'+esc(p.name)+'</b></li>').join('')+'</ol><button class="btn" onclick="showExploreAIRouteOnMap()">Ver melhor rota no mapa</button><div class="row" style="margin-top:10px"><button class="btn purple" onclick="startCarJourney()">Iniciar viagem</button><button class="btn secondary" onclick="openNextStopNavigation()">Navegar para próximo</button></div><p class="small muted">No Android abre a navegação instalada através do sistema. No iPhone/iPad abre Apple Maps. Se o telemóvel estiver ligado ao Android Auto ou CarPlay, a navegação compatível é apresentada no ecrã do automóvel.</p>'}
     toast('AI Experience preparou a rota');showExploreAIRouteOnMap();
   }catch(e){if(box)box.innerHTML='<b>Não foi possível calcular a rota agora.</b><p class="small muted">Manténs os locais selecionados e podes tentar novamente.</p>';toast('Serviço de rotas indisponível')}
 }
 function showExploreAIRouteOnMap(){if(!exploreRouteGeoJSON)return toast('Calcula primeiro a rota');go('field');setTimeout(()=>{renderExploreMarkers(true);renderExploreRoute();if(!map)return;const b=new maplibregl.LngLatBounds();exploreRouteGeoJSON.coordinates.forEach(c=>b.extend(c));map.fitBounds(b,{padding:55,maxZoom:15})},250)}
+function carPlatform(){const ua=navigator.userAgent||'';if(/iPhone|iPad|iPod/i.test(ua))return 'ios';if(/Android/i.test(ua))return 'android';return 'web'}
+function carNavUrl(p){if(!p)return '';const lat=p.center[1],lon=p.center[0],name=encodeURIComponent(p.name||'Destino');if(carPlatform()==='ios')return 'https://maps.apple.com/directions?destination='+encodeURIComponent(lat+','+lon)+'&mode=driving';if(carPlatform()==='android')return 'geo:0,0?q='+encodeURIComponent(lat+','+lon+' ('+(p.name||'Destino')+')');return 'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(lat+','+lon)+'&travelmode=driving'}
+function openCarNavUrl(url){if(!url)return toast('Destino indisponível');const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
+function startCarJourney(){if(!exploreRouteOrdered.length)return toast('Calcula primeiro a rota otimizada');localStorage.setItem('alpha_car_journey',JSON.stringify({createdAt:new Date().toISOString(),index:0,stops:exploreRouteOrdered.map(p=>({id:p.id,name:p.name,center:p.center}))}));openNextStopNavigation()}
+function openNextStopNavigation(){let trip=null;try{trip=JSON.parse(localStorage.getItem('alpha_car_journey')||'null')}catch{};if(!trip||!trip.stops?.length){if(exploreRouteOrdered.length){trip={createdAt:new Date().toISOString(),index:0,stops:exploreRouteOrdered.map(p=>({id:p.id,name:p.name,center:p.center}))};localStorage.setItem('alpha_car_journey',JSON.stringify(trip))}else return toast('Calcula primeiro a rota otimizada')}const i=Math.min(trip.index||0,trip.stops.length-1),p=trip.stops[i];openCarNavUrl(carNavUrl(p))}
+function markCarStopVisited(){let trip=null;try{trip=JSON.parse(localStorage.getItem('alpha_car_journey')||'null')}catch{};if(!trip?.stops?.length)return toast('Não existe viagem ativa');trip.index=Math.min((trip.index||0)+1,trip.stops.length);localStorage.setItem('alpha_car_journey',JSON.stringify(trip));if(trip.index>=trip.stops.length)return toast('Itinerário concluído');toast('Próximo destino: '+trip.stops[trip.index].name)}
+
 
 function destinationCoords(){
   if(destination&&Number.isFinite(destination.lat)&&Number.isFinite(destination.lon))return{latitude:destination.lat,longitude:destination.lon};
