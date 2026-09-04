@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 1.4.17 — Gold Explore Curated</title>
+<title>Project Alpha 1.4.18 — Gold Explore AI Route</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -118,7 +118,7 @@ textarea{min-height:90px}
 .included{padding:9px 11px;border:1px solid #315149;border-radius:12px;margin-top:8px;background:#0d211b}
 
 
-/* Alpha 1.4.17 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
+/* Alpha 1.4.18 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
 .authGate{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at top,#123b32,#071116 55%);display:none;overflow:auto;padding:24px 14px}.authGate.show{display:grid;place-items:center}.authBox{width:min(520px,100%);background:#0d1a21;border:1px solid #294149;border-radius:24px;padding:22px}.tierBadge{font-size:11px;font-weight:900;padding:7px 10px;border-radius:999px;border:1px solid #315149}.tier-free{color:#d7e4df}.tier-silver{color:#e6edf0;border-color:#82919a}.tier-gold{color:#ffe08a;border-color:#9b7b28}.tier-platinum{color:#eadfff;border-color:#8064b5}.tier-organization{color:#9ed1ff;border-color:#477aa6}.membershipHero{border:1px solid #3c5360;background:linear-gradient(135deg,#10262e,#0c171d)}.pointsBig{font-size:46px;font-weight:900;color:var(--green)}.premiumOnly,.silverOnly,.platinumOnly,.orgOnly{display:none}.entitled{display:block}.view.premiumOnly.entitled{display:none}.view.premiumOnly.entitled.active{display:block}.premiumNav{color:#e4dcff!important}.premiumNav.active{background:#251d3b!important}.logoutLink{border:0;background:transparent;color:var(--muted);text-decoration:underline;padding:6px}.miniProgress{height:9px;border-radius:99px;background:#17282e;overflow:hidden}.miniProgress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber))}.authNote{font-size:11px;color:var(--muted);margin-top:10px}.roleCard{border-left:3px solid var(--green)}
 .mediaPicker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:7px}
 .mediaAction{width:100%;min-height:48px}
@@ -135,7 +135,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 .planGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}.planChip{border:1px solid #5e5131;border-radius:12px;padding:10px 5px;text-align:center;font-weight:800;font-size:12px;background:#17160f;color:#fff}.planChip{cursor:pointer}.planChip.selected,.goldPlanChoice.selected{background:var(--green);border-color:var(--green);color:#fff!important}.planChip small{font-size:11px;opacity:.9}.paymentChoice.selected{background:var(--green)!important;border-color:var(--green)!important;color:#fff!important}
 @media(max-width:430px){.planGrid{grid-template-columns:repeat(3,1fr)}}
 
-/* Alpha 1.4.17 — Payment Method Launch Test + Gold Renew/Cancel Test */
+/* Alpha 1.4.18 — Payment Method Launch Test + Gold Renew/Cancel Test */
 .paymentChoice.selected{background:var(--lime)!important;color:#fff!important;border-color:var(--lime)!important}
 .paymentPanel{display:none;margin-top:14px}.paymentPanel.active{display:block}
 .payBox{border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(255,255,255,.025);margin-top:12px}
@@ -149,15 +149,15 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 @media(max-width:560px){.payGrid,.walletChoice{grid-template-columns:1fr}}
 
 
-/* Alpha 1.4.17 — GOLD EXPLORE · CURATED */
-.exploreGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:12px}.exploreCard{overflow:hidden;border:1px solid #294149;border-radius:18px;background:#0d1a21}.explorePhoto{width:100%;height:150px;object-fit:cover;background:#14262d;display:block}.exploreBody{padding:13px}.exploreBody h3{margin:3px 0 7px}.exploreCats{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.exploreChip{border:1px solid #3a515b;background:#10232a;color:#dbe8e3;border-radius:999px;padding:8px 10px;font-weight:800}.exploreChip.active{background:var(--lime);color:#fff;border-color:var(--lime)}.exploreSelected{outline:2px solid var(--lime)}.exploreMapMarker{width:30px;height:30px;border-radius:50%;background:#7bd389;border:3px solid #fff;display:grid;place-items:center;font-size:15px;box-shadow:0 2px 8px #0008}.exploreMapMarker.selected{background:#ffd166}.exploreEmpty{padding:18px;border:1px dashed #3a515b;border-radius:14px;color:var(--muted)}
+/* Alpha 1.4.18 — GOLD EXPLORE · CURATED */
+.exploreGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:12px}.exploreCard{overflow:hidden;border:1px solid #294149;border-radius:18px;background:#0d1a21}.explorePhoto{width:100%;height:150px;object-fit:cover;background:#14262d;display:block}.exploreBody{padding:13px}.exploreBody h3{margin:3px 0 7px}.exploreCats{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.exploreChip{border:1px solid #3a515b;background:#10232a;color:#dbe8e3;border-radius:999px;padding:8px 10px;font-weight:800}.exploreChip.active{background:var(--lime);color:#fff;border-color:var(--lime)}.exploreSelected{outline:2px solid var(--lime)}.exploreMapMarker{width:30px;height:30px;border-radius:50%;background:#7bd389;border:3px solid #fff;display:grid;place-items:center;font-size:15px;box-shadow:0 2px 8px #0008}.exploreMapMarker.selected{background:#ffd166}.exploreEmpty{padding:18px;border:1px dashed #3a515b;border-radius:14px;color:var(--muted)}.exploreDetail{margin-top:14px;border:1px solid #3a515b;border-radius:18px;padding:15px;background:#0b171d}.exploreRouteBox{margin-top:12px;border:1px solid #5a4f82;border-radius:16px;padding:14px;background:#151126}.routeStat{display:inline-block;margin:4px 7px 4px 0;padding:7px 10px;border-radius:999px;background:#10232a;border:1px solid #35515a;font-weight:800}
 </style>
 </head>
 <body>
 <div id="toast" class="toast"></div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.17 · Family Login</small></div></div>
+    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.18 · Family Login</small></div></div>
     <div class="sep"></div><div class="eyebrow">Bem-vindo</div><h1 style="margin:8px 0">Vale a pena ir hoje?</h1>
     <p class="muted">Alpha familiar com 4 contas locais de teste. Usa apenas o primeiro nome e o PIN <b>1234</b>. Ainda não existe backend/sincronização entre telemóveis.</p>
     <label>Utilizador</label>
@@ -170,12 +170,12 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     </select>
     <label>PIN de teste</label><input id="loginPin" type="password" inputmode="numeric" maxlength="4" placeholder="1234" autocomplete="current-password">
     <button class="btn" style="width:100%;margin-top:14px" onclick="alphaLogin()">Entrar</button>
-    <p class="authNote">Teste 1.4.17: Helena mantém o teste GOLD · Filipe = SILVER com expiração em 24h + 2000 TrailScore guardados para, depois de expirar, experimentar vários períodos SILVER · Daniela = FREE · André = FREE. O PIN 1234 é apenas para a Alpha e não representa segurança de produção.</p>
+    <p class="authNote">Teste 1.4.18: Helena mantém o teste GOLD · Filipe = SILVER com expiração em 24h + 2000 TrailScore guardados para, depois de expirar, experimentar vários períodos SILVER · Daniela = FREE · André = FREE. O PIN 1234 é apenas para a Alpha e não representa segurança de produção.</p>
   </div>
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.17 · family login + entitlements</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.18 · family login + entitlements</small></div></div>
   <div id="headerTier" class="tierBadge tier-free">FREE</div>
 </header>
 
@@ -219,6 +219,8 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     </div>
     <div class="row"><button class="btn secondary" onclick="showExploreOnMap(false)">Ver todos no mapa</button><button class="btn" onclick="showExploreOnMap(true)">Ver escolhidos no mapa</button></div>
     <div id="exploreSelectedSummary" class="small muted" style="margin-top:8px">Ainda não escolheste locais.</div>
+    <div id="exploreAIRouteBox" class="exploreRouteBox" style="display:none"></div>
+    <div id="exploreDetail" class="exploreDetail" style="display:none"></div>
     <div id="exploreResults" class="exploreGrid"><div class="exploreEmpty">Pesquisa uma localidade para começar.</div></div>
   </div>
 
@@ -658,7 +660,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     <div class="row"><button class="btn secondary" onclick="simulateTier('FREE')">FREE</button><button class="btn secondary" onclick="simulateSilverEarned()">SILVER</button><button class="btn purple" onclick="simulateTier('GOLD')">EARLY GOLD</button><button class="btn secondary" onclick="simulateTier('PLATINUM')">PLATINUM</button><button class="btn secondary" onclick="simulateTier('ORGANIZATION')">ORGANIZATIONS</button></div>
   </div>
   <div class="card">
-    <div class="eyebrow">Alpha 1.4.17</div><h2>Estado do teste</h2>
+    <div class="eyebrow">Alpha 1.4.18</div><h2>Estado do teste</h2>
     <div class="list">
       <div class="item">✓ GPS real + tracking</div>
       <div class="item">✓ Mapa vetorial real</div>
@@ -716,7 +718,7 @@ let pos=null,watchId=null,photoData='',map=null,userMarker=null,reportMarkers=[]
 let activityRunning=false,activityStartedAt=null,activitySeconds=0,activityDistance=0,lastActivityPos=null,activityTimer=null;
 let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareFile=null;
 let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,trailDetailPhotos=[],destination=null,experiencePlaces={monuments:[],meals:[],stays:[]},currentTester='Filipe',smartChoices={monuments:[],meals:[],stays:[]};
-let explorePlaces=[],exploreSelected=new Set(),exploreCategory='all',exploreCenter=null,exploreMarkers=[];
+let explorePlaces=[],exploreSelected=new Set(),exploreCategory='all',exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
 
 /* ---------- FAMILY LOGIN + ENTITLEMENT ENGINE 1.4.3 ---------- */
@@ -962,7 +964,7 @@ function simulateTier(t){clearGoldExpiryNotice();let e={tier:t,source:'alpha-lab
 function simulateSilverEarned(){saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+7*86400000).toISOString(),source:'alpha-test'});toast('SILVER de teste ativo por 7 dias')}
 function redeemSilver(days,cost){if(effectiveTier()!=='FREE')return toast('SILVER por pontos é ativado a partir de FREE');if(points()<cost)return toast('Ainda não tens pontos suficientes');localStorage.setItem(userKey(POINTS_PREFIX),String(points()-cost));saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+days*86400000).toISOString(),purchasedDays:days,source:'points',cost});renderMembership();toast('SILVER ativado por '+days+' dias · perfil atualizado');go('profile')}
 function resetSilverAlphaTest(){if(authUser()?.id!=='filipe')return;localStorage.setItem(userKey(POINTS_PREFIX),'2000');saveEnt({tier:'FREE',source:'alpha-1.4.17-silver-redemption-reset'});renderMembership();toast('Teste SILVER reposto · 2000 TrailScore');go('profile')}
-function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('goldProfileActions'))$('goldProfileActions').style.display=t==='GOLD'?'flex':'none';if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.purchasedDays?' · período escolhido: '+e.purchasedDays+' dias':'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.purchasedMonths?' · período escolhido: '+e.purchasedMonths+' '+(e.purchasedMonths===1?'mês':'meses'):'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 1.4.17: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button><button class="btn secondary" onclick="redeemSilver(60,720)">720 pts → 60 dias</button><button class="btn secondary" onclick="redeemSilver(90,1000)">1000 pts → 90 dias</button></div>':(t==='SILVER'&&p>=100?'<div class="item"><b>'+p+' pontos guardados.</b> Quando o SILVER atual expirar e regressares a FREE, podes trocá-los por um novo período SILVER.</div>'+(u.id==='filipe'?'<button class="btn secondary" style="width:100%;margin-top:10px" onclick="resetSilverAlphaTest()">Repor teste SILVER · 2000 pts</button>':''):''))}}
+function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('goldProfileActions'))$('goldProfileActions').style.display=t==='GOLD'?'flex':'none';if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.purchasedDays?' · período escolhido: '+e.purchasedDays+' dias':'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.purchasedMonths?' · período escolhido: '+e.purchasedMonths+' '+(e.purchasedMonths===1?'mês':'meses'):'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 1.4.18: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button><button class="btn secondary" onclick="redeemSilver(60,720)">720 pts → 60 dias</button><button class="btn secondary" onclick="redeemSilver(90,1000)">1000 pts → 90 dias</button></div>':(t==='SILVER'&&p>=100?'<div class="item"><b>'+p+' pontos guardados.</b> Quando o SILVER atual expirar e regressares a FREE, podes trocá-los por um novo período SILVER.</div>'+(u.id==='filipe'?'<button class="btn secondary" style="width:100%;margin-top:10px" onclick="resetSilverAlphaTest()">Repor teste SILVER · 2000 pts</button>':''):''))}}
 function bootAuth(){const u=authUser();if(!u){$('authGate').classList.add('show')}else{const profile=familyProfileById(u.id);seedFamilyExpiryTest(profile);currentTester=u.shortName||u.name||'Filipe';localStorage.setItem(TESTER_KEY,currentTester);$('authGate').classList.remove('show')}sweepReportPointMaturity();applyEntitlements()}
 
 const types={tree:'🌳 Árvore / obstáculo',water:'💧 Estado da água',mud:'🌧️ Lama / inundação',closure:'🚧 Caminho fechado',sign:'🪧 Sinalização',parking:'🚗 Acesso / estacionamento',animal:'🐄 Animal / gado no trilho',other:'⚠️ Outro'};
@@ -980,7 +982,7 @@ function initMap(){
     style:'https://tiles.openfreemap.org/styles/liberty'
   });
   map.addControl(new maplibregl.NavigationControl({showCompass:false,visualizePitch:false}),'top-right');
-  map.on('load',()=>{renderMapReports();renderTrailLayer();renderSelectedTrail();renderExploreMarkers();if(pos)updateUserMarker(!selectedTrail);if(selectedTrail)setTimeout(()=>focusSelectedTrail(false),120)})
+  map.on('load',()=>{renderMapReports();renderTrailLayer();renderSelectedTrail();renderExploreMarkers();renderExploreRoute();if(pos)updateUserMarker(!selectedTrail);if(selectedTrail)setTimeout(()=>focusSelectedTrail(false),120)})
 }
 function updateUserMarker(center=false){
   if(!map||!pos)return;
@@ -1326,11 +1328,57 @@ async function loadExplorePlaces(){
 function setExploreCategory(cat,btn){exploreCategory=cat;document.querySelectorAll('.exploreChip').forEach(x=>x.classList.toggle('active',x===btn));renderExploreResults()}
 function exploreDistance(p){const c=exploreCenter;if(!c)return '';return distanceLabel(hav(c.lat,c.lon,p.center[1],p.center[0]))}
 function toggleExplorePlace(id){if(exploreSelected.has(id))exploreSelected.delete(id);else exploreSelected.add(id);renderExploreResults();renderExploreSelectedSummary();renderExploreMarkers()}
-function renderExploreSelectedSummary(){const el=$('exploreSelectedSummary');if(!el)return;const n=exploreSelected.size;el.textContent=n?n+' '+(n===1?'local escolhido':'locais escolhidos')+' · prontos para ver no mapa':'Ainda não escolheste locais.'}
-function renderExploreResults(){const host=$('exploreResults');if(!host)return;const arr=explorePlaces.filter(p=>exploreCategory==='all'||p.cat===exploreCategory);if(!arr.length){host.innerHTML='<div class="exploreEmpty">Sem locais nesta categoria.</div>';return}host.innerHTML=arr.map(p=>{const sel=exploreSelected.has(p.id),photo=p.photo?'<img class="explorePhoto" src="'+esc(p.photo)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'<div class="explorePhoto" style="display:grid;place-items:center;font-size:44px">'+exploreIcon(p.cat)+'</div>';return '<article class="exploreCard '+(sel?'exploreSelected':'')+'">'+photo+'<div class="exploreBody"><div class="small green">'+exploreIcon(p.cat)+' '+exploreCategoryLabel(p.cat)+' · '+exploreDistance(p)+'</div><h3>'+esc(p.name)+'</h3><p class="small muted">'+esc(p.description)+'</p>'+(p.opening?'<div class="small">Horário OSM: '+esc(p.opening)+'</div>':'')+'<div class="row" style="margin-top:10px"><button class="btn '+(sel?'':'secondary')+'" onclick="toggleExplorePlace(\''+p.id+'\')">'+(sel?'✓ Escolhido':'Adicionar')+'</button><button class="btn secondary" onclick="showOneExploreOnMap(\''+p.id+'\')">Mapa</button>'+(p.wikipediaUrl?'<a class="btn secondary" target="_blank" rel="noopener" href="'+esc(p.wikipediaUrl)+'">Saber mais</a>':p.website?'<a class="btn secondary" target="_blank" rel="noopener" href="'+esc(p.website)+'">Site</a>':'')+'</div></div></article>'}).join('');renderExploreSelectedSummary()}
-function renderExploreMarkers(onlySelected=false){if(!map)return;exploreMarkers.forEach(m=>m.remove());exploreMarkers=[];const arr=explorePlaces.filter(p=>!onlySelected||exploreSelected.has(p.id));arr.forEach(p=>{const e=document.createElement('div');e.className='exploreMapMarker'+(exploreSelected.has(p.id)?' selected':'');e.textContent=exploreIcon(p.cat);const pop=new maplibregl.Popup({offset:20}).setHTML('<b>'+esc(p.name)+'</b><br><small>'+esc(exploreCategoryLabel(p.cat))+' · '+esc(exploreDistance(p))+'</small><br>'+esc(p.description));exploreMarkers.push(new maplibregl.Marker({element:e}).setLngLat(p.center).setPopup(pop).addTo(map))})}
-function showExploreOnMap(onlySelected){if(!explorePlaces.length)return toast('Primeiro procura locais para visitar');if(onlySelected&&!exploreSelected.size)return toast('Ainda não escolheste locais');go('field');setTimeout(()=>{renderExploreMarkers(onlySelected);const arr=explorePlaces.filter(p=>!onlySelected||exploreSelected.has(p.id));if(!map||!arr.length)return;const b=new maplibregl.LngLatBounds();arr.forEach(p=>b.extend(p.center));map.fitBounds(b,{padding:55,maxZoom:14})},220)}
-function showOneExploreOnMap(id){const p=explorePlaces.find(x=>x.id===id);if(!p)return;go('field');setTimeout(()=>{renderExploreMarkers();if(map)map.easeTo({center:p.center,zoom:16})},220)}
+function renderExploreSelectedSummary(){
+  const el=$('exploreSelectedSummary');if(!el)return;
+  const n=exploreSelected.size;
+  if(!n){el.textContent='Ainda não escolheste locais.';const box=$('exploreAIRouteBox');if(box)box.style.display='none';return}
+  el.innerHTML='<b>'+n+' '+(n===1?'local escolhido':'locais escolhidos')+'</b> · podes ver no mapa ou pedir à AI Experience a ordem de visita mais eficiente.<div class="row" style="margin-top:10px"><button class="btn purple" onclick="buildExploreAIRoute()">AI EXPERIENCE · Otimizar rota</button></div>';
+}
+function openExploreDetails(id){
+  const p=explorePlaces.find(x=>x.id===id),box=$('exploreDetail');if(!p||!box)return;
+  const sel=exploreSelected.has(id);
+  const photo=p.photo?'<img class="explorePhoto" src="'+esc(p.photo)+'" alt="" style="height:210px;border-radius:14px;margin-bottom:12px" onerror="this.style.display=\'none\'">':'';
+  box.style.display='block';
+  box.innerHTML=photo+'<div class="eyebrow">'+exploreIcon(p.cat)+' '+esc(exploreCategoryLabel(p.cat))+' · '+esc(exploreDistance(p))+'</div><h2 style="margin:7px 0">'+esc(p.name)+'</h2><p>'+esc(p.description||'Sem descrição disponível.')+'</p>'+(p.opening?'<p class="small"><b>Horário indicado:</b> '+esc(p.opening)+'</p>':'')+(p.fee?'<p class="small"><b>Entrada:</b> '+esc(p.fee)+'</p>':'')+'<div class="row"><button class="btn '+(sel?'':'secondary')+'" onclick="toggleExplorePlace(\''+p.id+'\');openExploreDetails(\''+p.id+'\')">'+(sel?'✓ Selecionado':'Selecionar')+'</button><button class="btn secondary" onclick="showOneExploreOnMap(\''+p.id+'\')">Ver no mapa</button>'+(p.wikipediaUrl?'<a class="btn secondary" target="_blank" rel="noopener" href="'+esc(p.wikipediaUrl)+'">Saber mais</a>':p.website?'<a class="btn secondary" target="_blank" rel="noopener" href="'+esc(p.website)+'">Site</a>':'')+'</div>';
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function renderExploreResults(){const host=$('exploreResults');if(!host)return;const arr=explorePlaces.filter(p=>exploreCategory==='all'||p.cat===exploreCategory);if(!arr.length){host.innerHTML='<div class="exploreEmpty">Sem locais nesta categoria.</div>';return}host.innerHTML=arr.map(p=>{const sel=exploreSelected.has(p.id),photo=p.photo?'<img class="explorePhoto" src="'+esc(p.photo)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'<div class="explorePhoto" style="display:grid;place-items:center;font-size:44px">'+exploreIcon(p.cat)+'</div>';return '<article class="exploreCard '+(sel?'exploreSelected':'')+'">'+photo+'<div class="exploreBody"><div class="small green">'+exploreIcon(p.cat)+' '+exploreCategoryLabel(p.cat)+' · '+exploreDistance(p)+'</div><h3>'+esc(p.name)+'</h3><p class="small muted">'+esc(p.description)+'</p><div class="row" style="margin-top:10px"><button class="btn secondary" onclick="openExploreDetails(\''+p.id+'\')">Ver detalhes</button><button class="btn '+(sel?'':'secondary')+'" onclick="toggleExplorePlace(\''+p.id+'\')">'+(sel?'✓ Selecionado':'Selecionar')+'</button></div></div></article>'}).join('');renderExploreSelectedSummary()}
+function renderExploreMarkers(onlySelected=false){if(!map)return;exploreMarkers.forEach(m=>m.remove());exploreMarkers=[];const arr=explorePlaces.filter(p=>!onlySelected||exploreSelected.has(p.id));arr.forEach((p,i)=>{const e=document.createElement('div');e.className='exploreMapMarker'+(exploreSelected.has(p.id)?' selected':'');e.textContent=exploreIcon(p.cat);const pop=new maplibregl.Popup({offset:20}).setHTML('<b>'+esc(p.name)+'</b><br><small>'+esc(exploreCategoryLabel(p.cat))+' · '+esc(exploreDistance(p))+'</small><br>'+esc(p.description));exploreMarkers.push(new maplibregl.Marker({element:e}).setLngLat(p.center).setPopup(pop).addTo(map))})}
+function renderExploreRoute(){
+  if(!map||!map.isStyleLoaded())return;
+  if(map.getLayer('explore-ai-route'))map.removeLayer('explore-ai-route');
+  if(map.getLayer('explore-ai-route-halo'))map.removeLayer('explore-ai-route-halo');
+  if(map.getSource('explore-ai-route'))map.removeSource('explore-ai-route');
+  if(!exploreRouteGeoJSON)return;
+  map.addSource('explore-ai-route',{type:'geojson',data:{type:'Feature',geometry:exploreRouteGeoJSON,properties:{}}});
+  map.addLayer({id:'explore-ai-route-halo',type:'line',source:'explore-ai-route',paint:{'line-color':'#071116','line-width':9,'line-opacity':.8}});
+  map.addLayer({id:'explore-ai-route',type:'line',source:'explore-ai-route',paint:{'line-color':'#ffd166','line-width':5,'line-opacity':1}});
+}
+function showExploreOnMap(onlySelected){if(!explorePlaces.length)return toast('Primeiro procura locais para visitar');if(onlySelected&&!exploreSelected.size)return toast('Ainda não escolheste locais');go('field');setTimeout(()=>{renderExploreMarkers(onlySelected);renderExploreRoute();const arr=explorePlaces.filter(p=>!onlySelected||exploreSelected.has(p.id));if(!map||!arr.length)return;const b=new maplibregl.LngLatBounds();arr.forEach(p=>b.extend(p.center));map.fitBounds(b,{padding:55,maxZoom:14})},220)}
+function showOneExploreOnMap(id){const p=explorePlaces.find(x=>x.id===id);if(!p)return;go('field');setTimeout(()=>{renderExploreMarkers();renderExploreRoute();if(map)map.easeTo({center:p.center,zoom:16})},220)}
+function routeStartPoint(){if(pos&&Number.isFinite(pos.longitude)&&Number.isFinite(pos.latitude))return[pos.longitude,pos.latitude];if(exploreCenter)return[exploreCenter.lon,exploreCenter.lat];return null}
+async function osrmTable(points){const coords=points.map(c=>c.join(',')).join(';');const r=await fetch('https://router.project-osrm.org/table/v1/driving/'+coords+'?annotations=distance,duration');if(!r.ok)throw new Error('OSRM table');return r.json()}
+function bestVisitOrder(matrix,n){
+  const ids=Array.from({length:n},(_,i)=>i+1);
+  if(n<=8){let best=null,bestCost=Infinity;const used=Array(n).fill(false),cur=[];function walk(last,cost){if(cost>=bestCost)return;if(cur.length===n){best=cur.slice();bestCost=cost;return}for(let k=0;k<n;k++){if(used[k])continue;const idx=k+1,d=matrix[last]?.[idx];if(!Number.isFinite(d))continue;used[k]=true;cur.push(k);walk(idx,cost+d);cur.pop();used[k]=false}}walk(0,0);return best||ids.map(x=>x-1)}
+  const left=new Set(ids);let last=0,out=[];while(left.size){let best=null,cost=Infinity;for(const x of left){const d=matrix[last]?.[x];if(Number.isFinite(d)&&d<cost){best=x;cost=d}}if(best===null)best=left.values().next().value;left.delete(best);out.push(best-1);last=best}return out
+}
+async function osrmRoute(points){const coords=points.map(c=>c.join(',')).join(';');const r=await fetch('https://router.project-osrm.org/route/v1/driving/'+coords+'?overview=full&geometries=geojson&steps=false');if(!r.ok)throw new Error('OSRM route');const j=await r.json();if(!j.routes?.length)throw new Error('Sem rota');return j.routes[0]}
+async function buildExploreAIRoute(){
+  if(!hasGold())return toast('AI Experience é uma funcionalidade GOLD');
+  const chosen=Array.from(exploreSelected).map(id=>explorePlaces.find(p=>p.id===id)).filter(Boolean);if(!chosen.length)return toast('Seleciona pelo menos um local');
+  const start=routeStartPoint();if(!start)return toast('Não foi possível determinar o ponto de partida');
+  const box=$('exploreAIRouteBox');if(box){box.style.display='block';box.innerHTML='<b>AI Experience</b><br><span class="muted">A calcular a sequência com menor distância rodoviária…</span>'}
+  try{
+    const raw=[start,...chosen.map(p=>p.center)],table=await osrmTable(raw),order=bestVisitOrder(table.distances,chosen.length),ordered=order.map(i=>chosen[i]),optPoints=[start,...ordered.map(p=>p.center)];
+    const [optRoute,baseRoute]=await Promise.all([osrmRoute(optPoints),osrmRoute(raw)]);
+    exploreRouteGeoJSON=optRoute.geometry;
+    const km=optRoute.distance/1000,mins=Math.round(optRoute.duration/60),saved=Math.max(0,(baseRoute.distance-optRoute.distance)/1000);
+    if(box){box.innerHTML='<div class="eyebrow">AI EXPERIENCE · ROTA OTIMIZADA</div><h3 style="margin:7px 0">Menos quilómetros, menor consumo</h3><span class="routeStat">'+km.toFixed(1)+' km</span><span class="routeStat">≈ '+mins+' min</span>'+(saved>=.1?'<span class="routeStat">− '+saved.toFixed(1)+' km vs ordem escolhida</span>':'')+'<p class="small muted">Sequência calculada pela distância rodoviária disponível. O objetivo é reduzir deslocações desnecessárias; trânsito, portagens, estacionamento e consumo real podem alterar o custo final.</p><ol>'+ordered.map(p=>'<li><b>'+esc(p.name)+'</b></li>').join('')+'</ol><button class="btn" onclick="showExploreAIRouteOnMap()">Ver melhor rota no mapa</button>'}
+    toast('AI Experience preparou a rota');showExploreAIRouteOnMap();
+  }catch(e){if(box)box.innerHTML='<b>Não foi possível calcular a rota agora.</b><p class="small muted">Manténs os locais selecionados e podes tentar novamente.</p>';toast('Serviço de rotas indisponível')}
+}
+function showExploreAIRouteOnMap(){if(!exploreRouteGeoJSON)return toast('Calcula primeiro a rota');go('field');setTimeout(()=>{renderExploreMarkers(true);renderExploreRoute();if(!map)return;const b=new maplibregl.LngLatBounds();exploreRouteGeoJSON.coordinates.forEach(c=>b.extend(c));map.fitBounds(b,{padding:55,maxZoom:15})},250)}
 
 function destinationCoords(){
   if(destination&&Number.isFinite(destination.lat)&&Number.isFinite(destination.lon))return{latitude:destination.lat,longitude:destination.lon};
