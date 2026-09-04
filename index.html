@@ -4,10 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071116">
+<meta name="alpha-version" content="2.0.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 1.4.29 — Live Navigation</title>
+<title>Project Alpha 2.0.1.1 — Live Navigation</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -118,7 +119,7 @@ textarea{min-height:90px}
 .included{padding:9px 11px;border:1px solid #315149;border-radius:12px;margin-top:8px;background:#0d211b}
 
 
-/* Alpha 1.4.29 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
+/* Alpha 2.0.1 — FAMILY LOGIN + ENTITLEMENTS + DYNAMIC UX */
 .authGate{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at top,#123b32,#071116 55%);display:none;overflow:auto;padding:24px 14px}.authGate.show{display:grid;place-items:center}.authBox{width:min(520px,100%);background:#0d1a21;border:1px solid #294149;border-radius:24px;padding:22px}.tierBadge{font-size:11px;font-weight:900;padding:7px 10px;border-radius:999px;border:1px solid #315149}.tier-free{color:#d7e4df}.tier-silver{color:#e6edf0;border-color:#82919a}.tier-gold{color:#ffe08a;border-color:#9b7b28}.tier-platinum{color:#eadfff;border-color:#8064b5}.tier-organization{color:#9ed1ff;border-color:#477aa6}.membershipHero{border:1px solid #3c5360;background:linear-gradient(135deg,#10262e,#0c171d)}.pointsBig{font-size:46px;font-weight:900;color:var(--green)}.premiumOnly,.silverOnly,.platinumOnly,.orgOnly{display:none}.entitled{display:block}.view.premiumOnly.entitled{display:none}.view.premiumOnly.entitled.active{display:block}.premiumNav{color:#e4dcff!important}.premiumNav.active{background:#251d3b!important}.logoutLink{border:0;background:transparent;color:var(--muted);text-decoration:underline;padding:6px}.miniProgress{height:9px;border-radius:99px;background:#17282e;overflow:hidden}.miniProgress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--amber))}.authNote{font-size:11px;color:var(--muted);margin-top:10px}.roleCard{border-left:3px solid var(--green)}
 .mediaPicker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:7px}
 .mediaAction{width:100%;min-height:48px}
@@ -135,7 +136,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 .planGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}.planChip{border:1px solid #5e5131;border-radius:12px;padding:10px 5px;text-align:center;font-weight:800;font-size:12px;background:#17160f;color:#fff}.planChip{cursor:pointer}.planChip.selected,.goldPlanChoice.selected{background:var(--green);border-color:var(--green);color:#fff!important}.planChip small{font-size:11px;opacity:.9}.paymentChoice.selected{background:var(--green)!important;border-color:var(--green)!important;color:#fff!important}
 @media(max-width:430px){.planGrid{grid-template-columns:repeat(3,1fr)}}
 
-/* Alpha 1.4.29 — Payment Method Launch Test + Gold Renew/Cancel Test */
+/* Alpha 2.0.1 — Payment Method Launch Test + Gold Renew/Cancel Test */
 .paymentChoice.selected{background:var(--lime)!important;color:#fff!important;border-color:var(--lime)!important}
 .paymentPanel{display:none;margin-top:14px}.paymentPanel.active{display:block}
 .payBox{border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(255,255,255,.025);margin-top:12px}
@@ -149,30 +150,72 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 @media(max-width:560px){.payGrid,.walletChoice{grid-template-columns:1fr}}
 
 
-/* Alpha 1.4.29 — GOLD EXPLORE · CURATED */
+/* Alpha 2.0.1 — GOLD EXPLORE · CURATED */
 .exploreGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:12px}.exploreCard{overflow:hidden;border:1px solid #294149;border-radius:18px;background:#0d1a21}.explorePhoto{width:100%;height:150px;object-fit:cover;background:#14262d;display:block}.exploreBody{padding:13px}.exploreBody h3{margin:3px 0 7px}.exploreCats{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.exploreChip{border:1px solid #3a515b;background:#10232a;color:#dbe8e3;border-radius:999px;padding:8px 10px;font-weight:800}.exploreChip.active{background:var(--lime);color:#fff;border-color:var(--lime)}.exploreSelected{outline:2px solid var(--lime)}.exploreMapMarker{width:30px;height:30px;border-radius:50%;background:#7bd389;border:3px solid #fff;display:grid;place-items:center;font-size:15px;box-shadow:0 2px 8px #0008}.exploreMapMarker.selected{background:#ffd166}.exploreEmpty{padding:18px;border:1px dashed #3a515b;border-radius:14px;color:var(--muted)}.exploreDetail{margin-top:14px;border:1px solid #3a515b;border-radius:18px;padding:15px;background:#0b171d}.exploreRouteBox{margin-top:12px;border:1px solid #5a4f82;border-radius:16px;padding:14px;background:#151126}.routeStat{display:inline-block;margin:4px 7px 4px 0;padding:7px 10px;border-radius:999px;background:#10232a;border:1px solid #35515a;font-weight:800}
 
-/* Alpha 1.4.29 — Navigation chooser */
+/* Alpha 2.0.1 — Navigation chooser */
 .navChooser{position:fixed;inset:0;background:#000a;z-index:9999;display:flex;align-items:flex-end;justify-content:center;padding:14px}.navChooserSheet{width:min(560px,100%);background:#0d1a21;border:1px solid #294149;border-radius:22px;padding:18px;box-shadow:0 18px 50px #000b}.navChooserOptions{display:grid;gap:10px;margin-top:14px}.navChoice{width:100%;display:flex;align-items:center;justify-content:space-between;text-align:left;padding:14px 16px;border-radius:16px}.navChoice b{font-size:16px}.navChoice small{display:block;color:var(--muted);margin-top:2px}
 
-/* Alpha 1.4.29 — LIVE NAVIGATION · MAP-FIRST */
-.mapShell{position:relative;border-radius:18px;overflow:hidden;background:#071116}.mapToolbar{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 0}.navMode{flex:1 1 105px;min-height:44px}.navMode.active{background:var(--green);color:#fff;border-color:var(--green)}.mapNavHud{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.mapNavHud .metric b{font-size:18px}.mapLiveBadge{position:absolute;left:12px;top:12px;z-index:8;background:rgba(7,17,22,.90);border:1px solid #315149;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:900;display:none;backdrop-filter:blur(8px)}.mapLiveBadge.on{display:block}.mapFsBtn{position:absolute;right:10px;bottom:10px;z-index:9;border:1px solid #315149;background:rgba(7,17,22,.9);color:#fff;border-radius:12px;padding:10px 12px;font-weight:900}.navRouteInfo{margin-top:10px;padding:10px 12px;border:1px solid #28434b;border-radius:14px;background:#0a1a20}.userMarker.navActive{width:26px;height:26px;box-shadow:0 0 0 10px rgba(77,157,255,.20);border-color:#fff;background:#2f8cff}.mapNavOverlay{display:none;position:absolute;inset:0;z-index:7;pointer-events:none;padding:12px;flex-direction:column;justify-content:space-between}.mapNavOverlayTop,.mapNavOverlayBottom{display:flex;gap:8px;align-items:center;justify-content:space-between}.mapNavOverlayTop{padding-right:58px}.navGlass{pointer-events:auto;background:rgba(7,17,22,.90);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:10px 12px;color:#fff;backdrop-filter:blur(10px);box-shadow:0 6px 22px rgba(0,0,0,.25)}.navGlass strong{display:block;font-size:16px;line-height:1.1}.navGlass small{display:block;color:#b9ccc5;margin-top:3px}.navGlassBtn{pointer-events:auto;border:1px solid rgba(255,255,255,.16);background:rgba(7,17,22,.92);color:#fff;border-radius:14px;min-width:48px;min-height:48px;padding:9px 12px;font-weight:900;backdrop-filter:blur(10px)}.navGlassBtn.primary{background:#2f8cff;border-color:#2f8cff}.mapShell.liveNavigating .mapNavOverlay,.mapShell:fullscreen .mapNavOverlay,.mapShell.mapShellFallbackFull .mapNavOverlay{display:flex}.mapShell:fullscreen,.mapShell.mapShellFallbackFull{background:#071116!important;border-radius:0!important}.mapShell:fullscreen #realMap,.mapShell.mapShellFallbackFull #realMap{height:100%!important;min-height:100%!important;border-radius:0!important;border:0!important}.mapShell.mapShellFallbackFull{position:fixed!important;inset:0!important;z-index:1000!important}.mapShell:fullscreen .mapFsBtn,.mapShell.mapShellFallbackFull .mapFsBtn{display:none}.navMiniStats{display:flex;gap:6px;flex-wrap:wrap}.navMiniStats span{font-size:12px;font-weight:900;padding:7px 9px;border-radius:999px;background:rgba(7,17,22,.90);border:1px solid rgba(255,255,255,.15);color:#fff;backdrop-filter:blur(8px)}
+/* Alpha 2.0.1 — LIVE NAVIGATION · MAP-FIRST */
+.mapShell{position:relative;border-radius:18px;overflow:hidden;background:#071116}.mapToolbar{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 0}.navMode{flex:1 1 105px;min-height:44px}.navMode.active{background:var(--green);color:#fff;border-color:var(--green)}.mapNavHud{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.mapNavHud .metric b{font-size:18px}.mapLiveBadge{position:absolute;left:12px;top:12px;z-index:8;background:rgba(7,17,22,.90);border:1px solid #315149;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:900;display:none;backdrop-filter:blur(8px)}.mapLiveBadge.on{display:block}.mapFsBtn{position:absolute;right:10px;bottom:10px;z-index:9;border:1px solid #315149;background:rgba(7,17,22,.9);color:#fff;border-radius:12px;padding:10px 12px;font-weight:900}.navRouteInfo{margin-top:10px;padding:10px 12px;border:1px solid #28434b;border-radius:14px;background:#0a1a20}.userMarker.navActive{width:26px;height:26px;box-shadow:0 0 0 10px rgba(77,157,255,.20);border-color:#fff;background:#2f8cff}.mapNavOverlay{display:none;position:absolute;inset:0;z-index:20;pointer-events:none;padding:12px;flex-direction:column;justify-content:space-between}.mapNavOverlayTop,.mapNavOverlayBottom{display:flex;gap:8px;align-items:center;justify-content:space-between}.mapNavOverlayTop{padding-right:72px}.navGlass{pointer-events:auto;background:rgba(7,17,22,.90);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:10px 12px;color:#fff;backdrop-filter:blur(10px);box-shadow:0 6px 22px rgba(0,0,0,.25)}.navGlass strong{display:block;font-size:16px;line-height:1.1}.navGlass small{display:block;color:#b9ccc5;margin-top:3px}.navGlassBtn{pointer-events:auto;border:1px solid rgba(255,255,255,.16);background:rgba(7,17,22,.92);color:#fff;border-radius:14px;min-width:48px;min-height:48px;padding:9px 12px;font-weight:900;backdrop-filter:blur(10px)}.navGlassBtn.primary{background:#2f8cff;border-color:#2f8cff}.mapShell.routeReady .mapNavOverlay,.mapShell.liveNavigating .mapNavOverlay,.mapShell:fullscreen .mapNavOverlay,.mapShell.mapShellFallbackFull .mapNavOverlay{display:flex}.mapShell:fullscreen,.mapShell.mapShellFallbackFull{background:#071116!important;border-radius:0!important}.mapShell:fullscreen #realMap,.mapShell.mapShellFallbackFull #realMap{height:100%!important;min-height:100%!important;border-radius:0!important;border:0!important}.mapShell.mapShellFallbackFull{position:fixed!important;inset:0!important;z-index:1000!important}.mapShell:fullscreen .mapFsBtn,.mapShell.mapShellFallbackFull .mapFsBtn{display:none}.navMiniStats{display:flex;gap:6px;flex-wrap:wrap}.navMiniStats span{font-size:12px;font-weight:900;padding:7px 9px;border-radius:999px;background:rgba(7,17,22,.90);border:1px solid rgba(255,255,255,.15);color:#fff;backdrop-filter:blur(8px)}
 @media(max-width:520px){#realMap{height:500px}.mapNavHud{grid-template-columns:1fr 1fr 1fr}.mapToolbar .btn{flex:1 1 130px}.mapNavOverlay{padding:10px}.navGlass{max-width:72%;padding:9px 10px}.navGlass strong{font-size:14px}.navGlassBtn{min-width:44px;min-height:44px;padding:8px 10px}}
 
-/* Alpha 1.4.29 — MODE-AWARE NAVIGATOR */
+/* Alpha 2.0.1 — MODE-AWARE NAVIGATOR */
 .userMarker{width:38px!important;height:38px!important;border-radius:50%!important;background:#fff!important;border:3px solid #fff!important;box-shadow:0 3px 14px #0008,0 0 0 6px rgba(104,168,255,.20)!important;display:grid!important;place-items:center!important;font-size:22px!important;line-height:1!important}
 .userMarker.navActive{background:#fff!important;border-color:#fff!important;box-shadow:0 3px 14px #0008,0 0 0 8px rgba(57,214,155,.22)!important}
 .userMarker .navVehicleIcon{display:block;transform:rotate(var(--nav-heading,0deg));transition:transform .25s linear;filter:drop-shadow(0 1px 1px #0005)}
 
-/* Alpha 1.4.29 — TURN-BY-TURN + LIVE ROUTE EVENTS */
+/* Alpha 2.0.1 — TURN-BY-TURN + LIVE ROUTE EVENTS */
 .navManeuver{pointer-events:auto;display:flex;align-items:center;gap:10px;max-width:min(440px,78vw);background:rgba(7,17,22,.94);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:10px 13px;color:#fff;backdrop-filter:blur(12px);box-shadow:0 6px 24px #0006}.navManeuverIcon{font-size:34px;min-width:42px;text-align:center}.navManeuverText strong{font-size:17px;line-height:1.15}.navManeuverText small{color:#c7d7d1;margin-top:3px;display:block}.routeEventMarker{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#18242b;border:2px solid #fff;box-shadow:0 2px 10px #0009;font-size:17px}.routeEventMarker.warn{background:#d88722}.routeEventMarker.danger{background:#c84444}.mapShell.liveNavigating .mapLiveBadge{display:none!important}
+
+
+/* Alpha 2.0 — unified navigation/report icon system */
+.vehicleSvg,.reportSvg{width:100%;height:100%;display:block}.userMarker{width:46px!important;height:46px!important;border-radius:50%!important;padding:4px!important;background:#fff!important;border:3px solid #fff!important;box-shadow:0 3px 14px #0008,0 0 0 7px rgba(47,140,255,.22)!important;display:grid!important;place-items:center!important;overflow:visible}.userMarker.navActive{box-shadow:0 4px 18px #0009,0 0 0 10px rgba(57,214,155,.23)!important}.userMarker .navVehicleIcon{width:34px;height:34px;display:block;transform:rotate(var(--nav-heading,0deg));transform-origin:50% 50%;transition:transform .22s linear}.vehicleChooser,.quickReport{position:fixed;inset:0;z-index:10050;background:#000b;display:flex;align-items:flex-end;justify-content:center;padding:12px}.vehicleSheet,.reportSheet{width:min(620px,100%);max-height:88vh;overflow:auto;background:#0b1b21;border:1px solid #294149;border-radius:24px;padding:17px;box-shadow:0 18px 60px #000c}.sheetHead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.sheetClose{border:0;background:#173038;color:#fff;width:42px;height:42px;border-radius:50%;font-size:24px}.vehicleGrid,.reportGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}.vehicleChoice,.reportChoice{border:1px solid #294149;background:#10242b;color:#eff7f3;border-radius:16px;padding:10px 7px;min-height:98px;display:grid;place-items:center;gap:5px;font-weight:800}.vehicleChoice.selected{outline:2px solid var(--green);background:#12382f}.vehicleChoice .iconBox,.reportChoice .iconBox{width:48px;height:48px}.reportChoice{min-height:104px}.reportChoice small{font-size:10px;color:#afc3bc}.quickReportBtn{pointer-events:auto;border:0;border-radius:50%;width:52px;height:52px;background:#f6c85f;color:#071116;font-size:22px;font-weight:900;box-shadow:0 5px 18px #0007}.mapToolbar.vehicleToolbar{align-items:center}.vehiclePickBtn{display:flex;align-items:center;gap:8px}.vehiclePickBtn .miniVehicle{width:28px;height:28px}.routeEventMarker{width:36px!important;height:36px!important;padding:4px!important;background:#fff!important;border:2px solid #fff!important}.routeEventMarker .reportSvg{width:26px;height:26px}.marker.reportUnified{width:34px;height:34px;padding:4px;background:#fff;border:2px solid #fff}.mapNavOverlayTop{align-items:flex-start}.navManeuver{border-radius:22px!important;background:rgba(5,15,20,.96)!important}.navManeuverIcon{font-size:38px!important}.mapShell.routeReady #realMap,.mapShell.liveNavigating #realMap{filter:saturate(.92) contrast(1.02)}
+@media(max-width:430px){.vehicleGrid,.reportGrid{grid-template-columns:repeat(3,1fr)}.vehicleChoice,.reportChoice{font-size:11px;min-height:90px}.vehicleChoice .iconBox,.reportChoice .iconBox{width:42px;height:42px}}
+
+
+/* Alpha 2.0.1 — RESPONSIVE ORIENTATION */
+@media (orientation: landscape){
+  body{padding-bottom:12px}
+  .app{max-width:none;padding:8px 12px}
+  .top{position:relative;padding:6px 0 8px}
+  .bottom{left:auto;right:10px;bottom:10px;transform:none;width:min(520px,calc(100% - 20px));grid-template-columns:repeat(var(--nav-count,5),1fr)}
+  #field.active #mapCard{margin:0;padding:10px;border-radius:16px}
+  #field.active #mapCard>.eyebrow{display:none}
+  #field.active .mapShell{height:calc(100vh - 92px);min-height:300px;border-radius:16px}
+  #field.active #realMap{height:100%!important;min-height:100%!important}
+  #field.active .mapToolbar,#field.active .mapNavHud,#field.active #navRouteInfo,#field.active #mapCard>p.small{display:none!important}
+  .mapNavOverlay{padding:10px 12px}
+  .mapNavOverlayTop{align-items:flex-start}
+  .navManeuver{max-width:min(520px,62vw)}
+  .navManeuverText strong{font-size:18px}
+  .mapNavOverlayBottom{justify-content:flex-end;gap:8px}
+  .mapFsBtn{right:12px;bottom:12px}
+  .navChooser{align-items:center}
+  .navChooserSheet{max-height:86vh;overflow:auto}
+  .exploreGrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (orientation: landscape) and (max-height:520px){
+  .top{display:none}
+  #field.active .mapShell{height:calc(100vh - 20px)}
+  .bottom{bottom:6px}
+  .navManeuver{padding:8px 10px;border-radius:14px}
+  .navManeuverIcon{font-size:28px;min-width:34px}
+  .navManeuverText strong{font-size:15px}
+  .navManeuverText small{font-size:11px}
+  .navGlassBtn{min-width:42px;min-height:42px;padding:7px 9px}
+}
+@media (orientation: portrait){
+  #field.active .mapShell{height:auto}
+}
+
 </style>
 </head>
 <body>
 <div id="toast" class="toast"></div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.29 · Family Login</small></div></div>
+    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 2.0.1 · Family Login</small></div></div>
     <div class="sep"></div><div class="eyebrow">Bem-vindo</div><h1 style="margin:8px 0">Vale a pena ir hoje?</h1>
     <p class="muted">Alpha familiar com 4 contas locais de teste. Usa apenas o primeiro nome e o PIN <b>1234</b>. Ainda não existe backend/sincronização entre telemóveis.</p>
     <label>Utilizador</label>
@@ -185,12 +228,12 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     </select>
     <label>PIN de teste</label><input id="loginPin" type="password" inputmode="numeric" maxlength="4" placeholder="1234" autocomplete="current-password">
     <button class="btn" style="width:100%;margin-top:14px" onclick="alphaLogin()">Entrar</button>
-    <p class="authNote">Teste 1.4.29: Helena mantém o teste GOLD · Filipe = SILVER com expiração em 24h + 2000 TrailScore guardados para, depois de expirar, experimentar vários períodos SILVER · Daniela = FREE · André = FREE. O PIN 1234 é apenas para a Alpha e não representa segurança de produção.</p>
+    <p class="authNote">Teste 2.0.0: Helena mantém o teste GOLD · Filipe = SILVER com expiração em 24h + 2000 TrailScore guardados para, depois de expirar, experimentar vários períodos SILVER · Daniela = FREE · André = FREE. O PIN 1234 é apenas para a Alpha e não representa segurança de produção.</p>
   </div>
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 1.4.29 · family login + entitlements</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 2.0.1 · family login + entitlements</small></div></div>
   <div id="headerTier" class="tierBadge tier-free">FREE</div>
 </header>
 
@@ -467,8 +510,9 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
           <div class="navMiniStats"><span id="navOverlaySpeed">— km/h</span></div>
         </div>
         <div class="mapNavOverlayBottom">
-          <button class="navGlassBtn" onclick="cycleNavigationMode()" id="navOverlayMode">🚶</button>
+          <button class="navGlassBtn" onclick="openVehicleChooser()" id="navOverlayMode" aria-label="Escolher veículo">VEÍCULO</button>
           <button class="navGlassBtn primary" onclick="toggleNavFollow()" id="navOverlayFollow">◎ Seguir</button>
+          <button class="quickReportBtn" onclick="openQuickReport()" aria-label="Reportar ocorrência">!</button>
           <button class="navGlassBtn" onclick="exitMapFullscreen()">✕</button>
         </div>
       </div>
@@ -481,6 +525,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
       <button class="btn secondary navMode" data-mode="moto" onclick="setNavigationMode('moto',this)">🏍️ Moto</button>
       <button class="btn secondary navMode" data-mode="car" onclick="setNavigationMode('car',this)">🚗 Carro</button>
     </div>
+    <div class="mapToolbar vehicleToolbar"><button class="btn secondary vehiclePickBtn" onclick="openVehicleChooser()"><span class="miniVehicle" id="navVehiclePreview"></span><span id="navVehicleName">Escolher ícone</span></button><button class="btn secondary" onclick="openQuickReport()">⚠ Reportar no mapa</button></div>
     <div class="mapToolbar">
       <button class="btn" id="liveNavBtn" onclick="toggleLiveNavigation()">Iniciar navegação na app</button>
       <button class="btn secondary" id="followGpsBtn" onclick="toggleNavFollow()">Seguir GPS · ON</button>
@@ -491,7 +536,8 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
       <div class="metric"><b id="navTrackDist">0 m</b><small>Distância realizada</small></div>
       <div class="metric"><b id="navLiveSpeed">—</b><small>Velocidade</small></div>
     </div>
-    <div id="navRouteInfo" class="navRouteInfo small muted">A linha azul é o percurso a seguir. A navegação mostra a próxima manobra, distância e ocorrências LIVE da nossa comunidade junto à rota.</div>
+    <div id="navInlineManeuver" class="navRouteInfo"><b id="navInlineManeuverText">Sem rota ativa</b><br><span id="navInlineManeuverMeta" class="small muted">Cria uma rota para veres instruções de navegação.</span></div>
+    <div id="navRouteInfo" class="navRouteInfo small muted">A linha azul é o percurso a seguir. Assim que existe uma rota, a próxima manobra fica visível no próprio mapa; ao iniciar navegação, distância e instruções passam a atualizar com o GPS.</div>
     <p class="small muted">Linha azul = rota a seguir · linha cinzenta discreta = percurso já realizado · linhas verdes finas = trails · pins = LIVE/EXPLORE.</p>
   </div>
 
@@ -504,6 +550,18 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     </div>
   </div>
 
+  <div id="vehicleChooser" class="vehicleChooser" style="display:none" onclick="if(event.target===this)closeVehicleChooser()">
+    <div class="vehicleSheet">
+      <div class="sheetHead"><div><div class="eyebrow">NAVEGAÇÃO · ALPHA 2.0</div><h2 style="margin:5px 0">Selecionar veículo</h2><p class="muted" style="margin:0">Ícones próprios vistos de cima para leitura imediata no mapa.</p></div><button class="sheetClose" onclick="closeVehicleChooser()">×</button></div>
+      <div id="vehicleGrid" class="vehicleGrid"></div>
+    </div>
+  </div>
+  <div id="quickReport" class="quickReport" style="display:none" onclick="if(event.target===this)closeQuickReport()">
+    <div class="reportSheet">
+      <div class="sheetHead"><div><div class="eyebrow">REALITY PULSE · LIVE</div><h2 style="margin:5px 0">Reportar no mapa</h2><p class="muted" style="margin:0">Os mesmos ícones são usados na navegação e no trekking.</p></div><button class="sheetClose" onclick="closeQuickReport()">×</button></div>
+      <div id="quickReportGrid" class="reportGrid"></div>
+    </div>
+  </div>
   <div id="navChooser" class="navChooser" style="display:none" onclick="if(event.target===this)closeNavigationChooser()">
     <div class="navChooserSheet">
       <div class="eyebrow">NAVEGAÇÃO</div>
@@ -527,14 +585,23 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     <h2>O que encontraste?</h2>
     <label>Tipo</label>
     <select id="rtype">
-      <option value="tree">🌳 Árvore / obstáculo</option>
-      <option value="water">💧 Estado da água</option>
-      <option value="mud">🌧️ Lama / inundação</option>
-      <option value="closure">🚧 Caminho fechado</option>
-      <option value="sign">🪧 Sinalização</option>
-      <option value="parking">🚗 Acesso / estacionamento</option>
-      <option value="animal">🐄 Animal / gado no trilho</option>
-      <option value="other">⚠️ Outro</option>
+      <option value="traffic">Trânsito</option>
+      <option value="police">Polícia / autoridade</option>
+      <option value="crash">Acidente</option>
+      <option value="hazard">Perigo</option>
+      <option value="roadworks">Obras</option>
+      <option value="blocked">Faixa / passagem bloqueada</option>
+      <option value="weather">Mau tempo</option>
+      <option value="fire">Incêndio</option>
+      <option value="tree">Árvore / obstáculo</option>
+      <option value="water">Estado da água</option>
+      <option value="mud">Lama / inundação</option>
+      <option value="landslide">Deslizamento</option>
+      <option value="closure">Caminho / estrada fechada</option>
+      <option value="sign">Sinalização</option>
+      <option value="parking">Acesso / estacionamento</option>
+      <option value="animal">Animal / gado</option>
+      <option value="other">Outro</option>
     </select>
     <label>Severidade</label>
     <select id="severity">
@@ -730,14 +797,14 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     <div class="row"><button class="btn secondary" onclick="simulateTier('FREE')">FREE</button><button class="btn secondary" onclick="simulateSilverEarned()">SILVER</button><button class="btn purple" onclick="simulateTier('GOLD')">EARLY GOLD</button><button class="btn secondary" onclick="simulateTier('PLATINUM')">PLATINUM</button><button class="btn secondary" onclick="simulateTier('ORGANIZATION')">ORGANIZATIONS</button></div>
   </div>
   <div class="card">
-    <div class="eyebrow">Alpha 1.4.29</div><h2>Estado do teste</h2>
+    <div class="eyebrow">Alpha 2.0.1</div><h2>Estado do teste</h2>
     <div class="list">
       <div class="item">✓ GPS real + tracking</div>
       <div class="item">✓ Mapa vetorial real</div>
       <div class="item">◉ Discovery de trails reais via OpenStreetMap</div>
       <div class="item">◉ Trail Detail · ficha antes do GO com dados reais disponíveis</div>
       <div class="item">◉ Destination Planner · pesquisa explícita + cache</div>
-      <div class="item">◉ Monumentos/POIs, refeições e alojamento via OSM/Overpass</div><div class="item">✓ GOLD EXPLORE 1.4.29 · rota visível + ações no fim da seleção · ✓ GOLD EXPLORE · CURATED · destaques para visitar sem trekking + seleção + mapa + Wikipedia quando disponível</div>
+      <div class="item">◉ Monumentos/POIs, refeições e alojamento via OSM/Overpass</div><div class="item">✓ GOLD EXPLORE 2.0.0 · rota visível + ações no fim da seleção · ✓ GOLD EXPLORE · CURATED · destaques para visitar sem trekking + seleção + mapa + Wikipedia quando disponível</div>
       <div class="item">◉ AI Experience Composer local · cria plano real sem inventar dados</div>
       <div class="item">◉ Equipa de teste · 4 participantes + registo de contribuições</div>
       <div class="item">◉ Multi-destino · sem presets · Portugal/Espanha/outros destinos</div>
@@ -789,6 +856,8 @@ let activityRunning=false,activityStartedAt=null,activitySeconds=0,activityDista
 let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareFile=null;
 let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,trailDetailPhotos=[],destination=null,experiencePlaces={monuments:[],meals:[],stays:[]},currentTester='Filipe',smartChoices={monuments:[],meals:[],stays:[]};
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[];
+const APP_VERSION='2.0.0',ACTIVE_ROUTE_KEY='alpha_active_route_v4';
+let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
 
@@ -1035,10 +1104,61 @@ function simulateTier(t){clearGoldExpiryNotice();let e={tier:t,source:'alpha-lab
 function simulateSilverEarned(){saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+7*86400000).toISOString(),source:'alpha-test'});toast('SILVER de teste ativo por 7 dias')}
 function redeemSilver(days,cost){if(effectiveTier()!=='FREE')return toast('SILVER por pontos é ativado a partir de FREE');if(points()<cost)return toast('Ainda não tens pontos suficientes');localStorage.setItem(userKey(POINTS_PREFIX),String(points()-cost));saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+days*86400000).toISOString(),purchasedDays:days,source:'points',cost});renderMembership();toast('SILVER ativado por '+days+' dias · perfil atualizado');go('profile')}
 function resetSilverAlphaTest(){if(authUser()?.id!=='filipe')return;localStorage.setItem(userKey(POINTS_PREFIX),'2000');saveEnt({tier:'FREE',source:'alpha-1.4.17-silver-redemption-reset'});renderMembership();toast('Teste SILVER reposto · 2000 TrailScore');go('profile')}
-function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('goldProfileActions'))$('goldProfileActions').style.display=t==='GOLD'?'flex':'none';if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.purchasedDays?' · período escolhido: '+e.purchasedDays+' dias':'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.purchasedMonths?' · período escolhido: '+e.purchasedMonths+' '+(e.purchasedMonths===1?'mês':'meses'):'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 1.4.29: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button><button class="btn secondary" onclick="redeemSilver(60,720)">720 pts → 60 dias</button><button class="btn secondary" onclick="redeemSilver(90,1000)">1000 pts → 90 dias</button></div>':(t==='SILVER'&&p>=100?'<div class="item"><b>'+p+' pontos guardados.</b> Quando o SILVER atual expirar e regressares a FREE, podes trocá-los por um novo período SILVER.</div>'+(u.id==='filipe'?'<button class="btn secondary" style="width:100%;margin-top:10px" onclick="resetSilverAlphaTest()">Repor teste SILVER · 2000 pts</button>':''):''))}}
+function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('goldProfileActions'))$('goldProfileActions').style.display=t==='GOLD'?'flex':'none';if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.purchasedDays?' · período escolhido: '+e.purchasedDays+' dias':'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.purchasedMonths?' · período escolhido: '+e.purchasedMonths+' '+(e.purchasedMonths===1?'mês':'meses'):'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 2.0.1: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button><button class="btn secondary" onclick="redeemSilver(60,720)">720 pts → 60 dias</button><button class="btn secondary" onclick="redeemSilver(90,1000)">1000 pts → 90 dias</button></div>':(t==='SILVER'&&p>=100?'<div class="item"><b>'+p+' pontos guardados.</b> Quando o SILVER atual expirar e regressares a FREE, podes trocá-los por um novo período SILVER.</div>'+(u.id==='filipe'?'<button class="btn secondary" style="width:100%;margin-top:10px" onclick="resetSilverAlphaTest()">Repor teste SILVER · 2000 pts</button>':''):''))}}
 function bootAuth(){const u=authUser();if(!u){$('authGate').classList.add('show')}else{const profile=familyProfileById(u.id);seedFamilyExpiryTest(profile);currentTester=u.shortName||u.name||'Filipe';localStorage.setItem(TESTER_KEY,currentTester);$('authGate').classList.remove('show')}sweepReportPointMaturity();applyEntitlements()}
 
-const types={tree:'🌳 Árvore / obstáculo',water:'💧 Estado da água',mud:'🌧️ Lama / inundação',closure:'🚧 Caminho fechado',sign:'🪧 Sinalização',parking:'🚗 Acesso / estacionamento',animal:'🐄 Animal / gado no trilho',other:'⚠️ Outro'};
+const types={traffic:'Trânsito',police:'Polícia / autoridade',crash:'Acidente',hazard:'Perigo',roadworks:'Obras',blocked:'Faixa / passagem bloqueada',weather:'Mau tempo',fire:'Incêndio',tree:'Árvore / obstáculo',water:'Estado da água',mud:'Lama / inundação',landslide:'Deslizamento',closure:'Caminho / estrada fechada',sign:'Sinalização',parking:'Acesso / estacionamento',animal:'Animal / gado',other:'Outro'};
+
+
+const NAV_VEHICLE_KEY='alpha_nav_vehicle_style';
+const VEHICLES=[
+{id:'arrow',name:'Seta',mode:'car',kind:'arrow',color:'#39c8ff'},
+{id:'car-red',name:'Auto vermelho',mode:'car',kind:'car',color:'#e74b4b'},
+{id:'car-blue',name:'Auto azul',mode:'car',kind:'car',color:'#3b8eea'},
+{id:'car-green',name:'Auto verde',mode:'car',kind:'car',color:'#69b84a'},
+{id:'car-yellow',name:'Auto amarelo',mode:'car',kind:'car',color:'#f4c542'},
+{id:'suv',name:'SUV',mode:'car',kind:'suv',color:'#7a8c99'},
+{id:'taxi',name:'Táxi',mode:'car',kind:'taxi',color:'#f1c40f'},
+{id:'moto',name:'Motocicleta',mode:'moto',kind:'moto',color:'#e84b3c'},
+{id:'bike',name:'Bicicleta',mode:'bike',kind:'bike',color:'#47c96b'},
+{id:'scooter',name:'Trotineta',mode:'scooter',kind:'scooter',color:'#28a8e9'},
+{id:'walk',name:'A pé',mode:'walk',kind:'walk',color:'#f39c45'},
+{id:'van',name:'Autocaravana',mode:'car',kind:'van',color:'#c8d0d7'}
+];
+let navVehicleStyle=localStorage.getItem(NAV_VEHICLE_KEY)||'car-red';
+function vehicleDef(id=navVehicleStyle){return VEHICLES.find(v=>v.id===id)||VEHICLES[1]}
+function vehicleSvg(id=navVehicleStyle){const v=vehicleDef(id),c=v.color;let inner='';
+ if(v.kind==='arrow')inner='<path d="M32 5 55 48 35 40 32 58 29 40 9 48Z" fill="'+c+'" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>';
+ else if(['car','suv','taxi','van'].includes(v.kind)){const w=v.kind==='suv'?34:30,x=(64-w)/2;inner='<rect x="'+x+'" y="8" width="'+w+'" height="48" rx="10" fill="'+c+'" stroke="#14212a" stroke-width="3"/><rect x="'+(x+5)+'" y="16" width="'+(w-10)+'" height="11" rx="3" fill="#bde7f6"/><rect x="'+(x+5)+'" y="36" width="'+(w-10)+'" height="12" rx="3" fill="#243947"/><rect x="'+(x-3)+'" y="16" width="4" height="12" rx="2" fill="#17232b"/><rect x="'+(x+w-1)+'" y="16" width="4" height="12" rx="2" fill="#17232b"/><rect x="'+(x-3)+'" y="38" width="4" height="12" rx="2" fill="#17232b"/><rect x="'+(x+w-1)+'" y="38" width="4" height="12" rx="2" fill="#17232b"/>'+(v.kind==='taxi'?'<rect x="25" y="6" width="14" height="6" rx="2" fill="#111"/><text x="32" y="11" text-anchor="middle" font-size="5" fill="#fff">TAXI</text>':'');}
+ else if(v.kind==='moto')inner='<ellipse cx="32" cy="13" rx="8" ry="10" fill="#222"/><ellipse cx="32" cy="51" rx="8" ry="10" fill="#222"/><path d="M32 18 22 30 27 38 32 45 37 38 42 30Z" fill="'+c+'" stroke="#16232c" stroke-width="3"/><rect x="27" y="26" width="10" height="12" rx="4" fill="#d8ecf5"/>';
+ else if(v.kind==='bike')inner='<circle cx="32" cy="12" r="8" fill="none" stroke="#20313a" stroke-width="4"/><circle cx="32" cy="52" r="8" fill="none" stroke="#20313a" stroke-width="4"/><path d="M32 20 24 32 32 42 40 32Z" fill="none" stroke="'+c+'" stroke-width="5"/><path d="M22 31h20" stroke="#20313a" stroke-width="3"/>';
+ else if(v.kind==='scooter')inner='<circle cx="32" cy="13" r="7" fill="#24323a"/><circle cx="32" cy="52" r="7" fill="#24323a"/><rect x="27" y="18" width="10" height="28" rx="5" fill="'+c+'"/><path d="M22 20h20M32 20v-8" stroke="#16232c" stroke-width="3"/>';
+ else if(v.kind==='walk')inner='<circle cx="32" cy="13" r="7" fill="'+c+'"/><path d="M32 21v16m0-7-10 9m10-9 10 9m-10-2-8 15m8-15 8 15" stroke="'+c+'" stroke-width="6" stroke-linecap="round" fill="none"/>';
+ return '<svg class="vehicleSvg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'}
+const REPORT_META={
+traffic:{label:'Trânsito',symbol:'cars',color:'#ef5350'},police:{label:'Polícia',symbol:'police',color:'#42a5f5'},crash:{label:'Acidente',symbol:'crash',color:'#ef5350'},hazard:{label:'Perigo',symbol:'hazard',color:'#fbc02d'},roadworks:{label:'Obras',symbol:'cone',color:'#fb8c00'},blocked:{label:'Bloqueado',symbol:'barrier',color:'#ef6c00'},weather:{label:'Mau tempo',symbol:'weather',color:'#78909c'},fire:{label:'Incêndio',symbol:'fire',color:'#ff7043'},tree:{label:'Árvore / obstáculo',symbol:'tree',color:'#43a047'},water:{label:'Água',symbol:'water',color:'#29b6f6'},mud:{label:'Lama / inundação',symbol:'water',color:'#6d8fa3'},landslide:{label:'Deslizamento',symbol:'rocks',color:'#8d6e63'},closure:{label:'Corte',symbol:'barrier',color:'#ef6c00'},sign:{label:'Sinalização',symbol:'sign',color:'#ffa726'},parking:{label:'Estacionamento',symbol:'parking',color:'#1976d2'},animal:{label:'Animal',symbol:'animal',color:'#8d6e63'},other:{label:'Outro',symbol:'hazard',color:'#90a4ae'}};
+function reportSvg(type){const m=REPORT_META[type]||REPORT_META.other,c=m.color;let i='';
+ if(m.symbol==='hazard')i='<path d="M32 8 58 54H6Z" fill="'+c+'" stroke="#17232b" stroke-width="4"/><text x="32" y="44" text-anchor="middle" font-size="28" font-weight="900" fill="#14212a">!</text>';
+ else if(m.symbol==='barrier')i='<rect x="8" y="24" width="48" height="16" rx="3" fill="#fff" stroke="#27343b" stroke-width="3"/><path d="M12 37 23 25m8 14 12-14m8 14 5-6" stroke="'+c+'" stroke-width="7"/><path d="M18 40v13m28-13v13" stroke="#27343b" stroke-width="4"/>';
+ else if(m.symbol==='cone')i='<path d="M25 8h14l10 42H15Z" fill="'+c+'" stroke="#26343b" stroke-width="3"/><path d="M20 31h24" stroke="#fff" stroke-width="6"/><rect x="10" y="49" width="44" height="7" rx="3" fill="#26343b"/>';
+ else if(m.symbol==='parking')i='<rect x="8" y="8" width="48" height="48" rx="12" fill="'+c+'"/><text x="32" y="45" text-anchor="middle" font-size="37" font-weight="900" fill="#fff">P</text>';
+ else if(m.symbol==='tree')i='<circle cx="32" cy="24" r="18" fill="'+c+'"/><rect x="28" y="36" width="8" height="20" rx="3" fill="#795548"/>';
+ else if(m.symbol==='water')i='<path d="M32 8C19 25 14 31 14 41a18 18 0 0 0 36 0C50 31 45 25 32 8Z" fill="'+c+'"/><path d="M20 44c8-5 16 5 24 0" fill="none" stroke="#fff" stroke-width="4"/>';
+ else if(m.symbol==='fire')i='<path d="M33 5c5 13-4 15 6 25 2-7 7-8 9-14 9 14 5 36-15 40C12 54 9 35 20 23c0 8 5 9 7 13 5-9-2-18 6-31Z" fill="'+c+'" stroke="#b52727" stroke-width="2"/>';
+ else if(m.symbol==='weather')i='<path d="M17 41h32a10 10 0 0 0 0-20 16 16 0 0 0-30-4A12 12 0 0 0 17 41Z" fill="'+c+'"/><path d="m22 46-5 10m16-10-5 10m16-10-5 10" stroke="#29b6f6" stroke-width="4"/>';
+ else if(m.symbol==='animal')i='<path d="M18 38c0-12 8-20 18-20 7 0 12 4 14 10l7 3-8 6v13h-6V39H27v11h-6V39Z" fill="'+c+'"/><path d="M24 20 18 10m22 10 5-11" stroke="#5d4037" stroke-width="4"/>';
+ else if(m.symbol==='police')i='<circle cx="32" cy="32" r="22" fill="'+c+'"/><path d="M19 27h26l-4 21H23Z" fill="#f3d7b9"/><path d="M18 24h28l-7-10H25Z" fill="#165ea8"/><rect x="16" y="22" width="32" height="6" rx="3" fill="#0d47a1"/>';
+ else if(m.symbol==='cars'||m.symbol==='crash')i='<rect x="7" y="25" width="24" height="24" rx="7" fill="#ef5350" stroke="#26343b" stroke-width="3"/><rect x="33" y="15" width="24" height="24" rx="7" fill="#f9b233" stroke="#26343b" stroke-width="3"/>'+(m.symbol==='crash'?'<path d="M24 18 32 26l7-11 2 13 12-5-8 10 10 5-14 1-1 13-7-11-10 8 5-13-12-5 13-2Z" fill="#fff" stroke="#ef5350" stroke-width="2"/>':'');
+ else if(m.symbol==='rocks')i='<path d="m9 49 13-28 13 13 8-18 14 33Z" fill="'+c+'" stroke="#37474f" stroke-width="3"/>';
+ else if(m.symbol==='sign')i='<path d="M12 18h34l7 8-7 8H12l-7-8Z" fill="'+c+'" stroke="#4e342e" stroke-width="3"/><rect x="28" y="34" width="7" height="22" fill="#795548"/>';
+ return '<svg class="reportSvg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">'+i+'</svg>'}
+function renderVehicleUI(){const v=vehicleDef();if($('navVehiclePreview'))$('navVehiclePreview').innerHTML=vehicleSvg(v.id);if($('navVehicleName'))$('navVehicleName').textContent=v.name;if($('navOverlayMode')){$('navOverlayMode').innerHTML='<span style="display:block;width:30px;height:30px">'+vehicleSvg(v.id)+'</span>'}if(userMarker){const ic=userMarker.getElement()?.querySelector('.navVehicleIcon');if(ic)ic.innerHTML=vehicleSvg(v.id)}}
+function openVehicleChooser(){const host=$('vehicleGrid'),modal=$('vehicleChooser');if(!host||!modal)return;host.innerHTML=VEHICLES.map(v=>'<button class="vehicleChoice '+(v.id===navVehicleStyle?'selected':'')+'" onclick="chooseVehicle(\''+v.id+'\')"><span class="iconBox">'+vehicleSvg(v.id)+'</span><span>'+esc(v.name)+'</span></button>').join('');modal.style.display='flex'}
+function closeVehicleChooser(){if($('vehicleChooser'))$('vehicleChooser').style.display='none'}
+function chooseVehicle(id){const v=vehicleDef(id);navVehicleStyle=v.id;localStorage.setItem(NAV_VEHICLE_KEY,v.id);navigationMode=v.mode;document.querySelectorAll('.navMode').forEach(x=>x.classList.toggle('active',x.dataset.mode===v.mode));if($('navModeLabel'))$('navModeLabel').textContent=navModeMeta(v.mode).label;renderVehicleUI();closeVehicleChooser();if(navFollow&&pos)followCurrentPosition();toast('Ícone: '+v.name)}
+function openQuickReport(){const h=$('quickReportGrid'),m=$('quickReport');if(!h||!m)return;const order=['traffic','police','crash','hazard','roadworks','blocked','weather','fire','tree','water','mud','landslide','closure','sign','parking','animal','other'];h.innerHTML=order.map(t=>'<button class="reportChoice" onclick="chooseQuickReport(\''+t+'\')"><span class="iconBox">'+reportSvg(t)+'</span><span>'+esc((REPORT_META[t]||REPORT_META.other).label)+'</span></button>').join('');m.style.display='flex'}
+function closeQuickReport(){if($('quickReport'))$('quickReport').style.display='none'}
+function chooseQuickReport(type){closeQuickReport();if($('rtype'))$('rtype').value=type;go('report');setTimeout(()=>{const el=$('rtype');if(el)el.scrollIntoView({behavior:'smooth',block:'center'})},100)}
 
 function toast(m){let t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.remove('show'),2800)}
 function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();if(map){map.resize();renderMapReports();renderTrailLayer();renderSelectedTrail();renderExploreMarkers();renderExploreRoute();renderLiveTrack();}},120);if(id==='experience')syncReview()}
@@ -1057,14 +1177,15 @@ function initMap(){
 }
 function updateUserMarker(center=false){
   if(!map||!pos)return;
-  if(!userMarker){let e=document.createElement('div');e.className='userMarker'+(liveNavActive?' navActive':'');e.innerHTML='<span class="navVehicleIcon">'+navModeMeta(navigationMode).icon+'</span>';userMarker=new maplibregl.Marker({element:e}).setLngLat([pos.longitude,pos.latitude]).addTo(map)}
-  else{userMarker.setLngLat([pos.longitude,pos.latitude]);const el=userMarker.getElement();if(el){el.classList.toggle('navActive',liveNavActive);const ic=el.querySelector('.navVehicleIcon');if(ic){ic.textContent=navModeMeta(navigationMode).icon;ic.style.setProperty('--nav-heading',(Number.isFinite(pos.heading)?pos.heading:0)+'deg')}}}
+  const heading=(Number.isFinite(pos.heading)?pos.heading:0);
+  if(!userMarker){let e=document.createElement('div');e.className='userMarker'+(liveNavActive?' navActive':'');e.innerHTML='<span class="navVehicleIcon" style="--nav-heading:'+heading+'deg">'+vehicleSvg(navVehicleStyle)+'</span>';userMarker=new maplibregl.Marker({element:e}).setLngLat([pos.longitude,pos.latitude]).addTo(map)}
+  else{userMarker.setLngLat([pos.longitude,pos.latitude]);const el=userMarker.getElement();if(el){el.classList.toggle('navActive',liveNavActive);const ic=el.querySelector('.navVehicleIcon');if(ic){ic.innerHTML=vehicleSvg(navVehicleStyle);ic.style.setProperty('--nav-heading',heading+'deg')}}}
   if(center)map.easeTo({center:[pos.longitude,pos.latitude],zoom:15})
 }
 function renderMapReports(){
   if(!map)return;reportMarkers.forEach(m=>m.remove());reportMarkers=[];
   reports().forEach(r=>{
-    let e=document.createElement('div');e.className='marker';e.textContent=(types[r.type]||'⚠️').split(' ')[0];
+    let e=document.createElement('div');e.className='marker reportUnified';e.innerHTML=reportSvg(r.type);
     let pop=new maplibregl.Popup({offset:20}).setHTML('<b>'+esc(types[r.type]||r.type)+'</b><br>'+esc(r.desc||'Sem descrição')+'<br><small>'+new Date(r.time).toLocaleString('pt-PT')+' · '+(r.status==='closed'?'FECHADO':temporalState(r).label)+'</small>');
     reportMarkers.push(new maplibregl.Marker({element:e}).setLngLat([r.lon,r.lat]).setPopup(pop).addTo(map))
   })
@@ -1081,7 +1202,7 @@ function updatePosition(p){
   let sp=filteredSpeed(pos);$('spd').textContent=sp===null?'—':sp.toFixed(1)+' km/h';if($('navLiveSpeed'))$('navLiveSpeed').textContent=sp===null?'—':sp.toFixed(1)+' km/h';
   $('gpsState').innerHTML='<span class="green">GPS ativo</span> · '+new Date(p.timestamp).toLocaleTimeString('pt-PT');
   if(liveNavActive){appendLiveTrack(pos,prev);}
-  initMap();updateUserMarker(false);updateNavigationOverlay();if(liveNavActive&&navFollow)followCurrentPosition();checkNearest();updateActivityFromGPS(pos);if(!weatherNow)fetchWeather();if(!nearbyTrails.length)loadTrailsNearby(false)
+  initMap();updateUserMarker(false);if(liveNavActive&&!exploreRouteGeoJSON)rebuildActiveRouteFromJourney();updateNavigationOverlay();if(liveNavActive&&navFollow)followCurrentPosition();checkNearest();updateActivityFromGPS(pos);if(!weatherNow)fetchWeather();if(!nearbyTrails.length)loadTrailsNearby(false)
 }
 function geoError(e){$('gpsState').innerHTML='<span class="red">GPS indisponível</span>';toast('GPS: '+e.message)}
 function requestLocation(){if(!navigator.geolocation)return toast('Geolocalização não suportada');navigator.geolocation.getCurrentPosition(updatePosition,geoError,{enableHighAccuracy:true,timeout:15000,maximumAge:0})}
@@ -1111,6 +1232,15 @@ function currentTrailIdentity(){
   return {trailId:'local-gps',trailName:'Percurso local / GPS'};
 }
 const TEMPORAL_POLICIES={
+  traffic:{className:'DINÂMICO',photoRequired:false,closeReviewMinutes:0,staleHours:.5,expireHours:2},
+  police:{className:'EFÉMERO',photoRequired:false,closeReviewMinutes:0,staleHours:.5,expireHours:2},
+  crash:{className:'DINÂMICO',photoRequired:false,closeReviewMinutes:0,staleHours:2,expireHours:6},
+  hazard:{className:'VARIÁVEL',photoRequired:false,closeReviewMinutes:10,staleHours:6,expireHours:24},
+  roadworks:{className:'PERSISTENTE',photoRequired:false,closeReviewMinutes:30,staleHours:24,expireHours:null},
+  blocked:{className:'PERSISTENTE',photoRequired:false,closeReviewMinutes:15,staleHours:12,expireHours:null},
+  weather:{className:'DINÂMICO',photoRequired:false,closeReviewMinutes:0,staleHours:1,expireHours:3},
+  fire:{className:'DINÂMICO',photoRequired:false,closeReviewMinutes:0,staleHours:1,expireHours:6},
+  landslide:{className:'PERSISTENTE',photoRequired:false,closeReviewMinutes:30,staleHours:72,expireHours:null},
   tree:{className:'PERSISTENTE',photoRequired:true,closeReviewMinutes:30,staleHours:72,expireHours:null},
   closure:{className:'PERSISTENTE',photoRequired:true,closeReviewMinutes:30,staleHours:72,expireHours:null},
   sign:{className:'ESTRUTURAL',photoRequired:true,closeReviewMinutes:60,staleHours:168,expireHours:null},
@@ -1325,7 +1455,7 @@ function exploreDescription(t,cat){
 }
 function exploreNameBoost(name=''){
   const n=String(name).toLowerCase();
-  const strong=['mosteiro','monastery','catedral','cathedral','sé ',' se ','biblioteca joanina','joanina','universidade','university','palácio','palacio','palace','castelo','castle','torre','tower','convento','convent','museu','museum','livraria','bookshop','jardim botânico','jardim botanico','botanical','mercado','market','ponte','bridge','igreja de santa','igreja da','igreja do','church of'];
+  const strong=['mosteiro','monastery','catedral','cathedral','sé ',' se ','biblioteca joanina','joanina','universidade','university','palácio','palacio','palace','castelo','castle','torre','tower','convento','convent','museu','museum','livraria','bookshop','jardim botânico','jardim botanico','botanical','conímbriga','conimbriga','ruínas','ruinas','arqueológico','arqueologico','mercado','market','ponte','bridge','igreja de santa','igreja da','igreja do','church of'];
   return strong.some(x=>n.includes(x))?14:0;
 }
 function exploreRelevance(p){
@@ -1392,47 +1522,67 @@ function exploreWikiScore(p){
   const c=exploreCenter;if(c){const km=hav(c.lat,c.lon,p.center[1],p.center[0])/1000;score+=Math.max(0,10-Math.min(10,km*.8));}
   return score;
 }
+async function fetchExploreWikipediaGeo(c,signal){
+  const params=new URLSearchParams({action:'query',generator:'geosearch',ggsprimary:'all',ggsnamespace:'0',ggslimit:'90',ggsradius:'25000',ggscoord:c.lat+'|'+c.lon,prop:'coordinates|pageimages|extracts|info',inprop:'url',exintro:'1',explaintext:'1',exsentences:'4',piprop:'thumbnail',pithumbsize:'720',format:'json',origin:'*'});
+  const r=await fetch('https://pt.wikipedia.org/w/api.php?'+params.toString(),{signal,cache:'no-store'});
+  if(!r.ok)throw new Error('Wikipedia geo '+r.status);const j=await r.json();
+  return Object.values((j.query&&j.query.pages)||{});
+}
+async function fetchExploreWikipediaSearch(c,signal){
+  const city=String(c.label||'').split(',')[0].trim();if(!city||city==='Perto de mim')return[];
+  const q='"'+city+'" (universidade OR biblioteca OR museu OR mosteiro OR convento OR igreja OR catedral OR palácio OR castelo OR torre OR monumento OR ruínas OR arqueológico OR jardim OR parque OR ponte OR teatro OR mercado)';
+  const params=new URLSearchParams({action:'query',generator:'search',gsrsearch:q,gsrnamespace:'0',gsrlimit:'45',prop:'coordinates|pageimages|extracts|info',inprop:'url',exintro:'1',explaintext:'1',exsentences:'4',piprop:'thumbnail',pithumbsize:'720',format:'json',origin:'*'});
+  const r=await fetch('https://pt.wikipedia.org/w/api.php?'+params.toString(),{signal,cache:'no-store'});
+  if(!r.ok)throw new Error('Wikipedia search '+r.status);const j=await r.json();
+  return Object.values((j.query&&j.query.pages)||{});
+}
 async function fetchExploreWikipedia(c){
-  const params=new URLSearchParams({action:'query',generator:'geosearch',ggsprimary:'all',ggsnamespace:'0',ggslimit:'35',ggsradius:'10000',ggscoord:c.lat+'|'+c.lon,prop:'coordinates|pageimages|extracts|info',inprop:'url',exintro:'1',explaintext:'1',exsentences:'4',piprop:'thumbnail',pithumbsize:'720',format:'json',origin:'*'});
-  const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),8000);
+  const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),10000);
   try{
-    const r=await fetch('https://pt.wikipedia.org/w/api.php?'+params.toString(),{signal:ctrl.signal});
-    if(!r.ok)throw new Error('Wikipedia '+r.status);const j=await r.json();
-    return Object.values((j.query&&j.query.pages)||{});
+    const settled=await Promise.allSettled([fetchExploreWikipediaGeo(c,ctrl.signal),fetchExploreWikipediaSearch(c,ctrl.signal)]),out=[],seen=new Set();
+    settled.forEach(x=>{if(x.status!=='fulfilled')return;(x.value||[]).forEach(pg=>{const key=String(pg.pageid||pg.title||'');if(!key||seen.has(key))return;seen.add(key);out.push(pg)})});
+    if(!out.length)throw new Error('Wikipedia sem resultados');
+    return out;
   }finally{clearTimeout(timer)}
+}
+function explorePageLooksVisitable(name,desc){
+  const x=(name+' '+desc).toLowerCase();
+  if(/^(lista de|freguesia de|município de|distrito de|eleições|temporada|campeonato)/i.test(name))return false;
+  const place=/universidade|biblioteca|museu|mosteiro|convento|igreja|catedral|sé\b|palácio|palacio|castelo|torre|monumento|ruína|ruina|arqueológ|jardim|parque|ponte|teatro|mercado|estádio|estadio|praça|praca|capela|aqueduto|anfiteatro|sítio|sitio|património|patrimonio|edifício|edificio|forte|muralha|quinta|paço|paco|jardim botânico|jardim botanico/.test(x);
+  const bio=/\b(nasceu|nascido|nascida|foi um político|foi uma política|futebolista|jogador de futebol|escritor português|professor universitário)\b/.test(x.slice(0,260));
+  return !bio||place;
 }
 async function loadExplorePlaces(){
   const c=exploreCenter;if(!c)return;
   exploreSelected.clear();exploreRouteGeoJSON=null;exploreRouteOrdered=[];renderExploreSelectedSummary();
-  const cacheKey='alpha_explore_fast_'+Math.round(c.lat*1000)+'_'+Math.round(c.lon*1000);
+  const cacheKey='alpha_explore_hybrid_v3_'+Math.round(c.lat*1000)+'_'+Math.round(c.lon*1000);
   try{
     const cached=JSON.parse(localStorage.getItem(cacheKey)||'null');
-    if(cached&&Date.now()-cached.time<86400000&&Array.isArray(cached.places)&&cached.places.length){
-      explorePlaces=cached.places;$('exploreState').textContent=explorePlaces.length+' destaques · resultado rápido guardado';renderExploreResults();return;
+    if(cached&&Date.now()-cached.time<21600000&&Array.isArray(cached.places)&&cached.places.length){
+      explorePlaces=cached.places;$('exploreState').textContent=explorePlaces.length+' locais para visitar · pesquisa híbrida guardada';renderExploreResults();return;
     }
   }catch{}
-  $('exploreState').textContent='A descobrir os principais locais…';
+  $('exploreState').textContent='A descobrir património, cultura, natureza e locais de interesse…';
   try{
     const pages=await fetchExploreWikipedia(c),seen=new Set();
     let places=pages.map(pg=>{
       const co=(pg.coordinates||[])[0];if(!co||!pg.title)return null;
       const name=pg.title.trim(),key=name.toLowerCase();if(seen.has(key))return null;seen.add(key);
-      const desc=(pg.extract||'').trim().slice(0,420);
-      // Exclui páginas claramente administrativas/biográficas; EXPLORE deve devolver locais visitáveis.
-      if(/^(lista de|freguesia de|município de|distrito de)/i.test(name))return null;
+      const desc=(pg.extract||'').trim().slice(0,480);
+      if(!explorePageLooksVisitable(name,desc))return null;
       const cat=exploreWikiCategory(name,desc);
       return {id:'explore-wiki-'+pg.pageid,name,center:[Number(co.lon),Number(co.lat)],tags:{wikipedia:'pt:'+name},cat,description:desc||exploreCategoryLabel(cat)+' com interesse para visita.',photo:pg.thumbnail&&pg.thumbnail.source||'',wikipediaUrl:pg.fullurl||('https://pt.wikipedia.org/?curid='+pg.pageid),wikiMatched:true,website:'',opening:'',fee:''};
     }).filter(Boolean);
     places.sort((a,b)=>exploreWikiScore(b)-exploreWikiScore(a));
-    explorePlaces=places.slice(0,16);
+    explorePlaces=places.slice(0,40);
     if(!explorePlaces.length)throw new Error('sem resultados');
     localStorage.setItem(cacheKey,JSON.stringify({time:Date.now(),places:explorePlaces}));
-    $('exploreState').textContent=explorePlaces.length+' destaques para visitar · '+c.label+' · seleciona apenas os que quiseres';
+    $('exploreState').textContent=explorePlaces.length+' locais para visitar · raio até 25 km · '+c.label+' · seleciona os que quiseres';
     renderExploreResults();
   }catch(e){
-    console.warn('EXPLORE fast discovery failed',e);
+    console.warn('EXPLORE hybrid discovery failed',e);
     explorePlaces=[];renderExploreResults();
-    $('exploreState').textContent='Pesquisa rápida indisponível. Não bloqueámos a app — podes continuar a usar as restantes funções e tentar novamente.';
+    $('exploreState').textContent='Pesquisa de locais indisponível neste momento. Podes continuar a usar as restantes funções e tentar novamente.';
     toast('Pesquisa de locais indisponível neste momento');
   }
 }
@@ -1465,23 +1615,60 @@ function openExploreDetails(id){
 }
 function renderExploreResults(){const host=$('exploreResults');if(!host)return;const arr=explorePlaces.filter(p=>exploreCategories.has('all')||exploreCategories.has(p.cat));if(!arr.length){host.innerHTML='<div class="exploreEmpty">Sem locais nas categorias selecionadas.</div>';return}host.innerHTML=arr.map(p=>{const sel=exploreSelected.has(p.id),photo=p.photo?'<img class="explorePhoto" src="'+esc(p.photo)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'<div class="explorePhoto" style="display:grid;place-items:center;font-size:44px">'+exploreIcon(p.cat)+'</div>';return '<article class="exploreCard '+(sel?'exploreSelected':'')+'">'+photo+'<div class="exploreBody"><div class="small green">'+exploreIcon(p.cat)+' '+exploreCategoryLabel(p.cat)+' · '+exploreDistance(p)+'</div><h3>'+esc(p.name)+'</h3><p class="small muted">'+esc(p.description)+'</p><div class="row" style="margin-top:10px"><button class="btn secondary" onclick="openExploreDetails(\''+p.id+'\')">Ver detalhes</button><button class="btn '+(sel?'':'secondary')+'" onclick="toggleExplorePlace(\''+p.id+'\')">'+(sel?'✓ Selecionado':'Selecionar')+'</button></div></div></article>'}).join('');renderExploreSelectedSummary()}
 function renderExploreMarkers(onlySelected=false){if(!map)return;exploreMarkers.forEach(m=>m.remove());exploreMarkers=[];const arr=explorePlaces.filter(p=>!onlySelected||exploreSelected.has(p.id));arr.forEach((p,i)=>{const e=document.createElement('div');e.className='exploreMapMarker'+(exploreSelected.has(p.id)?' selected':'');e.textContent=exploreIcon(p.cat);const pop=new maplibregl.Popup({offset:20}).setHTML('<b>'+esc(p.name)+'</b><br><small>'+esc(exploreCategoryLabel(p.cat))+' · '+esc(exploreDistance(p))+'</small><br>'+esc(p.description));exploreMarkers.push(new maplibregl.Marker({element:e}).setLngLat(p.center).setPopup(pop).addTo(map))})}
-function navModeMeta(mode){return({walk:{label:'A pé',icon:'🚶',zoom:17,pitch:48},bike:{label:'Bicicleta',icon:'🚲',zoom:16.5,pitch:50},scooter:{label:'Trotineta',icon:'🛴',zoom:16.5,pitch:50},moto:{label:'Moto',icon:'🏍️',zoom:16.2,pitch:54},car:{label:'Carro',icon:'🚗',zoom:16,pitch:55}})[mode]||{label:'A pé',icon:'🚶',zoom:17,pitch:48}}
-function setNavigationMode(mode,btn){navigationMode=mode;document.querySelectorAll('.navMode').forEach(x=>x.classList.toggle('active',x.dataset.mode===mode));const m=navModeMeta(mode);if($('navModeLabel'))$('navModeLabel').textContent=m.label;if($('navOverlayMode'))$('navOverlayMode').textContent=m.icon;if(userMarker){const el=userMarker.getElement(),ic=el&&el.querySelector('.navVehicleIcon');if(ic)ic.textContent=m.icon}if(liveNavActive&&navFollow)followCurrentPosition();updateNavigationOverlay();toast('Modo de navegação: '+m.label)}
+function navModeMeta(mode){return({walk:{label:'A pé',zoom:17,pitch:48},bike:{label:'Bicicleta',zoom:16.5,pitch:50},scooter:{label:'Trotineta',zoom:16.5,pitch:50},moto:{label:'Moto',zoom:16.2,pitch:54},car:{label:'Carro',zoom:16,pitch:55}})[mode]||{label:'A pé',zoom:17,pitch:48}}
+function setNavigationMode(mode,btn){navigationMode=mode;document.querySelectorAll('.navMode').forEach(x=>x.classList.toggle('active',x.dataset.mode===mode));if(mode==='walk')navVehicleStyle='walk';else if(mode==='bike')navVehicleStyle='bike';else if(mode==='scooter')navVehicleStyle='scooter';else if(mode==='moto')navVehicleStyle='moto';else if(!['car-red','car-blue','car-green','car-yellow','suv','taxi','van','arrow'].includes(navVehicleStyle))navVehicleStyle='car-red';localStorage.setItem(NAV_VEHICLE_KEY,navVehicleStyle);const m=navModeMeta(mode);if($('navModeLabel'))$('navModeLabel').textContent=m.label;renderVehicleUI();if(liveNavActive&&navFollow)followCurrentPosition();updateNavigationOverlay();toast('Modo de navegação: '+m.label)}
 function cycleNavigationMode(){const modes=['walk','bike','scooter','moto','car'],i=modes.indexOf(navigationMode),next=modes[(i+1)%modes.length];setNavigationMode(next,null)}
 function appendLiveTrack(c,prev){if(!Number.isFinite(c.latitude)||!Number.isFinite(c.longitude)||c.accuracy>65)return;const point=[c.longitude,c.latitude];const last=navTrack[navTrack.length-1];if(last){const d=hav(last[1],last[0],point[1],point[0]);if(d<2)return;navTrackDistance+=d}else if(prev){const d=hav(prev.latitude,prev.longitude,c.latitude,c.longitude);if(Number.isFinite(d)&&d<150)navTrackDistance+=d}navTrack.push(point);if(navTrack.length>2500)navTrack.shift();if($('navTrackDist'))$('navTrackDist').textContent=distanceLabel(navTrackDistance);renderLiveTrack()}
 function renderLiveTrack(){if(!map||!map.isStyleLoaded())return;const data={type:'Feature',properties:{},geometry:{type:'LineString',coordinates:navTrack.length>=2?navTrack:[]}};if(map.getSource('live-nav-track')){map.getSource('live-nav-track').setData(data);return}map.addSource('live-nav-track',{type:'geojson',data});map.addLayer({id:'live-nav-track',type:'line',source:'live-nav-track',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#6f7d82','line-width':3,'line-opacity':.42,'line-dasharray':[1.3,1.5]}})}
 function followCurrentPosition(){if(!map||!pos)return;const m=navModeMeta(navigationMode),bearing=Number.isFinite(pos.heading)&&Number(pos.speed)>1?pos.heading:map.getBearing();map.easeTo({center:[pos.longitude,pos.latitude],zoom:m.zoom,pitch:m.pitch,bearing,duration:450})}
 function currentJourneyStop(){let trip=null;try{trip=JSON.parse(localStorage.getItem('alpha_car_journey')||'null')}catch{};if(trip?.stops?.length){const i=Math.min(trip.index||0,trip.stops.length-1);if(i<trip.stops.length)return trip.stops[i]}return exploreRouteOrdered?.[0]||null}
+function persistActiveRoute(summary={}){
+  if(!exploreRouteGeoJSON?.coordinates?.length)return;
+  try{localStorage.setItem(ACTIVE_ROUTE_KEY,JSON.stringify({version:APP_VERSION,createdAt:Date.now(),geometry:exploreRouteGeoJSON,steps:exploreRouteSteps||[],stops:(exploreRouteOrdered||[]).map(p=>({id:p.id,name:p.name,center:p.center,cat:p.cat||'attraction',description:p.description||''})),summary}))}catch(e){console.warn('active route persist',e)}
+}
+function restoreActiveRoute(){
+  try{
+    const r=JSON.parse(localStorage.getItem(ACTIVE_ROUTE_KEY)||'null');
+    if(!r||!r.geometry?.coordinates?.length||Date.now()-Number(r.createdAt||0)>172800000)return false;
+    exploreRouteGeoJSON=r.geometry;exploreRouteSteps=Array.isArray(r.steps)?r.steps:[];exploreRouteOrdered=Array.isArray(r.stops)?r.stops:[];navStepIndex=0;
+    const shell=$('mapShell');if(shell)shell.classList.add('routeReady');
+    return true;
+  }catch{return false}
+}
+async function rebuildActiveRouteFromJourney(){
+  if(exploreRouteGeoJSON?.coordinates?.length)return true;
+  if(restoreActiveRoute())return true;
+  if(!pos)return false;
+  let trip=null;try{trip=JSON.parse(localStorage.getItem('alpha_car_journey')||'null')}catch{}
+  if(!trip?.stops?.length)return false;
+  const i=Math.min(Number(trip.index||0),trip.stops.length-1),remaining=trip.stops.slice(i).filter(x=>Array.isArray(x.center));if(!remaining.length)return false;
+  try{
+    const route=await osrmRoute([[pos.longitude,pos.latitude],...remaining.map(x=>x.center)]);
+    exploreRouteGeoJSON=route.geometry;exploreRouteOrdered=remaining;exploreRouteSteps=(route.legs||[]).flatMap(leg=>leg.steps||[]).filter(st=>st?.maneuver?.location);navStepIndex=0;persistActiveRoute({restoredFromJourney:true});renderExploreRoute();updateNavigationOverlay();return true;
+  }catch{return false}
+}
 function maneuverIcon(step){const t=step?.maneuver?.type||'',m=step?.maneuver?.modifier||'';if(t==='arrive')return '●';if(t.includes('roundabout')||t==='rotary')return '⟳';if(t==='merge')return m.includes('left')?'↖':'↗';if(t==='on ramp'||t==='off ramp'||t==='on_ramp'||t==='off_ramp')return m.includes('left')?'↖':'↗';if(t==='fork')return m.includes('left')?'↖':'↗';if(m==='uturn')return '↶';if(m.includes('left'))return m.includes('slight')?'↖':'←';if(m.includes('right'))return m.includes('slight')?'↗':'→';return '↑'}
 function maneuverText(step){if(!step)return 'Segue a rota';const t=step.maneuver?.type||'',m=step.maneuver?.modifier||'',road=(step.name||'').trim(),exit=step.maneuver?.exit;let a='Segue em frente';if(t==='arrive')a='Chegaste ao destino';else if(t==='depart')a='Inicia o percurso';else if(t.includes('roundabout')||t==='rotary')a='Na rotunda'+(exit?' sai na '+exit+'.ª saída':'');else if(t==='merge')a='Entra na via'+(m.includes('left')?' pela esquerda':m.includes('right')?' pela direita':'');else if(t==='on ramp'||t==='on_ramp')a='Entra na rampa'+(m.includes('left')?' à esquerda':m.includes('right')?' à direita':'');else if(t==='off ramp'||t==='off_ramp')a='Sai pela rampa'+(m.includes('left')?' à esquerda':m.includes('right')?' à direita':'');else if(t==='fork')a='Mantém-te pela '+(m.includes('left')?'esquerda':'direita');else if(m==='uturn')a='Faz inversão de marcha';else if(m.includes('left'))a=m.includes('slight')?'Segue ligeiramente à esquerda':'Vira à esquerda';else if(m.includes('right'))a=m.includes('slight')?'Segue ligeiramente à direita':'Vira à direita';return road&&t!=='arrive'?a+' · '+road:a}
-function nearestUpcomingStep(){if(!exploreRouteSteps.length)return null;if(!pos)return exploreRouteSteps[Math.min(navStepIndex,exploreRouteSteps.length-1)];let bestI=navStepIndex,bestD=Infinity;for(let i=Math.max(0,navStepIndex-1);i<Math.min(exploreRouteSteps.length,navStepIndex+5);i++){const l=exploreRouteSteps[i]?.maneuver?.location;if(!l)continue;const d=hav(pos.latitude,pos.longitude,l[1],l[0]);if(d<bestD){bestD=d;bestI=i}}if(bestI>navStepIndex||bestD<35)navStepIndex=bestI;if(bestD<22&&navStepIndex<exploreRouteSteps.length-1)navStepIndex++;return exploreRouteSteps[Math.min(navStepIndex,exploreRouteSteps.length-1)]}
+function nearestUpcomingStep(){
+  if(!exploreRouteSteps.length)return null;
+  navStepIndex=Math.max(0,Math.min(navStepIndex,exploreRouteSteps.length-1));
+  while(navStepIndex<exploreRouteSteps.length-1&&exploreRouteSteps[navStepIndex]?.maneuver?.type==='depart')navStepIndex++;
+  let step=exploreRouteSteps[navStepIndex];if(!pos)return step;
+  const loc=step?.maneuver?.location;if(!loc)return step;
+  const d=hav(pos.latitude,pos.longitude,loc[1],loc[0]),speedMs=Number.isFinite(pos.speed)?Math.max(0,pos.speed):0,threshold=Math.max(32,Math.min(95,35+speedMs*1.7));
+  if(step?.maneuver?.type!=='arrive'&&navStepIndex<exploreRouteSteps.length-1){
+    const next=exploreRouteSteps[navStepIndex+1],nl=next?.maneuver?.location,nextD=nl?hav(pos.latitude,pos.longitude,nl[1],nl[0]):Infinity;
+    if(d<=threshold||(nextD<=Math.max(70,threshold)&&nextD+20<d)){navStepIndex++;step=exploreRouteSteps[navStepIndex]}
+  }
+  return step;
+}
 function distanceToStep(step){if(!step||!pos||!step.maneuver?.location)return null;const l=step.maneuver.location;return hav(pos.latitude,pos.longitude,l[1],l[0])}
 function routeRelevantReports(){if(!exploreRouteGeoJSON?.coordinates?.length)return[];return reports().filter(r=>reportIsRelevant(r)).map(r=>{let d=Infinity;for(let i=0;i<exploreRouteGeoJSON.coordinates.length;i+=Math.max(1,Math.floor(exploreRouteGeoJSON.coordinates.length/180))){const c=exploreRouteGeoJSON.coordinates[i],x=hav(r.lat,r.lon,c[1],c[0]);if(x<d)d=x}return{r,d}}).filter(x=>x.d<=180).sort((a,b)=>a.d-b.d).slice(0,12)}
-function renderRouteEvents(){routeEventMarkers.forEach(m=>m.remove());routeEventMarkers=[];if(!map)return;routeRelevantReports().forEach(({r})=>{const el=document.createElement('div');el.className='routeEventMarker '+(r.severity==='major'?'danger':'warn');el.textContent=({tree:'🌳',water:'💧',mud:'🌧️',closure:'🚧',sign:'🪧',parking:'🅿️',animal:'🐄',other:'⚠️'})[r.type]||'⚠️';const mk=new maplibregl.Marker({element:el}).setLngLat([r.lon,r.lat]).setPopup(new maplibregl.Popup({offset:18}).setHTML('<b>'+esc(types[r.type]||r.type)+'</b><br><span>'+esc(r.desc||'Report LIVE')+'</span>')).addTo(map);routeEventMarkers.push(mk)})}
+function renderRouteEvents(){routeEventMarkers.forEach(m=>m.remove());routeEventMarkers=[];if(!map)return;routeRelevantReports().forEach(({r})=>{const el=document.createElement('div');el.className='routeEventMarker '+(r.severity==='major'?'danger':'warn');el.innerHTML=reportSvg(r.type);const mk=new maplibregl.Marker({element:el}).setLngLat([r.lon,r.lat]).setPopup(new maplibregl.Popup({offset:18}).setHTML('<b>'+esc(types[r.type]||r.type)+'</b><br><span>'+esc(r.desc||'Report LIVE')+'</span>')).addTo(map);routeEventMarkers.push(mk)})}
 function nearestRouteEvent(){if(!pos)return null;return routeRelevantReports().map(x=>({r:x.r,d:hav(pos.latitude,pos.longitude,x.r.lat,x.r.lon)})).filter(x=>x.d<=1200).sort((a,b)=>a.d-b.d)[0]||null}
-function updateNavigationOverlay(){const m=navModeMeta(navigationMode),step=nearestUpcomingStep(),d=distanceToStep(step),evt=nearestRouteEvent();if($('navOverlayMode'))$('navOverlayMode').textContent=m.icon;if($('navOverlayFollow'))$('navOverlayFollow').textContent=navFollow?'◎ Seguir':'○ Livre';if($('navManeuverIcon'))$('navManeuverIcon').textContent=step?maneuverIcon(step):'↑';if($('navManeuverText'))$('navManeuverText').textContent=step?maneuverText(step):(exploreRouteGeoJSON?'Segue a linha azul':'Navegação livre');let meta=step?(d===null?'Próxima indicação':distanceLabel(d)+' · próxima indicação'):(liveNavActive?'GPS ativo · '+m.label:'Ativa a navegação para começar');if(evt)meta+=' · ⚠️ '+(types[evt.r.type]||evt.r.type)+' a '+distanceLabel(evt.d);if($('navManeuverMeta'))$('navManeuverMeta').textContent=meta;const sp=pos?filteredSpeed(pos):null;if($('navOverlaySpeed'))$('navOverlaySpeed').textContent=sp===null?'— km/h':sp.toFixed(0)+' km/h'}
-function updateLiveNavUI(){const b=$('liveNavBtn'),badge=$('mapLiveBadge'),follow=$('followGpsBtn'),shell=$('mapShell');if(b)b.textContent=liveNavActive?'Parar navegação na app':'Iniciar navegação na app';if(b)b.classList.toggle('purple',liveNavActive);if(badge)badge.classList.toggle('on',liveNavActive);if(follow)follow.textContent='Seguir GPS · '+(navFollow?'ON':'OFF');if(shell)shell.classList.toggle('liveNavigating',liveNavActive);if(userMarker&&userMarker.getElement())userMarker.getElement().classList.toggle('navActive',liveNavActive);if($('navRouteInfo'))$('navRouteInfo').textContent=liveNavActive?'Navegação LIVE ativa · a linha azul é o caminho a seguir; o registo já percorrido fica discreto a cinzento. O mapa acompanha a tua posição.':'A linha azul é o percurso a seguir. A navegação mostra a próxima manobra, distância e ocorrências LIVE da nossa comunidade junto à rota.';updateNavigationOverlay()}
-function toggleLiveNavigation(){if(liveNavActive){liveNavActive=false;updateLiveNavUI();return toast('Navegação na app parada')}liveNavActive=true;navFollow=true;updateLiveNavUI();if(watchId===null)toggleWatch();else if(pos)followCurrentPosition();toast('Navegação LIVE iniciada · '+navModeMeta(navigationMode).label)}
+function updateNavigationOverlay(){const m=navModeMeta(navigationMode),step=nearestUpcomingStep(),d=distanceToStep(step),evt=nearestRouteEvent();renderVehicleUI();if($('navOverlayFollow'))$('navOverlayFollow').textContent=navFollow?'◎ Seguir':'○ Livre';if($('navManeuverIcon'))$('navManeuverIcon').textContent=step?maneuverIcon(step):'↑';if($('navManeuverText'))$('navManeuverText').textContent=step?maneuverText(step):(exploreRouteGeoJSON?'Segue a linha azul':'Navegação livre');let meta=step?(d===null?(liveNavActive?'A aguardar posição GPS · próxima indicação':'Próxima indicação · inicia navegação para distância LIVE'):distanceLabel(d)+' · próxima indicação'):(liveNavActive?'GPS ativo · '+m.label:'Ativa a navegação para começar');if(evt)meta+=' · ⚠️ '+(types[evt.r.type]||evt.r.type)+' a '+distanceLabel(evt.d);if($('navManeuverMeta'))$('navManeuverMeta').textContent=meta;if($('navInlineManeuverText'))$('navInlineManeuverText').textContent=step?(maneuverIcon(step)+' '+maneuverText(step)):(exploreRouteGeoJSON?'↑ Segue a linha azul':'Sem rota ativa');if($('navInlineManeuverMeta'))$('navInlineManeuverMeta').textContent=meta;const sp=pos?filteredSpeed(pos):null;if($('navOverlaySpeed'))$('navOverlaySpeed').textContent=sp===null?'— km/h':sp.toFixed(0)+' km/h'}
+function updateLiveNavUI(){const b=$('liveNavBtn'),badge=$('mapLiveBadge'),follow=$('followGpsBtn'),shell=$('mapShell');if(b)b.textContent=liveNavActive?'Parar navegação na app':'Iniciar navegação na app';if(b)b.classList.toggle('purple',liveNavActive);if(badge)badge.classList.toggle('on',liveNavActive);if(follow)follow.textContent='Seguir GPS · '+(navFollow?'ON':'OFF');if(shell)shell.classList.toggle('liveNavigating',liveNavActive);if(userMarker&&userMarker.getElement())userMarker.getElement().classList.toggle('navActive',liveNavActive);if($('navRouteInfo'))$('navRouteInfo').textContent=liveNavActive?'Navegação LIVE ativa · a linha azul é o caminho a seguir; o registo já percorrido fica discreto a cinzento. O mapa acompanha a tua posição.':'A linha azul é o percurso a seguir. Assim que existe uma rota, a próxima manobra fica visível no próprio mapa; ao iniciar navegação, distância e instruções passam a atualizar com o GPS.';updateNavigationOverlay()}
+async function toggleLiveNavigation(){if(liveNavActive){liveNavActive=false;updateLiveNavUI();return toast('Navegação na app parada')}liveNavActive=true;navFollow=true;updateLiveNavUI();if(watchId===null)toggleWatch();if(!exploreRouteGeoJSON){const ok=await rebuildActiveRouteFromJourney();if(!ok)toast('Navegação LIVE ativa · calcula/recupera uma rota para veres a linha azul')}if(pos)followCurrentPosition();renderExploreRoute();toast('Navegação LIVE iniciada · '+navModeMeta(navigationMode).label)}
 function toggleNavFollow(){navFollow=!navFollow;updateLiveNavUI();if(navFollow&&pos)followCurrentPosition()}
 function clearLiveTrack(){navTrack=[];navTrackDistance=0;if($('navTrackDist'))$('navTrackDist').textContent='0 m';renderLiveTrack();toast('Registo GPS limpo')}
 function toggleMapFullscreen(){const shell=$('mapShell');if(!shell)return;const doc=document;if(doc.fullscreenElement){doc.exitFullscreen&&doc.exitFullscreen();return}if(shell.requestFullscreen){shell.requestFullscreen().then(()=>setTimeout(()=>{map&&map.resize();if(navFollow&&pos)followCurrentPosition()},120)).catch(()=>toggleMapFallbackFullscreen());return}toggleMapFallbackFullscreen()}
@@ -1493,12 +1680,14 @@ function renderExploreRoute(retry=0){
   if(!map.isStyleLoaded()){if(retry<12)setTimeout(()=>renderExploreRoute(retry+1),120);return;}
   ['explore-ai-route-arrows','explore-ai-route','explore-ai-route-halo'].forEach(id=>{if(map.getLayer(id))map.removeLayer(id)});
   if(map.getSource('explore-ai-route'))map.removeSource('explore-ai-route');
-  if(!exploreRouteGeoJSON)return;
+  if(!exploreRouteGeoJSON){const shell=$('mapShell');if(shell)shell.classList.remove('routeReady');return;}
+  const shell=$('mapShell');if(shell)shell.classList.add('routeReady');
   map.addSource('explore-ai-route',{type:'geojson',data:{type:'Feature',geometry:exploreRouteGeoJSON,properties:{}}});
-  map.addLayer({id:'explore-ai-route-halo',type:'line',source:'explore-ai-route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ffffff','line-width':['interpolate',['linear'],['zoom'],9,8,16,15],'line-opacity':.95}});
-  map.addLayer({id:'explore-ai-route',type:'line',source:'explore-ai-route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#2f8cff','line-width':['interpolate',['linear'],['zoom'],9,5,16,9],'line-opacity':1}});
+  map.addLayer({id:'explore-ai-route-halo',type:'line',source:'explore-ai-route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ffffff','line-width':['interpolate',['linear'],['zoom'],9,11,16,17],'line-opacity':.95}});
+  map.addLayer({id:'explore-ai-route',type:'line',source:'explore-ai-route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#1976ff','line-width':['interpolate',['linear'],['zoom'],9,7,16,12],'line-opacity':1}});
   map.addLayer({id:'explore-ai-route-arrows',type:'symbol',source:'explore-ai-route',layout:{'symbol-placement':'line','symbol-spacing':110,'text-field':'›','text-size':22,'text-rotation-alignment':'map','text-keep-upright':false,'text-allow-overlap':true},paint:{'text-color':'#ffffff','text-halo-color':'#2f8cff','text-halo-width':2}});
   renderRouteEvents();updateNavigationOverlay();
+  const shell2=$('mapShell');if(shell2)shell2.classList.add('routeReady');
 }
 function showExploreOnMap(onlySelected){if(!explorePlaces.length)return toast('Primeiro procura locais para visitar');if(onlySelected&&!exploreSelected.size)return toast('Ainda não escolheste locais');go('field');setTimeout(()=>{renderExploreMarkers(onlySelected);renderExploreRoute();const arr=explorePlaces.filter(p=>!onlySelected||exploreSelected.has(p.id));if(!map||!arr.length)return;const b=new maplibregl.LngLatBounds();arr.forEach(p=>b.extend(p.center));map.fitBounds(b,{padding:55,maxZoom:14})},220)}
 function showOneExploreOnMap(id){const p=explorePlaces.find(x=>x.id===id);if(!p)return;go('field');setTimeout(()=>{renderExploreMarkers();renderExploreRoute();if(map)map.easeTo({center:p.center,zoom:16})},220)}
@@ -1518,13 +1707,13 @@ async function buildExploreAIRoute(){
   try{
     const raw=[start,...chosen.map(p=>p.center)],table=await osrmTable(raw),order=bestVisitOrder(table.distances,chosen.length),ordered=order.map(i=>chosen[i]),optPoints=[start,...ordered.map(p=>p.center)];
     const [optRoute,baseRoute]=await Promise.all([osrmRoute(optPoints),osrmRoute(raw)]);
-    exploreRouteGeoJSON=optRoute.geometry;exploreRouteOrdered=ordered.slice();exploreRouteSteps=(optRoute.legs||[]).flatMap(leg=>leg.steps||[]).filter(st=>st?.maneuver?.location);navStepIndex=0;
+    exploreRouteGeoJSON=optRoute.geometry;exploreRouteOrdered=ordered.slice();exploreRouteSteps=(optRoute.legs||[]).flatMap(leg=>leg.steps||[]).filter(st=>st?.maneuver?.location);navStepIndex=0;persistActiveRoute({distance:optRoute.distance,duration:optRoute.duration});
     const km=optRoute.distance/1000,mins=Math.round(optRoute.duration/60),saved=Math.max(0,(baseRoute.distance-optRoute.distance)/1000);
     if(box){box.innerHTML='<div class="eyebrow">AI EXPERIENCE · ROTA OTIMIZADA</div><h3 style="margin:7px 0">Menos quilómetros, menor consumo</h3><span class="routeStat">'+km.toFixed(1)+' km</span><span class="routeStat">≈ '+mins+' min</span>'+(saved>=.1?'<span class="routeStat">− '+saved.toFixed(1)+' km vs ordem escolhida</span>':'')+'<p class="small muted">Sequência calculada pela distância rodoviária disponível. A rota abre automaticamente no GO; a navegação fica disponível junto ao mapa e podes escolher a aplicação a utilizar.</p><ol>'+ordered.map(p=>'<li><b>'+esc(p.name)+'</b></li>').join('')+'</ol>'}
     toast('AI Experience preparou a rota');showExploreAIRouteOnMap();
   }catch(e){if(box)box.innerHTML='<b>Não foi possível calcular a rota agora.</b><p class="small muted">Manténs os locais selecionados e podes tentar novamente.</p>';toast('Serviço de rotas indisponível')}
 }
-function showExploreAIRouteOnMap(){if(!exploreRouteGeoJSON)return toast('Calcula primeiro a rota');go('field');setTimeout(()=>{if(!map)return;map.resize();renderExploreMarkers(true);renderExploreRoute(0);const b=new maplibregl.LngLatBounds();exploreRouteGeoJSON.coordinates.forEach(c=>b.extend(c));map.fitBounds(b,{padding:70,maxZoom:15,duration:700});const card=$('exploreGoNavCard'),title=$('exploreGoNavTitle'),text=$('exploreGoNavText');if(card)card.style.display='block';if(title)title.textContent=exploreRouteOrdered.length+' '+(exploreRouteOrdered.length===1?'paragem':'paragens')+' · rota pronta';if(text)text.textContent='A rota AI Experience está desenhada no mapa. Escolhe a aplicação de navegação quando estiveres pronto para iniciar a rota.';setTimeout(()=>renderExploreRoute(0),450)},380)}
+function showExploreAIRouteOnMap(){if(!exploreRouteGeoJSON)return toast('Calcula primeiro a rota');go('field');setTimeout(()=>{const shell=$('mapShell');if(shell)shell.classList.add('routeReady');if(!map)return;map.resize();renderExploreMarkers(true);renderExploreRoute(0);updateNavigationOverlay();const b=new maplibregl.LngLatBounds();exploreRouteGeoJSON.coordinates.forEach(c=>b.extend(c));map.fitBounds(b,{padding:70,maxZoom:15,duration:700});const card=$('exploreGoNavCard'),title=$('exploreGoNavTitle'),text=$('exploreGoNavText');if(card)card.style.display='block';if(title)title.textContent=exploreRouteOrdered.length+' '+(exploreRouteOrdered.length===1?'paragem':'paragens')+' · rota pronta';if(text)text.textContent='A rota azul está guardada neste dispositivo e permanece disponível ao regressares à app. Inicia a navegação para receberes instruções em tempo real.';setTimeout(()=>renderExploreRoute(0),450)},380)}
 function carPlatform(){const ua=navigator.userAgent||'';if(/iPhone|iPad|iPod/i.test(ua))return 'ios';if(/Android/i.test(ua))return 'android';return 'web'}
 function carNavUrl(p,provider='waze'){if(!p)return '';const lat=p.center[1],lon=p.center[0];if(provider==='waze')return 'https://waze.com/ul?ll='+encodeURIComponent(lat+','+lon)+'&navigate=yes&utm_source=outdoor_experience';if(provider==='apple')return 'https://maps.apple.com/directions?destination='+encodeURIComponent(lat+','+lon)+'&mode=driving';return 'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(lat+','+lon)+'&travelmode=driving&dir_action=navigate'}
 function openCarNavUrl(url){if(!url)return;const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
@@ -2479,6 +2668,20 @@ async function shareExperience(){
 }
 async function copyExperience(){try{await navigator.clipboard.writeText(experienceText());toast('Resumo copiado')}catch{toast('Não foi possível copiar')}}
 
+async function checkForFreshBuild(force=false){
+  if(!navigator.onLine)return;const now=Date.now();if(!force&&now-lastFreshBuildCheck<30000)return;lastFreshBuildCheck=now;
+  try{
+    const r=await fetch('./index.html?fresh='+now,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});if(!r.ok)return;const text=await r.text(),m=text.match(/<meta name="alpha-version" content="([^"]+)"/i);if(m&&m[1]&&m[1]!==APP_VERSION){location.reload();}
+  }catch{}
+}
+function setupFreshPWA(){
+  if(!('serviceWorker'in navigator))return;
+  navigator.serviceWorker.register('./sw.js?v='+encodeURIComponent(APP_VERSION),{updateViaCache:'none'}).then(reg=>{reg.update().catch(()=>{});navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!sessionStorage.getItem('alpha_controller_reload')){sessionStorage.setItem('alpha_controller_reload','1');location.reload()}})}).catch(()=>{});
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){navigator.serviceWorker.getRegistration().then(r=>r&&r.update().catch(()=>{}));checkForFreshBuild(true);restoreActiveRoute();if(map)renderExploreRoute();}});
+  window.addEventListener('pageshow',()=>checkForFreshBuild(false));window.addEventListener('focus',()=>checkForFreshBuild(false));
+}
+restoreActiveRoute();
+renderVehicleUI();
 bootAuth();renderReports();loadActivity();loadExperience();syncReview();
 try{currentTester=localStorage.getItem(TESTER_KEY)||'Filipe'}catch{}
 try{destination=JSON.parse(localStorage.getItem(DEST_KEY)||'null');if(destination){$('destinationInput').value=destination.query||'';$('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span> · guardado'}}catch{}
@@ -2492,7 +2695,16 @@ try{
 renderBudgetAdvice();
 try{let cc=JSON.parse(localStorage.getItem(scopedTrailCacheKey())||'null');if(cc&&cc.trails&&Date.now()-cc.time<21600000){nearbyTrails=cc.trails;renderTrails();$('trailStatus').textContent=nearbyTrails.length+' trails carregados do cache deste destino.'}}catch{}
 fetchWeather(false);
-if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+setupFreshPWA();checkForFreshBuild(false);
+
+function adaptOrientation(){
+  const landscape=window.matchMedia&&window.matchMedia('(orientation: landscape)').matches;
+  document.documentElement.dataset.orientation=landscape?'landscape':'portrait';
+  setTimeout(()=>{if(map){map.resize();if(liveNavActive&&navFollow&&pos)followCurrentPosition();else if(exploreRouteGeoJSON){try{const b=new maplibregl.LngLatBounds();exploreRouteGeoJSON.coordinates.forEach(c=>b.extend(c));map.fitBounds(b,{padding:landscape?70:55,maxZoom:16,duration:350})}catch{}}updateNavigationOverlay();}},140);
+}
+window.addEventListener('orientationchange',adaptOrientation);
+window.addEventListener('resize',()=>{clearTimeout(window._orientationResize);window._orientationResize=setTimeout(adaptOrientation,120)});
+adaptOrientation();
 </script>
 </body>
 </html>
