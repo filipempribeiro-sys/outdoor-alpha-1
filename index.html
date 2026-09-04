@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="2.1.0">
+<meta name="alpha-version" content="2.1.1">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 2.1.0 — Explore Conversational AI</title>
+<title>Project Alpha 2.1.1 — Navigation Stability Fix</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -218,6 +218,31 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 }
 @media (orientation: portrait){
   #field.active .mapShell{height:auto}
+}
+
+
+/* Alpha 2.1.1 — NAVIGATION STABILITY + CLEAN MARKER */
+#field.active #mapCard{overflow:visible;isolation:isolate}
+#field.active .mapShell{isolation:isolate;contain:layout paint;overflow:hidden;min-height:500px}
+#field.active #realMap{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;z-index:1}
+#field.active .mapNavOverlay{z-index:6}
+#field.active .mapFsBtn{z-index:7}
+#field.active .mapToolbar,#field.active .mapNavHud,#field.active #navRouteInfo{position:relative;z-index:2;background:var(--panel)}
+.userMarker{width:40px!important;height:40px!important;padding:3px!important;background:rgba(255,255,255,.98)!important;border:2px solid rgba(255,255,255,.98)!important;box-shadow:0 4px 14px #0007,0 0 0 5px rgba(47,140,255,.20)!important}
+.userMarker .navVehicleIcon{width:30px!important;height:30px!important;filter:none!important}
+.userMarker.navActive{box-shadow:0 5px 18px #0008,0 0 0 7px rgba(57,214,155,.22)!important}
+.mapShell.routeReady .mapNavOverlay:not(.forceHidden){display:flex}
+.navManeuver{max-width:min(370px,72vw)!important;padding:10px 12px!important}
+.navManeuverText strong{font-size:16px!important}
+.navManeuverText small{font-size:12px!important}
+@media (orientation:portrait){
+  #field.active .mapShell{height:min(62vh,560px)!important;min-height:430px!important}
+  #field.active #realMap{height:100%!important}
+  .mapNavOverlay{padding:10px!important}
+  .mapNavOverlayTop{padding-right:58px!important}
+  .mapNavOverlayBottom{gap:7px!important;align-items:flex-end!important}
+  .navGlassBtn{min-width:46px!important;min-height:46px!important;padding:8px 10px!important}
+  .quickReportBtn{width:48px!important;height:48px!important}
 }
 
 </style>
@@ -884,7 +909,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[];
 let exploreChatHistory=[],exploreChatStarted=false;
-const APP_VERSION='2.1.0',ACTIVE_ROUTE_KEY='alpha_active_route_v4';
+const APP_VERSION='2.1.1',ACTIVE_ROUTE_KEY='alpha_active_route_v4';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1161,7 +1186,7 @@ function vehicleSvg(id=navVehicleStyle){const v=vehicleDef(id),c=v.color;let inn
  else if(v.kind==='moto')inner='<ellipse cx="32" cy="13" rx="8" ry="10" fill="#222"/><ellipse cx="32" cy="51" rx="8" ry="10" fill="#222"/><path d="M32 18 22 30 27 38 32 45 37 38 42 30Z" fill="'+c+'" stroke="#16232c" stroke-width="3"/><rect x="27" y="26" width="10" height="12" rx="4" fill="#d8ecf5"/>';
  else if(v.kind==='bike')inner='<circle cx="32" cy="12" r="8" fill="none" stroke="#20313a" stroke-width="4"/><circle cx="32" cy="52" r="8" fill="none" stroke="#20313a" stroke-width="4"/><path d="M32 20 24 32 32 42 40 32Z" fill="none" stroke="'+c+'" stroke-width="5"/><path d="M22 31h20" stroke="#20313a" stroke-width="3"/>';
  else if(v.kind==='scooter')inner='<circle cx="32" cy="13" r="7" fill="#24323a"/><circle cx="32" cy="52" r="7" fill="#24323a"/><rect x="27" y="18" width="10" height="28" rx="5" fill="'+c+'"/><path d="M22 20h20M32 20v-8" stroke="#16232c" stroke-width="3"/>';
- else if(v.kind==='walk')inner='<circle cx="32" cy="13" r="7" fill="'+c+'"/><path d="M32 21v16m0-7-10 9m10-9 10 9m-10-2-8 15m8-15 8 15" stroke="'+c+'" stroke-width="6" stroke-linecap="round" fill="none"/>';
+ else if(v.kind==='walk')inner='<circle cx="32" cy="32" r="22" fill="'+c+'"/><circle cx="32" cy="20" r="5" fill="#fff"/><path d="M32 26v12m0-7-8 6m8-6 8 6m-8 1-7 11m7-11 7 11" stroke="#fff" stroke-width="4.5" stroke-linecap="round" fill="none"/>';
  return '<svg class="vehicleSvg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>'}
 const REPORT_META={
 traffic:{label:'Trânsito',symbol:'cars',color:'#ef5350'},police:{label:'Polícia',symbol:'police',color:'#42a5f5'},crash:{label:'Acidente',symbol:'crash',color:'#ef5350'},hazard:{label:'Perigo',symbol:'hazard',color:'#fbc02d'},roadworks:{label:'Obras',symbol:'cone',color:'#fb8c00'},blocked:{label:'Bloqueado',symbol:'barrier',color:'#ef6c00'},weather:{label:'Mau tempo',symbol:'weather',color:'#78909c'},fire:{label:'Incêndio',symbol:'fire',color:'#ff7043'},tree:{label:'Árvore / obstáculo',symbol:'tree',color:'#43a047'},water:{label:'Água',symbol:'water',color:'#29b6f6'},mud:{label:'Lama / inundação',symbol:'water',color:'#6d8fa3'},landslide:{label:'Deslizamento',symbol:'rocks',color:'#8d6e63'},closure:{label:'Corte',symbol:'barrier',color:'#ef6c00'},sign:{label:'Sinalização',symbol:'sign',color:'#ffa726'},parking:{label:'Estacionamento',symbol:'parking',color:'#1976d2'},animal:{label:'Animal',symbol:'animal',color:'#8d6e63'},other:{label:'Outro',symbol:'hazard',color:'#90a4ae'}};
@@ -1189,7 +1214,7 @@ function closeQuickReport(){if($('quickReport'))$('quickReport').style.display='
 function chooseQuickReport(type){closeQuickReport();if($('rtype'))$('rtype').value=type;go('report');setTimeout(()=>{const el=$('rtype');if(el)el.scrollIntoView({behavior:'smooth',block:'center'})},100)}
 
 function toast(m){let t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.remove('show'),2800)}
-function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();if(map){map.resize();renderMapReports();renderTrailLayer();renderSelectedTrail();renderExploreMarkers();renderExploreRoute();renderLiveTrack();}},120);if(id==='experience')syncReview()}
+function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();if(map){map.resize();renderMapReports();renderTrailLayer();renderSelectedTrail();renderExploreMarkers();renderExploreRoute();renderLiveTrack();setTimeout(()=>{map.resize();if(exploreRouteGeoJSON&&!liveNavActive)fitActiveRoute(false)},180)}},120);if(id==='experience')syncReview()}
 function reports(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
 function saveReports(r){localStorage.setItem(KEY,JSON.stringify(r))}
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -1876,7 +1901,7 @@ function distanceToStep(step){if(!step||!pos||!step.maneuver?.location)return nu
 function routeRelevantReports(){if(!exploreRouteGeoJSON?.coordinates?.length)return[];return reports().filter(r=>reportIsRelevant(r)).map(r=>{let d=Infinity;for(let i=0;i<exploreRouteGeoJSON.coordinates.length;i+=Math.max(1,Math.floor(exploreRouteGeoJSON.coordinates.length/180))){const c=exploreRouteGeoJSON.coordinates[i],x=hav(r.lat,r.lon,c[1],c[0]);if(x<d)d=x}return{r,d}}).filter(x=>x.d<=180).sort((a,b)=>a.d-b.d).slice(0,12)}
 function renderRouteEvents(){routeEventMarkers.forEach(m=>m.remove());routeEventMarkers=[];if(!map)return;routeRelevantReports().forEach(({r})=>{const el=document.createElement('div');el.className='routeEventMarker '+(r.severity==='major'?'danger':'warn');el.innerHTML=reportSvg(r.type);const mk=new maplibregl.Marker({element:el}).setLngLat([r.lon,r.lat]).setPopup(new maplibregl.Popup({offset:18}).setHTML('<b>'+esc(types[r.type]||r.type)+'</b><br><span>'+esc(r.desc||'Report LIVE')+'</span>')).addTo(map);routeEventMarkers.push(mk)})}
 function nearestRouteEvent(){if(!pos)return null;return routeRelevantReports().map(x=>({r:x.r,d:hav(pos.latitude,pos.longitude,x.r.lat,x.r.lon)})).filter(x=>x.d<=1200).sort((a,b)=>a.d-b.d)[0]||null}
-function updateNavigationOverlay(){const m=navModeMeta(navigationMode),step=nearestUpcomingStep(),d=distanceToStep(step),evt=nearestRouteEvent();renderVehicleUI();if($('navOverlayFollow'))$('navOverlayFollow').textContent=navFollow?'◎ Seguir':'○ Livre';if($('navManeuverIcon'))$('navManeuverIcon').textContent=step?maneuverIcon(step):'↑';if($('navManeuverText'))$('navManeuverText').textContent=step?maneuverText(step):(exploreRouteGeoJSON?'Segue a linha azul':'Navegação livre');let meta=step?(d===null?(liveNavActive?'A aguardar posição GPS · próxima indicação':'Próxima indicação · inicia navegação para distância LIVE'):distanceLabel(d)+' · próxima indicação'):(liveNavActive?'GPS ativo · '+m.label:'Ativa a navegação para começar');if(evt)meta+=' · ⚠️ '+(types[evt.r.type]||evt.r.type)+' a '+distanceLabel(evt.d);if($('navManeuverMeta'))$('navManeuverMeta').textContent=meta;if($('navInlineManeuverText'))$('navInlineManeuverText').textContent=step?(maneuverIcon(step)+' '+maneuverText(step)):(exploreRouteGeoJSON?'↑ Segue a linha azul':'Sem rota ativa');if($('navInlineManeuverMeta'))$('navInlineManeuverMeta').textContent=meta;const sp=pos?filteredSpeed(pos):null;if($('navOverlaySpeed'))$('navOverlaySpeed').textContent=sp===null?'— km/h':sp.toFixed(0)+' km/h'}
+function updateNavigationOverlay(){const m=navModeMeta(navigationMode),step=nearestUpcomingStep(),d=distanceToStep(step),evt=nearestRouteEvent(),prematureArrival=!!(step&&step.maneuver?.type==='arrive'&&d!==null&&d>55);renderVehicleUI();if($('navOverlayFollow'))$('navOverlayFollow').textContent=navFollow?'◎ Seguir':'○ Livre';if($('navManeuverIcon'))$('navManeuverIcon').textContent=prematureArrival?'↑':(step?maneuverIcon(step):'↑');if($('navManeuverText'))$('navManeuverText').textContent=prematureArrival?'Segue a rota':(step?maneuverText(step):(exploreRouteGeoJSON?'Segue a linha azul':'Navegação livre'));let meta=step?(d===null?(liveNavActive?'A aguardar posição GPS · próxima indicação':'Próxima indicação · inicia navegação para distância LIVE'):distanceLabel(d)+(prematureArrival?' · destino mais à frente':' · próxima indicação')):(liveNavActive?'GPS ativo · '+m.label:'Ativa a navegação para começar');if(evt)meta+=' · ⚠️ '+(types[evt.r.type]||evt.r.type)+' a '+distanceLabel(evt.d);if($('navManeuverMeta'))$('navManeuverMeta').textContent=meta;if($('navInlineManeuverText'))$('navInlineManeuverText').textContent=step?(prematureArrival?'↑ Segue a rota':maneuverIcon(step)+' '+maneuverText(step)):(exploreRouteGeoJSON?'↑ Segue a linha azul':'Sem rota ativa');if($('navInlineManeuverMeta'))$('navInlineManeuverMeta').textContent=meta;const sp=pos?filteredSpeed(pos):null;if($('navOverlaySpeed'))$('navOverlaySpeed').textContent=sp===null?'— km/h':sp.toFixed(0)+' km/h'}
 function updateLiveNavUI(){const b=$('liveNavBtn'),badge=$('mapLiveBadge'),follow=$('followGpsBtn'),shell=$('mapShell');if(b)b.textContent=liveNavActive?'Parar navegação na app':'Iniciar navegação na app';if(b)b.classList.toggle('purple',liveNavActive);if(badge)badge.classList.toggle('on',liveNavActive);if(follow)follow.textContent='Seguir GPS · '+(navFollow?'ON':'OFF');if(shell)shell.classList.toggle('liveNavigating',liveNavActive);if(userMarker&&userMarker.getElement())userMarker.getElement().classList.toggle('navActive',liveNavActive);if($('navRouteInfo'))$('navRouteInfo').textContent=liveNavActive?'Navegação LIVE ativa · a linha azul é o caminho a seguir; o registo já percorrido fica discreto a cinzento. O mapa acompanha a tua posição.':'A linha azul é o percurso a seguir. Assim que existe uma rota, a próxima manobra fica visível no próprio mapa; ao iniciar navegação, distância e instruções passam a atualizar com o GPS.';updateNavigationOverlay()}
 async function toggleLiveNavigation(){if(liveNavActive){liveNavActive=false;updateLiveNavUI();return toast('Navegação na app parada')}liveNavActive=true;navFollow=true;updateLiveNavUI();if(watchId===null)toggleWatch();if(!exploreRouteGeoJSON){const ok=await rebuildActiveRouteFromJourney();if(!ok)toast('Navegação LIVE ativa · calcula/recupera uma rota para veres a linha azul')}if(pos)followCurrentPosition();renderExploreRoute();toast('Navegação LIVE iniciada · '+navModeMeta(navigationMode).label)}
 function toggleNavFollow(){navFollow=!navFollow;updateLiveNavUI();if(navFollow&&pos)followCurrentPosition()}
@@ -1885,19 +1910,30 @@ function toggleMapFullscreen(){const shell=$('mapShell');if(!shell)return;const 
 function toggleMapFallbackFullscreen(){const shell=$('mapShell');if(!shell)return;mapFallbackFullscreen=!mapFallbackFullscreen;shell.classList.toggle('mapShellFallbackFull',mapFallbackFullscreen);document.body.style.overflow=mapFallbackFullscreen?'hidden':'';setTimeout(()=>{if(map){map.resize();if(navFollow&&pos)followCurrentPosition()}updateNavigationOverlay()},120)}
 function exitMapFullscreen(){if(document.fullscreenElement){document.exitFullscreen&&document.exitFullscreen();return}if(mapFallbackFullscreen)toggleMapFallbackFullscreen()}
 document.addEventListener('fullscreenchange',()=>{setTimeout(()=>{map&&map.resize();if(navFollow&&pos)followCurrentPosition();updateNavigationOverlay()},120)});
+function fitActiveRoute(force=false){
+  if(!map||!exploreRouteGeoJSON?.coordinates?.length)return;
+  if(liveNavActive&&!force)return;
+  try{
+    const b=new maplibregl.LngLatBounds();
+    exploreRouteGeoJSON.coordinates.forEach(c=>b.extend(c));
+    map.fitBounds(b,{padding:{top:95,bottom:85,left:48,right:48},maxZoom:15.5,duration:500});
+  }catch(e){console.warn('fitActiveRoute',e)}
+}
 function renderExploreRoute(retry=0){
   if(!map)return;
-  if(!map.isStyleLoaded()){if(retry<12)setTimeout(()=>renderExploreRoute(retry+1),120);return;}
-  ['explore-ai-route-arrows','explore-ai-route','explore-ai-route-halo'].forEach(id=>{if(map.getLayer(id))map.removeLayer(id)});
-  if(map.getSource('explore-ai-route'))map.removeSource('explore-ai-route');
-  if(!exploreRouteGeoJSON){const shell=$('mapShell');if(shell)shell.classList.remove('routeReady');return;}
+  if(!map.isStyleLoaded()){if(retry<20)setTimeout(()=>renderExploreRoute(retry+1),140);return;}
+  if(!exploreRouteGeoJSON?.coordinates?.length){const shell=$('mapShell');if(shell)shell.classList.remove('routeReady');return;}
   const shell=$('mapShell');if(shell)shell.classList.add('routeReady');
-  map.addSource('explore-ai-route',{type:'geojson',data:{type:'Feature',geometry:exploreRouteGeoJSON,properties:{}}});
-  map.addLayer({id:'explore-ai-route-halo',type:'line',source:'explore-ai-route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ffffff','line-width':['interpolate',['linear'],['zoom'],9,11,16,17],'line-opacity':.95}});
-  map.addLayer({id:'explore-ai-route',type:'line',source:'explore-ai-route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#1976ff','line-width':['interpolate',['linear'],['zoom'],9,7,16,12],'line-opacity':1}});
-  map.addLayer({id:'explore-ai-route-arrows',type:'symbol',source:'explore-ai-route',layout:{'symbol-placement':'line','symbol-spacing':110,'text-field':'›','text-size':22,'text-rotation-alignment':'map','text-keep-upright':false,'text-allow-overlap':true},paint:{'text-color':'#ffffff','text-halo-color':'#2f8cff','text-halo-width':2}});
+  const data={type:'Feature',geometry:exploreRouteGeoJSON,properties:{}};
+  try{
+    let src=map.getSource('explore-ai-route');
+    if(src&&src.setData)src.setData(data);else map.addSource('explore-ai-route',{type:'geojson',data});
+    if(!map.getLayer('explore-ai-route-halo'))map.addLayer({id:'explore-ai-route-halo',type:'line',source:'explore-ai-route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ffffff','line-width':['interpolate',['linear'],['zoom'],9,12,16,18],'line-opacity':.96}});
+    if(!map.getLayer('explore-ai-route'))map.addLayer({id:'explore-ai-route',type:'line',source:'explore-ai-route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#1976ff','line-width':['interpolate',['linear'],['zoom'],9,8,16,13],'line-opacity':1}});
+    if(!map.getLayer('explore-ai-route-arrows'))map.addLayer({id:'explore-ai-route-arrows',type:'symbol',source:'explore-ai-route',layout:{'symbol-placement':'line','symbol-spacing':115,'text-field':'›','text-size':22,'text-rotation-alignment':'map','text-keep-upright':false,'text-allow-overlap':true},paint:{'text-color':'#ffffff','text-halo-color':'#1976ff','text-halo-width':2}});
+    ['explore-ai-route-halo','explore-ai-route','explore-ai-route-arrows'].forEach(id=>{if(map.getLayer(id))map.moveLayer(id)});
+  }catch(e){console.warn('route render retry',e);if(retry<8)setTimeout(()=>renderExploreRoute(retry+1),180);return;}
   renderRouteEvents();updateNavigationOverlay();
-  const shell2=$('mapShell');if(shell2)shell2.classList.add('routeReady');
 }
 function showExploreOnMap(onlySelected){if(!explorePlaces.length)return toast('Primeiro procura locais para visitar');if(onlySelected&&!exploreSelected.size)return toast('Ainda não escolheste locais');go('field');setTimeout(()=>{renderExploreMarkers(onlySelected);renderExploreRoute();const arr=explorePlaces.filter(p=>!onlySelected||exploreSelected.has(p.id));if(!map||!arr.length)return;const b=new maplibregl.LngLatBounds();arr.forEach(p=>b.extend(p.center));map.fitBounds(b,{padding:55,maxZoom:14})},220)}
 function showOneExploreOnMap(id){const p=explorePlaces.find(x=>x.id===id);if(!p)return;go('field');setTimeout(()=>{renderExploreMarkers();renderExploreRoute();if(map)map.easeTo({center:p.center,zoom:16})},220)}
@@ -1923,7 +1959,7 @@ async function buildExploreAIRoute(){
     toast('AI Experience preparou a rota');showExploreAIRouteOnMap();
   }catch(e){if(box)box.innerHTML='<b>Não foi possível calcular a rota agora.</b><p class="small muted">Manténs os locais selecionados e podes tentar novamente.</p>';toast('Serviço de rotas indisponível')}
 }
-function showExploreAIRouteOnMap(){if(!exploreRouteGeoJSON)return toast('Calcula primeiro a rota');go('field');setTimeout(()=>{const shell=$('mapShell');if(shell)shell.classList.add('routeReady');if(!map)return;map.resize();renderExploreMarkers(true);renderExploreRoute(0);updateNavigationOverlay();const b=new maplibregl.LngLatBounds();exploreRouteGeoJSON.coordinates.forEach(c=>b.extend(c));map.fitBounds(b,{padding:70,maxZoom:15,duration:700});const card=$('exploreGoNavCard'),title=$('exploreGoNavTitle'),text=$('exploreGoNavText');if(card)card.style.display='block';if(title)title.textContent=exploreRouteOrdered.length+' '+(exploreRouteOrdered.length===1?'paragem':'paragens')+' · rota pronta';if(text)text.textContent='A rota azul está guardada neste dispositivo e permanece disponível ao regressares à app. Inicia a navegação para receberes instruções em tempo real.';setTimeout(()=>renderExploreRoute(0),450)},380)}
+function showExploreAIRouteOnMap(){if(!exploreRouteGeoJSON)return toast('Calcula primeiro a rota');go('field');setTimeout(()=>{const shell=$('mapShell');if(shell)shell.classList.add('routeReady');if(!map)return;map.resize();renderExploreMarkers(true);renderExploreRoute(0);updateNavigationOverlay();fitActiveRoute(true);const card=$('exploreGoNavCard'),title=$('exploreGoNavTitle'),text=$('exploreGoNavText');if(card)card.style.display='block';if(title)title.textContent=exploreRouteOrdered.length+' '+(exploreRouteOrdered.length===1?'paragem':'paragens')+' · rota pronta';if(text)text.textContent='A rota azul está guardada neste dispositivo e permanece disponível ao regressares à app. Inicia a navegação para receberes instruções em tempo real.';setTimeout(()=>renderExploreRoute(0),450)},380)}
 function carPlatform(){const ua=navigator.userAgent||'';if(/iPhone|iPad|iPod/i.test(ua))return 'ios';if(/Android/i.test(ua))return 'android';return 'web'}
 function carNavUrl(p,provider='waze'){if(!p)return '';const lat=p.center[1],lon=p.center[0];if(provider==='waze')return 'https://waze.com/ul?ll='+encodeURIComponent(lat+','+lon)+'&navigate=yes&utm_source=outdoor_experience';if(provider==='apple')return 'https://maps.apple.com/directions?destination='+encodeURIComponent(lat+','+lon)+'&mode=driving';return 'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(lat+','+lon)+'&travelmode=driving&dir_action=navigate'}
 function openCarNavUrl(url){if(!url)return;const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
@@ -2973,7 +3009,7 @@ setupFreshPWA();checkForFreshBuild(false);
 function adaptOrientation(){
   const landscape=window.matchMedia&&window.matchMedia('(orientation: landscape)').matches;
   document.documentElement.dataset.orientation=landscape?'landscape':'portrait';
-  setTimeout(()=>{if(map){map.resize();if(liveNavActive&&navFollow&&pos)followCurrentPosition();else if(exploreRouteGeoJSON){try{const b=new maplibregl.LngLatBounds();exploreRouteGeoJSON.coordinates.forEach(c=>b.extend(c));map.fitBounds(b,{padding:landscape?70:55,maxZoom:16,duration:350})}catch{}}updateNavigationOverlay();}},140);
+  setTimeout(()=>{if(map){map.resize();if(liveNavActive&&navFollow&&pos)followCurrentPosition();else if(exploreRouteGeoJSON){fitActiveRoute(false)}updateNavigationOverlay();}},140);
 }
 window.addEventListener('orientationchange',adaptOrientation);
 window.addEventListener('resize',()=>{clearTimeout(window._orientationResize);window._orientationResize=setTimeout(adaptOrientation,120)});
