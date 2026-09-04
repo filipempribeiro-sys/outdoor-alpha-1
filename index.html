@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="2.0.0">
+<meta name="alpha-version" content="2.0.5">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 2.0.4 — GPS Weather Header</title>
+<title>Project Alpha 2.0.5 — GPS Weather Header Stable</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -866,7 +866,7 @@ let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareF
 let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,trailDetailPhotos=[],destination=null,experiencePlaces={monuments:[],meals:[],stays:[]},currentTester='Filipe',smartChoices={monuments:[],meals:[],stays:[]};
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[];
-const APP_VERSION='2.0.4',ACTIVE_ROUTE_KEY='alpha_active_route_v4';
+const APP_VERSION='2.0.5',ACTIVE_ROUTE_KEY='alpha_active_route_v4';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -2784,16 +2784,18 @@ async function shareExperience(){
 async function copyExperience(){try{await navigator.clipboard.writeText(experienceText());toast('Resumo copiado')}catch{toast('Não foi possível copiar')}}
 
 async function checkForFreshBuild(force=false){
-  if(!navigator.onLine)return;const now=Date.now();if(!force&&now-lastFreshBuildCheck<30000)return;lastFreshBuildCheck=now;
+  if(!navigator.onLine)return;const now=Date.now();if(!force&&now-lastFreshBuildCheck<60000)return;lastFreshBuildCheck=now;
   try{
-    const r=await fetch('./index.html?fresh='+now,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});if(!r.ok)return;const text=await r.text(),m=text.match(/<meta name="alpha-version" content="([^"]+)"/i);if(m&&m[1]&&m[1]!==APP_VERSION){location.reload();}
+    const r=await fetch('./index.html?fresh='+now,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});if(!r.ok)return;
+    const text=await r.text(),m=text.match(/<meta name="alpha-version" content="([^"]+)"/i);
+    if(m&&m[1]&&m[1]!==APP_VERSION&&!window._alphaUpdateNotice){window._alphaUpdateNotice=true;toast('Nova versão disponível. Atualiza quando te for conveniente.');}
   }catch{}
 }
 function setupFreshPWA(){
   if(!('serviceWorker'in navigator))return;
-  navigator.serviceWorker.register('./sw.js?v='+encodeURIComponent(APP_VERSION),{updateViaCache:'none'}).then(reg=>{reg.update().catch(()=>{});navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!sessionStorage.getItem('alpha_controller_reload')){sessionStorage.setItem('alpha_controller_reload','1');location.reload()}})}).catch(()=>{});
-  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){navigator.serviceWorker.getRegistration().then(r=>r&&r.update().catch(()=>{}));checkForFreshBuild(true);restoreActiveRoute();refreshHeaderWeather(false);if(map)renderExploreRoute();}});
-  window.addEventListener('pageshow',()=>checkForFreshBuild(false));window.addEventListener('focus',()=>checkForFreshBuild(false));
+  navigator.serviceWorker.register('./sw.js?v='+encodeURIComponent(APP_VERSION),{updateViaCache:'none'}).then(reg=>{reg.update().catch(()=>{});navigator.serviceWorker.addEventListener('controllerchange',()=>{window._alphaSWChanged=true;});}).catch(()=>{});
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){navigator.serviceWorker.getRegistration().then(r=>r&&r.update().catch(()=>{}));restoreActiveRoute();refreshHeaderWeather(false);if(map)renderExploreRoute();}});
+  window.addEventListener('pageshow',()=>checkForFreshBuild(false));
 }
 restoreActiveRoute();
 renderVehicleUI();
