@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="2.0.6">
+<meta name="alpha-version" content="2.1.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 2.0.7 — Landmark Discovery + Device Language Stable</title>
+<title>Project Alpha 2.1.0 — Explore Conversational AI</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -157,6 +157,8 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 
 /* Alpha 2.0.3 — GOLD EXPLORE · CURATED */
 .exploreGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:12px}.exploreCard{overflow:hidden;border:1px solid #294149;border-radius:18px;background:#0d1a21}.explorePhoto{width:100%;height:150px;object-fit:cover;background:#14262d;display:block}.exploreBody{padding:13px}.exploreBody h3{margin:3px 0 7px}.exploreCats{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.exploreChip{border:1px solid #3a515b;background:#10232a;color:#dbe8e3;border-radius:999px;padding:8px 10px;font-weight:800}.exploreChip.active{background:var(--lime);color:#fff;border-color:var(--lime)}.exploreSelected{outline:2px solid var(--lime)}.exploreMapMarker{width:30px;height:30px;border-radius:50%;background:#7bd389;border:3px solid #fff;display:grid;place-items:center;font-size:15px;box-shadow:0 2px 8px #0008}.exploreMapMarker.selected{background:#ffd166}.exploreEmpty{padding:18px;border:1px dashed #3a515b;border-radius:14px;color:var(--muted)}.exploreDetail{margin-top:14px;border:1px solid #3a515b;border-radius:18px;padding:15px;background:#0b171d}
+/* Alpha 2.1.0 — EXPLORE CONVERSATIONAL AI */
+.exploreChat{display:none;margin-top:14px;border:1px solid #38545d;border-radius:22px;background:linear-gradient(180deg,#0d1c22,#091419);overflow:hidden;box-shadow:0 18px 50px #0004}.exploreChat.show{display:block}.exploreChatHead{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:15px 16px;border-bottom:1px solid #20343b;background:linear-gradient(135deg,#12352c,#102630)}.exploreChatTitle{display:flex;gap:10px;align-items:center}.aiOrb{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#91ffe0,#39d69b 40%,#2d7ce6 78%,#7b61ff);box-shadow:0 0 24px #39d69b55;font-weight:900;color:#04120e}.chatStatus{font-size:11px;color:#a7beb6}.chatMessages{padding:14px;max-height:480px;overflow:auto;display:flex;flex-direction:column;gap:10px}.chatBubble{max-width:88%;padding:11px 13px;border-radius:16px;line-height:1.45;white-space:pre-wrap}.chatBubble.ai{align-self:flex-start;background:#11262d;border:1px solid #294149;border-bottom-left-radius:6px}.chatBubble.user{align-self:flex-end;background:#234d41;border:1px solid #3c7b68;border-bottom-right-radius:6px}.chatBubble .chatActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.chatBubble .chatActions button{font-size:12px;padding:8px 10px}.chatSuggestions{display:flex;gap:7px;overflow:auto;padding:0 14px 10px;scrollbar-width:none}.chatSuggestions::-webkit-scrollbar{display:none}.chatSuggestion{white-space:nowrap;border:1px solid #37535d;background:#10232a;color:#e7f4ef;border-radius:999px;padding:9px 11px;font-weight:800}.chatComposer{display:grid;grid-template-columns:1fr auto;gap:8px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));border-top:1px solid #20343b;background:#0a151a;position:sticky;bottom:0}.chatComposer input{min-width:0}.chatMeta{padding:0 14px 10px;font-size:10px;color:#829790}.resultsToggle{width:100%;margin-top:12px}.exploreClassic{display:none}.exploreClassic.show{display:block}@media(orientation:landscape){.chatMessages{max-height:300px}.exploreChat{border-radius:18px}}
 .exploreRecs{margin-top:12px;padding:14px;border:1px solid #35515a;border-radius:18px;background:linear-gradient(145deg,#10262e,#0b171d)}
 .exploreRecsHead{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:10px}.exploreRecsHead h3{margin:2px 0}.exploreRecsRail{display:flex;gap:10px;overflow-x:auto;padding-bottom:3px;scroll-snap-type:x proximity}.exploreRec{min-width:210px;max-width:230px;scroll-snap-align:start;border:1px solid #2d4650;border-radius:15px;padding:12px;background:#0a1a20}.exploreRec b{display:block;margin:4px 0 6px}.exploreRec .why{font-size:11px;color:var(--muted);min-height:34px}
 .officialLinks{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.officialLink{display:inline-flex;align-items:center;gap:6px;text-decoration:none}
@@ -285,6 +287,15 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     <label>Onde queres explorar?</label>
     <div class="row"><input id="exploreDestinationInput" placeholder="Ex.: Coimbra" style="flex:1;min-width:180px"><button class="btn purple" onclick="exploreSearch()">Explorar</button><button class="btn secondary" onclick="exploreNearMe()">Perto de mim</button></div>
     <div id="exploreState" class="small muted" style="margin-top:8px">Indica uma localidade ou usa a tua posição.</div>
+    <div id="exploreChat" class="exploreChat">
+      <div class="exploreChatHead"><div class="exploreChatTitle"><div class="aiOrb">✦</div><div><b>EXPLORE AI</b><div id="exploreChatContext" class="chatStatus">Outdoor Intelligence · Alpha local</div></div></div><button class="btn secondary" style="padding:8px 10px" onclick="resetExploreChat()">Nova conversa</button></div>
+      <div id="exploreChatMessages" class="chatMessages"></div>
+      <div id="exploreChatSuggestions" class="chatSuggestions"></div>
+      <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
+      <div class="chatMeta">Alpha 2.1 · conversa contextual com os locais encontrados. Não inventa horários, preços ou disponibilidade.</div>
+    </div>
+    <button id="exploreResultsToggle" class="btn secondary resultsToggle" style="display:none" onclick="toggleExploreClassic()">▦ Ver todos os locais</button>
+    <div id="exploreClassic" class="exploreClassic">
     <div class="exploreCats" id="exploreCats">
       <button class="exploreChip active" data-cat="all" onclick="toggleExploreCategory('all',this)">Tudo</button><button class="exploreChip" data-cat="heritage" onclick="toggleExploreCategory('heritage',this)">Património</button><button class="exploreChip" data-cat="museum" onclick="toggleExploreCategory('museum',this)">Museus</button><button class="exploreChip" data-cat="viewpoint" onclick="toggleExploreCategory('viewpoint',this)">Miradouros</button><button class="exploreChip" data-cat="nature" onclick="toggleExploreCategory('nature',this)">Natureza</button><button class="exploreChip" data-cat="park" onclick="toggleExploreCategory('park',this)">Jardins / Parques</button><button class="exploreChip" data-cat="attraction" onclick="toggleExploreCategory('attraction',this)">Experiências</button>
     </div>
@@ -296,6 +307,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
       <div class="row" style="margin-top:10px"><button class="btn secondary" onclick="showExploreOnMap(false)">Ver todos no mapa</button><button class="btn" onclick="showExploreOnMap(true)">Ver escolhidos no mapa</button></div>
       <div id="exploreAIRouteBox" class="exploreRouteBox" style="display:none"></div>
       <div class="row" style="margin-top:10px"><button class="btn secondary" onclick="openNextStopNavigation()">Carro · próximo destino</button><button class="btn secondary" onclick="markCarStopVisited()">Marcar visitado</button></div>
+    </div>
     </div>
   </div>
 
@@ -871,7 +883,8 @@ let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareF
 let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,trailDetailPhotos=[],destination=null,experiencePlaces={monuments:[],meals:[],stays:[]},currentTester='Filipe',smartChoices={monuments:[],meals:[],stays:[]};
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[];
-const APP_VERSION='2.0.7',ACTIVE_ROUTE_KEY='alpha_active_route_v4';
+let exploreChatHistory=[],exploreChatStarted=false;
+const APP_VERSION='2.1.0',ACTIVE_ROUTE_KEY='alpha_active_route_v4';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1696,7 +1709,7 @@ async function loadExplorePlaces(){
   try{
     const cached=JSON.parse(localStorage.getItem(cacheKey)||'null');
     if(cached&&Date.now()-cached.time<21600000&&Array.isArray(cached.places)&&cached.places.length){
-      explorePlaces=cached.places;$('exploreState').textContent=explorePlaces.length+' locais para visitar · pesquisa híbrida guardada';renderExploreResults();renderExploreRecommendations();return;
+      explorePlaces=cached.places;$('exploreState').textContent=explorePlaces.length+' locais para visitar · pesquisa híbrida guardada';renderExploreResults();renderExploreRecommendations();startExploreConversation();return;
     }
   }catch{}
   $('exploreState').textContent='A descobrir património, cultura, natureza e locais de interesse…';
@@ -1719,7 +1732,7 @@ async function loadExplorePlaces(){
     if(explorePlaces.length<8)console.warn('EXPLORE: poucos resultados locais para',c.label,explorePlaces.length);
     localStorage.setItem(cacheKey,JSON.stringify({time:Date.now(),places:explorePlaces}));
     $('exploreState').textContent=explorePlaces.length+' locais para visitar · raio até 25 km · '+c.label+' · seleciona os que quiseres';
-    renderExploreResults();renderExploreRecommendations();
+    renderExploreResults();renderExploreRecommendations();startExploreConversation();
   }catch(e){
     console.warn('EXPLORE hybrid discovery failed',e);
     explorePlaces=[];renderExploreResults();
@@ -1727,6 +1740,61 @@ async function loadExplorePlaces(){
     toast('Pesquisa de locais indisponível neste momento');
   }
 }
+function exploreDestinationName(){
+  const raw=String(exploreCenter?.label||$('exploreDestinationInput')?.value||'este destino');
+  return raw.split(',')[0].trim()||'este destino';
+}
+function chatAdd(role,html,actions=[]){
+  const host=$('exploreChatMessages');if(!host)return;
+  const div=document.createElement('div');div.className='chatBubble '+role;div.innerHTML=html;
+  if(actions.length){const a=document.createElement('div');a.className='chatActions';actions.forEach(x=>{const b=document.createElement('button');b.className='btn '+(x.primary?'purple':'secondary');b.textContent=x.label;b.onclick=x.fn;a.appendChild(b)});div.appendChild(a)}
+  host.appendChild(div);host.scrollTop=host.scrollHeight;exploreChatHistory.push({role,text:div.innerText.slice(0,1200),time:Date.now()});
+}
+function setChatSuggestions(items){
+  const host=$('exploreChatSuggestions');if(!host)return;host.innerHTML='';items.forEach(x=>{const b=document.createElement('button');b.className='chatSuggestion';b.textContent=x.label;b.onclick=()=>{if(x.prompt){$('exploreChatInput').value=x.prompt;sendExploreChat()}else x.fn&&x.fn()};host.appendChild(b)})
+}
+function startExploreConversation(){
+  if(!explorePlaces.length)return;
+  const box=$('exploreChat'),toggle=$('exploreResultsToggle'),ctx=$('exploreChatContext');if(box)box.classList.add('show');if(toggle)toggle.style.display='block';
+  const classic=$('exploreClassic');if(classic)classic.classList.remove('show');if(ctx)ctx.textContent=exploreDestinationName()+' · '+explorePlaces.length+' locais conhecidos · Alpha local';
+  exploreChatHistory=[];exploreChatStarted=true;const top=explorePlaces.slice(0,4).map(p=>'<b>'+esc(p.name)+'</b>').join(', ');
+  const dest=esc(exploreDestinationName());
+  $('exploreChatMessages').innerHTML='';
+  chatAdd('ai','Olá! Estou a explorar <b>'+dest+'</b> contigo. Já cruzei os locais que encontrámos e os mais relevantes incluem '+top+'.<br><br>Diz-me o que te apetece viver, quanto tempo tens, com quem estás ou quanto queres gastar. Eu ajudo-te a decidir e posso preparar a seleção para a rota.');
+  setChatSuggestions([{label:'🏛 Imperdíveis',prompt:'Quero ver os imperdíveis'},{label:'⏱ Tenho 2 horas',prompt:'Tenho 2 horas. O que recomendas?'},{label:'👨‍👩‍👧 Família',prompt:'Estou em família. O que recomendas?'},{label:'💰 Pouco gasto',prompt:'Quero gastar pouco ou nada'},{label:'🚶 Andar pouco',prompt:'Quero andar pouco'},{label:'🌧 Se chover',prompt:'E se estiver a chover?'}]);
+}
+function resetExploreChat(){if(!explorePlaces.length)return;startExploreConversation()}
+function toggleExploreClassic(){const el=$('exploreClassic'),b=$('exploreResultsToggle');if(!el)return;const show=!el.classList.contains('show');el.classList.toggle('show',show);if(b)b.textContent=show?'✦ Voltar à conversa':'▦ Ver todos os locais';if(show)el.scrollIntoView({behavior:'smooth',block:'start'})}
+function selectChatPlaces(list){
+  exploreSelected.clear();list.forEach(p=>exploreSelected.add(p.id));renderExploreResults();renderExploreSelectedSummary();renderExploreRecommendations();renderExploreMarkers();
+}
+function chatRankPlaces(text){
+  const q=text.toLowerCase();let arr=[...explorePlaces];
+  const score=p=>{let v=(p.priority||0)+exploreWikiScore(p);const x=(p.name+' '+p.description+' '+p.cat).toLowerCase();if(/imperd|essencial|must|principal/.test(q))v+=(p.priority||0)*2;if(/família|familia|miúd|miud|criança|crianca/.test(q)&&/jardim|pequenitos|museu|parque|universidade/.test(x))v+=25;if(/grátis|gratis|barato|pouco gasto|sem gastar/.test(q)&&(!p.fee||/gr[aá]tis|free|livre/.test(String(p.fee))))v+=22;if(/chuva|chover|chov/.test(q)&&/museu|biblioteca|universidade|igreja|mosteiro|catedral|palácio|palacio/.test(x))v+=24;if(/andar pouco|pouco andar|mobilidade|cansad/.test(q)){const d=hav(exploreCenter.lat,exploreCenter.lon,p.center[1],p.center[0]);v-=Math.min(25,d/500)}if(/natureza|jardim|ar livre/.test(q)&&['nature','park','viewpoint'].includes(p.cat))v+=25;return v};
+  return arr.sort((a,b)=>score(b)-score(a));
+}
+function inferChatCount(q){const h=q.match(/(\d+)\s*(hora|horas|h\b)/);if(h){const n=Number(h[1]);return Math.max(2,Math.min(8,Math.round(n*1.5)))}return 4}
+function chatPlaceLines(list){return list.map((p,i)=>(i+1)+'. <b>'+esc(p.name)+'</b> · '+esc(exploreCategoryLabel(p.cat))+' · '+esc(exploreDistance(p))).join('<br>')}
+function sendExploreChat(){
+  const input=$('exploreChatInput');if(!input||!explorePlaces.length)return;const q=input.value.trim();if(!q)return;input.value='';chatAdd('user',esc(q));
+  const low=q.toLowerCase(),ranked=chatRankPlaces(q),count=inferChatCount(q),pick=ranked.slice(0,count),dest=esc(exploreDestinationName());
+  if(/faz.*rota|cria.*rota|otimiz.*rota/.test(low)&&exploreSelected.size){chatAdd('ai','Vou usar os locais que já escolheste e calcular uma ordem eficiente.',[{label:'✦ Criar rota',primary:true,fn:()=>buildExploreAIRoute()}]);return}
+  setTimeout(()=>{
+    let intro='Para <b>'+dest+'</b>, eu faria assim:';
+    if(/2\s*(hora|horas|h\b)/.test(low))intro='Com cerca de <b>2 horas</b>, concentrava a visita nestes locais:';
+    else if(/família|familia|miúd|miud|criança|crianca/.test(low))intro='Para uma visita <b>em família</b>, estas opções equilibram interesse e ritmo:';
+    else if(/chuva|chover|chov/.test(low))intro='Se estiver a <b>chover</b>, privilegiaria locais interiores ou abrigados:';
+    else if(/grátis|gratis|barato|pouco gasto|sem gastar/.test(low))intro='Para manter o custo baixo, começaria por estas opções; confirma sempre no site oficial se existe entrada:';
+    else if(/andar pouco|pouco andar|cansad/.test(low))intro='Para <b>reduzir deslocações a pé</b>, eu começaria pelas opções mais compactas:';
+    else if(/bilhete|preço|preco|horário|horario|aberto|fecha|site oficial/.test(low)){
+      const p=ranked.find(p=>low.includes(p.name.toLowerCase().split(' ')[0]))||ranked[0];
+      chatAdd('ai','Tenho dados sobre <b>'+esc(p.name)+'</b>, mas nesta Alpha não vou inventar horários, preços ou disponibilidade em tempo real. Abre os detalhes para consultar as fontes disponíveis.',[{label:'Ver detalhes',primary:true,fn:()=>openExploreDetails(p.id)},{label:'Selecionar',fn:()=>toggleExplorePlace(p.id)}]);return;
+    }
+    chatAdd('ai',intro+'<br><br>'+chatPlaceLines(pick)+'<br><br>Posso selecionar estes locais e preparar a rota, ou podemos trocar algum.',[{label:'✓ Selecionar sugestão',primary:true,fn:()=>{selectChatPlaces(pick);chatAdd('ai','Feito. Se quiseres, agora otimizo a ordem de visita.',[{label:'✦ Otimizar rota',primary:true,fn:()=>buildExploreAIRoute()},{label:'Ver no mapa',fn:()=>showExploreOnMap(true)}])}},{label:'🗺 Ver no mapa',fn:()=>{selectChatPlaces(pick);showExploreOnMap(true)}},{label:'▦ Ver todos',fn:()=>toggleExploreClassic()}]);
+    setChatSuggestions([{label:'Troca um local',prompt:'Troca o local menos interessante por outra opção'},{label:'Acrescenta natureza',prompt:'Acrescenta uma opção de natureza ou jardim'},{label:'Quero comer',prompt:'Quero parar para comer antes de continuar'},{label:'Faz a rota',prompt:'Faz-me a rota com estes locais'}]);
+  },280)
+}
+
 function toggleExploreCategory(cat,btn){
   if(cat==='all'){
     exploreCategories=new Set(['all']);
