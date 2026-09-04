@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="2.0.5">
+<meta name="alpha-version" content="2.0.6">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 2.0.5 — GPS Weather Header Stable</title>
+<title>Project Alpha 2.0.6 — Landmark Discovery + Device Language Stable</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -866,7 +866,7 @@ let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareF
 let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,trailDetailPhotos=[],destination=null,experiencePlaces={monuments:[],meals:[],stays:[]},currentTester='Filipe',smartChoices={monuments:[],meals:[],stays:[]};
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[];
-const APP_VERSION='2.0.5',ACTIVE_ROUTE_KEY='alpha_active_route_v4';
+const APP_VERSION='2.0.6',ACTIVE_ROUTE_KEY='alpha_active_route_v4';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1438,6 +1438,35 @@ function openSavedExperience(id){
   renderExperiencePlanPreview();renderExperienceRatingItems(t.review&&t.review.itemRatings||{});syncReview();toast('Experiência recuperada');
 }
 
+
+/* ---------- ALPHA 2.0.6 · DEVICE LANGUAGE + LANDMARK DISCOVERY ---------- */
+const DEVICE_LOCALE=(navigator.languages&&navigator.languages[0])||navigator.language||'pt-PT';
+const DEVICE_LANG=String(DEVICE_LOCALE).toLowerCase().split('-')[0];
+const SUPPORTED_UI_LANGS=['pt','en','es','fr'];
+const UI_LANG=SUPPORTED_UI_LANGS.includes(DEVICE_LANG)?DEVICE_LANG:'en';
+document.documentElement.lang=DEVICE_LOCALE;
+const UI_TEXT={
+  en:{'Descobrir':'Discover','Mapa/GO':'Map/GO','Perfil':'Profile','Abrir GO':'Open GO','Experiência':'Experience','Trails perto de mim':'Trails near me','Reportar condição':'Report condition','Onde queres explorar?':'Where do you want to explore?','Explorar':'Explore','Perto de mim':'Near me','Tudo':'All','Património':'Heritage','Museus':'Museums','Miradouros':'Viewpoints','Natureza':'Nature','Jardins / Parques':'Gardens / Parks','Experiências':'Experiences','Ver detalhes':'Details','Selecionar':'Select','Reportar no mapa':'Report on map'},
+  es:{'Descobrir':'Descubrir','Mapa/GO':'Mapa/GO','Perfil':'Perfil','Abrir GO':'Abrir GO','Experiência':'Experiencia','Trails perto de mim':'Rutas cerca de mí','Reportar condição':'Reportar condición','Onde queres explorar?':'¿Dónde quieres explorar?','Explorar':'Explorar','Perto de mim':'Cerca de mí','Tudo':'Todo','Património':'Patrimonio','Museus':'Museos','Miradouros':'Miradores','Natureza':'Naturaleza','Jardins / Parques':'Jardines / Parques','Experiências':'Experiencias','Ver detalhes':'Ver detalles','Selecionar':'Seleccionar','Reportar no mapa':'Reportar en el mapa'},
+  fr:{'Descobrir':'Découvrir','Mapa/GO':'Carte/GO','Perfil':'Profil','Abrir GO':'Ouvrir GO','Experiência':'Expérience','Trails perto de mim':'Sentiers proches','Reportar condição':'Signaler une condition','Onde queres explorar?':'Où veux-tu explorer ?','Explorar':'Explorer','Perto de mim':'Près de moi','Tudo':'Tout','Património':'Patrimoine','Museus':'Musées','Miradouros':'Points de vue','Natureza':'Nature','Jardins / Parques':'Jardins / Parcs','Experiências':'Expériences','Ver detalhes':'Détails','Selecionar':'Sélectionner','Reportar no mapa':'Signaler sur la carte'}
+};
+function tr(txt){return (UI_TEXT[UI_LANG]&&UI_TEXT[UI_LANG][txt])||txt}
+function applyDeviceLanguage(){
+  if(UI_LANG==='pt')return;
+  const map=UI_TEXT[UI_LANG]||{};
+  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+  const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+  nodes.forEach(n=>{const raw=n.nodeValue,trim=raw.trim();if(map[trim])n.nodeValue=raw.replace(trim,map[trim])});
+  document.querySelectorAll('input[placeholder]').forEach(el=>{if(map[el.placeholder])el.placeholder=map[el.placeholder]});
+}
+function normalizedCityName(c){return String(c&&c.label||'').split(',')[0].trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+const LANDMARK_PACKS={
+  coimbra:['Universidade de Coimbra','Biblioteca Joanina','Mosteiro de Santa Clara-a-Velha','Mosteiro de Santa Clara-a-Nova','Mosteiro de Santa Cruz','Sé Velha de Coimbra','Sé Nova de Coimbra','Museu Nacional de Machado de Castro','Portugal dos Pequenitos','Jardim Botânico da Universidade de Coimbra','Quinta das Lágrimas','Penedo da Saudade','Aqueduto de São Sebastião','Conímbriga']
+};
+function sourceWikiLang(c){
+  const byCountry={pt:'pt',es:'es',fr:'fr',it:'it',de:'de',gb:'en',ie:'en',br:'pt'};
+  return byCountry[String(c&&c.countryCode||'').toLowerCase()]||UI_LANG||'en';
+}
 function exploreCategoryOf(t){
   if(t.tourism==='museum')return 'museum';
   if(t.tourism==='viewpoint')return 'viewpoint';
@@ -1532,7 +1561,7 @@ function explicitCountryCode(q){
   for(const [code,names] of Object.entries(aliases))if(names.some(n=>x.includes(n)))return code;return '';
 }
 async function nominatimSearchPlace(q,countryCode=''){
-  const params=new URLSearchParams({format:'jsonv2',limit:'5',addressdetails:'1','accept-language':'pt-PT,pt,en'});params.set('q',q);if(countryCode)params.set('countrycodes',countryCode);
+  const params=new URLSearchParams({format:'jsonv2',limit:'5',addressdetails:'1','accept-language':DEVICE_LOCALE+','+UI_LANG+',en'});params.set('q',q);if(countryCode)params.set('countrycodes',countryCode);
   const r=await fetch('https://nominatim.openstreetmap.org/search?'+params.toString(),{headers:{Accept:'application/json'},cache:'no-store'});if(!r.ok)throw new Error('geocode');return await r.json();
 }
 async function geocodeExplore(q){
@@ -1581,18 +1610,27 @@ async function fetchExploreWikipediaSearch(c,signal){
 }
 async function fetchExploreWikipediaTargeted(c,signal){
   const city=String(c.label||'').split(',')[0].trim();if(!city||city==='Perto de mim')return[];
-  const terms=['universidade','biblioteca','museu','mosteiro','igreja','catedral','palácio','castelo','ruínas','arqueológico','jardim botânico','monumento'];
-  const out=[];
-  for(const term of terms){
-    const params=new URLSearchParams({action:'query',generator:'search',gsrsearch:city+' '+term,gsrnamespace:'0',gsrlimit:'6',prop:'coordinates|pageimages|extracts|info',inprop:'url',exintro:'1',explaintext:'1',exsentences:'4',piprop:'thumbnail',pithumbsize:'720',format:'json',origin:'*'});
-    try{const r=await fetch('https://pt.wikipedia.org/w/api.php?'+params.toString(),{signal,cache:'no-store'});if(!r.ok)continue;const j=await r.json();out.push(...Object.values((j.query&&j.query.pages)||{}))}catch{}
+  const lang=sourceWikiLang(c);
+  const terms=['universidade','biblioteca','biblioteca histórica','museu','mosteiro','convento','igreja','catedral','palácio','castelo','ruínas','sítio arqueológico','jardim botânico','monumento','centro histórico'];
+  const jobs=terms.map(async term=>{
+    const params=new URLSearchParams({action:'query',generator:'search',gsrsearch:'"'+city+'" '+term,gsrnamespace:'0',gsrlimit:'8',prop:'coordinates|pageimages|extracts|info',inprop:'url',exintro:'1',explaintext:'1',exsentences:'4',piprop:'thumbnail',pithumbsize:'720',format:'json',origin:'*'});
+    try{const r=await fetch('https://'+lang+'.wikipedia.org/w/api.php?'+params.toString(),{signal,cache:'no-store'});if(!r.ok)return[];const j=await r.json();return Object.values((j.query&&j.query.pages)||{})}catch{return[]}
+  });
+  return (await Promise.all(jobs)).flat();
+}
+async function fetchExploreLandmarkPack(c,signal){
+  const key=normalizedCityName(c),titles=LANDMARK_PACKS[key]||[];if(!titles.length)return[];
+  const lang=sourceWikiLang(c),out=[];
+  for(let i=0;i<titles.length;i+=10){
+    const params=new URLSearchParams({action:'query',titles:titles.slice(i,i+10).join('|'),redirects:'1',prop:'coordinates|pageimages|extracts|info',inprop:'url',exintro:'1',explaintext:'1',exsentences:'4',piprop:'thumbnail',pithumbsize:'720',format:'json',origin:'*'});
+    try{const r=await fetch('https://'+lang+'.wikipedia.org/w/api.php?'+params.toString(),{signal,cache:'no-store'});if(!r.ok)continue;const j=await r.json();out.push(...Object.values((j.query&&j.query.pages)||{}))}catch{}
   }
   return out;
 }
 async function fetchExploreWikipedia(c){
-  const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),12000);
+  const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),15000);
   try{
-    const settled=await Promise.allSettled([fetchExploreWikipediaGeo(c,ctrl.signal),fetchExploreWikipediaSearch(c,ctrl.signal),fetchExploreWikipediaTargeted(c,ctrl.signal)]),out=[],seen=new Set();
+    const settled=await Promise.allSettled([fetchExploreWikipediaGeo(c,ctrl.signal),fetchExploreWikipediaSearch(c,ctrl.signal),fetchExploreWikipediaTargeted(c,ctrl.signal),fetchExploreLandmarkPack(c,ctrl.signal)]),out=[],seen=new Set();
     settled.forEach(x=>{if(x.status!=='fulfilled')return;(x.value||[]).forEach(pg=>{const key=String(pg.pageid||pg.title||'');if(!key||seen.has(key))return;seen.add(key);out.push(pg)})});
     if(!out.length)throw new Error('Wikipedia sem resultados');
     return out;
@@ -1608,7 +1646,7 @@ function explorePageLooksVisitable(name,desc){
 async function loadExplorePlaces(){
   const c=exploreCenter;if(!c)return;
   exploreSelected.clear();exploreRouteGeoJSON=null;exploreRouteOrdered=[];renderExploreSelectedSummary();
-  const cacheKey='alpha_explore_hybrid_v5_local_first_'+(c.countryCode||'xx')+'_'+Math.round(c.lat*1000)+'_'+Math.round(c.lon*1000);
+  const cacheKey='alpha_explore_hybrid_v6_landmarks_lang_'+(c.countryCode||'xx')+'_'+Math.round(c.lat*1000)+'_'+Math.round(c.lon*1000);
   try{
     const cached=JSON.parse(localStorage.getItem(cacheKey)||'null');
     if(cached&&Date.now()-cached.time<21600000&&Array.isArray(cached.places)&&cached.places.length){
@@ -2813,6 +2851,7 @@ renderBudgetAdvice();
 try{let cc=JSON.parse(localStorage.getItem(scopedTrailCacheKey())||'null');if(cc&&cc.trails&&Date.now()-cc.time<21600000){nearbyTrails=cc.trails;renderTrails();$('trailStatus').textContent=nearbyTrails.length+' trails carregados do cache deste destino.'}}catch{}
 fetchWeather(false);
 startHeaderWeatherGPS();
+applyDeviceLanguage();if($('deviceLangBadge'))$('deviceLangBadge').textContent=DEVICE_LOCALE+' ·';
 setupFreshPWA();checkForFreshBuild(false);
 
 function adaptOrientation(){
