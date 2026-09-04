@@ -8,7 +8,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 2.0.6 — Landmark Discovery + Device Language Stable</title>
+<title>Project Alpha 2.0.7 — Landmark Discovery + Device Language Stable</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -156,7 +156,11 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 
 
 /* Alpha 2.0.3 — GOLD EXPLORE · CURATED */
-.exploreGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:12px}.exploreCard{overflow:hidden;border:1px solid #294149;border-radius:18px;background:#0d1a21}.explorePhoto{width:100%;height:150px;object-fit:cover;background:#14262d;display:block}.exploreBody{padding:13px}.exploreBody h3{margin:3px 0 7px}.exploreCats{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.exploreChip{border:1px solid #3a515b;background:#10232a;color:#dbe8e3;border-radius:999px;padding:8px 10px;font-weight:800}.exploreChip.active{background:var(--lime);color:#fff;border-color:var(--lime)}.exploreSelected{outline:2px solid var(--lime)}.exploreMapMarker{width:30px;height:30px;border-radius:50%;background:#7bd389;border:3px solid #fff;display:grid;place-items:center;font-size:15px;box-shadow:0 2px 8px #0008}.exploreMapMarker.selected{background:#ffd166}.exploreEmpty{padding:18px;border:1px dashed #3a515b;border-radius:14px;color:var(--muted)}.exploreDetail{margin-top:14px;border:1px solid #3a515b;border-radius:18px;padding:15px;background:#0b171d}.exploreRouteBox{margin-top:12px;border:1px solid #5a4f82;border-radius:16px;padding:14px;background:#151126}.routeStat{display:inline-block;margin:4px 7px 4px 0;padding:7px 10px;border-radius:999px;background:#10232a;border:1px solid #35515a;font-weight:800}
+.exploreGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:12px}.exploreCard{overflow:hidden;border:1px solid #294149;border-radius:18px;background:#0d1a21}.explorePhoto{width:100%;height:150px;object-fit:cover;background:#14262d;display:block}.exploreBody{padding:13px}.exploreBody h3{margin:3px 0 7px}.exploreCats{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.exploreChip{border:1px solid #3a515b;background:#10232a;color:#dbe8e3;border-radius:999px;padding:8px 10px;font-weight:800}.exploreChip.active{background:var(--lime);color:#fff;border-color:var(--lime)}.exploreSelected{outline:2px solid var(--lime)}.exploreMapMarker{width:30px;height:30px;border-radius:50%;background:#7bd389;border:3px solid #fff;display:grid;place-items:center;font-size:15px;box-shadow:0 2px 8px #0008}.exploreMapMarker.selected{background:#ffd166}.exploreEmpty{padding:18px;border:1px dashed #3a515b;border-radius:14px;color:var(--muted)}.exploreDetail{margin-top:14px;border:1px solid #3a515b;border-radius:18px;padding:15px;background:#0b171d}
+.exploreRecs{margin-top:12px;padding:14px;border:1px solid #35515a;border-radius:18px;background:linear-gradient(145deg,#10262e,#0b171d)}
+.exploreRecsHead{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:10px}.exploreRecsHead h3{margin:2px 0}.exploreRecsRail{display:flex;gap:10px;overflow-x:auto;padding-bottom:3px;scroll-snap-type:x proximity}.exploreRec{min-width:210px;max-width:230px;scroll-snap-align:start;border:1px solid #2d4650;border-radius:15px;padding:12px;background:#0a1a20}.exploreRec b{display:block;margin:4px 0 6px}.exploreRec .why{font-size:11px;color:var(--muted);min-height:34px}
+.officialLinks{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.officialLink{display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.exploreRouteBox{margin-top:12px;border:1px solid #5a4f82;border-radius:16px;padding:14px;background:#151126}.routeStat{display:inline-block;margin:4px 7px 4px 0;padding:7px 10px;border-radius:999px;background:#10232a;border:1px solid #35515a;font-weight:800}
 
 /* Alpha 2.0.3 — Navigation chooser */
 .navChooser{position:fixed;inset:0;background:#000a;z-index:9999;display:flex;align-items:flex-end;justify-content:center;padding:14px}.navChooserSheet{width:min(560px,100%);background:#0d1a21;border:1px solid #294149;border-radius:22px;padding:18px;box-shadow:0 18px 50px #000b}.navChooserOptions{display:grid;gap:10px;margin-top:14px}.navChoice{width:100%;display:flex;align-items:center;justify-content:space-between;text-align:left;padding:14px 16px;border-radius:16px}.navChoice b{font-size:16px}.navChoice small{display:block;color:var(--muted);margin-top:2px}
@@ -284,6 +288,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
     <div class="exploreCats" id="exploreCats">
       <button class="exploreChip active" data-cat="all" onclick="toggleExploreCategory('all',this)">Tudo</button><button class="exploreChip" data-cat="heritage" onclick="toggleExploreCategory('heritage',this)">Património</button><button class="exploreChip" data-cat="museum" onclick="toggleExploreCategory('museum',this)">Museus</button><button class="exploreChip" data-cat="viewpoint" onclick="toggleExploreCategory('viewpoint',this)">Miradouros</button><button class="exploreChip" data-cat="nature" onclick="toggleExploreCategory('nature',this)">Natureza</button><button class="exploreChip" data-cat="park" onclick="toggleExploreCategory('park',this)">Jardins / Parques</button><button class="exploreChip" data-cat="attraction" onclick="toggleExploreCategory('attraction',this)">Experiências</button>
     </div>
+    <div id="exploreRecommendations" class="exploreRecs" style="display:none"></div>
     <div id="exploreDetail" class="exploreDetail" style="display:none"></div>
     <div id="exploreResults" class="exploreGrid"><div class="exploreEmpty">Pesquisa uma localidade para começar.</div></div>
     <div id="exploreActions" style="margin-top:16px">
@@ -866,7 +871,7 @@ let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareF
 let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,trailDetailPhotos=[],destination=null,experiencePlaces={monuments:[],meals:[],stays:[]},currentTester='Filipe',smartChoices={monuments:[],meals:[],stays:[]};
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[];
-const APP_VERSION='2.0.6',ACTIVE_ROUTE_KEY='alpha_active_route_v4';
+const APP_VERSION='2.0.7',ACTIVE_ROUTE_KEY='alpha_active_route_v4';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1446,9 +1451,9 @@ const SUPPORTED_UI_LANGS=['pt','en','es','fr'];
 const UI_LANG=SUPPORTED_UI_LANGS.includes(DEVICE_LANG)?DEVICE_LANG:'en';
 document.documentElement.lang=DEVICE_LOCALE;
 const UI_TEXT={
-  en:{'Descobrir':'Discover','Mapa/GO':'Map/GO','Perfil':'Profile','Abrir GO':'Open GO','Experiência':'Experience','Trails perto de mim':'Trails near me','Reportar condição':'Report condition','Onde queres explorar?':'Where do you want to explore?','Explorar':'Explore','Perto de mim':'Near me','Tudo':'All','Património':'Heritage','Museus':'Museums','Miradouros':'Viewpoints','Natureza':'Nature','Jardins / Parques':'Gardens / Parks','Experiências':'Experiences','Ver detalhes':'Details','Selecionar':'Select','Reportar no mapa':'Report on map'},
-  es:{'Descobrir':'Descubrir','Mapa/GO':'Mapa/GO','Perfil':'Perfil','Abrir GO':'Abrir GO','Experiência':'Experiencia','Trails perto de mim':'Rutas cerca de mí','Reportar condição':'Reportar condición','Onde queres explorar?':'¿Dónde quieres explorar?','Explorar':'Explorar','Perto de mim':'Cerca de mí','Tudo':'Todo','Património':'Patrimonio','Museus':'Museos','Miradouros':'Miradores','Natureza':'Naturaleza','Jardins / Parques':'Jardines / Parques','Experiências':'Experiencias','Ver detalhes':'Ver detalles','Selecionar':'Seleccionar','Reportar no mapa':'Reportar en el mapa'},
-  fr:{'Descobrir':'Découvrir','Mapa/GO':'Carte/GO','Perfil':'Profil','Abrir GO':'Ouvrir GO','Experiência':'Expérience','Trails perto de mim':'Sentiers proches','Reportar condição':'Signaler une condition','Onde queres explorar?':'Où veux-tu explorer ?','Explorar':'Explorer','Perto de mim':'Près de moi','Tudo':'Tout','Património':'Patrimoine','Museus':'Musées','Miradouros':'Points de vue','Natureza':'Nature','Jardins / Parques':'Jardins / Parcs','Experiências':'Expériences','Ver detalhes':'Détails','Selecionar':'Sélectionner','Reportar no mapa':'Signaler sur la carte'}
+  en:{'Descobrir':'Discover','Mapa/GO':'Map/GO','Perfil':'Profile','Abrir GO':'Open GO','Experiência':'Experience','Trails perto de mim':'Trails near me','Reportar condição':'Report condition','Onde queres explorar?':'Where do you want to explore?','Explorar':'Explore','Perto de mim':'Near me','Tudo':'All','Património':'Heritage','Museus':'Museums','Miradouros':'Viewpoints','Natureza':'Nature','Jardins / Parques':'Gardens / Parks','Experiências':'Experiences','Ver detalhes':'Details','Selecionar':'Select','Reportar no mapa':'Report on map','Sugestões':'Suggestions','Imperdíveis neste destino':'Must-see places','recomendações':'recommendations','Selecionado':'Selected','Site oficial':'Official site','Bilhetes':'Tickets','Saber mais':'Learn more'},
+  es:{'Descobrir':'Descubrir','Mapa/GO':'Mapa/GO','Perfil':'Perfil','Abrir GO':'Abrir GO','Experiência':'Experiencia','Trails perto de mim':'Rutas cerca de mí','Reportar condição':'Reportar condición','Onde queres explorar?':'¿Dónde quieres explorar?','Explorar':'Explorar','Perto de mim':'Cerca de mí','Tudo':'Todo','Património':'Patrimonio','Museus':'Museos','Miradouros':'Miradores','Natureza':'Naturaleza','Jardins / Parques':'Jardines / Parques','Experiências':'Experiencias','Ver detalhes':'Ver detalles','Selecionar':'Seleccionar','Reportar no mapa':'Reportar en el mapa','Sugestões':'Sugerencias','Imperdíveis neste destino':'Imprescindibles','recomendações':'recomendaciones','Selecionado':'Seleccionado','Site oficial':'Sitio oficial','Bilhetes':'Entradas','Saber mais':'Saber más'},
+  fr:{'Descobrir':'Découvrir','Mapa/GO':'Carte/GO','Perfil':'Profil','Abrir GO':'Ouvrir GO','Experiência':'Expérience','Trails perto de mim':'Sentiers proches','Reportar condição':'Signaler une condition','Onde queres explorar?':'Où veux-tu explorer ?','Explorar':'Explorer','Perto de mim':'Près de moi','Tudo':'Tout','Património':'Patrimoine','Museus':'Musées','Miradouros':'Points de vue','Natureza':'Nature','Jardins / Parques':'Jardins / Parcs','Experiências':'Expériences','Ver detalhes':'Détails','Selecionar':'Sélectionner','Reportar no mapa':'Signaler sur la carte','Sugestões':'Suggestions','Imperdíveis neste destino':'Incontournables','recomendações':'recommandations','Selecionado':'Sélectionné','Site oficial':'Site officiel','Bilhetes':'Billets','Saber mais':'En savoir plus'}
 };
 function tr(txt){return (UI_TEXT[UI_LANG]&&UI_TEXT[UI_LANG][txt])||txt}
 function applyDeviceLanguage(){
@@ -1463,6 +1468,47 @@ function normalizedCityName(c){return String(c&&c.label||'').split(',')[0].trim(
 const LANDMARK_PACKS={
   coimbra:['Universidade de Coimbra','Biblioteca Joanina','Mosteiro de Santa Clara-a-Velha','Mosteiro de Santa Clara-a-Nova','Mosteiro de Santa Cruz','Sé Velha de Coimbra','Sé Nova de Coimbra','Museu Nacional de Machado de Castro','Portugal dos Pequenitos','Jardim Botânico da Universidade de Coimbra','Quinta das Lágrimas','Penedo da Saudade','Aqueduto de São Sebastião','Conímbriga']
 };
+const CURATED_LANDMARK_PACKS={
+  coimbra:[
+    {id:'cur-uc',name:'Universidade de Coimbra · Paço das Escolas',center:[-8.4264,40.2075],cat:'heritage',priority:100,why:'O conjunto histórico central da Universidade e Património Mundial.',description:'Núcleo histórico da Universidade de Coimbra, incluindo o Paço das Escolas, Palácio Real e Capela de São Miguel.',website:'https://visit.uc.pt/pt/',tickets:'https://visit.uc.pt/pt/program-list',wikipediaUrl:'https://pt.wikipedia.org/wiki/Universidade_de_Coimbra'},
+    {id:'cur-joanina',name:'Biblioteca Joanina',center:[-8.4263,40.2074],cat:'heritage',priority:99,why:'Um dos espaços mais emblemáticos e procurados de Coimbra.',description:'Biblioteca barroca do século XVIII integrada no Paço das Escolas da Universidade de Coimbra.',website:'https://visit.uc.pt/pt/space-list/joanina',tickets:'https://visit.uc.pt/pt/program-list',wikipediaUrl:'https://pt.wikipedia.org/wiki/Biblioteca_Joanina'},
+    {id:'cur-scvelha',name:'Mosteiro de Santa Clara-a-Velha',center:[-8.4337,40.2004],cat:'heritage',priority:97,why:'Ruínas góticas únicas junto ao Mondego e um dos monumentos essenciais da cidade.',description:'Antigo mosteiro medieval de Santa Clara, marcado pelas cheias do Mondego e hoje visitável como sítio patrimonial.',website:'https://loja.patrimoniocultural.gov.pt/patrimonio/mosteiro-de-santa-clara-a-velha/',tickets:'https://bilheteira.culturanorte.gov.pt/pt/monument/34',wikipediaUrl:'https://pt.wikipedia.org/wiki/Mosteiro_de_Santa_Clara-a-Velha'},
+    {id:'cur-sc-nova',name:'Mosteiro de Santa Clara-a-Nova',center:[-8.4396,40.2017],cat:'heritage',priority:91,why:'Complementa Santa Clara-a-Velha e guarda a memória da Rainha Santa Isabel.',description:'Mosteiro construído após o abandono de Santa Clara-a-Velha, no Monte da Esperança.',wikipediaUrl:'https://pt.wikipedia.org/wiki/Mosteiro_de_Santa_Clara-a-Nova'},
+    {id:'cur-santacruz',name:'Mosteiro de Santa Cruz',center:[-8.4291,40.2110],cat:'heritage',priority:96,why:'Monumento nacional no centro histórico e panteão dos primeiros reis de Portugal.',description:'Mosteiro histórico na Praça 8 de Maio, ligado às origens de Portugal.',wikipediaUrl:'https://pt.wikipedia.org/wiki/Mosteiro_de_Santa_Cruz'},
+    {id:'cur-sevelha',name:'Sé Velha de Coimbra',center:[-8.4251,40.2094],cat:'heritage',priority:94,why:'Uma das mais importantes catedrais românicas de Portugal.',description:'Catedral românica no coração da Alta de Coimbra.',wikipediaUrl:'https://pt.wikipedia.org/wiki/S%C3%A9_Velha_de_Coimbra'},
+    {id:'cur-senova',name:'Sé Nova de Coimbra',center:[-8.4237,40.2108],cat:'heritage',priority:86,why:'Grande referência religiosa e arquitetónica da Alta universitária.',description:'Catedral de Coimbra instalada na antiga igreja jesuíta.',wikipediaUrl:'https://pt.wikipedia.org/wiki/S%C3%A9_Nova_de_Coimbra'},
+    {id:'cur-machado',name:'Museu Nacional de Machado de Castro',center:[-8.4240,40.2097],cat:'museum',priority:95,why:'Museu nacional com o criptopórtico romano sob o antigo paço episcopal.',description:'Museu de arte e arqueologia instalado sobre estruturas romanas de Aeminium.',website:'https://www.museusemonumentos.pt/pt/museus-e-monumentos/museu-nacional-de-machado-de-castro',wikipediaUrl:'https://pt.wikipedia.org/wiki/Museu_Nacional_de_Machado_de_Castro'},
+    {id:'cur-pequenitos',name:'Portugal dos Pequenitos',center:[-8.4342,40.2023],cat:'attraction',priority:90,why:'Experiência familiar icónica de Coimbra.',description:'Parque lúdico-pedagógico dedicado ao património arquitetónico e cultural português.',website:'https://www.fbb.pt/pp/',wikipediaUrl:'https://pt.wikipedia.org/wiki/Portugal_dos_Pequenitos'},
+    {id:'cur-botanico',name:'Jardim Botânico da Universidade de Coimbra',center:[-8.4219,40.2058],cat:'park',priority:84,why:'Um dos espaços verdes históricos mais importantes da cidade.',description:'Jardim histórico e científico da Universidade de Coimbra.',website:'https://www.uc.pt/jardimbotanico/',wikipediaUrl:'https://pt.wikipedia.org/wiki/Jardim_Bot%C3%A2nico_da_Universidade_de_Coimbra'},
+    {id:'cur-lagrimas',name:'Quinta das Lágrimas',center:[-8.4367,40.1980],cat:'park',priority:82,why:'Lugar associado à história de Pedro e Inês, com jardins históricos.',description:'Quinta histórica ligada à memória de Pedro e Inês de Castro.',website:'https://www.quintadaslagrimas.pt/',wikipediaUrl:'https://pt.wikipedia.org/wiki/Quinta_das_L%C3%A1grimas'},
+    {id:'cur-conimbriga',name:'Conímbriga · Ruínas e Museu Nacional',center:[-8.4938,40.0990],cat:'heritage',priority:98,why:'Um dos mais importantes sítios arqueológicos romanos de Portugal, perto de Coimbra.',description:'Cidade romana musealizada com ruínas, mosaicos e Museu Nacional de Conímbriga.',website:'https://mnconimbriga.gov.pt/',tickets:'https://mnconimbriga.gov.pt/visitar',wikipediaUrl:'https://pt.wikipedia.org/wiki/Con%C3%ADmbriga'}
+  ]
+};
+function curatedPackFor(c){return CURATED_LANDMARK_PACKS[normalizedCityName(c)]||[]}
+function mergeCuratedLandmarks(places,c){
+  const pack=curatedPackFor(c);if(!pack.length)return places;
+  const out=[...places];
+  pack.forEach(cp=>{
+    const d=hav(c.lat,c.lon,cp.center[1],cp.center[0]);if(d>25000)return;
+    const norm=cp.name.toLowerCase().replace(/[^a-z0-9à-ÿ]+/g,' ');
+    const existing=out.find(p=>{const pn=String(p.name||'').toLowerCase().replace(/[^a-z0-9à-ÿ]+/g,' ');return pn.includes(norm.slice(0,18))||norm.includes(pn.slice(0,18))});
+    if(existing){Object.assign(existing,{priority:Math.max(existing.priority||0,cp.priority||0),website:existing.website||cp.website||'',tickets:existing.tickets||cp.tickets||'',wikipediaUrl:existing.wikipediaUrl||cp.wikipediaUrl||'',why:cp.why||existing.why||'',curated:true});}
+    else out.push({...cp,distanceM:d,tags:{curated:'yes'},photo:'',opening:'',fee:'',curated:true});
+  });
+  return out;
+}
+function renderExploreRecommendations(){
+  const box=$("exploreRecommendations");if(!box)return;
+  const recs=[...explorePlaces].sort((a,b)=>(b.priority||0)-(a.priority||0)||exploreWikiScore(b)-exploreWikiScore(a)).slice(0,6);
+  if(!recs.length){box.style.display="none";return}
+  box.style.display="block";
+  const cards=recs.map(p=>{
+    const selected=exploreSelected.has(p.id);
+    return `<div class="exploreRec"><span class="small green">${exploreIcon(p.cat)} ${esc(exploreCategoryLabel(p.cat))}</span><b>${esc(p.name)}</b><div class="why">${esc(p.why||p.description||'Local recomendado para visita.')}</div><div class="row" style="margin-top:8px"><button class="btn secondary" onclick="openExploreDetails('${p.id}')">${tr('Ver detalhes')}</button><button class="btn ${selected?'':'secondary'}" onclick="toggleExplorePlace('${p.id}')">${selected?'✓ '+tr('Selecionado'):tr('Selecionar')}</button></div></div>`;
+  }).join('');
+  box.innerHTML=`<div class="exploreRecsHead"><div><div class="eyebrow">✦ ${tr('Sugestões')}</div><h3>${tr('Imperdíveis neste destino')}</h3></div><span class="small muted">${recs.length} ${tr('recomendações')}</span></div><div class="exploreRecsRail">${cards}</div>`;
+}
+
 function sourceWikiLang(c){
   const byCountry={pt:'pt',es:'es',fr:'fr',it:'it',de:'de',gb:'en',ie:'en',br:'pt'};
   return byCountry[String(c&&c.countryCode||'').toLowerCase()]||UI_LANG||'en';
@@ -1646,11 +1692,11 @@ function explorePageLooksVisitable(name,desc){
 async function loadExplorePlaces(){
   const c=exploreCenter;if(!c)return;
   exploreSelected.clear();exploreRouteGeoJSON=null;exploreRouteOrdered=[];renderExploreSelectedSummary();
-  const cacheKey='alpha_explore_hybrid_v6_landmarks_lang_'+(c.countryCode||'xx')+'_'+Math.round(c.lat*1000)+'_'+Math.round(c.lon*1000);
+  const cacheKey='alpha_explore_hybrid_v7_smart_landmarks_'+(c.countryCode||'xx')+'_'+Math.round(c.lat*1000)+'_'+Math.round(c.lon*1000);
   try{
     const cached=JSON.parse(localStorage.getItem(cacheKey)||'null');
     if(cached&&Date.now()-cached.time<21600000&&Array.isArray(cached.places)&&cached.places.length){
-      explorePlaces=cached.places;$('exploreState').textContent=explorePlaces.length+' locais para visitar · pesquisa híbrida guardada';renderExploreResults();return;
+      explorePlaces=cached.places;$('exploreState').textContent=explorePlaces.length+' locais para visitar · pesquisa híbrida guardada';renderExploreResults();renderExploreRecommendations();return;
     }
   }catch{}
   $('exploreState').textContent='A descobrir património, cultura, natureza e locais de interesse…';
@@ -1666,13 +1712,14 @@ async function loadExplorePlaces(){
       const cat=exploreWikiCategory(name,desc);
       return {id:'explore-wiki-'+pg.pageid,name,center:[lon,lat],distanceM,tags:{wikipedia:'pt:'+name},cat,description:desc||exploreCategoryLabel(cat)+' com interesse para visita.',photo:pg.thumbnail&&pg.thumbnail.source||'',wikipediaUrl:pg.fullurl||('https://pt.wikipedia.org/?curid='+pg.pageid),wikiMatched:true,website:'',opening:'',fee:''};
     }).filter(Boolean);
-    places.sort((a,b)=>exploreWikiScore(b)-exploreWikiScore(a));
+    places=mergeCuratedLandmarks(places,c);
+    places.sort((a,b)=>(b.priority||0)-(a.priority||0)||exploreWikiScore(b)-exploreWikiScore(a));
     explorePlaces=places.slice(0,40);
     if(!explorePlaces.length)throw new Error('sem resultados');
     if(explorePlaces.length<8)console.warn('EXPLORE: poucos resultados locais para',c.label,explorePlaces.length);
     localStorage.setItem(cacheKey,JSON.stringify({time:Date.now(),places:explorePlaces}));
     $('exploreState').textContent=explorePlaces.length+' locais para visitar · raio até 25 km · '+c.label+' · seleciona os que quiseres';
-    renderExploreResults();
+    renderExploreResults();renderExploreRecommendations();
   }catch(e){
     console.warn('EXPLORE hybrid discovery failed',e);
     explorePlaces=[];renderExploreResults();
@@ -1692,7 +1739,7 @@ function toggleExploreCategory(cat,btn){
   renderExploreResults();
 }
 function exploreDistance(p){const c=exploreCenter;if(!c)return '';return distanceLabel(hav(c.lat,c.lon,p.center[1],p.center[0]))}
-function toggleExplorePlace(id){if(exploreSelected.has(id))exploreSelected.delete(id);else exploreSelected.add(id);renderExploreResults();renderExploreSelectedSummary();renderExploreMarkers()}
+function toggleExplorePlace(id){if(exploreSelected.has(id))exploreSelected.delete(id);else exploreSelected.add(id);renderExploreResults();renderExploreSelectedSummary();renderExploreRecommendations();renderExploreMarkers()}
 function renderExploreSelectedSummary(){
   const el=$('exploreSelectedSummary');if(!el)return;
   const n=exploreSelected.size;
@@ -1704,7 +1751,8 @@ function openExploreDetails(id){
   const sel=exploreSelected.has(id);
   const photo=p.photo?'<img class="explorePhoto" src="'+esc(p.photo)+'" alt="" style="height:210px;border-radius:14px;margin-bottom:12px" onerror="this.style.display=\'none\'">':'';
   box.style.display='block';
-  box.innerHTML=photo+'<div class="eyebrow">'+exploreIcon(p.cat)+' '+esc(exploreCategoryLabel(p.cat))+' · '+esc(exploreDistance(p))+'</div><h2 style="margin:7px 0">'+esc(p.name)+'</h2><p>'+esc(p.description||'Sem descrição disponível.')+'</p>'+(p.opening?'<p class="small"><b>Horário indicado:</b> '+esc(p.opening)+'</p>':'')+(p.fee?'<p class="small"><b>Entrada:</b> '+esc(p.fee)+'</p>':'')+'<div class="row"><button class="btn '+(sel?'':'secondary')+'" onclick="toggleExplorePlace(\''+p.id+'\');openExploreDetails(\''+p.id+'\')">'+(sel?'✓ Selecionado':'Selecionar')+'</button><button class="btn secondary" onclick="showOneExploreOnMap(\''+p.id+'\')">Ver no mapa</button>'+(p.wikipediaUrl?'<a class="btn secondary" target="_blank" rel="noopener" href="'+esc(p.wikipediaUrl)+'">Saber mais</a>':p.website?'<a class="btn secondary" target="_blank" rel="noopener" href="'+esc(p.website)+'">Site</a>':'')+'</div>';
+  const links='<div class="officialLinks">'+(p.website?'<a class="btn secondary officialLink" target="_blank" rel="noopener" href="'+esc(p.website)+'">🌐 '+tr('Site oficial')+'</a>':'')+(p.tickets?'<a class="btn purple officialLink" target="_blank" rel="noopener" href="'+esc(p.tickets)+'">🎟 '+tr('Bilhetes')+'</a>':'')+(p.wikipediaUrl?'<a class="btn secondary officialLink" target="_blank" rel="noopener" href="'+esc(p.wikipediaUrl)+'">ⓘ '+tr('Saber mais')+'</a>':'')+'</div>';
+  box.innerHTML=photo+'<div class="eyebrow">'+exploreIcon(p.cat)+' '+esc(exploreCategoryLabel(p.cat))+' · '+esc(exploreDistance(p))+'</div><h2 style="margin:7px 0">'+esc(p.name)+'</h2>'+(p.why?'<div class="providerNote"><b>✦ '+tr('Sugestões')+':</b> '+esc(p.why)+'</div>':'')+'<p>'+esc(p.description||'Sem descrição disponível.')+'</p>'+(p.opening?'<p class="small"><b>Horário indicado:</b> '+esc(p.opening)+'</p>':'')+(p.fee?'<p class="small"><b>Entrada:</b> '+esc(p.fee)+'</p>':'')+'<div class="row"><button class="btn '+(sel?'':'secondary')+'" onclick="toggleExplorePlace(\''+p.id+'\');openExploreDetails(\''+p.id+'\')">'+(sel?'✓ '+tr('Selecionado'):tr('Selecionar'))+'</button><button class="btn secondary" onclick="showOneExploreOnMap(\''+p.id+'\')">Ver no mapa</button></div>'+links;
   box.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function renderExploreResults(){const host=$('exploreResults');if(!host)return;const arr=explorePlaces.filter(p=>exploreCategories.has('all')||exploreCategories.has(p.cat));if(!arr.length){host.innerHTML='<div class="exploreEmpty">Sem locais nas categorias selecionadas.</div>';return}host.innerHTML=arr.map(p=>{const sel=exploreSelected.has(p.id),photo=p.photo?'<img class="explorePhoto" src="'+esc(p.photo)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'<div class="explorePhoto" style="display:grid;place-items:center;font-size:44px">'+exploreIcon(p.cat)+'</div>';return '<article class="exploreCard '+(sel?'exploreSelected':'')+'">'+photo+'<div class="exploreBody"><div class="small green">'+exploreIcon(p.cat)+' '+exploreCategoryLabel(p.cat)+' · '+exploreDistance(p)+'</div><h3>'+esc(p.name)+'</h3><p class="small muted">'+esc(p.description)+'</p><div class="row" style="margin-top:10px"><button class="btn secondary" onclick="openExploreDetails(\''+p.id+'\')">Ver detalhes</button><button class="btn '+(sel?'':'secondary')+'" onclick="toggleExplorePlace(\''+p.id+'\')">'+(sel?'✓ Selecionado':'Selecionar')+'</button></div></div></article>'}).join('');renderExploreSelectedSummary()}
