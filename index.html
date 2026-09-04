@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="2.2.1">
+<meta name="alpha-version" content="2.2.2">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 2.2.1 — Real Route Nav + Smart Chat</title>
+<title>Project Alpha 2.2.2 — Real Route Nav + Smart Chat</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -278,6 +278,13 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
   filter:drop-shadow(0 5px 5px rgba(0,0,0,.48))!important;
 }
 .mapShell.liveNavigating #realMap{filter:none!important}
+
+
+/* Alpha 2.2.2 — guaranteed route overlay above the 3D map */
+#routeSvgOverlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
+#field.active .mapNavOverlay{z-index:7!important}
+#field.active .mapFsBtn{z-index:8!important}
+.maplibregl-marker.userMarker{z-index:6!important}
 
 </style>
 </head>
@@ -943,7 +950,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[];
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='2.2.1',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='2.2.2',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1284,7 +1291,7 @@ function initMap(){
     style:'https://tiles.openfreemap.org/styles/liberty'
   });
   map.addControl(new maplibregl.NavigationControl({showCompass:false,visualizePitch:false}),'top-right');
-  map.on('load',()=>{renderMapReports();renderTrailLayer();renderSelectedTrail();renderExploreMarkers();renderExploreRoute();renderLiveTrack();updateNavigationOverlay();if(pos)updateUserMarker(!selectedTrail);if(selectedTrail)setTimeout(()=>focusSelectedTrail(false),120)})
+  map.on('load',()=>{ensureRouteSvgOverlay();renderMapReports();renderTrailLayer();renderSelectedTrail();renderExploreMarkers();renderExploreRoute();renderLiveTrack();updateNavigationOverlay();if(pos)updateUserMarker(!selectedTrail);if(selectedTrail)setTimeout(()=>focusSelectedTrail(false),120)})
 }
 function updateUserMarker(center=false){
   if(!map||!pos)return;
@@ -2066,20 +2073,75 @@ function fitActiveRoute(force=false){
 }
 
 function setNavigationMapPresentation(active){
-  if(!map||!map.isStyleLoaded())return;
-  try{
-    const layers=(map.getStyle()?.layers||[]);
-    if(!map._alpha3dVisibility)map._alpha3dVisibility={};
-    layers.filter(l=>l.type==='fill-extrusion').forEach(l=>{
-      if(!(l.id in map._alpha3dVisibility)){
-        let current='visible';
-        try{current=map.getLayoutProperty(l.id,'visibility')||'visible'}catch{}
-        map._alpha3dVisibility[l.id]=current
-      }
-      try{map.setLayoutProperty(l.id,'visibility',active?'none':map._alpha3dVisibility[l.id])}catch{}
-    });
-  }catch(e){console.warn('navigation presentation',e)}
+  // 2.2.2: keep the 3D map intact. Route visibility is handled by an SVG overlay above MapLibre.
+  return;
 }
+
+let routeSvgOverlay=null,routeSvgHalo=null,routeSvgMain=null,routeSvgBound=false;
+function ensureRouteSvgOverlay(){
+  const shell=$('mapShell');if(!shell)return false;
+  if(routeSvgOverlay&&routeSvgOverlay.isConnected)return true;
+  const ns='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(ns,'svg');
+  svg.id='routeSvgOverlay';
+  svg.setAttribute('aria-hidden','true');
+  svg.style.position='absolute';
+  svg.style.inset='0';
+  svg.style.width='100%';
+  svg.style.height='100%';
+  svg.style.zIndex='4';
+  svg.style.pointerEvents='none';
+  svg.style.overflow='hidden';
+  const halo=document.createElementNS(ns,'path');
+  halo.setAttribute('fill','none');
+  halo.setAttribute('stroke','#ffffff');
+  halo.setAttribute('stroke-width','12');
+  halo.setAttribute('stroke-linecap','round');
+  halo.setAttribute('stroke-linejoin','round');
+  halo.setAttribute('opacity','0.98');
+  const main=document.createElementNS(ns,'path');
+  main.setAttribute('fill','none');
+  main.setAttribute('stroke','#1787ff');
+  main.setAttribute('stroke-width','7');
+  main.setAttribute('stroke-linecap','round');
+  main.setAttribute('stroke-linejoin','round');
+  main.setAttribute('opacity','1');
+  svg.appendChild(halo);svg.appendChild(main);
+  shell.appendChild(svg);
+  routeSvgOverlay=svg;routeSvgHalo=halo;routeSvgMain=main;
+  bindRouteSvgOverlay();
+  return true;
+}
+function routeSvgPath(){
+  if(!map||!exploreRouteGeoJSON?.coordinates?.length)return '';
+  const coords=exploreRouteGeoJSON.coordinates;
+  const step=Math.max(1,Math.floor(coords.length/650));
+  let d='',started=false;
+  for(let i=0;i<coords.length;i+=step){
+    const c=coords[i];if(!Array.isArray(c)||c.length<2)continue;
+    const p=map.project(c);if(!p||!Number.isFinite(p.x)||!Number.isFinite(p.y))continue;
+    d+=(started?' L ':'M ')+p.x.toFixed(1)+' '+p.y.toFixed(1);started=true;
+  }
+  const last=coords[coords.length-1];
+  if(last&&step>1){
+    const p=map.project(last);
+    if(p&&Number.isFinite(p.x)&&Number.isFinite(p.y))d+=(started?' L ':'M ')+p.x.toFixed(1)+' '+p.y.toFixed(1);
+  }
+  return d;
+}
+function updateRouteSvgOverlay(){
+  if(!ensureRouteSvgOverlay())return;
+  const d=routeSvgPath();
+  if(routeSvgHalo)routeSvgHalo.setAttribute('d',d);
+  if(routeSvgMain)routeSvgMain.setAttribute('d',d);
+  if(routeSvgOverlay)routeSvgOverlay.style.display=d?'block':'none';
+}
+function bindRouteSvgOverlay(){
+  if(routeSvgBound||!map)return;routeSvgBound=true;
+  const refresh=()=>requestAnimationFrame(updateRouteSvgOverlay);
+  ['move','zoom','rotate','pitch','resize','render'].forEach(ev=>map.on(ev,refresh));
+}
+
 function ensureRouteLayersOnTop(){
   if(!map||!map.isStyleLoaded()||!exploreRouteGeoJSON?.coordinates?.length)return false;
   const data={type:'FeatureCollection',features:[{type:'Feature',geometry:exploreRouteGeoJSON,properties:{}}]};
@@ -2109,12 +2171,13 @@ function renderExploreRoute(retry=0){
   if(!map.isStyleLoaded()){if(retry<24)setTimeout(()=>renderExploreRoute(retry+1),140);return;}
   if(!exploreRouteGeoJSON?.coordinates?.length){const shell=$('mapShell');if(shell)shell.classList.remove('routeReady');return;}
   const shell=$('mapShell');if(shell)shell.classList.add('routeReady');
-  if(liveNavActive)setNavigationMapPresentation(true);
   const ok=ensureRouteLayersOnTop();
+  ensureRouteSvgOverlay();
+  updateRouteSvgOverlay();
   if(!ok&&retry<10){setTimeout(()=>renderExploreRoute(retry+1),180);return}
   renderRouteEvents();
   updateNavigationOverlay();
-  if(retry===0)setTimeout(()=>ensureRouteLayersOnTop(),260);
+  if(retry===0)setTimeout(()=>{ensureRouteLayersOnTop();updateRouteSvgOverlay()},260);
 }
 function showExploreOnMap(onlySelected){if(!explorePlaces.length)return toast('Primeiro procura locais para visitar');if(onlySelected&&!exploreSelected.size)return toast('Ainda não escolheste locais');go('field');setTimeout(()=>{renderExploreMarkers(onlySelected);renderExploreRoute();const arr=explorePlaces.filter(p=>!onlySelected||exploreSelected.has(p.id));if(!map||!arr.length)return;const b=new maplibregl.LngLatBounds();arr.forEach(p=>b.extend(p.center));map.fitBounds(b,{padding:55,maxZoom:14})},220)}
 function showOneExploreOnMap(id){const p=explorePlaces.find(x=>x.id===id);if(!p)return;activeExploreNavTarget=p;go('field');setTimeout(()=>{renderExploreMarkers();renderExploreRoute();if(map)map.easeTo({center:p.center,zoom:16})},220)}
@@ -2141,13 +2204,14 @@ async function navigateExplorePlace(id){
     go('field');
     setTimeout(()=>{if(map){
       map.resize();
-      setNavigationMapPresentation(true);
       ensureRouteLayersOnTop();
+      ensureRouteSvgOverlay();
+      updateRouteSvgOverlay();
       renderExploreMarkers(true);
       updateLiveNavUI();
       followCurrentPosition();
-      setTimeout(()=>{ensureRouteLayersOnTop();renderExploreRoute(0)},350);
-      setTimeout(()=>ensureRouteLayersOnTop(),900)
+      setTimeout(()=>{ensureRouteLayersOnTop();updateRouteSvgOverlay();renderExploreRoute(0)},350);
+      setTimeout(()=>{ensureRouteLayersOnTop();updateRouteSvgOverlay()},900)
     }},260);
     toast('Navegação iniciada para '+p.name);
   }catch(e){console.warn('navigateExplorePlace',e);toast('Não foi possível criar o percurso agora')}
