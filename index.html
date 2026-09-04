@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="2.2.2">
+<meta name="alpha-version" content="2.3.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 2.2.2 — Real Route Nav + Smart Chat</title>
+<title>Project Alpha 2.3.0 — Real Route Nav + Smart Chat</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -286,6 +286,17 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 #field.active .mapFsBtn{z-index:8!important}
 .maplibregl-marker.userMarker{z-index:6!important}
 
+
+/* Alpha 2.3.0 — AI MULTI-STOP WALK OPTIMIZER */
+.multiStopPlanner{margin-top:12px;padding:14px;border:1px solid #31515b;border-radius:18px;background:#0b1a20}
+.multiStopPlanner textarea{min-height:132px;resize:vertical}
+.routeStopMarker{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#0c1b22;border:3px solid #fff;color:#fff;font-weight:950;font-size:14px;box-shadow:0 4px 12px #0008}
+.routeStopMarker.first{background:#1f8f70}
+.routeStopMarker.last{background:#7a5bd6}
+.routeStopMarker span{display:block;line-height:1}
+.routeSummaryStrong{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}
+.routeSummaryStrong b{display:inline-block;padding:7px 10px;border:1px solid #35515a;border-radius:999px;background:#10232a}
+
 </style>
 </head>
 <body>
@@ -358,7 +369,22 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 2.1 · conversa contextual com os locais encontrados. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 2.3 · conversa contextual + otimização multi-paragens. Não inventa horários, preços ou disponibilidade.</div>
+    </div>
+    <div id="multiStopPlanner" class="multiStopPlanner">
+      <div class="eyebrow">AI MULTI-STOP · A PÉ</div>
+      <h3 style="margin:6px 0 4px">Tenho várias paragens</h3>
+      <p class="small muted" style="margin-top:0">Cola nomes ou moradas, uma por linha. A app localiza os pontos, escolhe a melhor ordem para reduzir caminhada/tempo e mostra o percurso completo.</p>
+      <textarea id="multiStopInput" placeholder="Ex.:
+Livraria Lello
+Mercado do Bolhão
+Estação de São Bento
+..."></textarea>
+      <div class="row" style="margin-top:9px">
+        <button class="btn purple" onclick="planMultiStopFromBox()">✦ Otimizar percurso a pé</button>
+        <button class="btn secondary" onclick="clearMultiStopPlan()">Limpar</button>
+      </div>
+      <div id="multiStopState" class="small muted" style="margin-top:8px">2–12 paragens · começa na tua posição GPS quando disponível.</div>
     </div>
     <button id="exploreResultsToggle" class="btn secondary resultsToggle" style="display:none" onclick="toggleExploreClassic()">▦ Ver todos os locais</button>
     <div id="exploreClassic" class="exploreClassic">
@@ -948,9 +974,9 @@ let activityRunning=false,activityStartedAt=null,activitySeconds=0,activityDista
 let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareFile=null;
 let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,trailDetailPhotos=[],destination=null,experiencePlaces={monuments:[],meals:[],stays:[]},currentTester='Filipe',smartChoices={monuments:[],meals:[],stays:[]};
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
-let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[];
+let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='2.2.2',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='2.3.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1279,7 +1305,7 @@ function closeQuickReport(){if($('quickReport'))$('quickReport').style.display='
 function chooseQuickReport(type){closeQuickReport();if($('rtype'))$('rtype').value=type;go('report');setTimeout(()=>{const el=$('rtype');if(el)el.scrollIntoView({behavior:'smooth',block:'center'})},100)}
 
 function toast(m){let t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.remove('show'),2800)}
-function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();if(map){map.resize();renderMapReports();renderTrailLayer();renderSelectedTrail();renderExploreMarkers();renderExploreRoute();renderLiveTrack();setTimeout(()=>{map.resize();if(exploreRouteGeoJSON&&!liveNavActive)fitActiveRoute(false)},180)}},120);if(id==='experience')syncReview()}
+function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();if(map){map.resize();renderMapReports();renderTrailLayer();renderSelectedTrail();renderExploreMarkers();renderMultiStopMarkers();renderExploreRoute();renderLiveTrack();setTimeout(()=>{map.resize();if(exploreRouteGeoJSON&&!liveNavActive)fitActiveRoute(false)},180)}},120);if(id==='experience')syncReview()}
 function reports(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
 function saveReports(r){localStorage.setItem(KEY,JSON.stringify(r))}
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -1850,8 +1876,8 @@ function startExploreConversation(){
   exploreChatHistory=[];exploreChatStarted=true;const top=explorePlaces.slice(0,4).map(p=>'<b>'+esc(p.name)+'</b>').join(', ');
   const dest=esc(exploreDestinationName());
   $('exploreChatMessages').innerHTML='';
-  chatAdd('ai','Olá! Estou a explorar <b>'+dest+'</b> contigo. Já cruzei os locais que encontrámos e os mais relevantes incluem '+top+'.<br><br>Diz-me o que te apetece viver, quanto tempo tens, com quem estás ou quanto queres gastar. Eu ajudo-te a decidir e posso preparar a seleção para a rota.');
-  setChatSuggestions([{label:'🏛 Imperdíveis',prompt:'Quero ver os imperdíveis'},{label:'⏱ Tenho 2 horas',prompt:'Tenho 2 horas. O que recomendas?'},{label:'👨‍👩‍👧 Família',prompt:'Estou em família. O que recomendas?'},{label:'💰 Pouco gasto',prompt:'Quero gastar pouco ou nada'},{label:'🚶 Andar pouco',prompt:'Quero andar pouco'},{label:'🌧 Se chover',prompt:'E se estiver a chover?'}]);
+  chatAdd('ai','Olá! Estou a explorar <b>'+dest+'</b> contigo. Já cruzei os locais que encontrámos e os mais relevantes incluem '+top+'.<br><br>Diz-me o que te apetece viver, quanto tempo tens, com quem estás ou quanto queres gastar. Também podes colar várias paragens e pedir: <b>“otimiza isto a pé para eu andar o mínimo possível”</b>.');
+  setChatSuggestions([{label:'🏛 Imperdíveis',prompt:'Quero ver os imperdíveis'},{label:'⏱ Tenho 2 horas',prompt:'Tenho 2 horas. O que recomendas?'},{label:'👨‍👩‍👧 Família',prompt:'Estou em família. O que recomendas?'},{label:'💰 Pouco gasto',prompt:'Quero gastar pouco ou nada'},{label:'🚶 Andar pouco',prompt:'Quero andar pouco'},{label:'🌧 Se chover',prompt:'E se estiver a chover?'},{label:'📍 Várias paragens',prompt:'Quero otimizar várias paragens a pé. Vou colar uma por linha:'}]);
 }
 function resetExploreChat(){if(!explorePlaces.length)return;startExploreConversation()}
 function toggleExploreClassic(){const el=$('exploreClassic'),b=$('exploreResultsToggle');if(!el)return;const show=!el.classList.contains('show');el.classList.toggle('show',show);if(b)b.textContent=show?'✦ Voltar à conversa':'▦ Ver todos os locais';if(show)el.scrollIntoView({behavior:'smooth',block:'start'})}
@@ -1903,9 +1929,217 @@ function chatDescribePlace(p,q=''){
   return true
 }
 function chatPlaceLines(list){return list.map((p,i)=>(i+1)+'. <b>'+esc(p.name)+'</b> · '+esc(exploreCategoryLabel(p.cat))+' · '+esc(exploreDistance(p))).join('<br>')}
+
+function parseMultiStopText(raw){
+  let s=String(raw||'').replace(/\r/g,'\n');
+  s=s.replace(/[•●▪◦]/g,'\n');
+  let parts=s.split(/\n+/).map(x=>x.trim()).filter(Boolean);
+  if(parts.length<2){
+    const colon=s.indexOf(':');
+    const tail=colon>=0?s.slice(colon+1):s;
+    parts=tail.split(/\s*;\s*|\s*\|\s*/).map(x=>x.trim()).filter(Boolean);
+  }
+  parts=parts.map(x=>x
+    .replace(/^\s*(?:\d{1,2}[\.\)\-:]|[-–—])\s*/,'')
+    .replace(/^(?:ir a|passar por|visitar|paragem|stop)\s+/i,'')
+    .trim()
+  ).filter(x=>x.length>=2);
+  const noise=/^(tenho|quero|preciso|faz|cria|otimiza|optimiza|rota|percurso|andar|a pe|a pé|poupar|tempo|esforco|esforço)$/i;
+  parts=parts.filter(x=>!noise.test(x));
+  const seen=new Set(),out=[];
+  for(const p of parts){const k=normalizeChatText(p);if(k&&!seen.has(k)){seen.add(k);out.push(p)}}
+  return out.slice(0,12)
+}
+function multiStopIntent(q){
+  const low=normalizeChatText(q);
+  const count=parseMultiStopText(q).length;
+  return count>=2 && (/rota|percurso|paragens|paragem|pontos|locais|andar|a pe|pe|otimiz|optim|poupar|visitar|passar/.test(low) || String(q).includes('\n'))
+}
+function multiStopCountryCode(){
+  return String(exploreCenter?.countryCode||exploreCenter?.homeCountryCode||'').toLowerCase()
+}
+async function geocodeMultiStop(name,index,total){
+  const state=$('multiStopState');
+  if(state)state.textContent='A localizar '+(index+1)+'/'+total+' · '+name;
+  let u='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&addressdetails=1';
+  const cc=multiStopCountryCode();if(cc)u+='&countrycodes='+encodeURIComponent(cc);
+  if(exploreCenter&&Number.isFinite(exploreCenter.lon)&&Number.isFinite(exploreCenter.lat)){
+    const lon=exploreCenter.lon,lat=exploreCenter.lat,dx=.18,dy=.14;
+    u+='&viewbox='+encodeURIComponent((lon-dx)+','+(lat+dy)+','+(lon+dx)+','+(lat-dy));
+    u+='&bounded=1';
+  }
+  u+='&accept-language='+encodeURIComponent(deviceLocale||'pt-PT');
+  u+='&q='+encodeURIComponent(name);
+  const r=await fetch(u,{headers:{'Accept':'application/json'}});
+  if(!r.ok)throw new Error('geocode '+r.status);
+  const j=await r.json();if(!j.length)throw new Error('not found');
+  const x=j[0];
+  return {
+    id:'multistop-'+Date.now()+'-'+index,
+    name:name,
+    label:x.display_name||name,
+    center:[Number(x.lon),Number(x.lat)],
+    cat:'attraction',
+    description:'Paragem introduzida manualmente para otimização de percurso.',
+    source:'multi-stop',
+    priority:100-index
+  }
+}
+async function geocodeMultiStops(names){
+  const out=[],failed=[];
+  for(let i=0;i<names.length;i++){
+    try{
+      const p=await geocodeMultiStop(names[i],i,names.length);
+      out.push(p);
+      if(i<names.length-1)await new Promise(r=>setTimeout(r,1050));
+    }catch(e){failed.push(names[i])}
+  }
+  return {points:out,failed}
+}
+function straightMatrix(points){
+  return points.map((a,i)=>points.map((b,j)=>i===j?0:hav(a[1],a[0],b[1],b[0])))
+}
+async function footTable(points){
+  const coords=points.map(c=>c.join(',')).join(';');
+  const url='https://routing.openstreetmap.de/routed-foot/table/v1/driving/'+coords+'?annotations=distance,duration';
+  try{
+    const r=await fetch(url);if(!r.ok)throw new Error('foot table '+r.status);
+    const j=await r.json();if(!Array.isArray(j.distances))throw new Error('foot table empty');
+    return j
+  }catch(e){
+    const distances=straightMatrix(points);
+    const durations=distances.map(row=>row.map(m=>m/1.25));
+    return {distances,durations,_fallback:true}
+  }
+}
+async function footRoute(points){
+  const coords=points.map(c=>c.join(',')).join(';');
+  const url='https://routing.openstreetmap.de/routed-foot/route/v1/driving/'+coords+'?overview=full&geometries=geojson&steps=true';
+  const r=await fetch(url);if(!r.ok)throw new Error('foot route '+r.status);
+  const j=await r.json();if(!j.routes?.length)throw new Error('Sem rota pedonal');
+  return j.routes[0]
+}
+function bestVisitOrderCost(matrix,n){
+  const ids=Array.from({length:n},(_,i)=>i+1);
+  if(n<=9){
+    let best=null,bestCost=Infinity;
+    const used=Array(n).fill(false),cur=[];
+    function walk(last,cost){
+      if(cost>=bestCost)return;
+      if(cur.length===n){best=cur.slice();bestCost=cost;return}
+      for(let k=0;k<n;k++){
+        if(used[k])continue;const idx=k+1,d=matrix[last]?.[idx];
+        if(!Number.isFinite(d))continue;
+        used[k]=true;cur.push(k);walk(idx,cost+d);cur.pop();used[k]=false
+      }
+    }
+    walk(0,0);return best||ids.map(x=>x-1)
+  }
+  const left=new Set(ids),out=[];let last=0;
+  while(left.size){
+    let best=null,cost=Infinity;
+    for(const x of left){const d=matrix[last]?.[x];if(Number.isFinite(d)&&d<cost){best=x;cost=d}}
+    if(best===null)best=left.values().next().value;
+    left.delete(best);out.push(best-1);last=best
+  }
+  return out
+}
+function renderMultiStopMarkers(){
+  multiStopMarkers.forEach(m=>m.remove());multiStopMarkers=[];
+  if(!map||!exploreRouteOrdered?.length)return;
+  exploreRouteOrdered.forEach((p,i)=>{
+    const e=document.createElement('div');
+    e.className='routeStopMarker '+(i===0?'first ':'')+(i===exploreRouteOrdered.length-1?'last':'');
+    e.innerHTML='<span>'+(i+1)+'</span>';
+    const pop=new maplibregl.Popup({offset:20}).setHTML('<b>'+(i+1)+'. '+esc(p.name)+'</b><br><small>'+esc(p.label||p.description||'Paragem')+'</small>');
+    multiStopMarkers.push(new maplibregl.Marker({element:e}).setLngLat(p.center).setPopup(pop).addTo(map))
+  })
+}
+function clearMultiStopPlan(){
+  multiStopPlan=null;multiStopMarkers.forEach(m=>m.remove());multiStopMarkers=[];
+  const input=$('multiStopInput');if(input)input.value='';
+  const state=$('multiStopState');if(state)state.textContent='2–12 paragens · começa na tua posição GPS quando disponível.';
+  toast('Plano multi-paragens limpo')
+}
+async function planMultiStopFromBox(){
+  const input=$('multiStopInput');if(!input)return;
+  const names=parseMultiStopText(input.value);
+  return planMultiStopNames(names,{source:'box'})
+}
+async function planMultiStopFromText(q){
+  const names=parseMultiStopText(q);
+  return planMultiStopNames(names,{source:'chat',raw:q})
+}
+async function planMultiStopNames(names,opts={}){
+  if(names.length<2)return toast('Indica pelo menos 2 paragens, uma por linha');
+  if(names.length>12)return toast('Nesta Alpha podes otimizar até 12 paragens');
+  const state=$('multiStopState');
+  if(state)state.textContent='A preparar '+names.length+' paragens…';
+  if(opts.source==='chat')chatAdd('ai','Percebi: queres um percurso com <b>'+names.length+' paragens obrigatórias</b>. Vou localizá-las e escolher a ordem que reduz a caminhada.');
+  try{
+    const geo=await geocodeMultiStops(names);
+    if(geo.points.length<2){
+      const msg='Só consegui localizar '+geo.points.length+' das '+names.length+' paragens.';
+      if(state)state.textContent=msg;
+      if(opts.source==='chat')chatAdd('ai',msg+' Confirma os nomes/moradas.');
+      return
+    }
+    geo.points.forEach(p=>{
+      const old=explorePlaces.find(x=>normalizeChatText(x.name)===normalizeChatText(p.name));
+      if(old){p.id=old.id;p.cat=old.cat||p.cat;p.description=old.description||p.description;p.website=old.website;p.tickets=old.tickets;p.wikipediaUrl=old.wikipediaUrl}
+      else explorePlaces.push(p)
+    });
+    exploreSelected=new Set(geo.points.map(p=>p.id));
+    const start=routeStartPoint();
+    if(!start)throw new Error('Sem ponto de partida');
+    const raw=[start,...geo.points.map(p=>p.center)];
+    if(state)state.textContent='A calcular distâncias pedonais e a melhor ordem…';
+    const table=await footTable(raw);
+    const matrix=(table.durations&&table.durations.length)?table.durations:table.distances;
+    const order=bestVisitOrderCost(matrix,geo.points.length);
+    const ordered=order.map(i=>geo.points[i]);
+    const route=await footRoute([start,...ordered.map(p=>p.center)]);
+    exploreRouteGeoJSON=route.geometry;
+    exploreRouteOrdered=ordered;
+    activeExploreNavTarget=ordered[0]||null;
+    exploreRouteSteps=(route.legs||[]).flatMap(leg=>leg.steps||[]).filter(st=>st?.maneuver?.location);
+    navStepIndex=0;
+    navigationMode='walk';navVehicleStyle='arrow';localStorage.setItem(NAV_VEHICLE_KEY,'arrow');
+    const distance=Number(route.distance||0),duration=Number(route.duration||0);
+    multiStopPlan={names,ordered,distance,duration,failed:geo.failed,createdAt:Date.now(),mode:'walk'};
+    persistActiveRoute({multiStop:true,mode:'walk',distance,duration,failed:geo.failed});
+    localStorage.setItem('alpha_multistop_plan',JSON.stringify({createdAt:Date.now(),mode:'walk',distance,duration,stops:ordered.map(p=>({id:p.id,name:p.name,label:p.label,center:p.center}))}));
+    renderExploreResults();renderExploreSelectedSummary();renderVehicleUI();
+    const km=(distance/1000).toFixed(1),mins=Math.max(1,Math.round(duration/60));
+    const result='<div class="eyebrow">AI MULTI-STOP · PERCURSO A PÉ</div>'+
+      '<h3 style="margin:7px 0">Ordem otimizada</h3>'+
+      '<div class="routeSummaryStrong"><b>🚶 '+km+' km</b><b>⏱ ≈ '+mins+' min</b><b>📍 '+ordered.length+' paragens</b></div>'+
+      (geo.failed.length?'<p class="small muted">Não localizei: '+esc(geo.failed.join(' · '))+'</p>':'')+
+      '<ol>'+ordered.map((p,i)=>'<li><b>'+esc(p.name)+'</b></li>').join('')+'</ol>'+
+      '<p class="small muted">A otimização usa rede pedonal quando o servidor público está disponível. O mapa mostra todas as paragens numeradas e o percurso completo.</p>';
+    const box=$('exploreAIRouteBox');if(box){box.style.display='block';box.innerHTML=result}
+    if(state)state.textContent='Pronto · '+ordered.length+' paragens · '+km+' km · ≈ '+mins+' min';
+    if(opts.source==='chat'){
+      chatAdd('ai','Fiz a otimização. A melhor sequência que encontrei é:<br><br>'+ordered.map((p,i)=>(i+1)+'. <b>'+esc(p.name)+'</b>').join('<br>')+
+        '<br><br>🚶 <b>'+km+' km</b> · ⏱ <b>≈ '+mins+' min</b>',[
+        {label:'🗺 Mostrar percurso',primary:true,fn:()=>showExploreAIRouteOnMap()},
+        {label:'▶ Iniciar navegação',fn:()=>{showExploreAIRouteOnMap();setTimeout(()=>toggleLiveNavigation(),500)}}
+      ])
+    }
+    showExploreAIRouteOnMap();
+  }catch(e){
+    console.warn('multiStop planner',e);
+    const msg='Não consegui concluir o percurso pedonal agora. Mantive as paragens para poderes corrigir ou tentar novamente.';
+    if(state)state.textContent=msg;
+    if(opts.source==='chat')chatAdd('ai',msg);
+    toast('Não foi possível calcular o percurso pedonal')
+  }
+}
+
 function sendExploreChat(){
   const input=$('exploreChatInput');if(!input||!explorePlaces.length)return;
   const q=input.value.trim();if(!q)return;input.value='';chatAdd('user',esc(q));
+  if(multiStopIntent(q)){planMultiStopFromText(q);return}
   const low=q.toLowerCase(),ranked=chatRankPlaces(q),count=inferChatCount(q),pick=ranked.slice(0,count),dest=esc(exploreDestinationName());
   const poi=chatPoiMatch(q);
   if(poi){
@@ -2241,17 +2475,17 @@ async function buildExploreAIRoute(){
   if(!hasGold())return toast('AI Experience é uma funcionalidade GOLD');
   const chosen=Array.from(exploreSelected).map(id=>explorePlaces.find(p=>p.id===id)).filter(Boolean);if(!chosen.length)return toast('Seleciona pelo menos um local');
   const start=routeStartPoint();if(!start)return toast('Não foi possível determinar o ponto de partida');
-  const box=$('exploreAIRouteBox');if(box){box.style.display='block';box.innerHTML='<b>AI Experience</b><br><span class="muted">A calcular a sequência com menor distância rodoviária…</span>'}
+  const box=$('exploreAIRouteBox');if(box){box.style.display='block';box.innerHTML='<b>AI Experience</b><br><span class="muted">A calcular a sequência mais eficiente…</span>'}
   try{
     const raw=[start,...chosen.map(p=>p.center)],table=await osrmTable(raw),order=bestVisitOrder(table.distances,chosen.length),ordered=order.map(i=>chosen[i]),optPoints=[start,...ordered.map(p=>p.center)];
     const [optRoute,baseRoute]=await Promise.all([osrmRoute(optPoints),osrmRoute(raw)]);
     exploreRouteGeoJSON=optRoute.geometry;exploreRouteOrdered=ordered.slice();activeExploreNavTarget=ordered[0]||null;exploreRouteSteps=(optRoute.legs||[]).flatMap(leg=>leg.steps||[]).filter(st=>st?.maneuver?.location);navStepIndex=0;persistActiveRoute({distance:optRoute.distance,duration:optRoute.duration});
     const km=optRoute.distance/1000,mins=Math.round(optRoute.duration/60),saved=Math.max(0,(baseRoute.distance-optRoute.distance)/1000);
-    if(box){box.innerHTML='<div class="eyebrow">AI EXPERIENCE · ROTA OTIMIZADA</div><h3 style="margin:7px 0">Menos quilómetros, menor consumo</h3><span class="routeStat">'+km.toFixed(1)+' km</span><span class="routeStat">≈ '+mins+' min</span>'+(saved>=.1?'<span class="routeStat">− '+saved.toFixed(1)+' km vs ordem escolhida</span>':'')+'<p class="small muted">Sequência calculada pela distância rodoviária disponível. A rota abre automaticamente no GO; a navegação fica disponível junto ao mapa e podes escolher a aplicação a utilizar.</p><ol>'+ordered.map(p=>'<li><b>'+esc(p.name)+'</b></li>').join('')+'</ol>'}
+    if(box){box.innerHTML='<div class="eyebrow">AI EXPERIENCE · ROTA OTIMIZADA</div><h3 style="margin:7px 0">Menos quilómetros, menor consumo</h3><span class="routeStat">'+km.toFixed(1)+' km</span><span class="routeStat">≈ '+mins+' min</span>'+(saved>=.1?'<span class="routeStat">− '+saved.toFixed(1)+' km vs ordem escolhida</span>':'')+'<p class="small muted">Sequência calculada pela rede disponível para o modo escolhido. A rota abre automaticamente no GO; a navegação fica disponível junto ao mapa e podes escolher a aplicação a utilizar.</p><ol>'+ordered.map(p=>'<li><b>'+esc(p.name)+'</b></li>').join('')+'</ol>'}
     toast('AI Experience preparou a rota');showExploreAIRouteOnMap();
   }catch(e){if(box)box.innerHTML='<b>Não foi possível calcular a rota agora.</b><p class="small muted">Manténs os locais selecionados e podes tentar novamente.</p>';toast('Serviço de rotas indisponível')}
 }
-function showExploreAIRouteOnMap(){if(!exploreRouteGeoJSON)return toast('Calcula primeiro a rota');go('field');setTimeout(()=>{const shell=$('mapShell');if(shell)shell.classList.add('routeReady');if(!map)return;map.resize();renderExploreMarkers(true);renderExploreRoute(0);updateNavigationOverlay();fitActiveRoute(true);const card=$('exploreGoNavCard'),title=$('exploreGoNavTitle'),text=$('exploreGoNavText');if(card)card.style.display='block';if(title)title.textContent=exploreRouteOrdered.length+' '+(exploreRouteOrdered.length===1?'paragem':'paragens')+' · rota pronta';if(text)text.textContent='A rota azul está guardada neste dispositivo e permanece disponível ao regressares à app. Inicia a navegação para receberes instruções em tempo real.';setTimeout(()=>renderExploreRoute(0),450)},380)}
+function showExploreAIRouteOnMap(){if(!exploreRouteGeoJSON)return toast('Calcula primeiro a rota');go('field');setTimeout(()=>{const shell=$('mapShell');if(shell)shell.classList.add('routeReady');if(!map)return;map.resize();renderExploreMarkers(true);renderMultiStopMarkers();renderExploreRoute(0);updateNavigationOverlay();fitActiveRoute(true);const card=$('exploreGoNavCard'),title=$('exploreGoNavTitle'),text=$('exploreGoNavText');if(card)card.style.display='block';if(title)title.textContent=exploreRouteOrdered.length+' '+(exploreRouteOrdered.length===1?'paragem':'paragens')+' · rota pronta';if(text)text.textContent='A rota azul está guardada neste dispositivo e permanece disponível ao regressares à app. Inicia a navegação para receberes instruções em tempo real.';setTimeout(()=>renderExploreRoute(0),450)},380)}
 function carPlatform(){const ua=navigator.userAgent||'';if(/iPhone|iPad|iPod/i.test(ua))return 'ios';if(/Android/i.test(ua))return 'android';return 'web'}
 function carNavUrl(p,provider='waze'){
   if(!p||!Array.isArray(p.center))return '';
