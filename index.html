@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="2.3.0">
+<meta name="alpha-version" content="2.3.1">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 2.3.0 — Real Route Nav + Smart Chat</title>
+<title>Project Alpha 2.3.1 — Real Route Nav + Smart Chat</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -369,7 +369,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 2.3 · conversa contextual + otimização multi-paragens. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 2.3.1 · multi-paragens com geocodificação resiliente + fallback local. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
       <div class="eyebrow">AI MULTI-STOP · A PÉ</div>
@@ -384,7 +384,7 @@ Estação de São Bento
         <button class="btn purple" onclick="planMultiStopFromBox()">✦ Otimizar percurso a pé</button>
         <button class="btn secondary" onclick="clearMultiStopPlan()">Limpar</button>
       </div>
-      <div id="multiStopState" class="small muted" style="margin-top:8px">2–12 paragens · começa na tua posição GPS quando disponível.</div>
+      <div id="multiStopState" class="small muted" style="margin-top:8px">2–12 paragens · usa primeiro os POI já descobertos e depois pesquisa por nome + destino atual.</div>
     </div>
     <button id="exploreResultsToggle" class="btn secondary resultsToggle" style="display:none" onclick="toggleExploreClassic()">▦ Ver todos os locais</button>
     <div id="exploreClassic" class="exploreClassic">
@@ -976,7 +976,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='2.3.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='2.3.1',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1958,32 +1958,111 @@ function multiStopIntent(q){
 function multiStopCountryCode(){
   return String(exploreCenter?.countryCode||exploreCenter?.homeCountryCode||'').toLowerCase()
 }
+function multiStopContextLabel(){
+  const raw=String(exploreCenter?.label||$('exploreDestinationInput')?.value||'').trim();
+  if(raw&&raw.toLowerCase()!=='perto de mim')return raw.split(',').slice(0,2).join(', ').trim();
+  if(weatherPlace&&String(weatherPlace).trim())return String(weatherPlace).trim();
+  return ''
+}
+function localMultiStopMatch(name){
+  const q=normalizeChatText(name),qt=q.split(' ').filter(x=>x.length>2);
+  let best=null,score=0;
+  for(const p of explorePlaces||[]){
+    if(!p?.center)continue;
+    const n=normalizeChatText(p.name),nt=n.split(' ').filter(x=>x.length>2);
+    let s=0;
+    if(n===q)s+=180;
+    if(n.includes(q)||q.includes(n))s+=100;
+    qt.forEach(t=>{if(nt.includes(t))s+=22;else if(n.includes(t))s+=9});
+    if(s>score){score=s;best=p}
+  }
+  return score>=35?best:null
+}
+function validGeoResult(x){
+  const lon=Number(x?.lon),lat=Number(x?.lat);
+  return Number.isFinite(lon)&&Number.isFinite(lat)&&lat>=-90&&lat<=90&&lon>=-180&&lon<=180
+}
+function geoCandidateDistance(x){
+  if(!exploreCenter||!validGeoResult(x))return 0;
+  return hav(exploreCenter.lat,exploreCenter.lon,Number(x.lat),Number(x.lon))
+}
+async function nominatimSearchMultiStop(q,opts={}){
+  let u='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=8&addressdetails=1&dedupe=1';
+  const cc=multiStopCountryCode();
+  if(cc)u+='&countrycodes='+encodeURIComponent(cc);
+  u+='&accept-language='+encodeURIComponent(deviceLocale||'pt-PT');
+  if(opts.viewbox&&exploreCenter&&Number.isFinite(exploreCenter.lon)&&Number.isFinite(exploreCenter.lat)){
+    const lon=exploreCenter.lon,lat=exploreCenter.lat,dx=.30,dy=.22;
+    u+='&viewbox='+encodeURIComponent((lon-dx)+','+(lat+dy)+','+(lon+dx)+','+(lat-dy));
+    /* IMPORTANT: viewbox is a ranking hint, never a hard bounded filter. */
+  }
+  u+='&q='+encodeURIComponent(q);
+  const r=await fetch(u,{headers:{'Accept':'application/json'}});
+  if(!r.ok)throw new Error('geocode '+r.status);
+  const j=await r.json();
+  return Array.isArray(j)?j.filter(validGeoResult):[]
+}
+function chooseMultiStopGeo(results){
+  if(!results.length)return null;
+  if(exploreCenter){
+    const near=results
+      .map(x=>({x,d:geoCandidateDistance(x)}))
+      .sort((a,b)=>a.d-b.d);
+    /* Prefer the closest result within a generous metro radius. */
+    const local=near.find(v=>v.d<=60000);
+    if(local)return local.x;
+    return near[0].x
+  }
+  return results[0]
+}
 async function geocodeMultiStop(name,index,total){
   const state=$('multiStopState');
   if(state)state.textContent='A localizar '+(index+1)+'/'+total+' · '+name;
-  let u='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&addressdetails=1';
-  const cc=multiStopCountryCode();if(cc)u+='&countrycodes='+encodeURIComponent(cc);
-  if(exploreCenter&&Number.isFinite(exploreCenter.lon)&&Number.isFinite(exploreCenter.lat)){
-    const lon=exploreCenter.lon,lat=exploreCenter.lat,dx=.18,dy=.14;
-    u+='&viewbox='+encodeURIComponent((lon-dx)+','+(lat+dy)+','+(lon+dx)+','+(lat-dy));
-    u+='&bounded=1';
+
+  /* 1. Reuse POIs already discovered by EXPLORE before making another network call. */
+  const local=localMultiStopMatch(name);
+  if(local){
+    return {
+      ...local,
+      id:local.id||('multistop-local-'+Date.now()+'-'+index),
+      name:name,
+      label:local.label||local.name||name,
+      source:'multi-stop-local'
+    }
   }
-  u+='&accept-language='+encodeURIComponent(deviceLocale||'pt-PT');
-  u+='&q='+encodeURIComponent(name);
-  const r=await fetch(u,{headers:{'Accept':'application/json'}});
-  if(!r.ok)throw new Error('geocode '+r.status);
-  const j=await r.json();if(!j.length)throw new Error('not found');
-  const x=j[0];
-  return {
-    id:'multistop-'+Date.now()+'-'+index,
-    name:name,
-    label:x.display_name||name,
-    center:[Number(x.lon),Number(x.lat)],
-    cat:'attraction',
-    description:'Paragem introduzida manualmente para otimização de percurso.',
-    source:'multi-stop',
-    priority:100-index
+
+  const ctx=multiStopContextLabel();
+  const attempts=[];
+  /* 2. Name + current explored city/area: best for "Clérigos", "Bolhão", etc. */
+  if(ctx&&!normalizeChatText(name).includes(normalizeChatText(ctx).split(' ')[0])){
+    attempts.push({q:name+', '+ctx,viewbox:true})
   }
+  /* 3. Original name with a soft geographic preference. */
+  attempts.push({q:name,viewbox:true});
+  /* 4. Original name without viewbox. Country restriction remains if known. */
+  attempts.push({q:name,viewbox:false});
+
+  let lastErr=null;
+  for(let a=0;a<attempts.length;a++){
+    try{
+      const j=await nominatimSearchMultiStop(attempts[a].q,{viewbox:attempts[a].viewbox});
+      const x=chooseMultiStopGeo(j);
+      if(x){
+        return {
+          id:'multistop-'+Date.now()+'-'+index,
+          name:name,
+          label:x.display_name||name,
+          center:[Number(x.lon),Number(x.lat)],
+          cat:'attraction',
+          description:'Paragem introduzida manualmente para otimização de percurso.',
+          source:'multi-stop',
+          priority:100-index
+        }
+      }
+    }catch(e){lastErr=e}
+    if(a<attempts.length-1)await new Promise(r=>setTimeout(r,350))
+  }
+  throw lastErr||new Error('not found')
 }
 async function geocodeMultiStops(names){
   const out=[],failed=[];
@@ -1991,8 +2070,13 @@ async function geocodeMultiStops(names){
     try{
       const p=await geocodeMultiStop(names[i],i,names.length);
       out.push(p);
-      if(i<names.length-1)await new Promise(r=>setTimeout(r,1050));
-    }catch(e){failed.push(names[i])}
+    }catch(e){
+      console.warn('Multi-stop: não localizado',names[i],e);
+      failed.push(names[i])
+    }
+    /* Be polite to the public geocoder, but do not wait a full second when
+       the point was resolved from the already-loaded local EXPLORE dataset. */
+    if(i<names.length-1)await new Promise(r=>setTimeout(r,450))
   }
   return {points:out,failed}
 }
@@ -2058,7 +2142,7 @@ function renderMultiStopMarkers(){
 function clearMultiStopPlan(){
   multiStopPlan=null;multiStopMarkers.forEach(m=>m.remove());multiStopMarkers=[];
   const input=$('multiStopInput');if(input)input.value='';
-  const state=$('multiStopState');if(state)state.textContent='2–12 paragens · começa na tua posição GPS quando disponível.';
+  const state=$('multiStopState');if(state)state.textContent='2–12 paragens · usa primeiro os POI já descobertos e depois pesquisa por nome + destino atual.';
   toast('Plano multi-paragens limpo')
 }
 async function planMultiStopFromBox(){
@@ -2080,8 +2164,9 @@ async function planMultiStopNames(names,opts={}){
     const geo=await geocodeMultiStops(names);
     if(geo.points.length<2){
       const msg='Só consegui localizar '+geo.points.length+' das '+names.length+' paragens.';
-      if(state)state.textContent=msg;
-      if(opts.source==='chat')chatAdd('ai',msg+' Confirma os nomes/moradas.');
+      const detail=geo.failed.length?' Não localizei: '+geo.failed.join(' · ')+'.':'';
+      if(state)state.textContent=msg+detail;
+      if(opts.source==='chat')chatAdd('ai',msg+detail+' Podes corrigir apenas os nomes em falta e tentar novamente.');
       return
     }
     geo.points.forEach(p=>{
