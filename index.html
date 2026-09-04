@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="2.2.0">
+<meta name="alpha-version" content="2.2.1">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 2.2.0 — Real Route Nav + Smart Chat</title>
+<title>Project Alpha 2.2.1 — Real Route Nav + Smart Chat</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -265,6 +265,19 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 .navManeuver{background:rgba(5,15,20,.95)!important}
 #field.active .mapShell{contain:layout paint style!important}
 .routeStartBtn{background:linear-gradient(135deg,#2f8cff,#39d69b)!important;border-color:transparent!important;color:#fff!important}
+
+
+/* Alpha 2.2.1 — ROUTE VISIBILITY + CLEAN 3D MARKER */
+.userMarker,.userMarker.navActive{
+  width:48px!important;height:48px!important;padding:0!important;
+  border:0!important;border-radius:0!important;background:transparent!important;
+  box-shadow:none!important;overflow:visible!important;
+}
+.userMarker .navVehicleIcon{
+  width:46px!important;height:46px!important;
+  filter:drop-shadow(0 5px 5px rgba(0,0,0,.48))!important;
+}
+.mapShell.liveNavigating #realMap{filter:none!important}
 
 </style>
 </head>
@@ -930,7 +943,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[];
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='2.2.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='2.2.1',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1186,7 +1199,7 @@ const types={traffic:'Trânsito',police:'Polícia / autoridade',crash:'Acidente'
 
 const NAV_VEHICLE_KEY='alpha_nav_vehicle_style';
 const VEHICLES=[
-{id:'arrow',name:'Seta',mode:'car',kind:'arrow',color:'#39c8ff'},
+{id:'arrow',name:'Seta 3D',mode:'keep',kind:'arrow',color:'#39c8ff'},
 {id:'car-red',name:'Auto vermelho',mode:'car',kind:'car',color:'#e74b4b'},
 {id:'car-blue',name:'Auto azul',mode:'car',kind:'car',color:'#3b8eea'},
 {id:'car-green',name:'Auto verde',mode:'car',kind:'car',color:'#69b84a'},
@@ -1196,10 +1209,10 @@ const VEHICLES=[
 {id:'moto',name:'Motocicleta',mode:'moto',kind:'moto',color:'#e84b3c'},
 {id:'bike',name:'Bicicleta',mode:'bike',kind:'bike',color:'#47c96b'},
 {id:'scooter',name:'Trotineta',mode:'scooter',kind:'scooter',color:'#28a8e9'},
-{id:'walk',name:'A pé',mode:'walk',kind:'walk',color:'#f39c45'},
 {id:'van',name:'Autocaravana',mode:'car',kind:'van',color:'#c8d0d7'}
 ];
 let navVehicleStyle=localStorage.getItem(NAV_VEHICLE_KEY)||'car-red';
+if(navVehicleStyle==='walk'){navVehicleStyle='arrow';localStorage.setItem(NAV_VEHICLE_KEY,'arrow')}
 function vehicleDef(id=navVehicleStyle){return VEHICLES.find(v=>v.id===id)||VEHICLES[1]}
 function vehicleSvg(id=navVehicleStyle){
  const v=vehicleDef(id),c=v.color,gid='vg-'+String(v.id).replace(/[^a-z0-9]/gi,'');
@@ -1241,7 +1254,19 @@ function reportSvg(type){const m=REPORT_META[type]||REPORT_META.other,c=m.color;
 function renderVehicleUI(){const v=vehicleDef();if($('navVehiclePreview'))$('navVehiclePreview').innerHTML=vehicleSvg(v.id);if($('navVehicleName'))$('navVehicleName').textContent=v.name;if($('navOverlayMode')){$('navOverlayMode').innerHTML='<span style="display:block;width:30px;height:30px">'+vehicleSvg(v.id)+'</span>'}if(userMarker){const ic=userMarker.getElement()?.querySelector('.navVehicleIcon');if(ic)ic.innerHTML=vehicleSvg(v.id)}}
 function openVehicleChooser(){const host=$('vehicleGrid'),modal=$('vehicleChooser');if(!host||!modal)return;host.innerHTML=VEHICLES.map(v=>'<button class="vehicleChoice '+(v.id===navVehicleStyle?'selected':'')+'" onclick="chooseVehicle(\''+v.id+'\')"><span class="iconBox">'+vehicleSvg(v.id)+'</span><span>'+esc(v.name)+'</span></button>').join('');modal.style.display='flex'}
 function closeVehicleChooser(){if($('vehicleChooser'))$('vehicleChooser').style.display='none'}
-function chooseVehicle(id){const v=vehicleDef(id);navVehicleStyle=v.id;localStorage.setItem(NAV_VEHICLE_KEY,v.id);navigationMode=v.mode;document.querySelectorAll('.navMode').forEach(x=>x.classList.toggle('active',x.dataset.mode===v.mode));if($('navModeLabel'))$('navModeLabel').textContent=navModeMeta(v.mode).label;renderVehicleUI();closeVehicleChooser();if(navFollow&&pos)followCurrentPosition();toast('Ícone: '+v.name)}
+function chooseVehicle(id){
+  const v=vehicleDef(id);
+  navVehicleStyle=v.id;
+  localStorage.setItem(NAV_VEHICLE_KEY,v.id);
+  if(v.mode!=='keep'){
+    navigationMode=v.mode;
+    document.querySelectorAll('.navMode').forEach(x=>x.classList.toggle('active',x.dataset.mode===v.mode));
+    if($('navModeLabel'))$('navModeLabel').textContent=navModeMeta(v.mode).label
+  }
+  renderVehicleUI();closeVehicleChooser();
+  if(navFollow&&pos)followCurrentPosition();
+  toast('Ícone: '+v.name)
+}
 function openQuickReport(){const h=$('quickReportGrid'),m=$('quickReport');if(!h||!m)return;const order=['traffic','police','crash','hazard','roadworks','blocked','weather','fire','tree','water','mud','landslide','closure','sign','parking','animal','other'];h.innerHTML=order.map(t=>'<button class="reportChoice" onclick="chooseQuickReport(\''+t+'\')"><span class="iconBox">'+reportSvg(t)+'</span><span>'+esc((REPORT_META[t]||REPORT_META.other).label)+'</span></button>').join('');m.style.display='flex'}
 function closeQuickReport(){if($('quickReport'))$('quickReport').style.display='none'}
 function chooseQuickReport(type){closeQuickReport();if($('rtype'))$('rtype').value=type;go('report');setTimeout(()=>{const el=$('rtype');if(el)el.scrollIntoView({behavior:'smooth',block:'center'})},100)}
@@ -1939,7 +1964,22 @@ function openExploreDetails(id){
 function renderExploreResults(){const host=$('exploreResults');if(!host)return;const arr=explorePlaces.filter(p=>exploreCategories.has('all')||exploreCategories.has(p.cat));if(!arr.length){host.innerHTML='<div class="exploreEmpty">Sem locais nas categorias selecionadas.</div>';return}host.innerHTML=arr.map(p=>{const sel=exploreSelected.has(p.id),photo=p.photo?'<img class="explorePhoto" src="'+esc(p.photo)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'<div class="explorePhoto" style="display:grid;place-items:center;font-size:44px">'+exploreIcon(p.cat)+'</div>';return '<article class="exploreCard '+(sel?'exploreSelected':'')+'">'+photo+'<div class="exploreBody"><div class="small green">'+exploreIcon(p.cat)+' '+exploreCategoryLabel(p.cat)+' · '+exploreDistance(p)+'</div><h3>'+esc(p.name)+'</h3><p class="small muted">'+esc(p.description)+'</p><div class="row" style="margin-top:10px"><button class="btn secondary" onclick="openExploreDetails(\''+p.id+'\')">Ver detalhes</button><button class="btn '+(sel?'':'secondary')+'" onclick="toggleExplorePlace(\''+p.id+'\')">'+(sel?'✓ Selecionado':'Selecionar')+'</button></div></div></article>'}).join('');renderExploreSelectedSummary()}
 function renderExploreMarkers(onlySelected=false){if(!map)return;exploreMarkers.forEach(m=>m.remove());exploreMarkers=[];const arr=explorePlaces.filter(p=>!onlySelected||exploreSelected.has(p.id));arr.forEach((p,i)=>{const e=document.createElement('div');e.className='exploreMapMarker'+(exploreSelected.has(p.id)?' selected':'');e.textContent=exploreIcon(p.cat);const pop=new maplibregl.Popup({offset:20}).setHTML('<b>'+esc(p.name)+'</b><br><small>'+esc(exploreCategoryLabel(p.cat))+' · '+esc(exploreDistance(p))+'</small><br>'+esc(p.description));exploreMarkers.push(new maplibregl.Marker({element:e}).setLngLat(p.center).setPopup(pop).addTo(map))})}
 function navModeMeta(mode){return({walk:{label:'A pé',zoom:17,pitch:48},bike:{label:'Bicicleta',zoom:16.5,pitch:50},scooter:{label:'Trotineta',zoom:16.5,pitch:50},moto:{label:'Moto',zoom:16.2,pitch:54},car:{label:'Carro',zoom:16,pitch:55}})[mode]||{label:'A pé',zoom:17,pitch:48}}
-function setNavigationMode(mode,btn){navigationMode=mode;document.querySelectorAll('.navMode').forEach(x=>x.classList.toggle('active',x.dataset.mode===mode));if(mode==='walk')navVehicleStyle='walk';else if(mode==='bike')navVehicleStyle='bike';else if(mode==='scooter')navVehicleStyle='scooter';else if(mode==='moto')navVehicleStyle='moto';else if(!['car-red','car-blue','car-green','car-yellow','suv','taxi','van','arrow'].includes(navVehicleStyle))navVehicleStyle='car-red';localStorage.setItem(NAV_VEHICLE_KEY,navVehicleStyle);const m=navModeMeta(mode);if($('navModeLabel'))$('navModeLabel').textContent=m.label;renderVehicleUI();if(liveNavActive&&navFollow)followCurrentPosition();updateNavigationOverlay();toast('Modo de navegação: '+m.label)}
+function setNavigationMode(mode,btn){
+  navigationMode=mode;
+  document.querySelectorAll('.navMode').forEach(x=>x.classList.toggle('active',x.dataset.mode===mode));
+  if(mode==='walk')navVehicleStyle='arrow';
+  else if(mode==='bike')navVehicleStyle='bike';
+  else if(mode==='scooter')navVehicleStyle='scooter';
+  else if(mode==='moto')navVehicleStyle='moto';
+  else if(!['car-red','car-blue','car-green','car-yellow','suv','taxi','van','arrow'].includes(navVehicleStyle))navVehicleStyle='car-red';
+  localStorage.setItem(NAV_VEHICLE_KEY,navVehicleStyle);
+  const m=navModeMeta(mode);
+  if($('navModeLabel'))$('navModeLabel').textContent=m.label;
+  renderVehicleUI();
+  if(liveNavActive&&navFollow)followCurrentPosition();
+  updateNavigationOverlay();
+  toast('Modo de navegação: '+m.label)
+}
 function cycleNavigationMode(){const modes=['walk','bike','scooter','moto','car'],i=modes.indexOf(navigationMode),next=modes[(i+1)%modes.length];setNavigationMode(next,null)}
 function appendLiveTrack(c,prev){if(!Number.isFinite(c.latitude)||!Number.isFinite(c.longitude)||c.accuracy>65)return;const point=[c.longitude,c.latitude];const last=navTrack[navTrack.length-1];if(last){const d=hav(last[1],last[0],point[1],point[0]);if(d<2)return;navTrackDistance+=d}else if(prev){const d=hav(prev.latitude,prev.longitude,c.latitude,c.longitude);if(Number.isFinite(d)&&d<150)navTrackDistance+=d}navTrack.push(point);if(navTrack.length>2500)navTrack.shift();if($('navTrackDist'))$('navTrackDist').textContent=distanceLabel(navTrackDistance);renderLiveTrack()}
 function renderLiveTrack(){if(!map||!map.isStyleLoaded())return;const data={type:'Feature',properties:{},geometry:{type:'LineString',coordinates:navTrack.length>=2?navTrack:[]}};if(map.getSource('live-nav-track')){map.getSource('live-nav-track').setData(data);return}map.addSource('live-nav-track',{type:'geojson',data});map.addLayer({id:'live-nav-track',type:'line',source:'live-nav-track',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#6f7d82','line-width':3,'line-opacity':.42,'line-dasharray':[1.3,1.5]}})}
@@ -1992,19 +2032,21 @@ function nearestRouteEvent(){if(!pos)return null;return routeRelevantReports().m
 function updateNavigationOverlay(){const m=navModeMeta(navigationMode),step=nearestUpcomingStep(),d=distanceToStep(step),evt=nearestRouteEvent(),prematureArrival=!!(step&&step.maneuver?.type==='arrive'&&d!==null&&d>55);renderVehicleUI();if($('navOverlayFollow'))$('navOverlayFollow').textContent=navFollow?'◎ Seguir':'○ Livre';if($('navManeuverIcon'))$('navManeuverIcon').textContent=prematureArrival?'↑':(step?maneuverIcon(step):'↑');if($('navManeuverText'))$('navManeuverText').textContent=prematureArrival?'Segue a rota':(step?maneuverText(step):(exploreRouteGeoJSON?'Segue a linha azul':'Navegação livre'));let meta=step?(d===null?(liveNavActive?'A aguardar posição GPS · próxima indicação':'Próxima indicação · inicia navegação para distância LIVE'):distanceLabel(d)+(prematureArrival?' · destino mais à frente':' · próxima indicação')):(liveNavActive?'GPS ativo · '+m.label:'Ativa a navegação para começar');if(evt)meta+=' · ⚠️ '+(types[evt.r.type]||evt.r.type)+' a '+distanceLabel(evt.d);if($('navManeuverMeta'))$('navManeuverMeta').textContent=meta;if($('navInlineManeuverText'))$('navInlineManeuverText').textContent=step?(prematureArrival?'↑ Segue a rota':maneuverIcon(step)+' '+maneuverText(step)):(exploreRouteGeoJSON?'↑ Segue a linha azul':'Sem rota ativa');if($('navInlineManeuverMeta'))$('navInlineManeuverMeta').textContent=meta;const sp=pos?filteredSpeed(pos):null;if($('navOverlaySpeed'))$('navOverlaySpeed').textContent=sp===null?'— km/h':sp.toFixed(0)+' km/h'}
 function updateLiveNavUI(){const b=$('liveNavBtn'),badge=$('mapLiveBadge'),follow=$('followGpsBtn'),shell=$('mapShell');if(b)b.textContent=liveNavActive?'Parar navegação na app':'Iniciar navegação na app';if(b)b.classList.toggle('purple',liveNavActive);if(badge)badge.classList.toggle('on',liveNavActive);if(follow)follow.textContent='Seguir GPS · '+(navFollow?'ON':'OFF');if(shell)shell.classList.toggle('liveNavigating',liveNavActive);if(userMarker&&userMarker.getElement())userMarker.getElement().classList.toggle('navActive',liveNavActive);if($('navRouteInfo'))$('navRouteInfo').textContent=liveNavActive?'Navegação LIVE ativa · a linha azul é o caminho a seguir; o registo já percorrido fica discreto a cinzento. O mapa acompanha a tua posição.':'A linha azul é o percurso a seguir. Assim que existe uma rota, a próxima manobra fica visível no próprio mapa; ao iniciar navegação, distância e instruções passam a atualizar com o GPS.';updateNavigationOverlay()}
 async function toggleLiveNavigation(){
-  if(liveNavActive){liveNavActive=false;updateLiveNavUI();return toast('Navegação na app parada')}
-  try{await ensureNavGps()}catch(e){return toast('Preciso do GPS para iniciar a navegação')}
-  if(!exploreRouteGeoJSON?.coordinates?.length){
-    let ok=await rebuildActiveRouteFromJourney();
-    if(!ok)ok=await buildRouteFromCurrentSelection();
-    if(!ok||!exploreRouteGeoJSON?.coordinates?.length)return toast('Escolhe um destino ou cria uma rota antes de iniciar')
+  if(liveNavActive){
+    liveNavActive=false;
+    setNavigationMapPresentation(false);
+    updateLiveNavUI();
+    return toast('Navegação na app parada')
   }
-  liveNavActive=true;navFollow=true;navStepIndex=0;
+  liveNavActive=true;navFollow=true;updateLiveNavUI();
   if(watchId===null)toggleWatch();
-  updateLiveNavUI();
+  if(!exploreRouteGeoJSON){
+    const ok=await rebuildActiveRouteFromJourney();
+    if(!ok)toast('Navegação LIVE ativa · calcula/recupera uma rota para veres a linha azul')
+  }
+  setNavigationMapPresentation(true);
   renderExploreRoute(0);
   if(pos)followCurrentPosition();
-  setTimeout(()=>renderExploreRoute(0),280);
   toast('Navegação LIVE iniciada · '+navModeMeta(navigationMode).label)
 }
 function toggleNavFollow(){navFollow=!navFollow;updateLiveNavUI();if(navFollow&&pos)followCurrentPosition()}
@@ -2022,21 +2064,57 @@ function fitActiveRoute(force=false){
     map.fitBounds(b,{padding:{top:95,bottom:85,left:48,right:48},maxZoom:15.5,duration:500});
   }catch(e){console.warn('fitActiveRoute',e)}
 }
-function renderExploreRoute(retry=0){
-  if(!map)return;
-  if(!map.isStyleLoaded()){if(retry<20)setTimeout(()=>renderExploreRoute(retry+1),140);return;}
-  if(!exploreRouteGeoJSON?.coordinates?.length){const shell=$('mapShell');if(shell)shell.classList.remove('routeReady');return;}
-  const shell=$('mapShell');if(shell)shell.classList.add('routeReady');
-  const data={type:'Feature',geometry:exploreRouteGeoJSON,properties:{}};
+
+function setNavigationMapPresentation(active){
+  if(!map||!map.isStyleLoaded())return;
+  try{
+    const layers=(map.getStyle()?.layers||[]);
+    if(!map._alpha3dVisibility)map._alpha3dVisibility={};
+    layers.filter(l=>l.type==='fill-extrusion').forEach(l=>{
+      if(!(l.id in map._alpha3dVisibility)){
+        let current='visible';
+        try{current=map.getLayoutProperty(l.id,'visibility')||'visible'}catch{}
+        map._alpha3dVisibility[l.id]=current
+      }
+      try{map.setLayoutProperty(l.id,'visibility',active?'none':map._alpha3dVisibility[l.id])}catch{}
+    });
+  }catch(e){console.warn('navigation presentation',e)}
+}
+function ensureRouteLayersOnTop(){
+  if(!map||!map.isStyleLoaded()||!exploreRouteGeoJSON?.coordinates?.length)return false;
+  const data={type:'FeatureCollection',features:[{type:'Feature',geometry:exploreRouteGeoJSON,properties:{}}]};
   try{
     let src=map.getSource('explore-ai-route');
-    if(src&&src.setData)src.setData(data);else map.addSource('explore-ai-route',{type:'geojson',data});
-    if(!map.getLayer('explore-ai-route-halo'))map.addLayer({id:'explore-ai-route-halo',type:'line',source:'explore-ai-route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ffffff','line-width':['interpolate',['linear'],['zoom'],9,12,16,18],'line-opacity':.96}});
-    if(!map.getLayer('explore-ai-route'))map.addLayer({id:'explore-ai-route',type:'line',source:'explore-ai-route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#1976ff','line-width':['interpolate',['linear'],['zoom'],9,8,16,13],'line-opacity':1}});
-    if(!map.getLayer('explore-ai-route-arrows'))map.addLayer({id:'explore-ai-route-arrows',type:'symbol',source:'explore-ai-route',layout:{'symbol-placement':'line','symbol-spacing':115,'text-field':'›','text-size':22,'text-rotation-alignment':'map','text-keep-upright':false,'text-allow-overlap':true},paint:{'text-color':'#ffffff','text-halo-color':'#1976ff','text-halo-width':2}});
-    ['explore-ai-route-halo','explore-ai-route','explore-ai-route-arrows'].forEach(id=>{if(map.getLayer(id))map.moveLayer(id)});
-  }catch(e){console.warn('route render retry',e);if(retry<8)setTimeout(()=>renderExploreRoute(retry+1),180);return;}
-  renderRouteEvents();updateNavigationOverlay();
+    if(src&&src.setData)src.setData(data);
+    else map.addSource('explore-ai-route',{type:'geojson',data});
+    const halo={id:'explore-ai-route-halo',type:'line',source:'explore-ai-route',
+      layout:{'line-cap':'round','line-join':'round','visibility':'visible'},
+      paint:{'line-color':'#ffffff','line-width':['interpolate',['linear'],['zoom'],9,13,16,21],'line-opacity':1}};
+    const route={id:'explore-ai-route',type:'line',source:'explore-ai-route',
+      layout:{'line-cap':'round','line-join':'round','visibility':'visible'},
+      paint:{'line-color':'#1787ff','line-width':['interpolate',['linear'],['zoom'],9,8,16,14],'line-opacity':1}};
+    const arrows={id:'explore-ai-route-arrows',type:'symbol',source:'explore-ai-route',
+      layout:{'symbol-placement':'line','symbol-spacing':90,'text-field':'›','text-size':24,'text-rotation-alignment':'map','text-keep-upright':false,'text-allow-overlap':true,'visibility':'visible'},
+      paint:{'text-color':'#ffffff','text-halo-color':'#1787ff','text-halo-width':3}};
+    if(!map.getLayer(halo.id))map.addLayer(halo); else map.setLayoutProperty(halo.id,'visibility','visible');
+    if(!map.getLayer(route.id))map.addLayer(route); else map.setLayoutProperty(route.id,'visibility','visible');
+    if(!map.getLayer(arrows.id))map.addLayer(arrows); else map.setLayoutProperty(arrows.id,'visibility','visible');
+    [halo.id,route.id,arrows.id].forEach(id=>{try{map.moveLayer(id)}catch{}});
+    return true;
+  }catch(e){console.warn('ensureRouteLayersOnTop',e);return false}
+}
+
+function renderExploreRoute(retry=0){
+  if(!map)return;
+  if(!map.isStyleLoaded()){if(retry<24)setTimeout(()=>renderExploreRoute(retry+1),140);return;}
+  if(!exploreRouteGeoJSON?.coordinates?.length){const shell=$('mapShell');if(shell)shell.classList.remove('routeReady');return;}
+  const shell=$('mapShell');if(shell)shell.classList.add('routeReady');
+  if(liveNavActive)setNavigationMapPresentation(true);
+  const ok=ensureRouteLayersOnTop();
+  if(!ok&&retry<10){setTimeout(()=>renderExploreRoute(retry+1),180);return}
+  renderRouteEvents();
+  updateNavigationOverlay();
+  if(retry===0)setTimeout(()=>ensureRouteLayersOnTop(),260);
 }
 function showExploreOnMap(onlySelected){if(!explorePlaces.length)return toast('Primeiro procura locais para visitar');if(onlySelected&&!exploreSelected.size)return toast('Ainda não escolheste locais');go('field');setTimeout(()=>{renderExploreMarkers(onlySelected);renderExploreRoute();const arr=explorePlaces.filter(p=>!onlySelected||exploreSelected.has(p.id));if(!map||!arr.length)return;const b=new maplibregl.LngLatBounds();arr.forEach(p=>b.extend(p.center));map.fitBounds(b,{padding:55,maxZoom:14})},220)}
 function showOneExploreOnMap(id){const p=explorePlaces.find(x=>x.id===id);if(!p)return;activeExploreNavTarget=p;go('field');setTimeout(()=>{renderExploreMarkers();renderExploreRoute();if(map)map.easeTo({center:p.center,zoom:16})},220)}
@@ -2061,7 +2139,16 @@ async function navigateExplorePlace(id){
     liveNavActive=true;navFollow=true;
     if(watchId===null)toggleWatch();
     go('field');
-    setTimeout(()=>{if(map){map.resize();renderExploreRoute(0);renderExploreMarkers(true);updateLiveNavUI();followCurrentPosition();setTimeout(()=>renderExploreRoute(0),350)}},260);
+    setTimeout(()=>{if(map){
+      map.resize();
+      setNavigationMapPresentation(true);
+      ensureRouteLayersOnTop();
+      renderExploreMarkers(true);
+      updateLiveNavUI();
+      followCurrentPosition();
+      setTimeout(()=>{ensureRouteLayersOnTop();renderExploreRoute(0)},350);
+      setTimeout(()=>ensureRouteLayersOnTop(),900)
+    }},260);
     toast('Navegação iniciada para '+p.name);
   }catch(e){console.warn('navigateExplorePlace',e);toast('Não foi possível criar o percurso agora')}
 }
