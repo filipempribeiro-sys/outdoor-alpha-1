@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="2.3.1">
+<meta name="alpha-version" content="2.4.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 2.3.1 — Real Route Nav + Smart Chat</title>
+<title>Project Alpha 2.4.0 — Real Route Nav + Smart Chat</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -369,19 +369,28 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 2.3.1 · multi-paragens com geocodificação resiliente + fallback local. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 2.4.0 · multi-paragens com geocodificação resiliente + fallback local. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
-      <div class="eyebrow">AI MULTI-STOP · A PÉ</div>
-      <h3 style="margin:6px 0 4px">Tenho várias paragens</h3>
-      <p class="small muted" style="margin-top:0">Cola nomes ou moradas, uma por linha. A app localiza os pontos, escolhe a melhor ordem para reduzir caminhada/tempo e mostra o percurso completo.</p>
-      <textarea id="multiStopInput" placeholder="Ex.:
+      <div class="eyebrow">AI JOURNEY · MULTI-STOP</div>
+      <h3 style="margin:6px 0 4px">Planeia a minha viagem</h3>
+      <p class="small muted" style="margin-top:0">Cola nomes ou moradas, uma por linha. A app separa destinos de instruções, localiza os pontos e prepara um percurso a pé ou híbrido carro + estacionamento + caminhada.</p>
+      <div class="row" style="margin:10px 0 12px;gap:8px;flex-wrap:wrap">
+      <select id="journeyMode" class="input" style="flex:1;min-width:150px">
+        <option value="auto">✦ Automático</option>
+        <option value="walk">🚶 A pé</option>
+        <option value="hybrid">🚗 + 🅿️ + 🚶 Híbrido</option>
+      </select>
+      <input id="journeyFinalDestination" class="input" style="flex:1;min-width:150px" placeholder="Destino seguinte (ex.: Braga)">
+    </div>
+    <input id="journeyAvoid" class="input" style="width:100%;margin-bottom:10px" placeholder="Evitar (ex.: Parque Cardosas)">
+    <textarea id="multiStopInput" placeholder="Ex.:
 Livraria Lello
 Mercado do Bolhão
 Estação de São Bento
 ..."></textarea>
       <div class="row" style="margin-top:9px">
-        <button class="btn purple" onclick="planMultiStopFromBox()">✦ Otimizar percurso a pé</button>
+        <button class="btn purple" onclick="planMultiStopFromBox()">✦ Planear viagem</button>
         <button class="btn secondary" onclick="clearMultiStopPlan()">Limpar</button>
       </div>
       <div id="multiStopState" class="small muted" style="margin-top:8px">2–12 paragens · usa primeiro os POI já descobertos e depois pesquisa por nome + destino atual.</div>
@@ -976,7 +985,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='2.3.1',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='2.4.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1930,25 +1939,25 @@ function chatDescribePlace(p,q=''){
 }
 function chatPlaceLines(list){return list.map((p,i)=>(i+1)+'. <b>'+esc(p.name)+'</b> · '+esc(exploreCategoryLabel(p.cat))+' · '+esc(exploreDistance(p))).join('<br>')}
 
+function looksLikeJourneyInstruction(line){
+  const s=normalizeChatText(line);
+  if(!s)return true;
+  const words=s.split(/\s+/).filter(Boolean);
+  const instruction=/\b(deve|devem|quero|pretendo|incluir|inclui|conter|contem|horarios|precos|custo|custos|estacionamento|parques|adultos|crianca|criancas|carro\/a pe|hibrid|evitar|minimizar|otimizar|destino seguinte|depois vou|seguir para)\b/;
+  return words.length>10 && instruction.test(s)
+}
 function parseMultiStopText(raw){
-  let s=String(raw||'').replace(/\r/g,'\n');
-  s=s.replace(/[•●▪◦]/g,'\n');
-  let parts=s.split(/\n+/).map(x=>x.trim()).filter(Boolean);
-  if(parts.length<2){
-    const colon=s.indexOf(':');
-    const tail=colon>=0?s.slice(colon+1):s;
-    parts=tail.split(/\s*;\s*|\s*\|\s*/).map(x=>x.trim()).filter(Boolean);
+  const lines=String(raw||'')
+    .split(/\n|;/)
+    .map(x=>x.replace(/^\s*(?:[-•*]|\d+[\.\)\-:])\s*/,'').trim())
+    .filter(Boolean);
+  const stops=[],instructions=[];
+  for(const line of lines){
+    if(looksLikeJourneyInstruction(line))instructions.push(line);
+    else stops.push(line);
   }
-  parts=parts.map(x=>x
-    .replace(/^\s*(?:\d{1,2}[\.\)\-:]|[-–—])\s*/,'')
-    .replace(/^(?:ir a|passar por|visitar|paragem|stop)\s+/i,'')
-    .trim()
-  ).filter(x=>x.length>=2);
-  const noise=/^(tenho|quero|preciso|faz|cria|otimiza|optimiza|rota|percurso|andar|a pe|a pé|poupar|tempo|esforco|esforço)$/i;
-  parts=parts.filter(x=>!noise.test(x));
-  const seen=new Set(),out=[];
-  for(const p of parts){const k=normalizeChatText(p);if(k&&!seen.has(k)){seen.add(k);out.push(p)}}
-  return out.slice(0,12)
+  window.alphaJourneyInstructions=instructions;
+  return [...new Set(stops)].slice(0,12)
 }
 function multiStopIntent(q){
   const low=normalizeChatText(q);
@@ -2001,6 +2010,21 @@ async function nominatimSearchMultiStop(q,opts={}){
   if(!r.ok)throw new Error('geocode '+r.status);
   const j=await r.json();
   return Array.isArray(j)?j.filter(validGeoResult):[]
+}
+async function photonSearchMultiStop(q){
+  let u='https://photon.komoot.io/api/?limit=8&q='+encodeURIComponent(q);
+  if(exploreCenter&&Number.isFinite(exploreCenter.lon)&&Number.isFinite(exploreCenter.lat)){
+    u+='&lon='+encodeURIComponent(exploreCenter.lon)+'&lat='+encodeURIComponent(exploreCenter.lat);
+  }
+  const r=await fetch(u,{headers:{'Accept':'application/json'}});
+  if(!r.ok)throw new Error('photon '+r.status);
+  const j=await r.json(),features=Array.isArray(j?.features)?j.features:[];
+  return features.map(f=>({
+    lat:Number(f?.geometry?.coordinates?.[1]),
+    lon:Number(f?.geometry?.coordinates?.[0]),
+    display_name:[f?.properties?.name,f?.properties?.city,f?.properties?.country].filter(Boolean).join(', '),
+    source:'photon'
+  })).filter(validGeoResult)
 }
 function chooseMultiStopGeo(results){
   if(!results.length)return null;
@@ -2062,6 +2086,24 @@ async function geocodeMultiStop(name,index,total){
     }catch(e){lastErr=e}
     if(a<attempts.length-1)await new Promise(r=>setTimeout(r,350))
   }
+  try{
+    const qs=[];
+    if(ctx)qs.push(name+', '+ctx);
+    qs.push(name);
+    for(const q of qs){
+      const j=await photonSearchMultiStop(q),x=chooseMultiStopGeo(j);
+      if(x){
+        return {
+          id:'multistop-photon-'+Date.now()+'-'+index,
+          name:name,label:x.display_name||name,
+          center:[Number(x.lon),Number(x.lat)],
+          cat:'attraction',
+          description:'Paragem localizada por geocodificador alternativo.',
+          source:'multi-stop-photon',priority:100-index
+        }
+      }
+    }
+  }catch(e){lastErr=e}
   throw lastErr||new Error('not found')
 }
 async function geocodeMultiStops(names){
@@ -2071,7 +2113,7 @@ async function geocodeMultiStops(names){
       const p=await geocodeMultiStop(names[i],i,names.length);
       out.push(p);
     }catch(e){
-      console.warn('Multi-stop: não localizado',names[i],e);
+      console.warn('Multi-stop: não localizado',names[i],e); window.alphaLastGeocodeError=String(e?.message||e);
       failed.push(names[i])
     }
     /* Be polite to the public geocoder, but do not wait a full second when
@@ -2163,7 +2205,7 @@ async function planMultiStopNames(names,opts={}){
   try{
     const geo=await geocodeMultiStops(names);
     if(geo.points.length<2){
-      const msg='Só consegui localizar '+geo.points.length+' das '+names.length+' paragens.';
+      const msg='Localizei '+geo.points.length+' de '+names.length+' paragens.';
       const detail=geo.failed.length?' Não localizei: '+geo.failed.join(' · ')+'.':'';
       if(state)state.textContent=msg+detail;
       if(opts.source==='chat')chatAdd('ai',msg+detail+' Podes corrigir apenas os nomes em falta e tentar novamente.');
