@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="3.6.0">
+<meta name="alpha-version" content="3.6.2">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 3.6.0 — AI Chat App Mode</title>
+<title>Project Alpha 3.6.2 — AI Chat App Mode</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -299,7 +299,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 
 
 /* ============================================================
-   ALPHA 3.6.0 · CONTEXT · TRUST · TRIP PLANNER — CONTINUITY LAYER
+   ALPHA 3.6.2 · CONTEXT · TRUST · TRIP PLANNER — CONTINUITY LAYER
    Mantém integralmente o core 2.4.0 e acrescenta a nova interface.
    ============================================================ */
 .lifestyleAI{border:1px solid #3e5f57;background:
@@ -423,7 +423,7 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 
 
 /* ============================================================
-   ALPHA 3.6.0 · AI CHAT APP MODE
+   ALPHA 3.6.2 · AI CHAT APP MODE
    Conversa iniciada = experiência full-screen semelhante a uma app AI.
    ============================================================ */
 .aiChatMenuBtn{display:none;border:1px solid #3b5b61;background:#10242b;color:#e8fbf5;border-radius:12px;padding:8px 11px;font-weight:900;cursor:pointer}
@@ -623,7 +623,7 @@ body.alphaChatMode #lifestyleAI .lifestyleThread{
 }
 
 
-/* ===== ALPHA 3.6.0 · WELCOME + NORTH-LOCK COMPASS IDENTITY ===== */
+/* ===== ALPHA 3.6.2 · WELCOME + NORTH-LOCK COMPASS IDENTITY ===== */
 .logo{
   --compass-rotation:0deg;
   overflow:visible;
@@ -724,7 +724,7 @@ body.alphaChatMode #lifestyleAI .lifestyleThread{
 
 
 /* ============================================================
-   ALPHA 3.6.0 · UNIFIED MINIMAL ICON SYSTEM
+   ALPHA 3.6.2 · UNIFIED MINIMAL ICON SYSTEM
    SVG line icons, sem dependências externas. Emojis ficam reservados
    para conteúdo/conversa e deixam de ser linguagem estrutural do UX.
    ============================================================ */
@@ -800,7 +800,7 @@ button.alphaIconified,.btn.alphaIconified,.nav.alphaIconified{display:inline-fle
 
 
 /* ============================================================
-   ALPHA 3.6.0 · CLEAN SURFACES + STATIC NORTH BRAND
+   ALPHA 3.6.2 · CLEAN SURFACES + STATIC NORTH BRAND
    ============================================================ */
 /* Nada técnico no ecrã principal. */
 #lifestyleState{display:none!important}
@@ -839,7 +839,7 @@ body.alphaChatMode #lifestyleAI .alphaComposerWrap{background:transparent!import
 
 
 /* ============================================================
-   ALPHA 3.6.0 · RESPONSIVE CHAT / NAV SHELL
+   ALPHA 3.6.2 · RESPONSIVE CHAT / NAV SHELL
    A moldura da Alpha termina sempre antes da navegação inferior.
    Quando a navegação não está visível, a moldura continua visível.
    ============================================================ */
@@ -898,7 +898,7 @@ body.alphaChatMode #lifestyleAI .alphaComposerWrap{
 
 
 /* ============================================================
-   ALPHA 3.6.0 · FRESH CHAT + KEYBOARD SAFE COMPOSER
+   ALPHA 3.6.2 · FRESH CHAT + KEYBOARD SAFE COMPOSER
    Nova conversa nunca pode perder o composer quando o teclado abre.
    ============================================================ */
 body.alphaComposeMode{
@@ -975,6 +975,7 @@ body.alphaComposeMode .bottom{display:none!important}
   }
 }
 
+.alphaPlaceAttribution{font-size:10px;opacity:.58;padding:6px 2px 0;line-height:1.35}
 </style>
 </head>
 <body>
@@ -991,7 +992,7 @@ body.alphaComposeMode .bottom{display:none!important}
 </div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.0 · Family Login</small></div></div>
+    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.2 · Family Login</small></div></div>
     <div class="authWelcomeBrand"><div class="logo compassSeeking"></div><div class="alphaWelcomeEyebrow">ALPHA · OUTDOOR LIFESTYLE AI</div><h1>Bem-vindo à Alpha</h1><p>Descobrir · Confiar · Viver</p></div>
     <p class="muted" style="text-align:center">Escolhe o teu perfil para começares. Nesta versão Alpha usamos as 4 contas familiares de teste e o PIN <b>1234</b>.</p>
     <label>Utilizador</label>
@@ -1009,7 +1010,7 @@ body.alphaComposeMode .bottom{display:none!important}
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.0 · Context · Trust · Trip Planner</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.2 · Context · Trust · Trip Planner</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -1105,7 +1106,7 @@ body.alphaComposeMode .bottom{display:none!important}
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 3.6.0 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 3.6.2 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
       <div class="eyebrow">AI JOURNEY · MULTI-STOP</div>
@@ -1743,7 +1744,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='3.6.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='3.6.2',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1753,7 +1754,7 @@ const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience',
 const ALPHA_LAST_WELCOME_PREFIX='alpha_last_welcome_';
 let alphaWelcomeTimer=null;
 
-/* ALPHA 3.6.0 — o logótipo é identidade, não instrumento de navegação.
+/* ALPHA 3.6.2 — o logótipo é identidade, não instrumento de navegação.
    Faz uma curta animação de entrada e termina sempre alinhado a Norte. */
 function alphaAllLogos(){return [...document.querySelectorAll('.logo')]}
 function alphaSetCompassRotation(deg=0){
@@ -4536,7 +4537,7 @@ document.addEventListener('visibilitychange',()=>{
     navigator.serviceWorker.getRegistration().then(r=>r&&r.update().catch(()=>{}));
     restoreActiveRoute();refreshHeaderWeather(false);if(map)renderExploreRoute();
 
-    // Regra 3.6.0: regressar à Alpha começa sempre numa conversa nova.
+    // Regra 3.6.2: regressar à Alpha começa sempre numa conversa nova.
     // A conversa anterior e o respetivo rascunho ficam preservados no Histórico.
     const incomingDecision=new URLSearchParams(location.search).has('alpha_share');
     if(authUser() && !incomingDecision && alphaBackgroundedAt && Date.now()-alphaBackgroundedAt>350){
@@ -4577,7 +4578,7 @@ window.addEventListener('resize',()=>{clearTimeout(window._orientationResize);wi
 adaptOrientation();
 
 /* ============================================================
-   ALPHA 3.6.0 · CONTEXT · TRUST · TRIP PLANNER + CONVERSATION MANAGER
+   ALPHA 3.6.2 · CONTEXT · TRUST · TRIP PLANNER + CONVERSATION MANAGER
    ============================================================ */
 const ALPHA_CONVERSATIONS_KEY='alpha_ai_conversations_v1_';
 const ALPHA_ACTIVE_CONVERSATION_KEY='alpha_ai_active_conversation_v1_';
@@ -4757,7 +4758,7 @@ function alphaRenderPlaceCards(m){
         ${(p.maps||p.website)?`<div class="alphaPlaceLinks">${p.maps?`<a href="${esc(p.maps)}" target="_blank" rel="noopener">Ver no mapa</a>`:''}${p.website?`<a href="${esc(p.website)}" target="_blank" rel="noopener">Site</a>`:''}</div>`:''}
       </div>
     </article>`;
-  }).join('')}</div>`;
+  }).join('')}<div class="alphaPlaceAttribution">Dados © OpenStreetMap contributors · imagens Wikimedia Commons quando disponíveis</div></div>`;
 }
 
 function alphaResponseActions(i,m){
@@ -4906,7 +4907,7 @@ function alphaToggleMic(){
 
 
 /* ============================================================
-   ALPHA 3.6.0 · ICON RUNTIME + CONTEXTUAL SPOTIFY ACTION
+   ALPHA 3.6.2 · ICON RUNTIME + CONTEXTUAL SPOTIFY ACTION
    ============================================================ */
 const ALPHA_ICON_PATHS={
   plus:'<path d="M12 5v14M5 12h14"/>',
@@ -5627,12 +5628,12 @@ function alphaOpenPathsHub(){go('field');setTimeout(()=>$('mapPathsHub')?.scroll
 function alphaMigrateLegacyChat(){const oldKey=userKey('alpha_lifestyle_chat_v2_'),done=userKey('alpha_ai_migrated_34_');if(localStorage.getItem(done))return;try{const old=JSON.parse(localStorage.getItem(oldKey)||'[]');if(Array.isArray(old)&&old.length&&!alphaConversations().length){const first=old.find(x=>x.role==='user')?.text||'Experiência anterior',c=alphaCreateConversation(first);c.messages=old.map(m=>({role:m.role,text:m.text,at:new Date().toISOString(),source:'legacy-3.3'}));alphaUpsertConversation(c)}}catch{}localStorage.setItem(done,'1')}
 function alphaAfterLogin34(){
   alphaMigrateLegacyChat();
-  // Regra 3.6.0: abrir a Alpha nunca retoma silenciosamente uma conversa antiga.
+  // Regra 3.6.2: abrir a Alpha nunca retoma silenciosamente uma conversa antiga.
   // O histórico permanece intacto e só é retomado por escolha explícita.
   alphaStartFreshConversation({focus:false,compose:false});
 }
 
-/* ALPHA 3.6.0 · shell fitting
+/* ALPHA 3.6.2 · shell fitting
    Mede a barra inferior em vez de assumir uma altura fixa. */
 let alphaShellRAF=0;
 function alphaFitShell(){
@@ -5717,7 +5718,7 @@ setTimeout(()=>{
 
 </script>
 
-<script>const ALPHA_VISIBLE_VERSION='v3.6.0 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='3.6.0-visual-place-cards-google-places';</script>
+<script>const ALPHA_VISIBLE_VERSION='v3.6.2 · TEST';
+window.ALPHA_DOMAIN_GATE_BUILD='3.6.2-open-place-cards-osm-wikimedia';</script>
 </body>
 </html>
