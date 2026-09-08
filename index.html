@@ -2,13 +2,13 @@
 <html lang="pt-PT">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#071116">
 <meta name="alpha-version" content="3.5.1">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 3.5.1 — Context · Trust · Trip Planner</title>
+<title>Project Alpha 3.5.1 — AI Chat App Mode</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -356,6 +356,77 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 .mapPathsHub .hubActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 
 
+
+/* ============================================================
+   ALPHA 3.5.1 · AI CHAT APP MODE
+   Conversa iniciada = experiência full-screen semelhante a uma app AI.
+   ============================================================ */
+.aiChatMenuBtn{display:none;border:1px solid #3b5b61;background:#10242b;color:#e8fbf5;border-radius:12px;padding:8px 11px;font-weight:900;cursor:pointer}
+.aiChatMenu{display:none;position:fixed;z-index:1400;top:calc(env(safe-area-inset-top) + 12px);right:12px;width:min(290px,calc(100vw - 24px));background:#0a1820;border:1px solid #35515a;border-radius:18px;padding:8px;box-shadow:0 18px 55px rgba(0,0,0,.45)}
+.aiChatMenu.show{display:grid;gap:5px}
+.aiChatMenu button{border:0;background:transparent;color:var(--text);text-align:left;padding:12px;border-radius:12px;font:inherit;font-weight:750}
+.aiChatMenu button:active{background:#142a31}
+.aiResponseActions{display:flex;gap:3px;align-items:center;margin:5px 5% 1px 0;flex-wrap:wrap}
+.aiResponseActions button{border:0;background:transparent;color:#9fb2ac;padding:6px 7px;border-radius:9px;font-size:16px;cursor:pointer}
+.aiResponseActions button:active{background:#142a31;color:#fff}
+.aiResponseActions .aiActionText{font-size:11px;padding-inline:8px}
+#lifestyleAI.chatStarted #lifestyleState{display:none!important}
+body.alphaChatMode{padding-bottom:0;overflow:hidden}
+body.alphaChatMode .app{height:100dvh;max-width:760px;padding:0 12px;margin:auto;overflow:hidden}
+body.alphaChatMode .top{display:none!important}
+body.alphaChatMode #home{height:100dvh;padding:0!important;overflow:hidden}
+body.alphaChatMode #home > #lifestyleAI{
+  position:relative;
+  height:100dvh!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin:0!important;
+  border-radius:0;
+  border-top:0;
+  border-bottom:0;
+  padding:calc(env(safe-area-inset-top) + 8px) 12px calc(env(safe-area-inset-bottom) + 8px);
+}
+body.alphaChatMode #lifestyleAI .aiTopbar{
+  justify-content:space-between;
+  min-height:42px;
+  flex:0 0 auto;
+  margin:0 0 4px;
+}
+body.alphaChatMode #lifestyleAI .aiTopbar::before{
+  content:"ALPHA";
+  color:var(--green);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+body.alphaChatMode #lifestyleAI .aiTopActions{display:none!important}
+body.alphaChatMode #lifestyleAI .aiChatMenuBtn{display:block}
+body.alphaChatMode #lifestyleAI .lifestyleThread{
+  flex:1 1 auto;
+  min-height:0;
+  margin:0;
+  padding:2px 2px 8px;
+  overflow-y:auto;
+  scroll-behavior:smooth;
+}
+body.alphaChatMode #lifestyleAI .lifestyleComposer{
+  position:relative;
+  flex:0 0 auto;
+  margin:4px 0 0;
+  padding:0;
+  background:transparent;
+}
+body.alphaChatMode #lifestyleAI .lifestyleComposer textarea{
+  min-height:54px;
+  max-height:112px;
+}
+body.alphaChatMode .bottom{display:none!important}
+@media(max-width:620px){
+  body.alphaChatMode .app{padding:0}
+  body.alphaChatMode #home > #lifestyleAI{padding-left:12px;padding-right:12px}
+  .aiResponseActions{margin-right:2%}
+}
+
 .aiTopbar{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .aiTopActions{display:flex;gap:6px}.aiTopActions button{border:1px solid #3b5b61;background:#10242b;color:#e8fbf5;border-radius:11px;padding:8px;font-weight:800}
 .aiHistoryDrawer{position:fixed;inset:0;z-index:1200;background:rgba(2,8,12,.75);display:none;align-items:flex-end}.aiHistoryDrawer.show{display:flex}
@@ -401,7 +472,7 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 <section id="home" class="view active">
 
   <div class="card lifestyleAI" id="lifestyleAI">
-    <div class="aiTopbar"><div class="eyebrow">ALPHA 3.5.1 · CONTEXT · TRUST · TRIP PLANNER</div><div class="aiTopActions"><button onclick="alphaNewConversation()">＋ Nova</button><button onclick="alphaOpenHistory()">☰ Histórico</button></div></div>
+    <div class="aiTopbar"><div class="eyebrow">ALPHA 3.5.1 · CONTEXT · TRUST · TRIP PLANNER</div><div class="aiTopActions"><button onclick="alphaNewConversation()">＋ Nova</button><button onclick="alphaOpenHistory()">☰ Histórico</button></div><button class="aiChatMenuBtn" type="button" onclick="alphaToggleChatMenu(event)" aria-label="Menu da Alpha">☰</button></div>
     <h1>O que queres <span class="green">fazer hoje?</span></h1>
     <p class="muted lifestyleAILead">Diz à Alpha o que te apetece, o tempo que tens, com quem vais ou simplesmente conta-lhe o contexto. A aplicação adapta as ferramentas ao teu objetivo — não és tu que tens de te adaptar à aplicação.</p>
     <div class="lifestyleQuick">
@@ -1086,6 +1157,14 @@ Estação de São Bento
 </div>
 
 <div id="aiHistoryDrawer" class="aiHistoryDrawer" onclick="if(event.target===this)alphaCloseHistory()"><div class="aiHistoryPanel"><div class="aiHistoryHead"><div><div class="eyebrow">MEMÓRIA PESSOAL</div><h2>As tuas conversas</h2></div><button class="btn secondary" onclick="alphaCloseHistory()">Fechar</button></div><div id="aiHistoryList"></div></div></div>
+<div id="aiChatMenu" class="aiChatMenu">
+  <button onclick="alphaNewConversation();alphaCloseChatMenu()">＋ Nova conversa</button>
+  <button onclick="alphaOpenHistory();alphaCloseChatMenu()">☰ Histórico</button>
+  <button onclick="alphaChatNavigate('field')">▶ Mapa/GO</button>
+  <button onclick="alphaChatNavigate('report')">⚑ LIVE</button>
+  <button onclick="alphaChatOpenPremium()">✦ Premium</button>
+  <button onclick="alphaChatNavigate('profile')">● Perfil</button>
+</div>
 <nav class="bottom">
   <button class="nav active" data-id="home" onclick="go('home')">✦<br>Alpha</button>
   <button class="nav" data-id="field" onclick="go('field')">▶<br>Mapa/GO</button>
@@ -1432,7 +1511,7 @@ function closeQuickReport(){if($('quickReport'))$('quickReport').style.display='
 function chooseQuickReport(type){closeQuickReport();if($('rtype'))$('rtype').value=type;go('report');setTimeout(()=>{const el=$('rtype');if(el)el.scrollIntoView({behavior:'smooth',block:'center'})},100)}
 
 function toast(m){let t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.remove('show'),2800)}
-function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();if(map){map.resize();renderMapReports();renderTrailLayer();renderSelectedTrail();renderExploreMarkers();renderMultiStopMarkers();renderExploreRoute();renderLiveTrack();setTimeout(()=>{map.resize();if(exploreRouteGeoJSON&&!liveNavActive)fitActiveRoute(false)},180)}},120);if(id==='experience')syncReview()}
+function go(id){if(id!=='home'){document.body.classList.remove('alphaChatMode');alphaCloseChatMenu?.();}document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();if(map){map.resize();renderMapReports();renderTrailLayer();renderSelectedTrail();renderExploreMarkers();renderMultiStopMarkers();renderExploreRoute();renderLiveTrack();setTimeout(()=>{map.resize();if(exploreRouteGeoJSON&&!liveNavActive)fitActiveRoute(false)},180)}},120);if(id==='experience')syncReview()}
 function reports(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
 function saveReports(r){localStorage.setItem(KEY,JSON.stringify(r))}
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -3851,9 +3930,79 @@ function alphaLocalSemanticTitle(text){
 }
 function alphaCreateConversation(text){const now=new Date().toISOString();return{id:alphaUuid(),userId:authUser()?.id||'guest',title:alphaLocalSemanticTitle(text),titleSource:'local',intent:null,places:[],experienceType:null,messages:[],createdAt:now,updatedAt:now}}
 function alphaUpsertConversation(c){let all=alphaConversations().filter(x=>x.id!==c.id);all.unshift(c);alphaSaveConversations(all);alphaSetActiveConversationId(c.id)}
-function alphaNewConversation(){alphaSetActiveConversationId('');if($('lifestylePrompt'))$('lifestylePrompt').value='';$('lifestyleAI')?.classList.remove('chatStarted');renderAlphaLifestyleThread();alphaCloseHistory();if($('lifestyleState'))$('lifestyleState').innerHTML='<span class="trustTag predicted">NOVA CONVERSA</span> O título será criado a partir do significado da experiência.';requestAnimationFrame(()=>$('lifestylePrompt')?.focus({preventScroll:true}))}
+function alphaNewConversation(){alphaSetActiveConversationId('');if($('lifestylePrompt'))$('lifestylePrompt').value='';document.body.classList.remove('alphaChatMode');$('lifestyleAI')?.classList.remove('chatStarted');renderAlphaLifestyleThread();alphaCloseHistory();alphaCloseChatMenu();if($('lifestyleState'))$('lifestyleState').innerHTML='<span class="trustTag predicted">NOVA CONVERSA</span> O título será criado a partir do significado da experiência.';requestAnimationFrame(()=>$('lifestylePrompt')?.focus({preventScroll:true}))}
 function alphaFormatConversationDate(x){try{return new Intl.DateTimeFormat('pt-PT',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(x))}catch{return''}}
-function renderAlphaLifestyleThread(){const host=$('lifestyleThread'),card=$('lifestyleAI');if(!host)return;const c=alphaCurrentConversation(),h=c?.messages||[];card?.classList.toggle('chatStarted',h.length>0);if(!h.length){host.classList.remove('show');host.innerHTML='';host.scrollTop=0;return}host.classList.add('show');host.innerHTML='<div class="small muted" style="margin-bottom:8px">● '+esc(c.title)+'</div>'+h.map(m=>'<div class="lifestyleMsg '+m.role+'">'+esc(m.text)+'</div>').join('');requestAnimationFrame(()=>{host.scrollTop=host.scrollHeight})}
+function alphaChatHasMessages(){const c=alphaCurrentConversation();return !!(c&&Array.isArray(c.messages)&&c.messages.length)}
+function alphaSyncChatMode(){
+  const started=alphaChatHasMessages();
+  document.body.classList.toggle('alphaChatMode',started);
+  $('lifestyleAI')?.classList.toggle('chatStarted',started);
+  if(!started)alphaCloseChatMenu();
+}
+function alphaToggleChatMenu(e){e?.stopPropagation?.();$('aiChatMenu')?.classList.toggle('show')}
+function alphaCloseChatMenu(){$('aiChatMenu')?.classList.remove('show')}
+function alphaChatNavigate(id){alphaCloseChatMenu();document.body.classList.remove('alphaChatMode');go(id)}
+function alphaChatOpenPremium(){alphaCloseChatMenu();document.body.classList.remove('alphaChatMode');openPremium()}
+function alphaCopyResponse(i){
+  const c=alphaCurrentConversation(),m=c?.messages?.[i];if(!m)return;
+  navigator.clipboard?.writeText(m.text).then(()=>toast('Resposta copiada')).catch(()=>toast('Não foi possível copiar'));
+}
+async function alphaShareResponse(i){
+  const c=alphaCurrentConversation(),m=c?.messages?.[i];if(!m)return;
+  try{
+    if(navigator.share)await navigator.share({title:c.title||'Project Alpha',text:m.text});
+    else{await navigator.clipboard?.writeText(m.text);toast('Resposta copiada para partilhar')}
+  }catch(e){}
+}
+function alphaRateResponse(i,value){
+  const c=alphaCurrentConversation();if(!c?.messages?.[i])return;
+  c.messages[i].rating=value;c.updatedAt=new Date().toISOString();alphaUpsertConversation(c);
+  renderAlphaLifestyleThread();toast(value==='up'?'Obrigado pelo feedback':'Feedback registado');
+}
+async function alphaRetryResponse(i){
+  const c=alphaCurrentConversation();if(!c)return;
+  let userIndex=i-1;while(userIndex>=0&&c.messages[userIndex]?.role!=='user')userIndex--;
+  if(userIndex<0)return;
+  const prompt=c.messages[userIndex].text;
+  c.messages=c.messages.slice(0,userIndex);
+  alphaUpsertConversation(c);
+  if($('lifestylePrompt'))$('lifestylePrompt').value=prompt;
+  renderAlphaLifestyleThread();
+  await alphaLifestyleSend();
+}
+function alphaSearchWebFromResponse(i){
+  const c=alphaCurrentConversation(),m=c?.messages?.[i];if(!m)return;
+  const q=encodeURIComponent((c.title?c.title+' ':'')+m.text.slice(0,180));
+  window.open('https://www.google.com/search?q='+q,'_blank','noopener,noreferrer');
+}
+function alphaResponseActions(i,m){
+  const up=m.rating==='up'?' aria-pressed="true"':'',down=m.rating==='down'?' aria-pressed="true"':'';
+  return `<div class="aiResponseActions" aria-label="Ações da resposta">
+    <button title="Copiar" aria-label="Copiar resposta" onclick="alphaCopyResponse(${i})">⧉</button>
+    <button title="Gostei" aria-label="Gostei" onclick="alphaRateResponse(${i},'up')"${up}>♡</button>
+    <button title="Não gostei" aria-label="Não gostei" onclick="alphaRateResponse(${i},'down')"${down}>♢</button>
+    <button title="Partilhar" aria-label="Partilhar resposta" onclick="alphaShareResponse(${i})">↗</button>
+    <button title="Tentar novamente" aria-label="Tentar novamente" onclick="alphaRetryResponse(${i})">↻</button>
+    <button class="aiActionText" title="Pesquisar na Web" onclick="alphaSearchWebFromResponse(${i})">⌕ Web</button>
+  </div>`;
+}
+function renderAlphaLifestyleThread(){
+  const host=$('lifestyleThread'),card=$('lifestyleAI');if(!host)return;
+  const c=alphaCurrentConversation(),h=c?.messages||[];
+  card?.classList.toggle('chatStarted',h.length>0);
+  document.body.classList.toggle('alphaChatMode',h.length>0);
+  if(!h.length){
+    host.classList.remove('show');host.innerHTML='';host.scrollTop=0;alphaCloseChatMenu();return;
+  }
+  host.classList.add('show');
+  host.innerHTML='<div class="small muted" style="margin-bottom:8px">● '+esc(c.title)+'</div>'+
+    h.map((m,i)=>{
+      const msg='<div class="lifestyleMsg '+m.role+'">'+esc(m.text)+'</div>';
+      return msg+(m.role==='ai'?alphaResponseActions(i,m):'');
+    }).join('');
+  requestAnimationFrame(()=>{host.scrollTop=host.scrollHeight});
+}
+
 function alphaOpenHistory(){alphaRenderHistory();$('aiHistoryDrawer')?.classList.add('show')}
 function alphaCloseHistory(){$('aiHistoryDrawer')?.classList.remove('show')}
 function alphaRenderHistory(){
@@ -3876,10 +4025,29 @@ function alphaCurrentContext(){const u=authUser(),ctx={membership:effectiveTier(
 function alphaExtractRecentIntent(text){const p=String(text||'').trim().split(/(?<=[.!?])\s+|\n+/).filter(Boolean);return p.slice(-4).join(' ')||String(text||'')}
 function alphaLifestyleLocalReply(text){const full=String(text||''),low=full.toLocaleLowerCase('pt-PT'),intent=alphaExtractRecentIntent(full).toLocaleLowerCase('pt-PT');if(/cheguei|voltei|vindo de|viagem|pernoit|visit/.test(low)&&/hoje|amanh|terminar o dia|acabar o dia/.test(intent))return'Percebi a viagem como contexto histórico e a tua intenção atual como um novo pedido. Não vou transformar uma referência a Santiago num Caminho de Santiago. Para recomendações concretas, a Alpha real deve cruzar dados verificados.';if(/caminho|rota|percurso/.test(intent))return'Percebi que queres explorar um Caminho ou rota. Posso estruturar a experiência; dados reais devem ser confirmados pelas ferramentas Alpha.';return'Percebi o pedido. Estou em fallback local; sem backend não vou inventar locais, horários, preços, disponibilidade ou condições live.'}
 async function alphaCallBackend(c,text){const base=alphaBackendUrl();if(!base)throw new Error('BACKEND_NOT_CONFIGURED');const r=await fetch(base+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({conversationId:c.id,title:c.title,messages:c.messages.slice(-16).map(m=>({role:m.role==='ai'?'assistant':'user',content:m.text})),currentMessage:text,context:alphaCurrentContext()})});const raw=await r.text();let d={};try{d=JSON.parse(raw)}catch{}if(!r.ok)throw new Error(d.error||'HTTP '+r.status);return d}
-async function alphaLifestyleSend(){const input=$('lifestylePrompt'),state=$('lifestyleState');if(!input)return;const text=input.value.trim();if(!text)return;let c=alphaCurrentConversation()||alphaCreateConversation(text);c.messages.push({role:'user',text,at:new Date().toISOString()});c.updatedAt=new Date().toISOString();alphaUpsertConversation(c);input.value='';renderAlphaLifestyleThread();if(state)state.textContent='A Alpha está a interpretar…';let d=null,reply='',real=false;try{d=await alphaCallBackend(c,text);reply=String(d.answer||'').trim();if(!reply)throw new Error('empty');real=true}catch(e){reply=alphaLifestyleLocalReply(text)}c=alphaCurrentConversation()||c;c.messages.push({role:'ai',text:reply,at:new Date().toISOString(),source:real?'backend':'local'});if(real&&d){if(d.title&&c.titleSource!=='user'){c.title=alphaNormalizeTitle(d.title);c.titleSource='ai'}c.intent=d.intent||c.intent;c.places=Array.isArray(d.places)?d.places:c.places;c.experienceType=d.experienceType||c.experienceType}c.updatedAt=new Date().toISOString();alphaUpsertConversation(c);renderAlphaLifestyleThread();if(state){
- const tools=real&&Array.isArray(d?.toolsUsed)&&d.toolsUsed.length?' · '+d.toolsUsed.map(esc).join(' · '):'';
- state.innerHTML=real?'<span class="trustTag verified">AI REAL</span> Dados reais quando disponíveis'+tools+'.'+(d?.trustSummary?' · '+esc(d.trustSummary):''):'<span class="trustTag predicted">FALLBACK LOCAL</span> Backend AI indisponível.';
-}}
+async function alphaLifestyleSend(){const input=$('lifestylePrompt'),state=$('lifestyleState');if(!input)return;const text=input.value.trim();if(!text)return;let c=alphaCurrentConversation()||alphaCreateConversation(text);c.messages.push({role:'user',text,at:new Date().toISOString()});c.updatedAt=new Date().toISOString();alphaUpsertConversation(c);input.value='';renderAlphaLifestyleThread();if(state)state.textContent='A Alpha está a interpretar…';let d=null,reply='',real=false;try{d=await alphaCallBackend(c,text);reply=String(d.answer||'').trim();if(!reply)throw new Error('empty');real=true}catch(e){reply=alphaLifestyleLocalReply(text)}c=alphaCurrentConversation()||c;c.messages.push({role:'ai',text:reply,at:new Date().toISOString(),source:real?'backend':'local'});if(real&&d){if(d.title&&c.titleSource!=='user'){c.title=alphaNormalizeTitle(d.title);c.titleSource='ai'}c.intent=d.intent||c.intent;c.places=Array.isArray(d.places)?d.places:c.places;c.experienceType=d.experienceType||c.experienceType}c.updatedAt=new Date().toISOString();alphaUpsertConversation(c);renderAlphaLifestyleThread();if(state){state.textContent=real?'Resposta gerada com sucesso.':'Backend AI indisponível · resposta local.';}}
+
+
+function alphaApplyVisualViewport(){
+  if(!document.body.classList.contains('alphaChatMode'))return;
+  const vv=window.visualViewport;
+  if(!vv)return;
+  const card=$('lifestyleAI');
+  if(!card)return;
+  card.style.height=Math.max(280,Math.round(vv.height))+'px';
+  card.style.transform='translateY('+Math.round(vv.offsetTop)+'px)';
+}
+function alphaResetVisualViewport(){
+  const card=$('lifestyleAI');if(!card)return;
+  if(!document.body.classList.contains('alphaChatMode')){card.style.height='';card.style.transform='';}
+}
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize',()=>{alphaApplyVisualViewport();requestAnimationFrame(()=>{const h=$('lifestyleThread');if(h)h.scrollTop=h.scrollHeight})});
+  window.visualViewport.addEventListener('scroll',alphaApplyVisualViewport);
+}
+document.addEventListener('focusin',e=>{if(e.target?.id==='lifestylePrompt')requestAnimationFrame(()=>{alphaApplyVisualViewport();const h=$('lifestyleThread');if(h)h.scrollTop=h.scrollHeight})});
+document.addEventListener('focusout',e=>{if(e.target?.id==='lifestylePrompt')setTimeout(()=>{alphaApplyVisualViewport()},80)});
+document.addEventListener('click',e=>{if(!e.target.closest?.('#aiChatMenu')&&!e.target.closest?.('.aiChatMenuBtn'))alphaCloseChatMenu()});
 
 document.addEventListener('keydown',e=>{if(e.target?.id==='lifestylePrompt'&&e.key==='Enter'&&!e.shiftKey){e.preventDefault();alphaLifestyleSend()}});
 function alphaWorthItToday(){if($('lifestylePrompt'))$('lifestylePrompt').value='Vale a pena ir hoje? Usa a minha localização e o contexto atual.';alphaLifestyleSend()}
