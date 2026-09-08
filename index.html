@@ -622,15 +622,116 @@ body.alphaChatMode #lifestyleAI .lifestyleThread{
   body.alphaChatMode #home > #lifestyleAI{padding-left:13px;padding-right:13px}
 }
 
+
+/* ===== ALPHA 3.5.1 · WELCOME + DYNAMIC COMPASS IDENTITY ===== */
+.logo{
+  --compass-rotation:0deg;
+  overflow:visible;
+  isolation:isolate;
+  border:1px solid rgba(85,230,174,.28);
+  box-shadow:0 0 0 1px rgba(255,255,255,.025) inset,0 8px 20px rgba(0,0,0,.18);
+}
+.logo:before{
+  content:"";
+  position:absolute;
+  inset:5px;
+  border-radius:50%;
+  border:1px solid rgba(238,247,243,.24);
+  background:
+    radial-gradient(circle at center,rgba(85,230,174,.18) 0 8%,transparent 9%),
+    linear-gradient(90deg,transparent 48%,rgba(238,247,243,.14) 49% 51%,transparent 52%),
+    linear-gradient(0deg,transparent 48%,rgba(238,247,243,.14) 49% 51%,transparent 52%);
+  z-index:1;
+}
+.logo:after{
+  content:"▲";
+  z-index:2;
+  transform:rotate(var(--compass-rotation));
+  transform-origin:center;
+  transition:transform .32s cubic-bezier(.2,.7,.2,1);
+  text-shadow:0 1px 6px rgba(0,0,0,.35);
+}
+.logo.compassSeeking:after{animation:alphaCompassSeek 1.8s cubic-bezier(.25,.8,.25,1) infinite}
+.logo.compassLive{
+  box-shadow:0 0 0 1px rgba(85,230,174,.18) inset,0 0 20px rgba(85,230,174,.15);
+}
+@keyframes alphaCompassSeek{
+  0%{transform:rotate(-18deg)}
+  45%{transform:rotate(330deg)}
+  70%{transform:rotate(290deg)}
+  100%{transform:rotate(360deg)}
+}
+.alphaWelcomeOverlay{
+  position:fixed;inset:0;z-index:95;
+  display:none;place-items:center;
+  padding:24px;
+  background:
+    radial-gradient(circle at 50% 20%,rgba(38,105,83,.26),transparent 38%),
+    linear-gradient(180deg,#07171a 0%,#071116 66%,#08151b 100%);
+  opacity:0;transition:opacity .28s ease;
+}
+.alphaWelcomeOverlay.show{display:grid;opacity:1}
+.alphaWelcomeOverlay.leaving{opacity:0}
+.alphaWelcomeInner{text-align:center;max-width:440px;width:100%}
+.alphaWelcomeCompass{
+  width:92px;height:92px;margin:0 auto 22px;border-radius:30px;
+  background:conic-gradient(from 200deg,var(--green),var(--blue),var(--green));
+  position:relative;
+}
+.alphaWelcomeCompass.logo:before{inset:11px}
+.alphaWelcomeCompass.logo:after{font-size:34px}
+.alphaWelcomeEyebrow{
+  color:var(--green);font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase
+}
+.alphaWelcomeTitle{
+  margin:8px 0 8px;font-size:clamp(28px,8vw,42px);line-height:1.08;letter-spacing:-.035em
+}
+.alphaWelcomeSub{margin:0;color:var(--muted);font-size:16px;line-height:1.45}
+.alphaCompassStatus{
+  margin-top:16px;font-size:11px;color:#8fa9a1;min-height:16px
+}
+.alphaCompassEnable{
+  display:none;margin:15px auto 0;border:1px solid #35564f;border-radius:999px;
+  padding:8px 13px;background:#102a27;color:#dff5ec;font-weight:800
+}
+.alphaCompassEnable.show{display:inline-flex}
+.authGate{
+  background:
+    radial-gradient(circle at 50% 8%,rgba(47,140,104,.24),transparent 36%),
+    linear-gradient(180deg,#07171a,#071116 58%)!important;
+}
+.authBox{
+  border-radius:30px!important;padding:26px!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.32);
+}
+.authWelcomeBrand{
+  display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:18px
+}
+.authWelcomeBrand .logo{width:72px;height:72px;border-radius:24px;margin-bottom:14px}
+.authWelcomeBrand .logo:after{font-size:28px}
+.authWelcomeBrand h1{margin:4px 0 4px;font-size:30px}
+.authWelcomeBrand p{margin:0;color:var(--muted)}
+.authBox .legacyAuthBrand{display:none}
+
 </style>
 </head>
 <body>
 <div id="toast" class="toast"></div>
+<div id="alphaWelcomeOverlay" class="alphaWelcomeOverlay" aria-hidden="true">
+  <div class="alphaWelcomeInner">
+    <div id="alphaWelcomeCompass" class="alphaWelcomeCompass logo compassSeeking" aria-hidden="true"></div>
+    <div class="alphaWelcomeEyebrow">ALPHA · OUTDOOR LIFESTYLE AI</div>
+    <h1 id="alphaWelcomeTitle" class="alphaWelcomeTitle">Bem-vindo de volta</h1>
+    <p id="alphaWelcomeSub" class="alphaWelcomeSub">O que queres viver hoje?</p>
+    <div id="alphaCompassStatus" class="alphaCompassStatus">A orientar a Alpha…</div>
+    <button id="alphaCompassEnable" class="alphaCompassEnable" type="button" onclick="alphaRequestCompassPermission()">Ativar bússola</button>
+  </div>
+</div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 2.0.3 · Family Login</small></div></div>
-    <div class="sep"></div><div class="eyebrow">Bem-vindo</div><h1 style="margin:8px 0">Vale a pena ir hoje?</h1>
-    <p class="muted">Alpha familiar com 4 contas locais de teste. Usa apenas o primeiro nome e o PIN <b>1234</b>. Ainda não existe backend/sincronização entre telemóveis.</p>
+    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.5.1 · Family Login</small></div></div>
+    <div class="authWelcomeBrand"><div class="logo compassSeeking"></div><div class="alphaWelcomeEyebrow">ALPHA · OUTDOOR LIFESTYLE AI</div><h1>Bem-vindo à Alpha</h1><p>Descobrir · Confiar · Viver</p></div>
+    <p class="muted" style="text-align:center">Escolhe o teu perfil para começares. Nesta versão Alpha usamos as 4 contas familiares de teste e o PIN <b>1234</b>.</p>
     <label>Utilizador</label>
     <select id="loginName" autocomplete="username">
       <option value="">Escolher utilizador…</option>
@@ -1386,6 +1487,124 @@ let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrac
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
 
 /* ---------- FAMILY LOGIN + ENTITLEMENT ENGINE 1.4.3 ---------- */
+
+const ALPHA_LAST_WELCOME_PREFIX='alpha_last_welcome_';
+let alphaCompassHeading=null;
+let alphaCompassBound=false;
+let alphaWelcomeTimer=null;
+
+function alphaAllLogos(){return [...document.querySelectorAll('.logo')]}
+function alphaSetCompassRotation(deg,live=false){
+  if(!Number.isFinite(deg))return;
+  const r=((deg%360)+360)%360;
+  alphaAllLogos().forEach(el=>{
+    el.style.setProperty('--compass-rotation',r+'deg');
+    el.classList.toggle('compassLive',!!live);
+    if(live)el.classList.remove('compassSeeking');
+  });
+}
+function alphaCompassStatus(text,needsButton=false){
+  const s=$('alphaCompassStatus'),b=$('alphaCompassEnable');
+  if(s)s.textContent=text||'';
+  if(b)b.classList.toggle('show',!!needsButton);
+}
+function alphaDeviceHeading(e){
+  if(Number.isFinite(e.webkitCompassHeading))return e.webkitCompassHeading;
+  if(e.absolute===true && Number.isFinite(e.alpha))return (360-e.alpha)%360;
+  return null;
+}
+function alphaOnDeviceOrientation(e){
+  const heading=alphaDeviceHeading(e);
+  if(!Number.isFinite(heading))return;
+  alphaCompassHeading=heading;
+  // O topo do equipamento aponta para heading; para a agulha apontar a Norte no ecrã,
+  // rodamos no sentido oposto.
+  alphaSetCompassRotation(-heading,true);
+  alphaCompassStatus('Bússola ativa · Norte real',false);
+}
+function alphaBindCompass(){
+  if(alphaCompassBound)return;
+  alphaCompassBound=true;
+  window.addEventListener('deviceorientationabsolute',alphaOnDeviceOrientation,true);
+  window.addEventListener('deviceorientation',alphaOnDeviceOrientation,true);
+}
+async function alphaRequestCompassPermission(){
+  try{
+    if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
+      const p=await DeviceOrientationEvent.requestPermission();
+      if(p!=='granted'){alphaCompassStatus('Bússola sem permissão · Norte visual',true);alphaSetCompassRotation(0,false);return false}
+    }
+    alphaBindCompass();
+    alphaCompassStatus('A procurar Norte…',false);
+    alphaAllLogos().forEach(el=>el.classList.add('compassSeeking'));
+    setTimeout(()=>{
+      if(alphaCompassHeading===null){
+        alphaSetCompassRotation(0,false);
+        alphaCompassStatus('Sensor indisponível · Norte visual',false);
+      }
+    },1800);
+    return true;
+  }catch(e){
+    console.warn('alpha compass permission',e);
+    alphaSetCompassRotation(0,false);
+    alphaCompassStatus('Sensor indisponível · Norte visual',false);
+    return false;
+  }
+}
+function alphaStartCompass(){
+  alphaAllLogos().forEach(el=>el.classList.add('compassSeeking'));
+  if(typeof DeviceOrientationEvent==='undefined'){
+    setTimeout(()=>alphaSetCompassRotation(0,false),1500);
+    alphaCompassStatus('Sem sensor de orientação · Norte visual',false);
+    return;
+  }
+  if(typeof DeviceOrientationEvent.requestPermission==='function'){
+    alphaCompassStatus('Bússola disponível',true);
+    setTimeout(()=>{if(alphaCompassHeading===null)alphaSetCompassRotation(0,false)},1500);
+    return;
+  }
+  alphaBindCompass();
+  alphaCompassStatus('A procurar Norte…',false);
+  setTimeout(()=>{
+    if(alphaCompassHeading===null){
+      alphaSetCompassRotation(0,false);
+      alphaCompassStatus('Sensor indisponível · Norte visual',false);
+    }
+  },1800);
+}
+function alphaGreetingForTime(){
+  const h=new Date().getHours();
+  if(h<12)return'Bom dia';
+  if(h<19)return'Boa tarde';
+  return'Boa noite';
+}
+function alphaShowWelcome({firstForUser=false}={}){
+  const u=authUser();if(!u)return;
+  const ov=$('alphaWelcomeOverlay'),title=$('alphaWelcomeTitle'),sub=$('alphaWelcomeSub');
+  if(!ov||!title||!sub)return;
+  title.textContent=firstForUser?'Bem-vindo à Alpha, '+(u.shortName||u.name):alphaGreetingForTime()+', '+(u.shortName||u.name);
+  sub.textContent=firstForUser?'A tua próxima experiência começa aqui.':'Bem-vindo de volta · O que queres viver hoje?';
+  ov.classList.remove('leaving');
+  ov.classList.add('show');
+  ov.setAttribute('aria-hidden','false');
+  alphaStartCompass();
+  clearTimeout(alphaWelcomeTimer);
+  alphaWelcomeTimer=setTimeout(()=>alphaHideWelcome(),1850);
+}
+function alphaHideWelcome(){
+  const ov=$('alphaWelcomeOverlay');if(!ov)return;
+  ov.classList.add('leaving');
+  setTimeout(()=>{
+    ov.classList.remove('show','leaving');
+    ov.setAttribute('aria-hidden','true');
+  },280);
+}
+function alphaWelcomeKeyForUser(id){return ALPHA_LAST_WELCOME_PREFIX+id}
+function alphaMarkWelcomeSeen(){
+  const u=authUser();if(u)localStorage.setItem(alphaWelcomeKeyForUser(u.id),String(Date.now()));
+}
+function alphaWasWelcomedBefore(id){return !!localStorage.getItem(alphaWelcomeKeyForUser(id))}
+
 const AUTH_KEY='alpha_auth_user', ENT_PREFIX='alpha_entitlements_', POINTS_PREFIX='alpha_trailscore_points_', LAST_GOLD_PREFIX='alpha_last_gold_expired_';
 const FAMILY_USERS={
   Helena:{id:'helena',name:'Helena Ribeiro',shortName:'Helena',initialTier:'GOLD',initialDays:2},
@@ -1447,9 +1666,12 @@ function alphaLogin(){
   const entKey=ENT_PREFIX+profile.id;
   if(!localStorage.getItem(entKey))localStorage.setItem(entKey,JSON.stringify(createInitialEntitlement(profile)));
   currentTester=profile.shortName;localStorage.setItem(userKey(TESTER_KEY),currentTester);
-  $('loginPin').value='';$('authGate').classList.remove('show');applyEntitlements();alphaAfterLogin34();if($('lifestylePrompt'))$('lifestylePrompt').value='';toast('Bem-vindo, '+profile.shortName+' · '+tierLabel(effectiveTier()));
+  const firstWelcome=!alphaWasWelcomedBefore(profile.id);
+  $('loginPin').value='';$('authGate').classList.remove('show');applyEntitlements();alphaAfterLogin34();if($('lifestylePrompt'))$('lifestylePrompt').value='';
+  alphaShowWelcome({firstForUser:firstWelcome});alphaMarkWelcomeSeen();
+  toast('Bem-vindo, '+profile.shortName+' · '+tierLabel(effectiveTier()));
 }
-function alphaLogout(){localStorage.removeItem(AUTH_KEY);if($('lifestyleThread')){$('lifestyleThread').innerHTML='';$('lifestyleThread').classList.remove('show')}if($('lifestylePrompt'))$('lifestylePrompt').value='';$('authGate').classList.add('show');$('loginPin').value='';go('home')}
+function alphaLogout(){alphaHideWelcome();localStorage.removeItem(AUTH_KEY);if($('lifestyleThread')){$('lifestyleThread').innerHTML='';$('lifestyleThread').classList.remove('show')}if($('lifestylePrompt'))$('lifestylePrompt').value='';$('authGate').classList.add('show');$('loginPin').value='';go('home')}
 function lastGoldExpiredAt(){const u=authUser();if(!u)return 0;return Number(localStorage.getItem(LAST_GOLD_PREFIX+u.id)||0)}
 function rememberGoldExpiry(ts){const u=authUser();if(u)localStorage.setItem(LAST_GOLD_PREFIX+u.id,String(ts||Date.now()))}
 function clearGoldExpiryNotice(){const u=authUser();if(u)localStorage.removeItem(LAST_GOLD_PREFIX+u.id)}
@@ -1629,7 +1851,22 @@ function simulateSilverEarned(){saveEnt({tier:'SILVER',expiresAt:new Date(Date.n
 function redeemSilver(days,cost){if(effectiveTier()!=='FREE')return toast('SILVER por pontos é ativado a partir de FREE');if(points()<cost)return toast('Ainda não tens pontos suficientes');localStorage.setItem(userKey(POINTS_PREFIX),String(points()-cost));saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+days*86400000).toISOString(),purchasedDays:days,source:'points',cost});renderMembership();toast('SILVER ativado por '+days+' dias · perfil atualizado');go('profile')}
 function resetSilverAlphaTest(){if(authUser()?.id!=='filipe')return;localStorage.setItem(userKey(POINTS_PREFIX),'2000');saveEnt({tier:'FREE',source:'alpha-1.4.17-silver-redemption-reset'});renderMembership();toast('Teste SILVER reposto · 2000 TrailScore');go('profile')}
 function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('goldProfileActions'))$('goldProfileActions').style.display=t==='GOLD'?'flex':'none';if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.purchasedDays?' · período escolhido: '+e.purchasedDays+' dias':'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.purchasedMonths?' · período escolhido: '+e.purchasedMonths+' '+(e.purchasedMonths===1?'mês':'meses'):'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 2.0.3: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button><button class="btn secondary" onclick="redeemSilver(60,720)">720 pts → 60 dias</button><button class="btn secondary" onclick="redeemSilver(90,1000)">1000 pts → 90 dias</button></div>':(t==='SILVER'&&p>=100?'<div class="item"><b>'+p+' pontos guardados.</b> Quando o SILVER atual expirar e regressares a FREE, podes trocá-los por um novo período SILVER.</div>'+(u.id==='filipe'?'<button class="btn secondary" style="width:100%;margin-top:10px" onclick="resetSilverAlphaTest()">Repor teste SILVER · 2000 pts</button>':''):''))}}
-function bootAuth(){const u=authUser();if(!u){$('authGate').classList.add('show')}else{const profile=familyProfileById(u.id);seedFamilyExpiryTest(profile);currentTester=u.shortName||u.name||'Filipe';localStorage.setItem(userKey(TESTER_KEY),currentTester);$('authGate').classList.remove('show')}sweepReportPointMaturity();applyEntitlements()}
+function bootAuth(){
+  const u=authUser();
+  if(!u){
+    $('authGate').classList.add('show');
+    alphaStartCompass();
+  }else{
+    const profile=familyProfileById(u.id);
+    seedFamilyExpiryTest(profile);
+    currentTester=u.shortName||u.name||'Filipe';
+    localStorage.setItem(userKey(TESTER_KEY),currentTester);
+    $('authGate').classList.remove('show');
+    const firstWelcome=!alphaWasWelcomedBefore(u.id);
+    setTimeout(()=>{alphaShowWelcome({firstForUser:firstWelcome});alphaMarkWelcomeSeen()},120);
+  }
+  sweepReportPointMaturity();applyEntitlements();
+}
 
 const types={traffic:'Trânsito',police:'Polícia / autoridade',crash:'Acidente',hazard:'Perigo',roadworks:'Obras',blocked:'Faixa / passagem bloqueada',weather:'Mau tempo',fire:'Incêndio',tree:'Árvore / obstáculo',water:'Estado da água',mud:'Lama / inundação',landslide:'Deslizamento',closure:'Caminho / estrada fechada',sign:'Sinalização',parking:'Acesso / estacionamento',animal:'Animal / gado',other:'Outro'};
 
@@ -4239,7 +4476,15 @@ function alphaDeleteConversation(id){const all=alphaConversations(),c=all.find(x
 function alphaLifestyleQuick(text){if($('lifestylePrompt'))$('lifestylePrompt').value=text;go('home');setTimeout(()=>$('lifestyleAI')?.scrollIntoView({behavior:'smooth',block:'start'}),80)}
 function alphaCurrentContext(){const u=authUser(),ctx={membership:effectiveTier()};if(u)ctx.user={id:u.id,firstName:u.shortName||u.name};if(pos&&Number.isFinite(pos.latitude)&&Number.isFinite(pos.longitude))ctx.location={latitude:pos.latitude,longitude:pos.longitude};if(headerWeatherLast)ctx.weather={place:headerWeatherLast.place||null,temp:headerWeatherLast.temp??null,retrievedAt:new Date(headerWeatherLast.time||Date.now()).toISOString()};return ctx}
 function alphaExtractRecentIntent(text){const p=String(text||'').trim().split(/(?<=[.!?])\s+|\n+/).filter(Boolean);return p.slice(-4).join(' ')||String(text||'')}
-function alphaLifestyleLocalReply(text){const full=String(text||''),low=full.toLocaleLowerCase('pt-PT'),intent=alphaExtractRecentIntent(full).toLocaleLowerCase('pt-PT');if(/cheguei|voltei|vindo de|viagem|pernoit|visit/.test(low)&&/hoje|amanh|terminar o dia|acabar o dia/.test(intent))return'Percebi a viagem como contexto histórico e a tua intenção atual como um novo pedido. Não vou transformar uma referência a Santiago num Caminho de Santiago. Para recomendações concretas, a Alpha real deve cruzar dados verificados.';if(/caminho|rota|percurso/.test(intent))return'Percebi que queres explorar um Caminho ou rota. Posso estruturar a experiência; dados reais devem ser confirmados pelas ferramentas Alpha.';return'Percebi o pedido. Estou em fallback local; sem backend não vou inventar locais, horários, preços, disponibilidade ou condições live.'}
+function alphaLifestyleLocalReply(text){
+  const full=String(text||''),low=full.toLocaleLowerCase('pt-PT'),intent=alphaExtractRecentIntent(full).toLocaleLowerCase('pt-PT');
+  const obviousOutdoor=/trilho|caminhad|campism|cicl|biciclet|praia|piquenique|pique-nique|caminho|orientaç|bússola|bussola|mapa|gps|mochila|tenda|outdoor|natureza|serra|montanha|viagem|roteiro|alojamento|estacionamento|meteorolog|miradouro|passeio/.test(low);
+  const obviousOutside=/torradeira|máquina de lavar|maquina de lavar|frigorífico|frigorifico|microondas|televisão|televisao|aspirador|celebridade|fofoca|quem morreu|quem se casou|novela|reality show/.test(low);
+  if(obviousOutside&&!obviousOutdoor)return'Isso fica fora do âmbito da Alpha. Posso ajudar-te com o que seja útil para planear, preparar ou viver uma experiência outdoor.';
+  if(/cheguei|voltei|vindo de|viagem|pernoit|visit/.test(low)&&/hoje|amanh|terminar o dia|acabar o dia/.test(intent))return'Percebi a viagem como contexto histórico e a tua intenção atual como um novo pedido. Não vou transformar uma referência a Santiago num Caminho de Santiago. Para recomendações concretas, a Alpha real deve cruzar dados verificados.';
+  if(/caminho|rota|percurso/.test(intent))return'Percebi que queres explorar um Caminho ou rota. Posso estruturar a experiência; dados reais devem ser confirmados pelas ferramentas Alpha.';
+  return'Percebi o pedido. Estou em fallback local; sem backend não vou inventar locais, horários, preços, disponibilidade ou condições live.';
+}
 
 let alphaPendingAttachments=[];
 let alphaRecognition=null;
@@ -4469,6 +4714,7 @@ document.addEventListener('focusout',e=>{if(e.target?.id==='lifestylePrompt')set
 document.addEventListener('click',e=>{if(!e.target.closest?.('#aiChatMenu')&&!e.target.closest?.('.aiChatMenuBtn'))alphaCloseChatMenu();if(!e.target.closest?.('#alphaAttachMenu')&&!e.target.closest?.('.alphaAttachBtn'))alphaCloseAttachMenu()});
 
 document.addEventListener('input',e=>{if(e.target?.id==='lifestylePrompt')alphaSetDraft(e.target.value)});
+document.addEventListener('click',e=>{if(e.target?.id==='alphaWelcomeOverlay')alphaHideWelcome()});
 document.addEventListener('keydown',e=>{if(e.target?.id==='lifestylePrompt'&&e.key==='Enter'&&!e.shiftKey){e.preventDefault();alphaLifestyleSend()}});
 function alphaWorthItToday(){if($('lifestylePrompt'))$('lifestylePrompt').value='Vale a pena ir hoje? Usa a minha localização e o contexto atual.';alphaLifestyleSend()}
 function alphaTrailsNearMe(){go('field');setTimeout(()=>{requestLocation();loadTrailsNearby(true)},180)}
@@ -4479,6 +4725,6 @@ setTimeout(()=>{if(authUser())alphaAfterLogin34()},160);
 
 </script>
 
-<script>window.ALPHA_DOMAIN_GATE_BUILD='3.5.1-domain-gated';</script>
+<script>window.ALPHA_DOMAIN_GATE_BUILD='3.5.1-welcome-compass-hard-gate';</script>
 </body>
 </html>
