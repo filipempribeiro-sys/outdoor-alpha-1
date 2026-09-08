@@ -312,9 +312,21 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 .lifestyleComposer{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:8px;flex:0 0 auto;align-items:end}
 .lifestyleComposer textarea{min-height:54px;max-height:96px;resize:none;overflow-y:auto}
 .lifestyleComposer .btn{min-height:54px;white-space:nowrap}
-.lifestyleThread{display:none;margin-top:10px;border-top:1px solid #294149;padding:10px 2px 4px;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;-ms-overflow-style:none}
+/* A área da conversa existe sempre e funciona como o "espaçador" flexível.
+   Assim, mesmo numa conversa vazia, o composer permanece encostado ao fundo. */
+.lifestyleThread{display:block;flex:1 1 auto;margin-top:10px;border-top:1px solid #294149;padding:10px 2px 4px;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;-ms-overflow-style:none}
 .lifestyleThread::-webkit-scrollbar{display:none}
 .lifestyleThread.show{display:block}
+/* Depois da primeira interação, desaparece o ecrã de boas-vindas e o cartão
+   passa a comportar-se como um chat AI: conversa em cima, composer em baixo. */
+#lifestyleAI.chatStarted > h1,
+#lifestyleAI.chatStarted > .lifestyleAILead,
+#lifestyleAI.chatStarted > .lifestyleQuick{display:none!important}
+#lifestyleAI.chatStarted .aiTopbar .eyebrow{display:none}
+#lifestyleAI.chatStarted .aiTopbar{justify-content:flex-end;min-height:34px;margin-bottom:2px}
+#lifestyleAI.chatStarted .aiTopActions button{padding:6px 9px;font-size:11px;border-radius:10px}
+#lifestyleAI.chatStarted .lifestyleThread{margin-top:0;border-top:0;padding-top:4px}
+#lifestyleAI.chatStarted #lifestyleState{margin-top:4px!important}
 .lifestyleMsg{padding:12px 14px;border-radius:16px;margin-top:9px;white-space:pre-wrap;line-height:1.48}
 .lifestyleMsg.user{margin-left:8%;background:#234d41;border:1px solid #3c7b68}
 .lifestyleMsg.ai{margin-right:5%;background:#101d28;border:1px solid #34495d}
@@ -334,10 +346,11 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 #home > .card:not(#lifestyleAI){display:none!important}
 #home{padding-top:10px}
 #lifestyleAI{height:calc(100dvh - 165px);min-height:560px;max-height:820px;display:flex;flex-direction:column;overflow:hidden}
-#lifestyleAI .lifestyleComposer{margin-top:8px}
+#lifestyleAI .lifestyleComposer{margin-top:8px;flex:0 0 auto}
 #lifestyleAI .lifestyleThread{flex:1 1 auto}
 #lifestyleAI .lifestyleQuick{flex:0 0 auto}
 #lifestyleAI .lifestyleAILead{flex:0 0 auto}
+#lifestyleAI > h1,#lifestyleAI > .aiTopbar{flex:0 0 auto}
 #lifestyleState{flex:0 0 auto}
 .mapPathsHub{border:1px solid #3c5362;background:linear-gradient(145deg,#0d2028,#12192a)}
 .mapPathsHub .hubActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
@@ -3838,9 +3851,9 @@ function alphaLocalSemanticTitle(text){
 }
 function alphaCreateConversation(text){const now=new Date().toISOString();return{id:alphaUuid(),userId:authUser()?.id||'guest',title:alphaLocalSemanticTitle(text),titleSource:'local',intent:null,places:[],experienceType:null,messages:[],createdAt:now,updatedAt:now}}
 function alphaUpsertConversation(c){let all=alphaConversations().filter(x=>x.id!==c.id);all.unshift(c);alphaSaveConversations(all);alphaSetActiveConversationId(c.id)}
-function alphaNewConversation(){alphaSetActiveConversationId('');if($('lifestylePrompt'))$('lifestylePrompt').value='';renderAlphaLifestyleThread();alphaCloseHistory();if($('lifestyleState'))$('lifestyleState').innerHTML='<span class="trustTag predicted">NOVA CONVERSA</span> O título será criado a partir do significado da experiência.'}
+function alphaNewConversation(){alphaSetActiveConversationId('');if($('lifestylePrompt'))$('lifestylePrompt').value='';$('lifestyleAI')?.classList.remove('chatStarted');renderAlphaLifestyleThread();alphaCloseHistory();if($('lifestyleState'))$('lifestyleState').innerHTML='<span class="trustTag predicted">NOVA CONVERSA</span> O título será criado a partir do significado da experiência.';requestAnimationFrame(()=>$('lifestylePrompt')?.focus({preventScroll:true}))}
 function alphaFormatConversationDate(x){try{return new Intl.DateTimeFormat('pt-PT',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(x))}catch{return''}}
-function renderAlphaLifestyleThread(){const host=$('lifestyleThread');if(!host)return;const c=alphaCurrentConversation(),h=c?.messages||[];if(!h.length){host.classList.remove('show');host.innerHTML='';return}host.classList.add('show');host.innerHTML='<div class="small muted" style="margin-bottom:8px">● '+esc(c.title)+'</div>'+h.map(m=>'<div class="lifestyleMsg '+m.role+'">'+esc(m.text)+'</div>').join('');requestAnimationFrame(()=>{host.scrollTop=host.scrollHeight})}
+function renderAlphaLifestyleThread(){const host=$('lifestyleThread'),card=$('lifestyleAI');if(!host)return;const c=alphaCurrentConversation(),h=c?.messages||[];card?.classList.toggle('chatStarted',h.length>0);if(!h.length){host.classList.remove('show');host.innerHTML='';host.scrollTop=0;return}host.classList.add('show');host.innerHTML='<div class="small muted" style="margin-bottom:8px">● '+esc(c.title)+'</div>'+h.map(m=>'<div class="lifestyleMsg '+m.role+'">'+esc(m.text)+'</div>').join('');requestAnimationFrame(()=>{host.scrollTop=host.scrollHeight})}
 function alphaOpenHistory(){alphaRenderHistory();$('aiHistoryDrawer')?.classList.add('show')}
 function alphaCloseHistory(){$('aiHistoryDrawer')?.classList.remove('show')}
 function alphaRenderHistory(){
