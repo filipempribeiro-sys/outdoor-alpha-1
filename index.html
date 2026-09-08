@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="3.5.0">
+<meta name="alpha-version" content="3.5.1">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 3.5.0 — Outdoor Lifestyle AI · Real Tools</title>
+<title>Project Alpha 3.5.1 — Context · Trust · Trip Planner</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -299,7 +299,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 
 
 /* ============================================================
-   ALPHA 3.5 · REAL TOOLS — CONTINUITY LAYER
+   ALPHA 3.5.1 · CONTEXT · TRUST · TRIP PLANNER — CONTINUITY LAYER
    Mantém integralmente o core 2.4.0 e acrescenta a nova interface.
    ============================================================ */
 .lifestyleAI{border:1px solid #3e5f57;background:
@@ -372,7 +372,7 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.5 · Real Tools</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.5.1 · Context · Trust · Trip Planner</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -383,7 +383,7 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 <section id="home" class="view active">
 
   <div class="card lifestyleAI" id="lifestyleAI">
-    <div class="aiTopbar"><div class="eyebrow">ALPHA 3.5 · REAL TOOLS</div><div class="aiTopActions"><button onclick="alphaNewConversation()">＋ Nova</button><button onclick="alphaOpenHistory()">☰ Histórico</button></div></div>
+    <div class="aiTopbar"><div class="eyebrow">ALPHA 3.5.1 · CONTEXT · TRUST · TRIP PLANNER</div><div class="aiTopActions"><button onclick="alphaNewConversation()">＋ Nova</button><button onclick="alphaOpenHistory()">☰ Histórico</button></div></div>
     <h1>O que queres <span class="green">fazer hoje?</span></h1>
     <p class="muted lifestyleAILead">Diz à Alpha o que te apetece, o tempo que tens, com quem vais ou simplesmente conta-lhe o contexto. A aplicação adapta as ferramentas ao teu objetivo — não és tu que tens de te adaptar à aplicação.</p>
     <div class="lifestyleQuick">
@@ -455,7 +455,7 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 3.5 · Real Tools sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 3.5.1 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
       <div class="eyebrow">AI JOURNEY · MULTI-STOP</div>
@@ -683,7 +683,7 @@ Estação de São Bento
 
   <div class="card mapPathsHub" id="mapPathsHub">
     <div class="eyebrow">MAPA / GO · EXPLORAR</div>
-    <h2>Trilhos · Caminhos · Rotas</h2>
+    <h2>Trilhos · Caminhos · Rotas · Guardados · Navegação</h2>
     <p class="muted">Explora no mapa sem prender a experiência a um percurso específico. A Alpha usa esta área para trails, caminhos de vários dias, rotas e navegação.</p>
     <div class="hubActions">
       <button class="btn secondary" onclick="loadTrailsNearby(true)">🥾 Trails</button>
@@ -1085,7 +1085,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='3.5.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='3.5.1',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1415,8 +1415,8 @@ function chooseQuickReport(type){closeQuickReport();if($('rtype'))$('rtype').val
 
 function toast(m){let t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.remove('show'),2800)}
 function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();if(map){map.resize();renderMapReports();renderTrailLayer();renderSelectedTrail();renderExploreMarkers();renderMultiStopMarkers();renderExploreRoute();renderLiveTrack();setTimeout(()=>{map.resize();if(exploreRouteGeoJSON&&!liveNavActive)fitActiveRoute(false)},180)}},120);if(id==='experience')syncReview()}
-function reports(){try{return JSON.parse(localStorage.getItem(userKey(KEY))||'[]')}catch{return[]}}
-function saveReports(r){localStorage.setItem(userKey(KEY),JSON.stringify(r))}
+function reports(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
+function saveReports(r){localStorage.setItem(KEY,JSON.stringify(r))}
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
 function initMap(){
@@ -3801,7 +3801,7 @@ window.addEventListener('resize',()=>{clearTimeout(window._orientationResize);wi
 adaptOrientation();
 
 /* ============================================================
-   ALPHA 3.5 · REAL TOOLS + CONVERSATION MANAGER
+   ALPHA 3.5.1 · CONTEXT · TRUST · TRIP PLANNER + CONVERSATION MANAGER
    ============================================================ */
 const ALPHA_CONVERSATIONS_KEY='alpha_ai_conversations_v1_';
 const ALPHA_ACTIVE_CONVERSATION_KEY='alpha_ai_active_conversation_v1_';
@@ -3860,7 +3860,7 @@ function alphaLifestyleLocalReply(text){const full=String(text||''),low=full.toL
 async function alphaCallBackend(c,text){const base=alphaBackendUrl();if(!base)throw new Error('BACKEND_NOT_CONFIGURED');const r=await fetch(base+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({conversationId:c.id,title:c.title,messages:c.messages.slice(-16).map(m=>({role:m.role==='ai'?'assistant':'user',content:m.text})),currentMessage:text,context:alphaCurrentContext()})});const raw=await r.text();let d={};try{d=JSON.parse(raw)}catch{}if(!r.ok)throw new Error(d.error||'HTTP '+r.status);return d}
 async function alphaLifestyleSend(){const input=$('lifestylePrompt'),state=$('lifestyleState');if(!input)return;const text=input.value.trim();if(!text)return;let c=alphaCurrentConversation()||alphaCreateConversation(text);c.messages.push({role:'user',text,at:new Date().toISOString()});c.updatedAt=new Date().toISOString();alphaUpsertConversation(c);input.value='';renderAlphaLifestyleThread();if(state)state.textContent='A Alpha está a interpretar…';let d=null,reply='',real=false;try{d=await alphaCallBackend(c,text);reply=String(d.answer||'').trim();if(!reply)throw new Error('empty');real=true}catch(e){reply=alphaLifestyleLocalReply(text)}c=alphaCurrentConversation()||c;c.messages.push({role:'ai',text:reply,at:new Date().toISOString(),source:real?'backend':'local'});if(real&&d){if(d.title&&c.titleSource!=='user'){c.title=alphaNormalizeTitle(d.title);c.titleSource='ai'}c.intent=d.intent||c.intent;c.places=Array.isArray(d.places)?d.places:c.places;c.experienceType=d.experienceType||c.experienceType}c.updatedAt=new Date().toISOString();alphaUpsertConversation(c);renderAlphaLifestyleThread();if(state){
  const tools=real&&Array.isArray(d?.toolsUsed)&&d.toolsUsed.length?' · '+d.toolsUsed.map(esc).join(' · '):'';
- state.innerHTML=real?'<span class="trustTag verified">AI REAL</span> Dados reais quando disponíveis'+tools+'.':'<span class="trustTag predicted">FALLBACK LOCAL</span> Backend AI ainda não configurado.';
+ state.innerHTML=real?'<span class="trustTag verified">AI REAL</span> Dados reais quando disponíveis'+tools+'.'+(d?.trustSummary?' · '+esc(d.trustSummary):''):'<span class="trustTag predicted">FALLBACK LOCAL</span> Backend AI indisponível.';
 }}
 function alphaWorthItToday(){if($('lifestylePrompt'))$('lifestylePrompt').value='Vale a pena ir hoje? Usa a minha localização e o contexto atual.';alphaLifestyleSend()}
 function alphaTrailsNearMe(){go('field');setTimeout(()=>{requestLocation();loadTrailsNearby(true)},180)}
