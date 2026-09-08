@@ -299,7 +299,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 
 
 /* ============================================================
-   ALPHA 3.2 · OUTDOOR LIFESTYLE AI — CONTINUITY LAYER
+   ALPHA 3.3 · PERSONAL AI HOME — CONTINUITY LAYER
    Mantém integralmente o core 2.4.0 e acrescenta a nova interface.
    ============================================================ */
 .lifestyleAI{border:1px solid #3e5f57;background:
@@ -326,6 +326,17 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 .pathsIcon{font-size:22px}.pathsRow small{color:var(--muted)}
 @media(max-width:520px){.lifestyleComposer{grid-template-columns:1fr}.lifestyleComposer .btn{width:100%}}
 
+
+/* ALPHA 3.3 · HOME MINIMALISTA
+   Os módulos anteriores permanecem no DOM/core; a HOME mostra apenas a AI. */
+#home > .card:not(#lifestyleAI){display:none!important}
+#home{padding-top:10px}
+#lifestyleAI{min-height:calc(100dvh - 150px);display:flex;flex-direction:column}
+#lifestyleAI .lifestyleComposer{margin-top:14px}
+#lifestyleAI .lifestyleThread{flex:1}
+.mapPathsHub{border:1px solid #3c5362;background:linear-gradient(145deg,#0d2028,#12192a)}
+.mapPathsHub .hubActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
 </style>
 </head>
 <body>
@@ -350,7 +361,7 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.2 · Outdoor Lifestyle AI</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.3 · Personal AI Home</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -361,14 +372,18 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 <section id="home" class="view active">
 
   <div class="card lifestyleAI" id="lifestyleAI">
-    <div class="eyebrow">ALPHA 3.2 · OUTDOOR LIFESTYLE AI</div>
+    <div class="eyebrow">ALPHA 3.3 · PERSONAL AI HOME</div>
     <h1>O que queres <span class="green">fazer hoje?</span></h1>
     <p class="muted lifestyleAILead">Diz à Alpha o que te apetece, o tempo que tens, com quem vais ou simplesmente conta-lhe o contexto. A aplicação adapta as ferramentas ao teu objetivo — não és tu que tens de te adaptar à aplicação.</p>
     <div class="lifestyleQuick">
       <button class="lifestyleChip" onclick="alphaLifestyleQuick('Quero ideias para hoje perto de mim')">✦ Ideias para hoje</button>
-      <button class="lifestyleChip" onclick="alphaLifestyleQuick('Planeia o meu dia com carro e caminhada')">🚗 + 👣 Planear o dia</button>
+      <button class="lifestyleChip" onclick="alphaWorthItToday()">⭐ Vale a pena ir hoje?</button>
+      <button class="lifestyleChip" onclick="alphaTrailsNearMe()">🥾 Trails perto de mim</button>
       <button class="lifestyleChip" onclick="alphaLifestyleQuick('Quero natureza ou água')">💧 Natureza / água</button>
-      <button class="lifestyleChip" onclick="alphaLifestyleQuick('Quero planear um Caminho de vários dias')">🥾 Caminhos</button>
+      <button class="lifestyleChip" onclick="alphaLifestyleQuick('Quero fazer alguma coisa em família')">👨‍👩‍👧‍👦 Em família</button>
+      <button class="lifestyleChip" onclick="alphaLifestyleQuick('Planeia o meu dia com carro e caminhada')">🚗 + 👣 Planear o dia</button>
+      <button class="lifestyleChip" onclick="alphaLifestyleQuick('Surpreende-me com uma experiência para hoje')">✨ Surpreende-me</button>
+      <button class="lifestyleChip" onclick="alphaOpenPathsHub()">🥾 Caminhos</button>
     </div>
     <div class="lifestyleComposer">
       <textarea id="lifestylePrompt" placeholder="Ex.: Cheguei agora de viagem e quero uma ideia tranquila para acabar o dia..."></textarea>
@@ -429,7 +444,7 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 3.2 · Outdoor Lifestyle AI sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 3.3 · Personal AI Home sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
       <div class="eyebrow">AI JOURNEY · MULTI-STOP</div>
@@ -654,6 +669,19 @@ Estação de São Bento
 </section>
 
 <section id="field" class="view">
+
+  <div class="card mapPathsHub" id="mapPathsHub">
+    <div class="eyebrow">MAPA / GO · EXPLORAR</div>
+    <h2>Trilhos · Caminhos · Rotas</h2>
+    <p class="muted">Explora no mapa sem prender a experiência a um percurso específico. A Alpha usa esta área para trails, caminhos de vários dias, rotas e navegação.</p>
+    <div class="hubActions">
+      <button class="btn secondary" onclick="loadTrailsNearby(true)">🥾 Trails</button>
+      <button class="btn secondary" onclick="alphaLifestyleQuick('Quero explorar Caminhos')">🧭 Caminhos</button>
+      <button class="btn secondary" onclick="alphaLifestyleQuick('Quero explorar rotas e percursos')">🗺️ Rotas</button>
+      <button class="btn secondary" onclick="showSelectedTrailOnMap()">★ Percurso selecionado</button>
+    </div>
+  </div>
+
   <div class="card">
     <div class="eyebrow">GO · teste de campo</div>
     <h2 id="gpsState">GPS desligado</h2>
@@ -1045,7 +1073,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='3.2.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='3.3.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1111,10 +1139,10 @@ function alphaLogin(){
   seedFamilyExpiryTest(profile);
   const entKey=ENT_PREFIX+profile.id;
   if(!localStorage.getItem(entKey))localStorage.setItem(entKey,JSON.stringify(createInitialEntitlement(profile)));
-  currentTester=profile.shortName;localStorage.setItem(TESTER_KEY,currentTester);
-  $('loginPin').value='';$('authGate').classList.remove('show');applyEntitlements();toast('Bem-vindo, '+profile.shortName+' · '+tierLabel(effectiveTier()));
+  currentTester=profile.shortName;localStorage.setItem(userKey(TESTER_KEY),currentTester);
+  $('loginPin').value='';$('authGate').classList.remove('show');applyEntitlements();renderAlphaLifestyleThread();if($('lifestylePrompt'))$('lifestylePrompt').value='';toast('Bem-vindo, '+profile.shortName+' · '+tierLabel(effectiveTier()));
 }
-function alphaLogout(){localStorage.removeItem(AUTH_KEY);$('authGate').classList.add('show');$('loginPin').value='';go('home')}
+function alphaLogout(){localStorage.removeItem(AUTH_KEY);if($('lifestyleThread')){$('lifestyleThread').innerHTML='';$('lifestyleThread').classList.remove('show')}if($('lifestylePrompt'))$('lifestylePrompt').value='';$('authGate').classList.add('show');$('loginPin').value='';go('home')}
 function lastGoldExpiredAt(){const u=authUser();if(!u)return 0;return Number(localStorage.getItem(LAST_GOLD_PREFIX+u.id)||0)}
 function rememberGoldExpiry(ts){const u=authUser();if(u)localStorage.setItem(LAST_GOLD_PREFIX+u.id,String(ts||Date.now()))}
 function clearGoldExpiryNotice(){const u=authUser();if(u)localStorage.removeItem(LAST_GOLD_PREFIX+u.id)}
@@ -1294,7 +1322,7 @@ function simulateSilverEarned(){saveEnt({tier:'SILVER',expiresAt:new Date(Date.n
 function redeemSilver(days,cost){if(effectiveTier()!=='FREE')return toast('SILVER por pontos é ativado a partir de FREE');if(points()<cost)return toast('Ainda não tens pontos suficientes');localStorage.setItem(userKey(POINTS_PREFIX),String(points()-cost));saveEnt({tier:'SILVER',expiresAt:new Date(Date.now()+days*86400000).toISOString(),purchasedDays:days,source:'points',cost});renderMembership();toast('SILVER ativado por '+days+' dias · perfil atualizado');go('profile')}
 function resetSilverAlphaTest(){if(authUser()?.id!=='filipe')return;localStorage.setItem(userKey(POINTS_PREFIX),'2000');saveEnt({tier:'FREE',source:'alpha-1.4.17-silver-redemption-reset'});renderMembership();toast('Teste SILVER reposto · 2000 TrailScore');go('profile')}
 function renderMembership(){const u=authUser();if(!u)return;let t=effectiveTier(),e=entState();if($('goldProfileActions'))$('goldProfileActions').style.display=t==='GOLD'?'flex':'none';if($('memberName'))$('memberName').textContent=u.name;if($('memberEmail'))$('memberEmail').textContent='Conta Alpha familiar · '+u.shortName;if($('membershipMessage')){let msg='FREE · core outdoor completo.';if(t==='SILVER')msg='SILVER · Contributor'+(e.purchasedDays?' · período escolhido: '+e.purchasedDays+' dias':'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'');if(t==='GOLD')msg='GOLD · Early Premium'+(e.purchasedMonths?' · período escolhido: '+e.purchasedMonths+' '+(e.purchasedMonths===1?'mês':'meses'):'')+(e.expiresAt?' · até '+new Date(e.expiresAt).toLocaleDateString('pt-PT'):'')+' · sem renovação automática.';if(t==='PLATINUM')msg='PLATINUM · Founder / Crowdfunder.';if(t==='ORGANIZATION')msg='ORGANIZATIONS · UX organizacional em preparação.';$('membershipMessage').innerHTML='<b>'+msg+'</b>'}if($('silverWallet')){let p=points(),pct=Math.min(100,p);$('silverWallet').innerHTML='<div class="eyebrow">TrailScore · caminho para SILVER</div><div class="pointsBig">'+p+' pts</div><div class="miniProgress"><i style="width:'+pct+'%"></i></div><p class="small muted">Alpha 2.0.3: TrailScore só é validado por evidência de outro utilizador ou, se ninguém interagir, libertado após 48h. Confirmações/fechos incoerentes no tempo ficam em revisão em vez de penalizarem automaticamente o autor.</p>'+(t==='FREE'?'<div class="row"><button class="btn secondary" onclick="redeemSilver(7,100)">100 pts → 7 dias SILVER</button><button class="btn secondary" onclick="redeemSilver(15,220)">220 pts → 15 dias</button><button class="btn secondary" onclick="redeemSilver(30,400)">400 pts → 30 dias</button><button class="btn secondary" onclick="redeemSilver(60,720)">720 pts → 60 dias</button><button class="btn secondary" onclick="redeemSilver(90,1000)">1000 pts → 90 dias</button></div>':(t==='SILVER'&&p>=100?'<div class="item"><b>'+p+' pontos guardados.</b> Quando o SILVER atual expirar e regressares a FREE, podes trocá-los por um novo período SILVER.</div>'+(u.id==='filipe'?'<button class="btn secondary" style="width:100%;margin-top:10px" onclick="resetSilverAlphaTest()">Repor teste SILVER · 2000 pts</button>':''):''))}}
-function bootAuth(){const u=authUser();if(!u){$('authGate').classList.add('show')}else{const profile=familyProfileById(u.id);seedFamilyExpiryTest(profile);currentTester=u.shortName||u.name||'Filipe';localStorage.setItem(TESTER_KEY,currentTester);$('authGate').classList.remove('show')}sweepReportPointMaturity();applyEntitlements()}
+function bootAuth(){const u=authUser();if(!u){$('authGate').classList.add('show')}else{const profile=familyProfileById(u.id);seedFamilyExpiryTest(profile);currentTester=u.shortName||u.name||'Filipe';localStorage.setItem(userKey(TESTER_KEY),currentTester);$('authGate').classList.remove('show')}sweepReportPointMaturity();applyEntitlements()}
 
 const types={traffic:'Trânsito',police:'Polícia / autoridade',crash:'Acidente',hazard:'Perigo',roadworks:'Obras',blocked:'Faixa / passagem bloqueada',weather:'Mau tempo',fire:'Incêndio',tree:'Árvore / obstáculo',water:'Estado da água',mud:'Lama / inundação',landslide:'Deslizamento',closure:'Caminho / estrada fechada',sign:'Sinalização',parking:'Acesso / estacionamento',animal:'Animal / gado',other:'Outro'};
 
@@ -1313,8 +1341,8 @@ const VEHICLES=[
 {id:'scooter',name:'Trotineta',mode:'scooter',kind:'scooter',color:'#28a8e9'},
 {id:'van',name:'Autocaravana',mode:'car',kind:'van',color:'#c8d0d7'}
 ];
-let navVehicleStyle=localStorage.getItem(NAV_VEHICLE_KEY)||'car-red';
-if(navVehicleStyle==='walk'){navVehicleStyle='arrow';localStorage.setItem(NAV_VEHICLE_KEY,'arrow')}
+let navVehicleStyle=localStorage.getItem(userKey(NAV_VEHICLE_KEY))||'car-red';
+if(navVehicleStyle==='walk'){navVehicleStyle='arrow';localStorage.setItem(userKey(NAV_VEHICLE_KEY),'arrow')}
 function vehicleDef(id=navVehicleStyle){return VEHICLES.find(v=>v.id===id)||VEHICLES[1]}
 function vehicleSvg(id=navVehicleStyle){
  const v=vehicleDef(id),c=v.color,gid='vg-'+String(v.id).replace(/[^a-z0-9]/gi,'');
@@ -1359,7 +1387,7 @@ function closeVehicleChooser(){if($('vehicleChooser'))$('vehicleChooser').style.
 function chooseVehicle(id){
   const v=vehicleDef(id);
   navVehicleStyle=v.id;
-  localStorage.setItem(NAV_VEHICLE_KEY,v.id);
+  localStorage.setItem(userKey(NAV_VEHICLE_KEY),v.id);
   if(v.mode!=='keep'){
     navigationMode=v.mode;
     document.querySelectorAll('.navMode').forEach(x=>x.classList.toggle('active',x.dataset.mode===v.mode));
@@ -1375,8 +1403,8 @@ function chooseQuickReport(type){closeQuickReport();if($('rtype'))$('rtype').val
 
 function toast(m){let t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.remove('show'),2800)}
 function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();if(map){map.resize();renderMapReports();renderTrailLayer();renderSelectedTrail();renderExploreMarkers();renderMultiStopMarkers();renderExploreRoute();renderLiveTrack();setTimeout(()=>{map.resize();if(exploreRouteGeoJSON&&!liveNavActive)fitActiveRoute(false)},180)}},120);if(id==='experience')syncReview()}
-function reports(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
-function saveReports(r){localStorage.setItem(KEY,JSON.stringify(r))}
+function reports(){try{return JSON.parse(localStorage.getItem(userKey(KEY))||'[]')}catch{return[]}}
+function saveReports(r){localStorage.setItem(userKey(KEY),JSON.stringify(r))}
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
 function initMap(){
@@ -1557,17 +1585,17 @@ function clearReports(){if(confirm('Apagar todos os reports de teste deste telem
 /* ---------- DESTINATION + EXPERIENCE COMPOSER + FAMILY FIELD TEST ---------- */
 const TESTERS=['Helena','Filipe','Daniela','André'];
 function testerContributions(){
-  try{return JSON.parse(localStorage.getItem(CONTRIB_KEY)||'[]')}catch{return[]}
+  try{return JSON.parse(localStorage.getItem(userKey(CONTRIB_KEY))||'[]')}catch{return[]}
 }
 function logContribution(action,itemId='',note=''){
   const a=testerContributions();
   a.unshift({id:Date.now(),tester:currentTester,action,itemId,note,time:new Date().toISOString()});
-  localStorage.setItem(CONTRIB_KEY,JSON.stringify(a.slice(0,200)));
+  localStorage.setItem(userKey(CONTRIB_KEY),JSON.stringify(a.slice(0,200)));
   renderTesters();
 }
 function setTester(name){
   if(!TESTERS.includes(name))return;
-  currentTester=name;localStorage.setItem(TESTER_KEY,name);renderTesters();toast(name+' está a contribuir agora');
+  currentTester=name;localStorage.setItem(userKey(TESTER_KEY),name);renderTesters();toast(name+' está a contribuir agora');
 }
 function renderTesters(){
   const host=$('testerButtons');if(!host)return;
@@ -1591,23 +1619,23 @@ function scopeKey(){
 function scopedTrailCacheKey(){return TRAIL_CACHE+'_'+scopeKey()}
 function scopedPlacesCacheKey(){return PLACES_KEY+'_'+scopeKey()}
 function destinationHistory(){
-  try{return JSON.parse(localStorage.getItem(DEST_HISTORY_KEY)||'[]')}catch{return[]}
+  try{return JSON.parse(localStorage.getItem(userKey(DEST_HISTORY_KEY))||'[]')}catch{return[]}
 }
 function saveDestinationHistory(d){
   let arr=destinationHistory().filter(x=>slugKey(x.query)!==slugKey(d.query));
   arr.unshift({...d,lastUsed:new Date().toISOString()});
-  localStorage.setItem(DEST_HISTORY_KEY,JSON.stringify(arr.slice(0,30)));
+  localStorage.setItem(userKey(DEST_HISTORY_KEY),JSON.stringify(arr.slice(0,30)));
   renderTripHistory();
 }
 function experienceHistory(){
-  try{return JSON.parse(localStorage.getItem(EXPERIENCE_HISTORY_KEY)||'[]')}catch{return[]}
+  try{return JSON.parse(localStorage.getItem(userKey(EXPERIENCE_HISTORY_KEY))||'[]')}catch{return[]}
 }
 function upsertExperienceHistory(plan,extra={}){
   if(!plan||!plan.id)return;
   let arr=experienceHistory(),idx=arr.findIndex(x=>x.id===plan.id);
   const row={...(idx>=0?arr[idx]:{}),...JSON.parse(JSON.stringify(plan)),...extra,updatedAt:new Date().toISOString()};
   if(idx>=0)arr[idx]=row;else arr.unshift(row);
-  localStorage.setItem(EXPERIENCE_HISTORY_KEY,JSON.stringify(arr.slice(0,60)));
+  localStorage.setItem(userKey(EXPERIENCE_HISTORY_KEY),JSON.stringify(arr.slice(0,60)));
   renderTripHistory();
 }
 function renderTripHistory(){
@@ -1629,7 +1657,7 @@ function renderTripHistory(){
 }
 function reuseDestination(key){
   const d=destinationHistory().find(x=>slugKey(x.query)===key);if(!d)return;
-  destination=d;localStorage.setItem(DEST_KEY,JSON.stringify(destination));$('destinationInput').value=d.query||'';
+  destination=d;localStorage.setItem(userKey(DEST_KEY),JSON.stringify(destination));$('destinationInput').value=d.query||'';
   $('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span> · recuperado';
   nearbyTrails=[];experiencePlaces={monuments:[],meals:[],stays:[]};selectedTrail=null;
   loadDestinationBundle(true);
@@ -1637,7 +1665,7 @@ function reuseDestination(key){
 function openSavedExperience(id){
   const t=experienceHistory().find(x=>x.id===id);if(!t)return;
   saveExperiencePlan(JSON.parse(JSON.stringify(t)));
-  if(t.destination){destination=t.destination;localStorage.setItem(DEST_KEY,JSON.stringify(destination));$('destinationInput').value=destination.query||'';$('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span> · experiência recuperada';}
+  if(t.destination){destination=t.destination;localStorage.setItem(userKey(DEST_KEY),JSON.stringify(destination));$('destinationInput').value=destination.query||'';$('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span> · experiência recuperada';}
   renderExperiencePlanPreview();renderExperienceRatingItems(t.review&&t.review.itemRatings||{});syncReview();toast('Experiência recuperada');
 }
 
@@ -2291,11 +2319,11 @@ async function planMultiStopNames(names,opts={}){
     activeExploreNavTarget=ordered[0]||null;
     exploreRouteSteps=(route.legs||[]).flatMap(leg=>leg.steps||[]).filter(st=>st?.maneuver?.location);
     navStepIndex=0;
-    navigationMode='walk';navVehicleStyle='arrow';localStorage.setItem(NAV_VEHICLE_KEY,'arrow');
+    navigationMode='walk';navVehicleStyle='arrow';localStorage.setItem(userKey(NAV_VEHICLE_KEY),'arrow');
     const distance=Number(route.distance||0),duration=Number(route.duration||0);
     multiStopPlan={names,ordered,distance,duration,failed:geo.failed,createdAt:Date.now(),mode:'walk'};
     persistActiveRoute({multiStop:true,mode:'walk',distance,duration,failed:geo.failed});
-    localStorage.setItem('alpha_multistop_plan',JSON.stringify({createdAt:Date.now(),mode:'walk',distance,duration,stops:ordered.map(p=>({id:p.id,name:p.name,label:p.label,center:p.center}))}));
+    localStorage.setItem(userKey('alpha_multistop_plan_'),JSON.stringify({createdAt:Date.now(),mode:'walk',distance,duration,stops:ordered.map(p=>({id:p.id,name:p.name,label:p.label,center:p.center}))}));
     renderExploreResults();renderExploreSelectedSummary();renderVehicleUI();
     const km=(distance/1000).toFixed(1),mins=Math.max(1,Math.round(duration/60));
     const result='<div class="eyebrow">AI MULTI-STOP · PERCURSO A PÉ</div>'+
@@ -2400,7 +2428,7 @@ function setNavigationMode(mode,btn){
   else if(mode==='scooter')navVehicleStyle='scooter';
   else if(mode==='moto')navVehicleStyle='moto';
   else if(!['car-red','car-blue','car-green','car-yellow','suv','taxi','van','arrow'].includes(navVehicleStyle))navVehicleStyle='car-red';
-  localStorage.setItem(NAV_VEHICLE_KEY,navVehicleStyle);
+  localStorage.setItem(userKey(NAV_VEHICLE_KEY),navVehicleStyle);
   const m=navModeMeta(mode);
   if($('navModeLabel'))$('navModeLabel').textContent=m.label;
   renderVehicleUI();
@@ -2412,14 +2440,14 @@ function cycleNavigationMode(){const modes=['walk','bike','scooter','moto','car'
 function appendLiveTrack(c,prev){if(!Number.isFinite(c.latitude)||!Number.isFinite(c.longitude)||c.accuracy>65)return;const point=[c.longitude,c.latitude];const last=navTrack[navTrack.length-1];if(last){const d=hav(last[1],last[0],point[1],point[0]);if(d<2)return;navTrackDistance+=d}else if(prev){const d=hav(prev.latitude,prev.longitude,c.latitude,c.longitude);if(Number.isFinite(d)&&d<150)navTrackDistance+=d}navTrack.push(point);if(navTrack.length>2500)navTrack.shift();if($('navTrackDist'))$('navTrackDist').textContent=distanceLabel(navTrackDistance);renderLiveTrack()}
 function renderLiveTrack(){if(!map||!map.isStyleLoaded())return;const data={type:'Feature',properties:{},geometry:{type:'LineString',coordinates:navTrack.length>=2?navTrack:[]}};if(map.getSource('live-nav-track')){map.getSource('live-nav-track').setData(data);return}map.addSource('live-nav-track',{type:'geojson',data});map.addLayer({id:'live-nav-track',type:'line',source:'live-nav-track',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#6f7d82','line-width':3,'line-opacity':.42,'line-dasharray':[1.3,1.5]}})}
 function followCurrentPosition(){if(!map||!pos)return;const m=navModeMeta(navigationMode),bearing=Number.isFinite(pos.heading)&&Number(pos.speed)>1?pos.heading:map.getBearing();map.easeTo({center:[pos.longitude,pos.latitude],zoom:m.zoom,pitch:m.pitch,bearing,duration:450})}
-function currentJourneyStop(){let trip=null;try{trip=JSON.parse(localStorage.getItem('alpha_car_journey')||'null')}catch{};if(trip?.stops?.length){const i=Math.min(trip.index||0,trip.stops.length-1);if(i<trip.stops.length)return trip.stops[i]}return exploreRouteOrdered?.[0]||null}
+function currentJourneyStop(){let trip=null;try{trip=JSON.parse(localStorage.getItem(userKey('alpha_car_journey_'))||'null')}catch{};if(trip?.stops?.length){const i=Math.min(trip.index||0,trip.stops.length-1);if(i<trip.stops.length)return trip.stops[i]}return exploreRouteOrdered?.[0]||null}
 function persistActiveRoute(summary={}){
   if(!exploreRouteGeoJSON?.coordinates?.length)return;
-  try{localStorage.setItem(ACTIVE_ROUTE_KEY,JSON.stringify({version:APP_VERSION,createdAt:Date.now(),geometry:exploreRouteGeoJSON,steps:exploreRouteSteps||[],stops:(exploreRouteOrdered||[]).map(p=>({id:p.id,name:p.name,center:p.center,cat:p.cat||'attraction',description:p.description||''})),summary}))}catch(e){console.warn('active route persist',e)}
+  try{localStorage.setItem(userKey(ACTIVE_ROUTE_KEY),JSON.stringify({version:APP_VERSION,createdAt:Date.now(),geometry:exploreRouteGeoJSON,steps:exploreRouteSteps||[],stops:(exploreRouteOrdered||[]).map(p=>({id:p.id,name:p.name,center:p.center,cat:p.cat||'attraction',description:p.description||''})),summary}))}catch(e){console.warn('active route persist',e)}
 }
 function restoreActiveRoute(){
   try{
-    const r=JSON.parse(localStorage.getItem(ACTIVE_ROUTE_KEY)||'null');
+    const r=JSON.parse(localStorage.getItem(userKey(ACTIVE_ROUTE_KEY))||'null');
     if(!r||!r.geometry?.coordinates?.length||Date.now()-Number(r.createdAt||0)>172800000)return false;
     exploreRouteGeoJSON=r.geometry;exploreRouteSteps=Array.isArray(r.steps)?r.steps:[];exploreRouteOrdered=Array.isArray(r.stops)?r.stops:[];navStepIndex=0;
     const shell=$('mapShell');if(shell)shell.classList.add('routeReady');
@@ -2430,7 +2458,7 @@ async function rebuildActiveRouteFromJourney(){
   if(exploreRouteGeoJSON?.coordinates?.length)return true;
   if(restoreActiveRoute())return true;
   if(!pos)return false;
-  let trip=null;try{trip=JSON.parse(localStorage.getItem('alpha_car_journey')||'null')}catch{}
+  let trip=null;try{trip=JSON.parse(localStorage.getItem(userKey('alpha_car_journey_'))||'null')}catch{}
   if(!trip?.stops?.length)return false;
   const i=Math.min(Number(trip.index||0),trip.stops.length-1),remaining=trip.stops.slice(i).filter(x=>Array.isArray(x.center));if(!remaining.length)return false;
   try{
@@ -2618,7 +2646,7 @@ async function navigateExplorePlace(id){
     exploreRouteGeoJSON=route.geometry;exploreRouteOrdered=[p];
     exploreRouteSteps=(route.legs||[]).flatMap(leg=>leg.steps||[]).filter(st=>st?.maneuver?.location);
     navStepIndex=0;
-    localStorage.setItem('alpha_car_journey',JSON.stringify({createdAt:new Date().toISOString(),index:0,provider:'waze',stops:[{id:p.id,name:p.name,center:p.center}]}));
+    localStorage.setItem(userKey('alpha_car_journey_'),JSON.stringify({createdAt:new Date().toISOString(),index:0,provider:'waze',stops:[{id:p.id,name:p.name,center:p.center}]}));
     persistActiveRoute({singleDestination:true,targetId:p.id,targetName:p.name,distance:route.distance,duration:route.duration});
     liveNavActive=true;navFollow=true;
     if(watchId===null)toggleWatch();
@@ -2700,21 +2728,21 @@ function chooseNavigationProvider(provider){
   closeNavigationChooser();
   const target=currentExternalNavTarget();
   if(!target)return toast('Destino não definido');
-  localStorage.setItem('alpha_car_journey',JSON.stringify({createdAt:new Date().toISOString(),index:0,provider,stops:[{id:target.id,name:target.name,center:target.center}]}));
+  localStorage.setItem(userKey('alpha_car_journey_'),JSON.stringify({createdAt:new Date().toISOString(),index:0,provider,stops:[{id:target.id,name:target.name,center:target.center}]}));
   openCarNavUrl(carNavUrl(target,provider))
 }
 function startCarJourney(provider='waze'){
   const target=currentExternalNavTarget();
   if(!target)return toast('Escolhe primeiro o destino');
   activeExploreNavTarget=target;
-  localStorage.setItem('alpha_car_journey',JSON.stringify({createdAt:new Date().toISOString(),index:0,provider,stops:[{id:target.id,name:target.name,center:target.center}]}));
+  localStorage.setItem(userKey('alpha_car_journey_'),JSON.stringify({createdAt:new Date().toISOString(),index:0,provider,stops:[{id:target.id,name:target.name,center:target.center}]}));
   openCarNavUrl(carNavUrl(target,provider))
 }
 function openNextStopNavigation(provider){
   const target=currentExternalNavTarget();if(!target)return toast('Destino não definido');
   openCarNavUrl(carNavUrl(target,provider||'waze'))
 }
-function markCarStopVisited(){let trip=null;try{trip=JSON.parse(localStorage.getItem('alpha_car_journey')||'null')}catch{};if(!trip?.stops?.length)return toast('Não existe viagem ativa');trip.index=Math.min((trip.index||0)+1,trip.stops.length);localStorage.setItem('alpha_car_journey',JSON.stringify(trip));if(trip.index>=trip.stops.length)return toast('Itinerário concluído');toast('Próximo destino: '+trip.stops[trip.index].name)}
+function markCarStopVisited(){let trip=null;try{trip=JSON.parse(localStorage.getItem(userKey('alpha_car_journey_'))||'null')}catch{};if(!trip?.stops?.length)return toast('Não existe viagem ativa');trip.index=Math.min((trip.index||0)+1,trip.stops.length);localStorage.setItem(userKey('alpha_car_journey_'),JSON.stringify(trip));if(trip.index>=trip.stops.length)return toast('Itinerário concluído');toast('Próximo destino: '+trip.stops[trip.index].name)}
 
 
 function destinationCoords(){
@@ -2726,7 +2754,7 @@ async function prepareDestination(){
   if(!q)return toast('Indica um destino');
   $('destinationState').textContent='A localizar '+q+'…';
   const cached=(()=>{
-    try{const d=JSON.parse(localStorage.getItem(DEST_KEY)||'null');return d&&d.query&&d.query.toLowerCase()===q.toLowerCase()?d:null}catch{return null}
+    try{const d=JSON.parse(localStorage.getItem(userKey(DEST_KEY))||'null');return d&&d.query&&d.query.toLowerCase()===q.toLowerCase()?d:null}catch{return null}
   })();
   if(cached){destination=cached;$('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span> · cache local';await loadDestinationBundle(true);return}
   try{
@@ -2740,7 +2768,7 @@ async function prepareDestination(){
     $('destinationState').textContent='Não foi possível localizar o destino agora. Tenta escrever o nome completo da localidade.';
     toast('Destino não localizado');return;
   }
-  localStorage.setItem(DEST_KEY,JSON.stringify(destination));
+  localStorage.setItem(userKey(DEST_KEY),JSON.stringify(destination));
   saveDestinationHistory(destination);
   $('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span>';
   logContribution('preparou destino','destination',q);
@@ -3311,7 +3339,7 @@ function routeShapeLabel(t){
   return'Não indicado';
 }
 function localTrailReviews(id){
-  try{return JSON.parse(localStorage.getItem('alpha_trail_reviews_'+id)||'[]')}catch{return[]}
+  try{return JSON.parse(localStorage.getItem(userKey('alpha_trail_reviews_')+id)||'[]')}catch{return[]}
 }
 function detailScores(t){
   let fit=78;
@@ -3415,9 +3443,9 @@ function renderDetailLinks(){
 }
 function saveSelectedTrail(){
   if(!selectedTrail)return;
-  let arr=[];try{arr=JSON.parse(localStorage.getItem(SAVED_TRAILS_KEY)||'[]')}catch{}
+  let arr=[];try{arr=JSON.parse(localStorage.getItem(userKey(SAVED_TRAILS_KEY))||'[]')}catch{}
   if(!arr.some(x=>x.id===selectedTrail.id))arr.unshift({id:selectedTrail.id,name:selectedTrail.name,ref:selectedTrail.ref,center:selectedTrail.center,time:new Date().toISOString()});
-  localStorage.setItem(SAVED_TRAILS_KEY,JSON.stringify(arr.slice(0,50)));toast('Trail guardado neste telemóvel');
+  localStorage.setItem(userKey(SAVED_TRAILS_KEY),JSON.stringify(arr.slice(0,50)));toast('Trail guardado neste telemóvel');
 }
 function startSelectedTrail(){
   if(!selectedTrail)return;
@@ -3497,10 +3525,10 @@ function updateActivityFromGPS(c){
 function formatDuration(sec){let h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;return h?String(h).padStart(2,'0')+':'+String(m).padStart(2,'0'):String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
 function saveActivity(){
   let a={time:new Date().toISOString(),seconds:activitySeconds,distance:activityDistance,steps:Math.round(activityDistance/0.78),heartRate:heartRate,wearable:wearableConnected};
-  localStorage.setItem(ACT_KEY,JSON.stringify(a))
+  localStorage.setItem(userKey(ACT_KEY),JSON.stringify(a))
 }
 function loadActivity(){
-  try{let a=JSON.parse(localStorage.getItem(ACT_KEY)||'null');if(!a)return;activitySeconds=a.seconds||0;activityDistance=a.distance||0;heartRate=a.heartRate||null;
+  try{let a=JSON.parse(localStorage.getItem(userKey(ACT_KEY))||'null');if(!a)return;activitySeconds=a.seconds||0;activityDistance=a.distance||0;heartRate=a.heartRate||null;
   $('actTime').textContent=formatDuration(activitySeconds);$('actDist').textContent=(activityDistance/1000).toFixed(2)+' km';$('actSteps').textContent=(a.steps||0).toLocaleString('pt-PT');$('actHr').textContent=a.heartRate?a.heartRate+' bpm':'—'}catch{}
 }
 
@@ -3523,15 +3551,15 @@ function defaultExperiencePlan(){
 }
 function getExperiencePlan(){
   try{
-    const p=JSON.parse(localStorage.getItem(EXPERIENCE_PLAN_KEY)||'null');
+    const p=JSON.parse(localStorage.getItem(userKey(EXPERIENCE_PLAN_KEY))||'null');
     if(p && Array.isArray(p.items)) return p;
   }catch{}
   const p=defaultExperiencePlan();
-  localStorage.setItem(EXPERIENCE_PLAN_KEY,JSON.stringify(p));
+  localStorage.setItem(userKey(EXPERIENCE_PLAN_KEY),JSON.stringify(p));
   return p;
 }
 function saveExperiencePlan(plan){
-  localStorage.setItem(EXPERIENCE_PLAN_KEY,JSON.stringify(plan));
+  localStorage.setItem(userKey(EXPERIENCE_PLAN_KEY),JSON.stringify(plan));
 }
 function completedExperienceItems(){
   return getExperiencePlan().items.filter(i=>i.status==='completed');
@@ -3612,7 +3640,7 @@ function syncReview(){
   }
   $('shareDetails').textContent=bits.length?bits.join(' · '):'Sem componentes concluídos para avaliar.'
 }
-function currentActivity(){try{return JSON.parse(localStorage.getItem(ACT_KEY)||'null')}catch{return null}}
+function currentActivity(){try{return JSON.parse(localStorage.getItem(userKey(ACT_KEY))||'null')}catch{return null}}
 function saveExperience(){
   computeGlobalRating();
   const items=ratedCompletedItems();
@@ -3627,8 +3655,8 @@ function saveExperience(){
     includeHealth:$('includeHealth').checked,
     activity:currentActivity()
   };
-  try{localStorage.setItem(EXP_KEY,JSON.stringify(e))}
-  catch(err){e.photo='';localStorage.setItem(EXP_KEY,JSON.stringify(e));toast('Avaliação guardada sem foto: armazenamento cheio');return}
+  try{localStorage.setItem(userKey(EXP_KEY),JSON.stringify(e))}
+  catch(err){e.photo='';localStorage.setItem(userKey(EXP_KEY),JSON.stringify(e));toast('Avaliação guardada sem foto: armazenamento cheio');return}
   const plan=getExperiencePlan();
   plan.items=plan.items.map(p=>{
     const r=e.itemRatings[p.id];
@@ -3655,7 +3683,7 @@ function migrateLegacyExperience(e){
 }
 function loadExperience(){
   try{
-    let e=JSON.parse(localStorage.getItem(EXP_KEY)||'null');
+    let e=JSON.parse(localStorage.getItem(userKey(EXP_KEY))||'null');
     if(e) e=migrateLegacyExperience(e);
     const plan=getExperiencePlan();
     $('expName').value=(e&&e.name)||plan.name||'A minha experiência';
@@ -3735,8 +3763,8 @@ function setupFreshPWA(){
 restoreActiveRoute();
 renderVehicleUI();
 bootAuth();renderReports();loadActivity();loadExperience();syncReview();
-try{currentTester=localStorage.getItem(TESTER_KEY)||'Filipe'}catch{}
-try{destination=JSON.parse(localStorage.getItem(DEST_KEY)||'null');if(destination){$('destinationInput').value=destination.query||'';$('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span> · guardado'}}catch{}
+try{currentTester=localStorage.getItem(userKey(TESTER_KEY))||'Filipe'}catch{}
+try{destination=JSON.parse(localStorage.getItem(userKey(DEST_KEY))||'null');if(destination){$('destinationInput').value=destination.query||'';$('destinationState').innerHTML='<span class="destinationBadge">📍 '+esc(destination.label)+'</span> · guardado'}}catch{}
 try{let pc=JSON.parse(localStorage.getItem(scopedPlacesCacheKey())||'null');if(pc&&pc.places){experiencePlaces=pc.places;renderPlaceCandidates()}}catch{}
 renderTesters();renderExperiencePlanPreview();renderTripHistory();
 try{
@@ -3761,17 +3789,17 @@ window.addEventListener('resize',()=>{clearTimeout(window._orientationResize);wi
 adaptOrientation();
 
 /* ============================================================
-   ALPHA 3.2 · OUTDOOR LIFESTYLE AI — conversation continuity
+   ALPHA 3.3 · PERSONAL AI HOME — conversation continuity
    IMPORTANTE: esta camada acrescenta-se ao core existente.
    Não substitui Mapa/GO, LIVE, Premium, membership ou Perfil.
    ============================================================ */
-const ALPHA_LIFESTYLE_CHAT_KEY='alpha_lifestyle_chat_v1';
+const ALPHA_LIFESTYLE_CHAT_KEY='alpha_lifestyle_chat_v2_';
 
 function alphaLifestyleHistory(){
-  try{return JSON.parse(localStorage.getItem(ALPHA_LIFESTYLE_CHAT_KEY)||'[]')}catch(e){return[]}
+  try{return JSON.parse(localStorage.getItem(userKey(ALPHA_LIFESTYLE_CHAT_KEY))||'[]')}catch(e){return[]}
 }
 function saveAlphaLifestyleHistory(h){
-  localStorage.setItem(ALPHA_LIFESTYLE_CHAT_KEY,JSON.stringify(h.slice(-20)));
+  localStorage.setItem(userKey(ALPHA_LIFESTYLE_CHAT_KEY),JSON.stringify(h.slice(-20)));
 }
 function renderAlphaLifestyleThread(){
   const host=$('lifestyleThread'); if(!host)return;
@@ -3844,6 +3872,20 @@ function alphaLifestyleSend(){
   if(state)state.innerHTML='<span class="trustTag predicted">CONCEPT LOCAL</span> A resposta demonstra interpretação de intenção. Dados live concretos só serão apresentados quando forem verificados.';
   setTimeout(()=>{const host=$('lifestyleThread');if(host)host.scrollIntoView({behavior:'smooth',block:'nearest'});},80);
 }
+
+function alphaWorthItToday(){
+  if($('lifestylePrompt'))$('lifestylePrompt').value='Vale a pena ir hoje? Usa a minha localização e o contexto atual.';
+  alphaLifestyleSend();
+}
+function alphaTrailsNearMe(){
+  go('field');
+  setTimeout(()=>{requestLocation();loadTrailsNearby(true)},180);
+}
+function alphaOpenPathsHub(){
+  go('field');
+  setTimeout(()=>{const el=$('mapPathsHub');if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},120);
+}
+
 setTimeout(renderAlphaLifestyleThread,150);
 
 </script>
