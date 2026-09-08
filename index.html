@@ -309,9 +309,11 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 .lifestyleQuick{display:flex;gap:7px;overflow-x:auto;padding:2px 0 5px;scrollbar-width:none}
 .lifestyleQuick::-webkit-scrollbar{display:none}
 .lifestyleChip{white-space:nowrap;border:1px solid #38564f;background:#10251f;color:#e9fff7;border-radius:999px;padding:9px 11px;font-weight:800;cursor:pointer}
-.lifestyleComposer{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}
-.lifestyleComposer textarea{min-height:112px;max-height:260px;resize:vertical}
-.lifestyleThread{display:none;margin-top:12px;border-top:1px solid #294149;padding-top:12px}
+.lifestyleComposer{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:8px;flex:0 0 auto;align-items:end}
+.lifestyleComposer textarea{min-height:54px;max-height:96px;resize:none;overflow-y:auto}
+.lifestyleComposer .btn{min-height:54px;white-space:nowrap}
+.lifestyleThread{display:none;margin-top:10px;border-top:1px solid #294149;padding:10px 2px 4px;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;-ms-overflow-style:none}
+.lifestyleThread::-webkit-scrollbar{display:none}
 .lifestyleThread.show{display:block}
 .lifestyleMsg{padding:12px 14px;border-radius:16px;margin-top:9px;white-space:pre-wrap;line-height:1.48}
 .lifestyleMsg.user{margin-left:8%;background:#234d41;border:1px solid #3c7b68}
@@ -324,16 +326,19 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 .pathsGrid{display:grid;gap:8px;margin-top:10px}
 .pathsRow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:11px;border:1px solid #30434a;border-radius:14px;background:#0a1a20}
 .pathsIcon{font-size:22px}.pathsRow small{color:var(--muted)}
-@media(max-width:520px){.lifestyleComposer{grid-template-columns:1fr}.lifestyleComposer .btn{width:100%}}
+@media(max-width:520px){.lifestyleComposer{grid-template-columns:minmax(0,1fr) auto}.lifestyleComposer .btn{width:auto;padding-inline:14px;font-size:0}.lifestyleComposer .btn::after{content:"➤";font-size:22px}}
 
 
 /* ALPHA 3.3 · HOME MINIMALISTA
    Os módulos anteriores permanecem no DOM/core; a HOME mostra apenas a AI. */
 #home > .card:not(#lifestyleAI){display:none!important}
 #home{padding-top:10px}
-#lifestyleAI{min-height:calc(100dvh - 150px);display:flex;flex-direction:column}
-#lifestyleAI .lifestyleComposer{margin-top:14px}
-#lifestyleAI .lifestyleThread{flex:1}
+#lifestyleAI{height:calc(100dvh - 165px);min-height:560px;max-height:820px;display:flex;flex-direction:column;overflow:hidden}
+#lifestyleAI .lifestyleComposer{margin-top:8px}
+#lifestyleAI .lifestyleThread{flex:1 1 auto}
+#lifestyleAI .lifestyleQuick{flex:0 0 auto}
+#lifestyleAI .lifestyleAILead{flex:0 0 auto}
+#lifestyleState{flex:0 0 auto}
 .mapPathsHub{border:1px solid #3c5362;background:linear-gradient(145deg,#0d2028,#12192a)}
 .mapPathsHub .hubActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 
@@ -396,12 +401,12 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
       <button class="lifestyleChip" onclick="alphaLifestyleQuick('Surpreende-me com uma experiência para hoje')">✨ Surpreende-me</button>
       <button class="lifestyleChip" onclick="alphaOpenPathsHub()">🥾 Caminhos</button>
     </div>
+    <div id="lifestyleThread" class="lifestyleThread"></div>
+    <div id="lifestyleState" class="small muted" style="margin-top:6px">AI híbrida: backend seguro quando configurado, fallback local quando indisponível. Conversas organizadas por título e isoladas por utilizador.</div>
     <div class="lifestyleComposer">
-      <textarea id="lifestylePrompt" placeholder="Ex.: Cheguei agora de viagem e quero uma ideia tranquila para acabar o dia..."></textarea>
+      <textarea id="lifestylePrompt" rows="1" placeholder="Pergunta à Alpha..."></textarea>
       <button class="btn purple" onclick="alphaLifestyleSend()">Perguntar à Alpha</button>
     </div>
-    <div id="lifestyleState" class="small muted" style="margin-top:8px">AI híbrida: backend seguro quando configurado, fallback local quando indisponível. Conversas organizadas por título e isoladas por utilizador.</div>
-    <div id="lifestyleThread" class="lifestyleThread"></div>
   </div>
 
   <div class="card hero">
@@ -3835,7 +3840,7 @@ function alphaCreateConversation(text){const now=new Date().toISOString();return
 function alphaUpsertConversation(c){let all=alphaConversations().filter(x=>x.id!==c.id);all.unshift(c);alphaSaveConversations(all);alphaSetActiveConversationId(c.id)}
 function alphaNewConversation(){alphaSetActiveConversationId('');if($('lifestylePrompt'))$('lifestylePrompt').value='';renderAlphaLifestyleThread();alphaCloseHistory();if($('lifestyleState'))$('lifestyleState').innerHTML='<span class="trustTag predicted">NOVA CONVERSA</span> O título será criado a partir do significado da experiência.'}
 function alphaFormatConversationDate(x){try{return new Intl.DateTimeFormat('pt-PT',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(x))}catch{return''}}
-function renderAlphaLifestyleThread(){const host=$('lifestyleThread');if(!host)return;const c=alphaCurrentConversation(),h=c?.messages||[];if(!h.length){host.classList.remove('show');host.innerHTML='';return}host.classList.add('show');host.innerHTML='<div class="small muted" style="margin-bottom:8px">● '+esc(c.title)+'</div>'+h.map(m=>'<div class="lifestyleMsg '+m.role+'">'+esc(m.text)+'</div>').join('')}
+function renderAlphaLifestyleThread(){const host=$('lifestyleThread');if(!host)return;const c=alphaCurrentConversation(),h=c?.messages||[];if(!h.length){host.classList.remove('show');host.innerHTML='';return}host.classList.add('show');host.innerHTML='<div class="small muted" style="margin-bottom:8px">● '+esc(c.title)+'</div>'+h.map(m=>'<div class="lifestyleMsg '+m.role+'">'+esc(m.text)+'</div>').join('');requestAnimationFrame(()=>{host.scrollTop=host.scrollHeight})}
 function alphaOpenHistory(){alphaRenderHistory();$('aiHistoryDrawer')?.classList.add('show')}
 function alphaCloseHistory(){$('aiHistoryDrawer')?.classList.remove('show')}
 function alphaRenderHistory(){
@@ -3862,6 +3867,8 @@ async function alphaLifestyleSend(){const input=$('lifestylePrompt'),state=$('li
  const tools=real&&Array.isArray(d?.toolsUsed)&&d.toolsUsed.length?' · '+d.toolsUsed.map(esc).join(' · '):'';
  state.innerHTML=real?'<span class="trustTag verified">AI REAL</span> Dados reais quando disponíveis'+tools+'.'+(d?.trustSummary?' · '+esc(d.trustSummary):''):'<span class="trustTag predicted">FALLBACK LOCAL</span> Backend AI indisponível.';
 }}
+
+document.addEventListener('keydown',e=>{if(e.target?.id==='lifestylePrompt'&&e.key==='Enter'&&!e.shiftKey){e.preventDefault();alphaLifestyleSend()}});
 function alphaWorthItToday(){if($('lifestylePrompt'))$('lifestylePrompt').value='Vale a pena ir hoje? Usa a minha localização e o contexto atual.';alphaLifestyleSend()}
 function alphaTrailsNearMe(){go('field');setTimeout(()=>{requestLocation();loadTrailsNearby(true)},180)}
 function alphaOpenPathsHub(){go('field');setTimeout(()=>$('mapPathsHub')?.scrollIntoView({behavior:'smooth',block:'start'}),120)}
