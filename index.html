@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="3.5.5">
+<meta name="alpha-version" content="3.5.6">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 3.5.5 — AI Chat App Mode</title>
+<title>Project Alpha 3.5.6 — AI Chat App Mode</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -299,7 +299,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 
 
 /* ============================================================
-   ALPHA 3.5.5 · CONTEXT · TRUST · TRIP PLANNER — CONTINUITY LAYER
+   ALPHA 3.5.6 · CONTEXT · TRUST · TRIP PLANNER — CONTINUITY LAYER
    Mantém integralmente o core 2.4.0 e acrescenta a nova interface.
    ============================================================ */
 .lifestyleAI{border:1px solid #3e5f57;background:
@@ -423,7 +423,7 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 
 
 /* ============================================================
-   ALPHA 3.5.5 · AI CHAT APP MODE
+   ALPHA 3.5.6 · AI CHAT APP MODE
    Conversa iniciada = experiência full-screen semelhante a uma app AI.
    ============================================================ */
 .aiChatMenuBtn{display:none;border:1px solid #3b5b61;background:#10242b;color:#e8fbf5;border-radius:12px;padding:8px 11px;font-weight:900;cursor:pointer}
@@ -623,7 +623,7 @@ body.alphaChatMode #lifestyleAI .lifestyleThread{
 }
 
 
-/* ===== ALPHA 3.5.5 · WELCOME + NORTH-LOCK COMPASS IDENTITY ===== */
+/* ===== ALPHA 3.5.6 · WELCOME + NORTH-LOCK COMPASS IDENTITY ===== */
 .logo{
   --compass-rotation:0deg;
   overflow:visible;
@@ -724,7 +724,7 @@ body.alphaChatMode #lifestyleAI .lifestyleThread{
 
 
 /* ============================================================
-   ALPHA 3.5.5 · UNIFIED MINIMAL ICON SYSTEM
+   ALPHA 3.5.6 · UNIFIED MINIMAL ICON SYSTEM
    SVG line icons, sem dependências externas. Emojis ficam reservados
    para conteúdo/conversa e deixam de ser linguagem estrutural do UX.
    ============================================================ */
@@ -768,7 +768,7 @@ button.alphaIconified,.btn.alphaIconified,.nav.alphaIconified{display:inline-fle
 
 
 /* ============================================================
-   ALPHA 3.5.5 · CLEAN SURFACES + STATIC NORTH BRAND
+   ALPHA 3.5.6 · CLEAN SURFACES + STATIC NORTH BRAND
    ============================================================ */
 /* Nada técnico no ecrã principal. */
 #lifestyleState{display:none!important}
@@ -807,7 +807,7 @@ body.alphaChatMode #lifestyleAI .alphaComposerWrap{background:transparent!import
 
 
 /* ============================================================
-   ALPHA 3.5.5 · RESPONSIVE CHAT / NAV SHELL
+   ALPHA 3.5.6 · RESPONSIVE CHAT / NAV SHELL
    A moldura da Alpha termina sempre antes da navegação inferior.
    Quando a navegação não está visível, a moldura continua visível.
    ============================================================ */
@@ -864,6 +864,85 @@ body.alphaChatMode #lifestyleAI .alphaComposerWrap{
   }
 }
 
+
+/* ============================================================
+   ALPHA 3.5.6 · FRESH CHAT + KEYBOARD SAFE COMPOSER
+   Nova conversa nunca pode perder o composer quando o teclado abre.
+   ============================================================ */
+body.alphaComposeMode{
+  padding-bottom:0!important;
+  overflow:hidden;
+}
+body.alphaComposeMode .app{
+  height:100dvh;
+  max-width:760px;
+  padding:0 8px!important;
+  margin:auto;
+  overflow:hidden;
+}
+body.alphaComposeMode .top{display:none!important}
+body.alphaComposeMode #home{
+  height:100dvh;
+  padding:0!important;
+  overflow:hidden;
+}
+body.alphaComposeMode #home > #lifestyleAI{
+  position:relative;
+  height:calc(100dvh - 16px)!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin:8px 0!important;
+  border:1px solid var(--line)!important;
+  border-radius:22px!important;
+  padding:calc(env(safe-area-inset-top) + 8px) 12px calc(env(safe-area-inset-bottom) + 8px)!important;
+  overflow:hidden;
+  background:#071a1d!important;
+}
+body.alphaComposeMode #lifestyleAI > h1,
+body.alphaComposeMode #lifestyleAI > .lifestyleAILead,
+body.alphaComposeMode #lifestyleAI > .lifestyleQuick,
+body.alphaComposeMode #lifestyleState{
+  display:none!important;
+}
+body.alphaComposeMode #lifestyleAI .aiTopbar{
+  display:flex!important;
+  justify-content:space-between;
+  min-height:42px;
+  flex:0 0 auto;
+  margin:0 0 4px;
+  padding-bottom:8px;
+  border-bottom:1px solid rgba(126,166,157,.16);
+  background:transparent!important;
+}
+body.alphaComposeMode #lifestyleAI .aiTopActions{display:none!important}
+body.alphaComposeMode #lifestyleAI .aiChatMenuBtn{display:block!important}
+body.alphaComposeMode #lifestyleAI .lifestyleThread{
+  display:block!important;
+  flex:1 1 auto;
+  min-height:0;
+  margin:0;
+  padding:12px 4px 14px;
+  overflow-y:auto;
+  background:transparent!important;
+}
+body.alphaComposeMode #lifestyleAI .alphaComposerWrap{
+  flex:0 0 auto;
+  margin-top:auto;
+  background:transparent!important;
+}
+body.alphaComposeMode .bottom{display:none!important}
+
+@media(max-width:620px){
+  body.alphaComposeMode .app{padding-left:6px!important;padding-right:6px!important}
+  body.alphaComposeMode #home > #lifestyleAI{
+    height:calc(100dvh - 12px)!important;
+    margin:6px 0!important;
+    border-radius:20px!important;
+    padding-left:13px!important;
+    padding-right:13px!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -880,7 +959,7 @@ body.alphaChatMode #lifestyleAI .alphaComposerWrap{
 </div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.5.5 · Family Login</small></div></div>
+    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.5.6 · Family Login</small></div></div>
     <div class="authWelcomeBrand"><div class="logo compassSeeking"></div><div class="alphaWelcomeEyebrow">ALPHA · OUTDOOR LIFESTYLE AI</div><h1>Bem-vindo à Alpha</h1><p>Descobrir · Confiar · Viver</p></div>
     <p class="muted" style="text-align:center">Escolhe o teu perfil para começares. Nesta versão Alpha usamos as 4 contas familiares de teste e o PIN <b>1234</b>.</p>
     <label>Utilizador</label>
@@ -898,7 +977,7 @@ body.alphaChatMode #lifestyleAI .alphaComposerWrap{
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.5.5 · Context · Trust · Trip Planner</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.5.6 · Context · Trust · Trip Planner</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -994,7 +1073,7 @@ body.alphaChatMode #lifestyleAI .alphaComposerWrap{
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 3.5.5 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 3.5.6 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
       <div class="eyebrow">AI JOURNEY · MULTI-STOP</div>
@@ -1632,7 +1711,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='3.5.5',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='3.5.6',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1642,7 +1721,7 @@ const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience',
 const ALPHA_LAST_WELCOME_PREFIX='alpha_last_welcome_';
 let alphaWelcomeTimer=null;
 
-/* ALPHA 3.5.5 — o logótipo é identidade, não instrumento de navegação.
+/* ALPHA 3.5.6 — o logótipo é identidade, não instrumento de navegação.
    Faz uma curta animação de entrada e termina sempre alinhado a Norte. */
 function alphaAllLogos(){return [...document.querySelectorAll('.logo')]}
 function alphaSetCompassRotation(deg=0){
@@ -4425,9 +4504,10 @@ document.addEventListener('visibilitychange',()=>{
     navigator.serviceWorker.getRegistration().then(r=>r&&r.update().catch(()=>{}));
     restoreActiveRoute();refreshHeaderWeather(false);if(map)renderExploreRoute();
 
-    // Ao regressar de outra app/ecrã, mostrar novamente a entrada Alpha,
-    // preservando conversa, rascunhos e respostas em curso.
+    // Regra 3.5.6: regressar à Alpha começa sempre numa conversa nova.
+    // A conversa anterior e o respetivo rascunho ficam preservados no Histórico.
     if(authUser() && alphaBackgroundedAt && Date.now()-alphaBackgroundedAt>350){
+      alphaStartFreshConversation({focus:false,compose:false});
       setTimeout(()=>alphaShowWelcome({firstForUser:false}),80);
     }
     alphaBackgroundedAt=0;
@@ -4464,7 +4544,7 @@ window.addEventListener('resize',()=>{clearTimeout(window._orientationResize);wi
 adaptOrientation();
 
 /* ============================================================
-   ALPHA 3.5.5 · CONTEXT · TRUST · TRIP PLANNER + CONVERSATION MANAGER
+   ALPHA 3.5.6 · CONTEXT · TRUST · TRIP PLANNER + CONVERSATION MANAGER
    ============================================================ */
 const ALPHA_CONVERSATIONS_KEY='alpha_ai_conversations_v1_';
 const ALPHA_ACTIVE_CONVERSATION_KEY='alpha_ai_active_conversation_v1_';
@@ -4496,14 +4576,59 @@ function alphaLocalSemanticTitle(text){
 }
 function alphaCreateConversation(text){const now=new Date().toISOString();return{id:alphaUuid(),userId:authUser()?.id||'guest',title:alphaLocalSemanticTitle(text),titleSource:'local',intent:null,places:[],experienceType:null,messages:[],createdAt:now,updatedAt:now}}
 function alphaUpsertConversation(c){let all=alphaConversations().filter(x=>x.id!==c.id);all.unshift(c);alphaSaveConversations(all);alphaSetActiveConversationId(c.id)}
-function alphaNewConversation(){const oldInput=$('lifestylePrompt');if(oldInput)alphaSetDraft(oldInput.value);alphaSetActiveConversationId('');alphaSetSendBusy(false);if($('lifestylePrompt'))$('lifestylePrompt').value=alphaGetDraft('__new__');document.body.classList.remove('alphaChatMode');$('lifestyleAI')?.classList.remove('chatStarted');renderAlphaLifestyleThread();alphaCloseHistory();alphaCloseChatMenu();if($('lifestyleState'))$('lifestyleState').innerHTML='<span class="trustTag predicted">NOVA CONVERSA</span> O título será criado a partir do significado da experiência.';requestAnimationFrame(()=>$('lifestylePrompt')?.focus({preventScroll:true}))}
+
+function alphaPreserveCurrentDraft(){
+  const input=$('lifestylePrompt');
+  const activeId=alphaActiveConversationId();
+  if(input&&activeId)alphaSetDraft(input.value,activeId);
+}
+
+function alphaStartFreshConversation({focus=false,compose=false}={}){
+  alphaPreserveCurrentDraft();
+
+  // A conversa nova ainda não existe no histórico.
+  // Só será criada/guardada quando o utilizador enviar a primeira mensagem.
+  alphaSetActiveConversationId('');
+  alphaSetDraft('','__new__');
+  alphaSetSendBusy(false);
+
+  const input=$('lifestylePrompt');
+  if(input)input.value='';
+
+  document.body.classList.remove('alphaChatMode');
+  document.body.classList.toggle('alphaComposeMode',!!compose);
+  $('lifestyleAI')?.classList.remove('chatStarted');
+
+  alphaCloseHistory();
+  alphaCloseFloatingMenus?.();
+  renderAlphaLifestyleThread();
+
+  if($('lifestyleState'))$('lifestyleState').textContent='';
+
+  requestAnimationFrame(()=>{
+    alphaFitShell?.();
+    if(focus&&input){
+      input.focus({preventScroll:true});
+      setTimeout(()=>{
+        document.body.classList.add('alphaComposeMode');
+        alphaFitShell?.();
+        input.focus({preventScroll:true});
+      },40);
+    }
+  });
+}
+
+function alphaNewConversation(){
+  alphaStartFreshConversation({focus:true,compose:true});
+}
 function alphaFormatConversationDate(x){try{return new Intl.DateTimeFormat('pt-PT',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(x))}catch{return''}}
 function alphaChatHasMessages(){const c=alphaCurrentConversation();return !!(c&&Array.isArray(c.messages)&&c.messages.length)}
 function alphaSyncChatMode(){
   const started=alphaChatHasMessages();
   document.body.classList.toggle('alphaChatMode',started);
+  if(started)document.body.classList.remove('alphaComposeMode');
   $('lifestyleAI')?.classList.toggle('chatStarted',started);
-  if(!started)alphaCloseChatMenu();
+  if(!started&&!document.body.classList.contains('alphaComposeMode'))alphaCloseChatMenu();
 }
 function alphaCloseChatMenu(){$('aiChatMenu')?.classList.remove('show')}
 function alphaCloseAttachMenu(){$('alphaAttachMenu')?.classList.remove('show')}
@@ -4518,8 +4643,8 @@ function alphaToggleChatMenu(e){
   alphaCloseFloatingMenus('chat');
   menu?.classList.toggle('show',willOpen);
 }
-function alphaChatNavigate(id){alphaCloseChatMenu();document.body.classList.remove('alphaChatMode');go(id)}
-function alphaChatOpenPremium(){alphaCloseChatMenu();document.body.classList.remove('alphaChatMode');openPremium()}
+function alphaChatNavigate(id){alphaCloseChatMenu();document.body.classList.remove('alphaChatMode','alphaComposeMode');go(id)}
+function alphaChatOpenPremium(){alphaCloseChatMenu();document.body.classList.remove('alphaChatMode','alphaComposeMode');openPremium()}
 function alphaCopyResponse(i){
   const c=alphaCurrentConversation(),m=c?.messages?.[i];if(!m)return;
   navigator.clipboard?.writeText(m.text).then(()=>toast('Resposta copiada')).catch(()=>toast('Não foi possível copiar'));
@@ -4585,15 +4710,20 @@ function renderAlphaLifestyleThread(){
   const c=alphaCurrentConversation(),h=c?.messages||[];
   card?.classList.toggle('chatStarted',h.length>0);
   document.body.classList.toggle('alphaChatMode',h.length>0);
+  if(h.length)document.body.classList.remove('alphaComposeMode');
   if(!h.length){
-    host.classList.remove('show');host.innerHTML='';host.scrollTop=0;alphaCloseChatMenu();return;
+    host.classList.toggle('show',document.body.classList.contains('alphaComposeMode'));
+    host.innerHTML='';host.scrollTop=0;
+    if(!document.body.classList.contains('alphaComposeMode'))alphaCloseChatMenu();
+    requestAnimationFrame(()=>alphaFitShell?.());
+    return;
   }
   host.classList.add('show');
   host.innerHTML='<div class="small muted" style="margin-bottom:8px">● '+esc(c.title)+alphaStatusSignal(c.id)+'</div>'+
     h.map((m,i)=>{
       const msg='<div class="lifestyleMsg '+m.role+'">'+(m.role==='ai'?alphaRenderMessageText(m.text):esc(m.text).replace(/\n/g,'<br>'))+'</div>';
       const atts=Array.isArray(m.attachments)&&m.attachments.length?'<div class="alphaMsgAttachments">'+m.attachments.map(a=>'<span class="alphaMsgAttachment">'+(String(a.type||'').startsWith('image/')?'🖼️ ':'📎 ')+esc(a.name||'anexo')+'</span>').join('')+'</div>':'';
-      return msg+atts+(m.role==='ai'?(alphaContextActions(m)+alphaResponseActions(i,m)):'');
+      return msg+atts+(m.role==='ai'?(alphaContextActions(m,i)+alphaResponseActions(i,m)):'');
     }).join('')+(alphaPendingRequests.has(c.id)?alphaGeneratingRow():'');
   requestAnimationFrame(()=>{host.scrollTop=host.scrollHeight});
 }
@@ -4612,7 +4742,7 @@ function alphaRenderHistory(){
     </div>`;
   }).join('');
 }
-function alphaOpenConversation(id){const input=$('lifestylePrompt');if(input)alphaSetDraft(input.value);alphaSetActiveConversationId(id);alphaClearUnread(id);alphaSetSendBusy(alphaPendingRequests.has(id));alphaRestoreDraft();renderAlphaLifestyleThread();alphaCloseHistory();go('home')}
+function alphaOpenConversation(id){const input=$('lifestylePrompt');if(input&&alphaActiveConversationId())alphaSetDraft(input.value);document.body.classList.remove('alphaComposeMode');alphaSetActiveConversationId(id);alphaClearUnread(id);alphaSetSendBusy(alphaPendingRequests.has(id));alphaRestoreDraft();renderAlphaLifestyleThread();alphaCloseHistory();go('home');requestAnimationFrame(()=>alphaFitShell?.())}
 function alphaRenameConversation(id){const all=alphaConversations(),c=all.find(x=>x.id===id);if(!c)return;const n=prompt('Novo título:',c.title);if(n===null)return;c.title=alphaNormalizeTitle(n);c.titleSource='user';c.updatedAt=new Date().toISOString();alphaSaveConversations(all);alphaRenderHistory();renderAlphaLifestyleThread()}
 function alphaDeleteConversation(id){const all=alphaConversations(),c=all.find(x=>x.id===id);if(!c||!confirm('Apagar "'+c.title+'"?'))return;alphaSaveConversations(all.filter(x=>x.id!==id));alphaSetDraft('',id);alphaClearUnread(id);alphaPendingRequests.delete(id);if(alphaActiveConversationId()===id)alphaSetActiveConversationId('');alphaRenderHistory();renderAlphaLifestyleThread()}
 function alphaLifestyleQuick(text){if($('lifestylePrompt'))$('lifestylePrompt').value=text;go('home');setTimeout(()=>$('lifestyleAI')?.scrollIntoView({behavior:'smooth',block:'start'}),80)}
@@ -4710,7 +4840,7 @@ function alphaToggleMic(){
 
 
 /* ============================================================
-   ALPHA 3.5.5 · ICON RUNTIME + CONTEXTUAL SPOTIFY ACTION
+   ALPHA 3.5.6 · ICON RUNTIME + CONTEXTUAL SPOTIFY ACTION
    ============================================================ */
 const ALPHA_ICON_PATHS={
   plus:'<path d="M12 5v14M5 12h14"/>',
@@ -4800,12 +4930,43 @@ function alphaOpenSpotify(query){
   const onVis=()=>{if(document.visibilityState==='hidden')left=true};
   document.addEventListener('visibilitychange',onVis,{once:true});
   window.location.href=appUrl;
-  setTimeout(()=>{if(!left&&document.visibilityState==='visible')window.open(webUrl,'_blank','noopener,noreferrer')},850);
+
+  // Fallback na mesma janela: evita o "Pop-up bloqueado" do Chrome/Android.
+  setTimeout(()=>{
+    if(!left&&document.visibilityState==='visible')window.location.href=webUrl;
+  },850);
 }
-function alphaContextActions(m){
-  if(!m||!m.spotifyQuery)return'';
-  const safe=String(m.spotifyQuery).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-  return `<div class="alphaContextAction"><button class="alphaSpotifyAction" type="button" onclick="alphaOpenSpotify('${safe}')">${alphaIcon('music')}Abrir no Spotify</button></div>`;
+
+function alphaShouldOfferWhatsApp(text){
+  const t=String(text||'').toLocaleLowerCase('pt-PT');
+  return /whats\s*app|whatsapp|partilh|partilhar|enviar|manda|mandar|aprova|aprovação|aprovacao|opinião|opiniao|feedback|troca(?:r)?\s+(?:de\s+)?ideias|discutir|combinar/.test(t);
+}
+
+function alphaWhatsAppShareText(m){
+  const c=alphaCurrentConversation();
+  const title=String(c?.title||'Plano Alpha').trim();
+  const body=String(m?.text||'').trim().slice(0,6500);
+  return `PROJECT ALPHA\n${title}\n\n${body}\n\n— Planeado com PROJECT ALPHA`;
+}
+
+function alphaOpenWhatsAppResponse(i){
+  const c=alphaCurrentConversation(),m=c?.messages?.[i];
+  if(!m)return;
+  const url='https://wa.me/?text='+encodeURIComponent(alphaWhatsAppShareText(m));
+  window.location.href=url;
+}
+
+function alphaContextActions(m,i){
+  if(!m)return'';
+  const actions=[];
+  if(m.spotifyQuery){
+    const safe=String(m.spotifyQuery).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    actions.push(`<button class="alphaSpotifyAction" type="button" onclick="alphaOpenSpotify('${safe}')">${alphaIcon('music')}Abrir no Spotify</button>`);
+  }
+  if(m.whatsappShare){
+    actions.push(`<button class="alphaWhatsAppAction" type="button" onclick="alphaOpenWhatsAppResponse(${Number(i)||0})">${alphaIcon('share')}Partilhar no WhatsApp</button>`);
+  }
+  return actions.length?`<div class="alphaContextAction">${actions.join('')}</div>`:'';
 }
 const alphaIconObserver=new MutationObserver(muts=>{for(const m of muts){for(const n of m.addedNodes){if(n.nodeType===1)alphaApplyIconSystem(n)}}});
 document.addEventListener('DOMContentLoaded',()=>{alphaApplyIconSystem(document);alphaIconObserver.observe(document.body,{childList:true,subtree:true})});
@@ -4913,6 +5074,7 @@ async function alphaLifestyleSend(){
   // Evita resposta duplicada ao mesmo requestId.
   if(!target.messages.some(m=>m.role==='ai'&&m.requestId===requestId)){
     const contextualMusic=real&&d&&d.scope==='CONTEXTUAL'&&/\b(spotify|música|musica|playlist|ouvir|toca|tocar)\b/i.test(displayText);
+    const contextualWhatsApp=real&&d&&d.scope!=='OUT_OF_SCOPE'&&alphaShouldOfferWhatsApp(displayText);
     target.messages.push({
       role:'ai',
       text:reply,
@@ -4920,7 +5082,8 @@ async function alphaLifestyleSend(){
       source:real?'backend':'local',
       requestId,
       scope:real&&d?d.scope:null,
-      spotifyQuery:contextualMusic?alphaSpotifyQueryFromPrompt(displayText,d?.title||''):null
+      spotifyQuery:contextualMusic?alphaSpotifyQueryFromPrompt(displayText,d?.title||''):null,
+      whatsappShare:contextualWhatsApp
     });
   }
 
@@ -4955,14 +5118,23 @@ async function alphaLifestyleSend(){
 }
 function alphaResetVisualViewport(){
   const card=$('lifestyleAI');if(!card)return;
-  if(!document.body.classList.contains('alphaChatMode')){card.style.height='';card.style.transform='';}
+  if(!document.body.classList.contains('alphaChatMode')&&!document.body.classList.contains('alphaComposeMode')){card.style.height='';card.style.transform='';}
 }
 if(window.visualViewport){
   window.visualViewport.addEventListener('resize',()=>{alphaApplyVisualViewport();requestAnimationFrame(()=>{const h=$('lifestyleThread');if(h)h.scrollTop=h.scrollHeight})});
   window.visualViewport.addEventListener('scroll',alphaApplyVisualViewport);
 }
-document.addEventListener('focusin',e=>{if(e.target?.id==='lifestylePrompt')requestAnimationFrame(()=>{alphaApplyVisualViewport();const h=$('lifestyleThread');if(h)h.scrollTop=h.scrollHeight})});
-document.addEventListener('focusout',e=>{if(e.target?.id==='lifestylePrompt')setTimeout(()=>{alphaApplyVisualViewport()},80)});
+document.addEventListener('focusin',e=>{
+  if(e.target?.id!=='lifestylePrompt')return;
+  if(!alphaChatHasMessages())document.body.classList.add('alphaComposeMode');
+  requestAnimationFrame(()=>{
+    alphaApplyVisualViewport();
+    const h=$('lifestyleThread');if(h)h.scrollTop=h.scrollHeight;
+  });
+});
+document.addEventListener('focusout',e=>{
+  if(e.target?.id==='lifestylePrompt')setTimeout(()=>alphaApplyVisualViewport(),80);
+});
 document.addEventListener('click',e=>{
   const chatMenu=e.target.closest?.('#aiChatMenu');
   const attachMenu=e.target.closest?.('#alphaAttachMenu');
@@ -4983,9 +5155,14 @@ function alphaWorthItToday(){if($('lifestylePrompt'))$('lifestylePrompt').value=
 function alphaTrailsNearMe(){go('field');setTimeout(()=>{requestLocation();loadTrailsNearby(true)},180)}
 function alphaOpenPathsHub(){go('field');setTimeout(()=>$('mapPathsHub')?.scrollIntoView({behavior:'smooth',block:'start'}),120)}
 function alphaMigrateLegacyChat(){const oldKey=userKey('alpha_lifestyle_chat_v2_'),done=userKey('alpha_ai_migrated_34_');if(localStorage.getItem(done))return;try{const old=JSON.parse(localStorage.getItem(oldKey)||'[]');if(Array.isArray(old)&&old.length&&!alphaConversations().length){const first=old.find(x=>x.role==='user')?.text||'Experiência anterior',c=alphaCreateConversation(first);c.messages=old.map(m=>({role:m.role,text:m.text,at:new Date().toISOString(),source:'legacy-3.3'}));alphaUpsertConversation(c)}}catch{}localStorage.setItem(done,'1')}
-function alphaAfterLogin34(){alphaMigrateLegacyChat();renderAlphaLifestyleThread()}
+function alphaAfterLogin34(){
+  alphaMigrateLegacyChat();
+  // Regra 3.5.6: abrir a Alpha nunca retoma silenciosamente uma conversa antiga.
+  // O histórico permanece intacto e só é retomado por escolha explícita.
+  alphaStartFreshConversation({focus:false,compose:false});
+}
 
-/* ALPHA 3.5.5 · shell fitting
+/* ALPHA 3.5.6 · shell fitting
    Mede a barra inferior em vez de assumir uma altura fixa. */
 let alphaShellRAF=0;
 function alphaFitShell(){
@@ -4994,7 +5171,7 @@ function alphaFitShell(){
     const card=$('lifestyleAI');
     if(!card)return;
 
-    if(document.body.classList.contains('alphaChatMode')){
+    if(document.body.classList.contains('alphaChatMode')||document.body.classList.contains('alphaComposeMode')){
       /* No modo conversa a barra inferior está escondida.
          A moldura mantém-se dentro do visual viewport, inclusive com teclado. */
       const vv=window.visualViewport;
@@ -5054,6 +5231,6 @@ setTimeout(()=>{if(authUser())alphaAfterLogin34();alphaApplyIconSystem(document)
 
 </script>
 
-<script>window.ALPHA_DOMAIN_GATE_BUILD='3.5.5-clean-home-static-north-spotify-action';</script>
+<script>window.ALPHA_DOMAIN_GATE_BUILD='3.5.6-fresh-chat-keyboard-resume-spotify-whatsapp';</script>
 </body>
 </html>
