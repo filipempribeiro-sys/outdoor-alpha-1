@@ -299,7 +299,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 
 
 /* ============================================================
-   ALPHA 3.3 · PERSONAL AI HOME — CONTINUITY LAYER
+   ALPHA 3.5 · REAL TOOLS — CONTINUITY LAYER
    Mantém integralmente o core 2.4.0 e acrescenta a nova interface.
    ============================================================ */
 .lifestyleAI{border:1px solid #3e5f57;background:
@@ -337,6 +337,17 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 .mapPathsHub{border:1px solid #3c5362;background:linear-gradient(145deg,#0d2028,#12192a)}
 .mapPathsHub .hubActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 
+
+.aiTopbar{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.aiTopActions{display:flex;gap:6px}.aiTopActions button{border:1px solid #3b5b61;background:#10242b;color:#e8fbf5;border-radius:11px;padding:8px;font-weight:800}
+.aiHistoryDrawer{position:fixed;inset:0;z-index:1200;background:rgba(2,8,12,.75);display:none;align-items:flex-end}.aiHistoryDrawer.show{display:flex}
+.aiHistoryPanel{width:100%;max-height:82dvh;overflow:auto;background:#08161d;border:1px solid #334c55;border-radius:22px 22px 0 0;padding:16px}
+.aiHistoryHead{display:flex;justify-content:space-between;align-items:center;position:sticky;top:-16px;background:#08161d;padding:4px 0 12px}
+.aiConversationItem{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px solid #263d46;background:#0d2028;border-radius:15px;padding:12px;margin:8px 0}
+.aiConversationItem.active{border-color:#5b9d87}.aiConversationItem button{background:none;border:0;color:inherit;text-align:left;cursor:pointer}
+.aiConversationItem b,.aiConversationItem small{display:block}.aiConversationItem small{color:var(--muted);margin-top:3px}.aiConvActions{display:flex;gap:4px}
+.aiConvActions button{border:1px solid #344b54;border-radius:9px;padding:6px 8px}.aiEmptyHistory{text-align:center;color:var(--muted);padding:24px}
+
 </style>
 </head>
 <body>
@@ -361,7 +372,7 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.3 · Personal AI Home</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.5 · Real Tools</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -372,7 +383,7 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 <section id="home" class="view active">
 
   <div class="card lifestyleAI" id="lifestyleAI">
-    <div class="eyebrow">ALPHA 3.3 · PERSONAL AI HOME</div>
+    <div class="aiTopbar"><div class="eyebrow">ALPHA 3.5 · REAL TOOLS</div><div class="aiTopActions"><button onclick="alphaNewConversation()">＋ Nova</button><button onclick="alphaOpenHistory()">☰ Histórico</button></div></div>
     <h1>O que queres <span class="green">fazer hoje?</span></h1>
     <p class="muted lifestyleAILead">Diz à Alpha o que te apetece, o tempo que tens, com quem vais ou simplesmente conta-lhe o contexto. A aplicação adapta as ferramentas ao teu objetivo — não és tu que tens de te adaptar à aplicação.</p>
     <div class="lifestyleQuick">
@@ -389,7 +400,7 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
       <textarea id="lifestylePrompt" placeholder="Ex.: Cheguei agora de viagem e quero uma ideia tranquila para acabar o dia..."></textarea>
       <button class="btn purple" onclick="alphaLifestyleSend()">Perguntar à Alpha</button>
     </div>
-    <div id="lifestyleState" class="small muted" style="margin-top:8px">Concept local com memória no dispositivo. A versão LLM real será ligada por backend seguro e usará dados reais através das ferramentas Alpha.</div>
+    <div id="lifestyleState" class="small muted" style="margin-top:8px">AI híbrida: backend seguro quando configurado, fallback local quando indisponível. Conversas organizadas por título e isoladas por utilizador.</div>
     <div id="lifestyleThread" class="lifestyleThread"></div>
   </div>
 
@@ -444,7 +455,7 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 3.3 · Personal AI Home sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 3.5 · Real Tools sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
       <div class="eyebrow">AI JOURNEY · MULTI-STOP</div>
@@ -1056,6 +1067,7 @@ Estação de São Bento
 
 </div>
 
+<div id="aiHistoryDrawer" class="aiHistoryDrawer" onclick="if(event.target===this)alphaCloseHistory()"><div class="aiHistoryPanel"><div class="aiHistoryHead"><div><div class="eyebrow">MEMÓRIA PESSOAL</div><h2>As tuas conversas</h2></div><button class="btn secondary" onclick="alphaCloseHistory()">Fechar</button></div><div id="aiHistoryList"></div></div></div>
 <nav class="bottom">
   <button class="nav active" data-id="home" onclick="go('home')">✦<br>Alpha</button>
   <button class="nav" data-id="field" onclick="go('field')">▶<br>Mapa/GO</button>
@@ -1073,7 +1085,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='3.3.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='3.5.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1140,7 +1152,7 @@ function alphaLogin(){
   const entKey=ENT_PREFIX+profile.id;
   if(!localStorage.getItem(entKey))localStorage.setItem(entKey,JSON.stringify(createInitialEntitlement(profile)));
   currentTester=profile.shortName;localStorage.setItem(userKey(TESTER_KEY),currentTester);
-  $('loginPin').value='';$('authGate').classList.remove('show');applyEntitlements();renderAlphaLifestyleThread();if($('lifestylePrompt'))$('lifestylePrompt').value='';toast('Bem-vindo, '+profile.shortName+' · '+tierLabel(effectiveTier()));
+  $('loginPin').value='';$('authGate').classList.remove('show');applyEntitlements();alphaAfterLogin34();if($('lifestylePrompt'))$('lifestylePrompt').value='';toast('Bem-vindo, '+profile.shortName+' · '+tierLabel(effectiveTier()));
 }
 function alphaLogout(){localStorage.removeItem(AUTH_KEY);if($('lifestyleThread')){$('lifestyleThread').innerHTML='';$('lifestyleThread').classList.remove('show')}if($('lifestylePrompt'))$('lifestylePrompt').value='';$('authGate').classList.add('show');$('loginPin').value='';go('home')}
 function lastGoldExpiredAt(){const u=authUser();if(!u)return 0;return Number(localStorage.getItem(LAST_GOLD_PREFIX+u.id)||0)}
@@ -3789,104 +3801,73 @@ window.addEventListener('resize',()=>{clearTimeout(window._orientationResize);wi
 adaptOrientation();
 
 /* ============================================================
-   ALPHA 3.3 · PERSONAL AI HOME — conversation continuity
-   IMPORTANTE: esta camada acrescenta-se ao core existente.
-   Não substitui Mapa/GO, LIVE, Premium, membership ou Perfil.
+   ALPHA 3.5 · REAL TOOLS + CONVERSATION MANAGER
    ============================================================ */
-const ALPHA_LIFESTYLE_CHAT_KEY='alpha_lifestyle_chat_v2_';
+const ALPHA_CONVERSATIONS_KEY='alpha_ai_conversations_v1_';
+const ALPHA_ACTIVE_CONVERSATION_KEY='alpha_ai_active_conversation_v1_';
+const ALPHA_AI_BACKEND_KEY='alpha_ai_backend_url_v1';
+/* Depois do primeiro deploy, podes colocar aqui o URL Render para todos os dispositivos.
+   Ex.: 'https://alpha-ai-backend.onrender.com'. Enquanto vazio, usa localStorage. */
+const ALPHA_DEFAULT_BACKEND_URL='';
 
-function alphaLifestyleHistory(){
-  try{return JSON.parse(localStorage.getItem(userKey(ALPHA_LIFESTYLE_CHAT_KEY))||'[]')}catch(e){return[]}
+function alphaUuid(){return crypto?.randomUUID?crypto.randomUUID():'c_'+Date.now()+'_'+Math.random().toString(36).slice(2)}
+function alphaBackendUrl(){return String(ALPHA_DEFAULT_BACKEND_URL||localStorage.getItem(ALPHA_AI_BACKEND_KEY)||'').trim().replace(/\/+$/,'')}
+function alphaConfigureBackend(url){const clean=String(url||'').trim().replace(/\/+$/,'');if(clean)localStorage.setItem(ALPHA_AI_BACKEND_KEY,clean);else localStorage.removeItem(ALPHA_AI_BACKEND_KEY);return clean}
+function alphaConversations(){try{const x=JSON.parse(localStorage.getItem(userKey(ALPHA_CONVERSATIONS_KEY))||'[]');return Array.isArray(x)?x:[]}catch{return[]}}
+function alphaSaveConversations(x){localStorage.setItem(userKey(ALPHA_CONVERSATIONS_KEY),JSON.stringify(x.slice(0,60)))}
+function alphaActiveConversationId(){return localStorage.getItem(userKey(ALPHA_ACTIVE_CONVERSATION_KEY))||''}
+function alphaSetActiveConversationId(id){id?localStorage.setItem(userKey(ALPHA_ACTIVE_CONVERSATION_KEY),id):localStorage.removeItem(userKey(ALPHA_ACTIVE_CONVERSATION_KEY))}
+function alphaCurrentConversation(){const id=alphaActiveConversationId();return alphaConversations().find(c=>c.id===id)||null}
+function alphaNormalizeTitle(t){let x=String(t||'').replace(/^["“”']+|["“”']+$/g,'').replace(/\s+/g,' ').trim();if(x.length>48)x=x.slice(0,48).replace(/\s+\S*$/,'')+'…';return x||'Nova experiência'}
+function alphaLocalSemanticTitle(text){
+ const t=String(text||'').toLocaleLowerCase('pt-PT');
+ if(/biciclet|bike|cicl/.test(t)){const m=t.match(/\b(lisboa|porto|coimbra|braga|vigo|sintra|cascais|amadora)\b/i);return m?m[1][0].toUpperCase()+m[1].slice(1)+' de Bicicleta':'Passeio de Bicicleta'}
+ if(/catedral/.test(t)&&/santiago/.test(t))return'Catedral de Santiago';
+ if(/caminho/.test(t)&&/santiago/.test(t))return'Caminho de Santiago';
+ if(/ribeira do cavalo/.test(t))return'Ribeira do Cavalo';
+ const places=['Lisboa','Porto','Coimbra','Braga','Vigo','Santiago','Sintra','Cascais','Gerês','Arouca'];
+ const p=places.find(x=>t.includes(x.toLocaleLowerCase('pt-PT')));if(p)return /viagem|roteiro|passeio|visit/.test(t)?'Experiência em '+p:p;
+ if(/trilho|trail/.test(t))return'Explorar Trilhos';if(/caminho|rota|percurso/.test(t))return'Caminhos e Rotas';
+ if(/hoje|amanh|ideias|o que fazer/.test(t))return'Ideias para Hoje';
+ return alphaNormalizeTitle(String(text||'').split(/[.!?\n]/)[0]||'Nova experiência')
 }
-function saveAlphaLifestyleHistory(h){
-  localStorage.setItem(userKey(ALPHA_LIFESTYLE_CHAT_KEY),JSON.stringify(h.slice(-20)));
+function alphaCreateConversation(text){const now=new Date().toISOString();return{id:alphaUuid(),userId:authUser()?.id||'guest',title:alphaLocalSemanticTitle(text),titleSource:'local',intent:null,places:[],experienceType:null,messages:[],createdAt:now,updatedAt:now}}
+function alphaUpsertConversation(c){let all=alphaConversations().filter(x=>x.id!==c.id);all.unshift(c);alphaSaveConversations(all);alphaSetActiveConversationId(c.id)}
+function alphaNewConversation(){alphaSetActiveConversationId('');if($('lifestylePrompt'))$('lifestylePrompt').value='';renderAlphaLifestyleThread();alphaCloseHistory();if($('lifestyleState'))$('lifestyleState').innerHTML='<span class="trustTag predicted">NOVA CONVERSA</span> O título será criado a partir do significado da experiência.'}
+function alphaFormatConversationDate(x){try{return new Intl.DateTimeFormat('pt-PT',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(x))}catch{return''}}
+function renderAlphaLifestyleThread(){const host=$('lifestyleThread');if(!host)return;const c=alphaCurrentConversation(),h=c?.messages||[];if(!h.length){host.classList.remove('show');host.innerHTML='';return}host.classList.add('show');host.innerHTML='<div class="small muted" style="margin-bottom:8px">● '+esc(c.title)+'</div>'+h.map(m=>'<div class="lifestyleMsg '+m.role+'">'+esc(m.text)+'</div>').join('')}
+function alphaOpenHistory(){alphaRenderHistory();$('aiHistoryDrawer')?.classList.add('show')}
+function alphaCloseHistory(){$('aiHistoryDrawer')?.classList.remove('show')}
+function alphaRenderHistory(){
+  const host=$('aiHistoryList');if(!host)return;
+  const all=alphaConversations(),active=alphaActiveConversationId();
+  if(!all.length){host.innerHTML='<div class="aiEmptyHistory">Ainda não tens conversas guardadas.</div>';return}
+  host.innerHTML=all.map(c=>{
+    const id=String(c.id).replace(/'/g,"\\'");
+    return `<div class="aiConversationItem ${c.id===active?'active':''}">
+      <button onclick="alphaOpenConversation('${id}')"><b>${esc(c.title)}</b><small>${alphaFormatConversationDate(c.updatedAt)} · ${c.messages?.length||0} mensagens</small></button>
+      <div class="aiConvActions"><button onclick="alphaRenameConversation('${id}')">✎</button><button onclick="alphaDeleteConversation('${id}')">⌫</button></div>
+    </div>`;
+  }).join('');
 }
-function renderAlphaLifestyleThread(){
-  const host=$('lifestyleThread'); if(!host)return;
-  const h=alphaLifestyleHistory();
-  if(!h.length){host.classList.remove('show');host.innerHTML='';return}
-  host.classList.add('show');
-  host.innerHTML=h.map(m=>'<div class="lifestyleMsg '+m.role+'">'+esc(m.text)+'</div>').join('');
-}
-function alphaLifestyleQuick(text){
-  if($('lifestylePrompt'))$('lifestylePrompt').value=text;
-  go('home');
-  setTimeout(()=>{const el=$('lifestyleAI');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},80);
-}
-function alphaCurrentContextText(){
-  let bits=[];
-  if(headerWeatherLast){
-    if(headerWeatherLast.place)bits.push('Localização atual: '+headerWeatherLast.place);
-    if(headerWeatherLast.temp!=null)bits.push('Temperatura: '+Math.round(headerWeatherLast.temp)+'°C');
-  }
-  return bits.join(' · ');
-}
-function alphaExtractRecentIntent(text){
-  const clean=String(text||'').trim();
-  const parts=clean.split(/(?<=[.!?])\s+|\n+/).filter(Boolean);
-  const tail=parts.slice(-4).join(' ');
-  return tail || clean;
-}
-function alphaLifestyleLocalReply(text){
-  const full=String(text||'').trim();
-  const low=full.toLocaleLowerCase('pt-PT');
-  const intent=alphaExtractRecentIntent(full).toLocaleLowerCase('pt-PT');
-  const ctx=alphaCurrentContextText();
-
-  const didTrip=/cheguei|voltei|vindo de|mini férias|viagem|pernoit|visit/.test(low);
-  const asksToday=/hoje|terminar o dia|acabar o dia/.test(intent);
-  const asksTomorrow=/amanh/.test(intent);
-  const pathIntent=/caminho de santiago|caminhos? de fátima|rota vicentina|\bgr\b|\bgrs\b|travessia/.test(intent);
-
-  if(pathIntent){
-    return 'Percebi: queres trabalhar um percurso de vários dias. A Alpha deve começar pelo objetivo real — origem, destino, dias disponíveis, quilómetros confortáveis por etapa, ritmo, companhia, orçamento e tipo de alojamento — e só depois construir etapas. Em produção, albergues, pousadas, comida, água, farmácias, meteorologia e estado do percurso serão validados por ferramentas reais; a IA não os inventará.'+(ctx?'\n\n'+ctx:'');
-  }
-
-  if(didTrip && (asksToday||asksTomorrow)){
-    let when=asksToday&&asksTomorrow?'hoje ou amanhã':asksTomorrow?'amanhã':'hoje';
-    return 'Percebi o contexto completo: acabaste uma viagem intensa e, mais importante, a tua intenção atual é decidir o que fazer '+when+'. Não vou interpretar Coimbra, Porto, Braga, Vigo ou Santiago como novos destinos só porque aparecem no relato.\n\nA minha primeira proposta seria baixar o ritmo: uma saída curta e próxima, um passeio ao fim do dia, natureza leve ou simplesmente recuperação. Se quiseres algo para amanhã, posso transformar isso num plano completo adaptado ao teu perfil, distância, orçamento e meteorologia.\n\nNa Alpha final eu cruzaria automaticamente localização, hora, meteorologia, trânsito, locais abertos e o teu histórico antes de te apresentar 2–3 opções concretas.'+(ctx?'\n\nContexto disponível agora: '+ctx:'');
-  }
-
-  if(/não sei|ideias|o que fazer|apetece|fazer hoje|perto de mim/.test(intent)){
-    return 'Não precisas de escolher um módulo. Diz-me apenas quanto tempo tens, se vais sozinho ou acompanhado e se preferes natureza, património, água, comida ou simplesmente algo diferente. A Alpha deve usar a tua localização e contexto para construir opções reais.'+(ctx?'\n\n'+ctx:'');
-  }
-
-  if(/carro|caminhada|paragens|visitar|planeia|roteiro|viagem/.test(intent)){
-    return 'Isto é um Journey: a Alpha deve decidir quando faz sentido carro, estacionamento e caminhada, ordenar as paragens, respeitar exclusões e preparar a continuação para o destino final. O Mapa/GO, o Journey Engine e a navegação que já existiam continuam disponíveis por baixo desta conversa.'+(ctx?'\n\n'+ctx:'');
-  }
-
-  return 'Percebi. Na Alpha 3.x esta conversa passa a ser a porta de entrada, mas não elimina nenhuma das funções existentes. A intenção é transformar o que escreveste numa combinação das ferramentas já presentes — Mapa/GO, LIVE, Journey, Reality Pulse, Experience, Premium e Perfil — usando o teu contexto em vez de te obrigar a escolher primeiro o módulo.'+(ctx?'\n\n'+ctx:'');
-}
-function alphaLifestyleSend(){
-  const input=$('lifestylePrompt'), state=$('lifestyleState');
-  if(!input)return;
-  const text=input.value.trim();
-  if(!text){if(state)state.textContent='Escreve o que queres fazer ou conta-me o contexto.';return}
-  let h=alphaLifestyleHistory();
-  h.push({role:'user',text});
-  const reply=alphaLifestyleLocalReply(text);
-  h.push({role:'ai',text:reply});
-  saveAlphaLifestyleHistory(h);
-  input.value='';
-  renderAlphaLifestyleThread();
-  if(state)state.innerHTML='<span class="trustTag predicted">CONCEPT LOCAL</span> A resposta demonstra interpretação de intenção. Dados live concretos só serão apresentados quando forem verificados.';
-  setTimeout(()=>{const host=$('lifestyleThread');if(host)host.scrollIntoView({behavior:'smooth',block:'nearest'});},80);
-}
-
-function alphaWorthItToday(){
-  if($('lifestylePrompt'))$('lifestylePrompt').value='Vale a pena ir hoje? Usa a minha localização e o contexto atual.';
-  alphaLifestyleSend();
-}
-function alphaTrailsNearMe(){
-  go('field');
-  setTimeout(()=>{requestLocation();loadTrailsNearby(true)},180);
-}
-function alphaOpenPathsHub(){
-  go('field');
-  setTimeout(()=>{const el=$('mapPathsHub');if(el)el.scrollIntoView({behavior:'smooth',block:'start'})},120);
-}
-
-setTimeout(renderAlphaLifestyleThread,150);
+function alphaOpenConversation(id){alphaSetActiveConversationId(id);renderAlphaLifestyleThread();alphaCloseHistory();go('home')}
+function alphaRenameConversation(id){const all=alphaConversations(),c=all.find(x=>x.id===id);if(!c)return;const n=prompt('Novo título:',c.title);if(n===null)return;c.title=alphaNormalizeTitle(n);c.titleSource='user';c.updatedAt=new Date().toISOString();alphaSaveConversations(all);alphaRenderHistory();renderAlphaLifestyleThread()}
+function alphaDeleteConversation(id){const all=alphaConversations(),c=all.find(x=>x.id===id);if(!c||!confirm('Apagar "'+c.title+'"?'))return;alphaSaveConversations(all.filter(x=>x.id!==id));if(alphaActiveConversationId()===id)alphaSetActiveConversationId('');alphaRenderHistory();renderAlphaLifestyleThread()}
+function alphaLifestyleQuick(text){if($('lifestylePrompt'))$('lifestylePrompt').value=text;go('home');setTimeout(()=>$('lifestyleAI')?.scrollIntoView({behavior:'smooth',block:'start'}),80)}
+function alphaCurrentContext(){const u=authUser(),ctx={membership:effectiveTier()};if(u)ctx.user={id:u.id,firstName:u.shortName||u.name};if(pos&&Number.isFinite(pos.latitude)&&Number.isFinite(pos.longitude))ctx.location={latitude:pos.latitude,longitude:pos.longitude};if(headerWeatherLast)ctx.weather={place:headerWeatherLast.place||null,temp:headerWeatherLast.temp??null,retrievedAt:new Date(headerWeatherLast.time||Date.now()).toISOString()};return ctx}
+function alphaExtractRecentIntent(text){const p=String(text||'').trim().split(/(?<=[.!?])\s+|\n+/).filter(Boolean);return p.slice(-4).join(' ')||String(text||'')}
+function alphaLifestyleLocalReply(text){const full=String(text||''),low=full.toLocaleLowerCase('pt-PT'),intent=alphaExtractRecentIntent(full).toLocaleLowerCase('pt-PT');if(/cheguei|voltei|vindo de|viagem|pernoit|visit/.test(low)&&/hoje|amanh|terminar o dia|acabar o dia/.test(intent))return'Percebi a viagem como contexto histórico e a tua intenção atual como um novo pedido. Não vou transformar uma referência a Santiago num Caminho de Santiago. Para recomendações concretas, a Alpha real deve cruzar dados verificados.';if(/caminho|rota|percurso/.test(intent))return'Percebi que queres explorar um Caminho ou rota. Posso estruturar a experiência; dados reais devem ser confirmados pelas ferramentas Alpha.';return'Percebi o pedido. Estou em fallback local; sem backend não vou inventar locais, horários, preços, disponibilidade ou condições live.'}
+async function alphaCallBackend(c,text){const base=alphaBackendUrl();if(!base)throw new Error('BACKEND_NOT_CONFIGURED');const r=await fetch(base+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({conversationId:c.id,title:c.title,messages:c.messages.slice(-16).map(m=>({role:m.role==='ai'?'assistant':'user',content:m.text})),currentMessage:text,context:alphaCurrentContext()})});const raw=await r.text();let d={};try{d=JSON.parse(raw)}catch{}if(!r.ok)throw new Error(d.error||'HTTP '+r.status);return d}
+async function alphaLifestyleSend(){const input=$('lifestylePrompt'),state=$('lifestyleState');if(!input)return;const text=input.value.trim();if(!text)return;let c=alphaCurrentConversation()||alphaCreateConversation(text);c.messages.push({role:'user',text,at:new Date().toISOString()});c.updatedAt=new Date().toISOString();alphaUpsertConversation(c);input.value='';renderAlphaLifestyleThread();if(state)state.textContent='A Alpha está a interpretar…';let d=null,reply='',real=false;try{d=await alphaCallBackend(c,text);reply=String(d.answer||'').trim();if(!reply)throw new Error('empty');real=true}catch(e){reply=alphaLifestyleLocalReply(text)}c=alphaCurrentConversation()||c;c.messages.push({role:'ai',text:reply,at:new Date().toISOString(),source:real?'backend':'local'});if(real&&d){if(d.title&&c.titleSource!=='user'){c.title=alphaNormalizeTitle(d.title);c.titleSource='ai'}c.intent=d.intent||c.intent;c.places=Array.isArray(d.places)?d.places:c.places;c.experienceType=d.experienceType||c.experienceType}c.updatedAt=new Date().toISOString();alphaUpsertConversation(c);renderAlphaLifestyleThread();if(state){
+ const tools=real&&Array.isArray(d?.toolsUsed)&&d.toolsUsed.length?' · '+d.toolsUsed.map(esc).join(' · '):'';
+ state.innerHTML=real?'<span class="trustTag verified">AI REAL</span> Dados reais quando disponíveis'+tools+'.':'<span class="trustTag predicted">FALLBACK LOCAL</span> Backend AI ainda não configurado.';
+}}
+function alphaWorthItToday(){if($('lifestylePrompt'))$('lifestylePrompt').value='Vale a pena ir hoje? Usa a minha localização e o contexto atual.';alphaLifestyleSend()}
+function alphaTrailsNearMe(){go('field');setTimeout(()=>{requestLocation();loadTrailsNearby(true)},180)}
+function alphaOpenPathsHub(){go('field');setTimeout(()=>$('mapPathsHub')?.scrollIntoView({behavior:'smooth',block:'start'}),120)}
+function alphaMigrateLegacyChat(){const oldKey=userKey('alpha_lifestyle_chat_v2_'),done=userKey('alpha_ai_migrated_34_');if(localStorage.getItem(done))return;try{const old=JSON.parse(localStorage.getItem(oldKey)||'[]');if(Array.isArray(old)&&old.length&&!alphaConversations().length){const first=old.find(x=>x.role==='user')?.text||'Experiência anterior',c=alphaCreateConversation(first);c.messages=old.map(m=>({role:m.role,text:m.text,at:new Date().toISOString(),source:'legacy-3.3'}));alphaUpsertConversation(c)}}catch{}localStorage.setItem(done,'1')}
+function alphaAfterLogin34(){alphaMigrateLegacyChat();renderAlphaLifestyleThread()}
+setTimeout(()=>{if(authUser())alphaAfterLogin34()},160);
 
 </script>
 </body>
