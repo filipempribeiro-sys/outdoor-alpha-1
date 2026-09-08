@@ -776,6 +776,8 @@ button.alphaIconified,.btn.alphaIconified,.nav.alphaIconified{display:inline-fle
 .alphaPlaceDesc{font-size:13px;line-height:1.45;margin-top:9px}.alphaPlaceLinks{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .alphaPlaceLinks a{display:inline-flex;align-items:center;min-height:36px;border:1px solid #356254;border-radius:999px;padding:7px 11px;background:#102a25;color:#dff8ee;text-decoration:none;font-size:12px;font-weight:850}
 .alphaPlaceHours{margin-top:10px;font-size:12px;color:#b7c8c2}.alphaPlaceHours summary{cursor:pointer;font-weight:850;color:#d9e8e3}
+.alphaTestVersion{display:inline-block;margin-left:8px;padding:3px 7px;border:1px solid rgba(85,230,174,.28);border-radius:999px;color:#8ea79f;font-size:10px;font-weight:800;letter-spacing:.04em;vertical-align:1px;text-transform:none}
+
 
 
 .alphaDecisionOverlay{position:fixed;inset:0;z-index:99999;background:rgba(2,10,13,.78);backdrop-filter:blur(10px);display:grid;place-items:center;padding:18px}
@@ -1018,7 +1020,7 @@ body.alphaComposeMode .bottom{display:none!important}
 <section id="home" class="view active">
 
   <div class="card lifestyleAI" id="lifestyleAI">
-    <div class="aiTopbar"><div class="eyebrow">ALPHA</div><div class="aiTopActions"><button onclick="alphaNewConversation()">＋ Nova</button><button onclick="alphaOpenHistory()">☰ Histórico</button></div><button class="aiChatMenuBtn" type="button" onclick="alphaToggleChatMenu(event)" aria-label="Menu da Alpha">☰</button></div>
+    <div class="aiTopbar"><div class="eyebrow">ALPHA <span class="alphaTestVersion" id="alphaTestVersion"></span></div><div class="aiTopActions"><button onclick="alphaNewConversation()">＋ Nova</button><button onclick="alphaOpenHistory()">☰ Histórico</button></div><button class="aiChatMenuBtn" type="button" onclick="alphaToggleChatMenu(event)" aria-label="Menu da Alpha">☰</button></div>
     <h1>O que queres <span class="green">fazer hoje?</span></h1>
     <p class="muted lifestyleAILead">Diz à Alpha o que te apetece, o tempo que tens, com quem vais ou simplesmente conta-lhe o contexto. A aplicação adapta as ferramentas ao teu objetivo — não és tu que tens de te adaptar à aplicação.</p>
     <div class="lifestyleQuick">
@@ -1775,7 +1777,7 @@ function alphaStartCompass(){
   alphaSetCompassRotation(0);
   alphaAllLogos().forEach(el=>el.classList.remove('compassLive'));
   alphaAllLogos().forEach(el=>el.classList.add('compassSeeking'));
-  alphaCompassStatus('A iniciar a Alpha…');
+  alphaCompassStatus('A iniciar a ALPHA '+APP_VERSION+' · TESTE…');
   setTimeout(alphaFinishLogoIntro,2950);
 }
 async function alphaRequestCompassPermission(){
@@ -5704,6 +5706,8 @@ setTimeout(alphaFitShell,180);
 
 setTimeout(()=>{
   if(authUser())alphaAfterLogin34();
+  const alphaTestVersion=document.getElementById('alphaTestVersion');
+  if(alphaTestVersion)alphaTestVersion.textContent=ALPHA_VISIBLE_VERSION;
   alphaApplyIconSystem(document);
   setTimeout(async()=>{
     await alphaHandleIncomingDecisionLink();
@@ -5713,6 +5717,7 @@ setTimeout(()=>{
 
 </script>
 
-<script>window.ALPHA_DOMAIN_GATE_BUILD='3.6.0-visual-place-cards-google-places';</script>
+<script>const ALPHA_VISIBLE_VERSION='v3.6.0 · TEST';
+window.ALPHA_DOMAIN_GATE_BUILD='3.6.0-visual-place-cards-google-places';</script>
 </body>
 </html>
