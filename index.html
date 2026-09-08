@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="3.5.8">
+<meta name="alpha-version" content="3.6.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 3.5.8 — AI Chat App Mode</title>
+<title>Project Alpha 3.6.0 — AI Chat App Mode</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -299,7 +299,7 @@ button.active *,button.selected *,.btn.active *,.btn.selected *{color:#fff!impor
 
 
 /* ============================================================
-   ALPHA 3.5.8 · CONTEXT · TRUST · TRIP PLANNER — CONTINUITY LAYER
+   ALPHA 3.6.0 · CONTEXT · TRUST · TRIP PLANNER — CONTINUITY LAYER
    Mantém integralmente o core 2.4.0 e acrescenta a nova interface.
    ============================================================ */
 .lifestyleAI{border:1px solid #3e5f57;background:
@@ -423,7 +423,7 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 
 
 /* ============================================================
-   ALPHA 3.5.8 · AI CHAT APP MODE
+   ALPHA 3.6.0 · AI CHAT APP MODE
    Conversa iniciada = experiência full-screen semelhante a uma app AI.
    ============================================================ */
 .aiChatMenuBtn{display:none;border:1px solid #3b5b61;background:#10242b;color:#e8fbf5;border-radius:12px;padding:8px 11px;font-weight:900;cursor:pointer}
@@ -623,7 +623,7 @@ body.alphaChatMode #lifestyleAI .lifestyleThread{
 }
 
 
-/* ===== ALPHA 3.5.8 · WELCOME + NORTH-LOCK COMPASS IDENTITY ===== */
+/* ===== ALPHA 3.6.0 · WELCOME + NORTH-LOCK COMPASS IDENTITY ===== */
 .logo{
   --compass-rotation:0deg;
   overflow:visible;
@@ -724,7 +724,7 @@ body.alphaChatMode #lifestyleAI .lifestyleThread{
 
 
 /* ============================================================
-   ALPHA 3.5.8 · UNIFIED MINIMAL ICON SYSTEM
+   ALPHA 3.6.0 · UNIFIED MINIMAL ICON SYSTEM
    SVG line icons, sem dependências externas. Emojis ficam reservados
    para conteúdo/conversa e deixam de ser linguagem estrutural do UX.
    ============================================================ */
@@ -767,6 +767,30 @@ button.alphaIconified,.btn.alphaIconified,.nav.alphaIconified{display:inline-fle
 .alphaContextAction .alphaSpotifyMeta{font-size:10px;color:var(--muted);margin-left:4px}
 .alphaShareStatus{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:11px;color:#9eb2ab}
 .alphaShareStatus.accepted{color:#55e6ae}.alphaShareStatus.rejected{color:#ef9a9a}.alphaShareStatus.changes_requested{color:#f0cc7a}
+.alphaPlaceCards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:12px;margin:14px 0 6px}
+.alphaPlaceCard{overflow:hidden;border:1px solid #29463f;border-radius:20px;background:#0a1d20}
+.alphaPlacePhoto{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#10292a}
+.alphaPlaceBody{padding:14px}.alphaPlaceCategory{font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#58dfaa}
+.alphaPlaceName{font-size:18px;font-weight:900;line-height:1.2;margin:4px 0 7px}.alphaPlaceRating{display:flex;align-items:center;gap:7px;font-size:13px;margin:7px 0}
+.alphaPlaceRating b{font-size:15px}.alphaStars{letter-spacing:1px;color:#f3c969}.alphaPlaceMeta{font-size:12px;color:#a9bbb5;line-height:1.45;margin-top:6px}
+.alphaPlaceDesc{font-size:13px;line-height:1.45;margin-top:9px}.alphaPlaceLinks{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.alphaPlaceLinks a{display:inline-flex;align-items:center;min-height:36px;border:1px solid #356254;border-radius:999px;padding:7px 11px;background:#102a25;color:#dff8ee;text-decoration:none;font-size:12px;font-weight:850}
+.alphaPlaceHours{margin-top:10px;font-size:12px;color:#b7c8c2}.alphaPlaceHours summary{cursor:pointer;font-weight:850;color:#d9e8e3}
+
+
+.alphaDecisionOverlay{position:fixed;inset:0;z-index:99999;background:rgba(2,10,13,.78);backdrop-filter:blur(10px);display:grid;place-items:center;padding:18px}
+.alphaDecisionCard{width:min(620px,100%);max-height:calc(100dvh - 36px);overflow:auto;background:linear-gradient(180deg,#0b2324,#091820);border:1px solid #31544d;border-radius:26px;padding:22px;box-shadow:0 28px 80px rgba(0,0,0,.55)}
+.alphaDecisionBrand{color:#55e6ae;font-size:12px;font-weight:950;letter-spacing:.14em}
+.alphaDecisionCard h2{font-size:28px;line-height:1.08;margin:10px 0 8px}
+.alphaDecisionQuestion{color:#a9bbb5;line-height:1.45;margin-bottom:16px}
+.alphaDecisionSummary{white-space:pre-line;line-height:1.5;background:#0b1c22;border:1px solid #2a443e;border-radius:18px;padding:15px;margin:14px 0}
+.alphaDecisionPlaylist{margin-top:14px;padding-top:12px;border-top:1px solid #28443d}
+.alphaDecisionPlaylist a{color:#74e9bd;overflow-wrap:anywhere}
+.alphaDecisionActions{display:grid;gap:10px;margin-top:18px}
+.alphaDecisionBtn{min-height:52px;border-radius:15px;border:1px solid #386255;background:#123229;color:#fff;font:inherit;font-weight:900;padding:11px 15px}
+.alphaDecisionBtn.change{background:#162b36;border-color:#3c5664}.alphaDecisionBtn.reject{background:#2b1c1f;border-color:#68444a}.alphaDecisionBtn.secondary{background:#102027;color:#c7d6d1}
+.alphaDecisionTextarea{width:100%;min-height:125px;margin-top:8px;background:#07151a;color:#fff;border:1px solid #3c5860;border-radius:14px;padding:13px;font:inherit;resize:vertical}
+.alphaDecisionResult{margin-top:16px;padding:15px;border-radius:15px;background:#102c24;border:1px solid #34705c;line-height:1.45}
 
 .alphaContextAction .alphaIcon{width:16px;height:16px}
 .fileIcon .alphaIcon{width:18px;height:18px}
@@ -774,7 +798,7 @@ button.alphaIconified,.btn.alphaIconified,.nav.alphaIconified{display:inline-fle
 
 
 /* ============================================================
-   ALPHA 3.5.8 · CLEAN SURFACES + STATIC NORTH BRAND
+   ALPHA 3.6.0 · CLEAN SURFACES + STATIC NORTH BRAND
    ============================================================ */
 /* Nada técnico no ecrã principal. */
 #lifestyleState{display:none!important}
@@ -813,7 +837,7 @@ body.alphaChatMode #lifestyleAI .alphaComposerWrap{background:transparent!import
 
 
 /* ============================================================
-   ALPHA 3.5.8 · RESPONSIVE CHAT / NAV SHELL
+   ALPHA 3.6.0 · RESPONSIVE CHAT / NAV SHELL
    A moldura da Alpha termina sempre antes da navegação inferior.
    Quando a navegação não está visível, a moldura continua visível.
    ============================================================ */
@@ -872,7 +896,7 @@ body.alphaChatMode #lifestyleAI .alphaComposerWrap{
 
 
 /* ============================================================
-   ALPHA 3.5.8 · FRESH CHAT + KEYBOARD SAFE COMPOSER
+   ALPHA 3.6.0 · FRESH CHAT + KEYBOARD SAFE COMPOSER
    Nova conversa nunca pode perder o composer quando o teclado abre.
    ============================================================ */
 body.alphaComposeMode{
@@ -965,7 +989,7 @@ body.alphaComposeMode .bottom{display:none!important}
 </div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.5.8 · Family Login</small></div></div>
+    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.0 · Family Login</small></div></div>
     <div class="authWelcomeBrand"><div class="logo compassSeeking"></div><div class="alphaWelcomeEyebrow">ALPHA · OUTDOOR LIFESTYLE AI</div><h1>Bem-vindo à Alpha</h1><p>Descobrir · Confiar · Viver</p></div>
     <p class="muted" style="text-align:center">Escolhe o teu perfil para começares. Nesta versão Alpha usamos as 4 contas familiares de teste e o PIN <b>1234</b>.</p>
     <label>Utilizador</label>
@@ -983,7 +1007,7 @@ body.alphaComposeMode .bottom{display:none!important}
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.5.8 · Context · Trust · Trip Planner</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.0 · Context · Trust · Trip Planner</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -1079,7 +1103,7 @@ body.alphaComposeMode .bottom{display:none!important}
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 3.5.8 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 3.6.0 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
       <div class="eyebrow">AI JOURNEY · MULTI-STOP</div>
@@ -1717,7 +1741,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='3.5.8',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='3.6.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -1727,7 +1751,7 @@ const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience',
 const ALPHA_LAST_WELCOME_PREFIX='alpha_last_welcome_';
 let alphaWelcomeTimer=null;
 
-/* ALPHA 3.5.8 — o logótipo é identidade, não instrumento de navegação.
+/* ALPHA 3.6.0 — o logótipo é identidade, não instrumento de navegação.
    Faz uma curta animação de entrada e termina sempre alinhado a Norte. */
 function alphaAllLogos(){return [...document.querySelectorAll('.logo')]}
 function alphaSetCompassRotation(deg=0){
@@ -4510,9 +4534,10 @@ document.addEventListener('visibilitychange',()=>{
     navigator.serviceWorker.getRegistration().then(r=>r&&r.update().catch(()=>{}));
     restoreActiveRoute();refreshHeaderWeather(false);if(map)renderExploreRoute();
 
-    // Regra 3.5.8: regressar à Alpha começa sempre numa conversa nova.
+    // Regra 3.6.0: regressar à Alpha começa sempre numa conversa nova.
     // A conversa anterior e o respetivo rascunho ficam preservados no Histórico.
-    if(authUser() && alphaBackgroundedAt && Date.now()-alphaBackgroundedAt>350){
+    const incomingDecision=new URLSearchParams(location.search).has('alpha_share');
+    if(authUser() && !incomingDecision && alphaBackgroundedAt && Date.now()-alphaBackgroundedAt>350){
       alphaStartFreshConversation({focus:false,compose:false});
       setTimeout(()=>alphaShowWelcome({firstForUser:false}),80);
     }
@@ -4550,7 +4575,7 @@ window.addEventListener('resize',()=>{clearTimeout(window._orientationResize);wi
 adaptOrientation();
 
 /* ============================================================
-   ALPHA 3.5.8 · CONTEXT · TRUST · TRIP PLANNER + CONVERSATION MANAGER
+   ALPHA 3.6.0 · CONTEXT · TRUST · TRIP PLANNER + CONVERSATION MANAGER
    ============================================================ */
 const ALPHA_CONVERSATIONS_KEY='alpha_ai_conversations_v1_';
 const ALPHA_ACTIVE_CONVERSATION_KEY='alpha_ai_active_conversation_v1_';
@@ -4700,6 +4725,39 @@ function alphaRenderMessageText(raw){
   return blocks.join('');
 }
 
+
+function alphaPlacePhotoUrl(p){
+  const raw=String(p?.photo||'').trim();
+  if(!raw)return'';
+  if(/^https?:\/\//i.test(raw))return raw;
+  return raw.startsWith('/')?alphaBackendUrl()+raw:'';
+}
+function alphaPriceLevelLabel(v){
+  return ({PRICE_LEVEL_FREE:'Grátis',PRICE_LEVEL_INEXPENSIVE:'€',PRICE_LEVEL_MODERATE:'€€',PRICE_LEVEL_EXPENSIVE:'€€€',PRICE_LEVEL_VERY_EXPENSIVE:'€€€€'})[String(v||'')]||'';
+}
+function alphaStars(r){const n=Math.max(0,Math.min(5,Math.round(Number(r)||0)));return'★'.repeat(n)+'☆'.repeat(5-n)}
+function alphaRenderPlaceCards(m){
+  const cards=Array.isArray(m?.placeCards)?m.placeCards.filter(x=>x&&x.name):[];
+  if(!cards.length)return'';
+  return `<div class="alphaPlaceCards">${cards.map(p=>{
+    const photo=alphaPlacePhotoUrl(p),rating=Number.isFinite(Number(p.rating))?Number(p.rating):null;
+    const reviews=Number.isFinite(Number(p.reviews))?Number(p.reviews):null,price=alphaPriceLevelLabel(p.priceLevel);
+    const hours=Array.isArray(p.openingHours)?p.openingHours.filter(Boolean):[];
+    return `<article class="alphaPlaceCard">
+      ${photo?`<img class="alphaPlacePhoto" src="${esc(photo)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none'">`:''}
+      <div class="alphaPlaceBody">
+        ${p.category?`<div class="alphaPlaceCategory">${esc(p.category)}</div>`:''}
+        <div class="alphaPlaceName">${esc(p.name)}</div>
+        ${rating!==null?`<div class="alphaPlaceRating"><span class="alphaStars">${alphaStars(rating)}</span><b>${rating.toFixed(1)}</b>${reviews!==null?`<span class="alphaPlaceMeta">${reviews.toLocaleString('pt-PT')} avaliações</span>`:''}</div>`:''}
+        ${[p.address,price].filter(Boolean).length?`<div class="alphaPlaceMeta">${[p.address,price].filter(Boolean).map(esc).join(' · ')}</div>`:''}
+        ${p.description?`<div class="alphaPlaceDesc">${esc(p.description)}</div>`:''}
+        ${hours.length?`<details class="alphaPlaceHours"><summary>Horários</summary><div>${hours.map(esc).join('<br>')}</div></details>`:''}
+        ${(p.maps||p.website)?`<div class="alphaPlaceLinks">${p.maps?`<a href="${esc(p.maps)}" target="_blank" rel="noopener">Ver no mapa</a>`:''}${p.website?`<a href="${esc(p.website)}" target="_blank" rel="noopener">Site</a>`:''}</div>`:''}
+      </div>
+    </article>`;
+  }).join('')}</div>`;
+}
+
 function alphaResponseActions(i,m){
   const up=m.rating==='up'?' aria-pressed="true"':'',down=m.rating==='down'?' aria-pressed="true"':'';
   return `<div class="aiResponseActions" aria-label="Ações da resposta">
@@ -4727,7 +4785,7 @@ function renderAlphaLifestyleThread(){
   host.classList.add('show');
   host.innerHTML='<div class="small muted" style="margin-bottom:8px">● '+esc(c.title)+alphaStatusSignal(c.id)+'</div>'+
     h.map((m,i)=>{
-      const msg='<div class="lifestyleMsg '+m.role+'">'+(m.role==='ai'?alphaRenderMessageText(m.text):esc(m.text).replace(/\n/g,'<br>'))+'</div>';
+      const msg='<div class="lifestyleMsg '+m.role+'">'+(m.role==='ai'?alphaRenderMessageText(m.text):esc(m.text).replace(/\n/g,'<br>'))+'</div>'+(m.role==='ai'?alphaRenderPlaceCards(m):'');
       const atts=Array.isArray(m.attachments)&&m.attachments.length?'<div class="alphaMsgAttachments">'+m.attachments.map(a=>'<span class="alphaMsgAttachment">'+(String(a.type||'').startsWith('image/')?'🖼️ ':'📎 ')+esc(a.name||'anexo')+'</span>').join('')+'</div>':'';
       return msg+atts+(m.role==='ai'?(alphaContextActions(m,i)+alphaResponseActions(i,m)):'');
     }).join('')+(alphaPendingRequests.has(c.id)?alphaGeneratingRow():'');
@@ -4846,7 +4904,7 @@ function alphaToggleMic(){
 
 
 /* ============================================================
-   ALPHA 3.5.8 · ICON RUNTIME + CONTEXTUAL SPOTIFY ACTION
+   ALPHA 3.6.0 · ICON RUNTIME + CONTEXTUAL SPOTIFY ACTION
    ============================================================ */
 const ALPHA_ICON_PATHS={
   plus:'<path d="M12 5v14M5 12h14"/>',
@@ -5085,8 +5143,144 @@ function alphaOpenSpotifyPlaylist(p){
     setTimeout(()=>{if(!left&&document.visibilityState==='visible'&&p.url)location.href=p.url},850);
   }else if(p.url)location.href=p.url;
 }
+
+function alphaDecisionEsc(v){
+  return esc(String(v??''));
+}
+function alphaDecisionStatusLabel(status){
+  return status==='accepted'?'Plano aceite'
+    :status==='rejected'?'Plano rejeitado'
+    :status==='changes_requested'?'Alteração enviada'
+    :'A aguardar decisão';
+}
+function alphaDecisionCleanUrl(){
+  const u=new URL(location.href);
+  u.searchParams.delete('alpha_share');
+  u.searchParams.delete('alpha_action');
+  history.replaceState(null,'',u.pathname+u.search+u.hash);
+}
+function alphaDecisionClose(){
+  document.getElementById('alphaDecisionOverlay')?.remove();
+  alphaDecisionCleanUrl();
+}
+function alphaDecisionRender(share,action){
+  document.getElementById('alphaDecisionOverlay')?.remove();
+
+  const overlay=document.createElement('div');
+  overlay.id='alphaDecisionOverlay';
+  overlay.className='alphaDecisionOverlay';
+
+  const status=String(share?.status||'pending');
+  const finished=status!=='pending';
+  const actionSafe=['accept','change','reject'].includes(action)?action:'accept';
+  const actionTitle=actionSafe==='accept'?'Aceitar plano':actionSafe==='reject'?'Rejeitar plano':'Sugerir alteração';
+
+  const playlist=share?.playlistUrl
+    ? `<div class="alphaDecisionPlaylist">🎵 <b>${alphaDecisionEsc(share.playlistName||'Playlist da experiência')}</b><br><a href="${alphaDecisionEsc(share.playlistUrl)}" target="_blank" rel="noopener">${alphaDecisionEsc(share.playlistUrl)}</a></div>`
+    :'';
+
+  let actionArea='';
+  if(finished){
+    const suggestion=status==='changes_requested'&&share?.suggestion
+      ? `<div class="alphaDecisionSummary">✎ ${alphaDecisionEsc(share.suggestion)}</div>`
+      :'';
+    actionArea=`<div class="alphaDecisionResult"><b>${alphaDecisionEsc(alphaDecisionStatusLabel(status))}</b>${suggestion}</div>
+      <div class="alphaDecisionActions"><button class="alphaDecisionBtn secondary" type="button" onclick="alphaDecisionClose()">Fechar</button></div>`;
+  }else if(actionSafe==='change'){
+    actionArea=`<label class="alphaDecisionQuestion" for="alphaDecisionSuggestion">O que gostarias de alterar?</label>
+      <textarea id="alphaDecisionSuggestion" class="alphaDecisionTextarea" maxlength="1200" placeholder="Ex.: Preferia almoçar mais cedo..."></textarea>
+      <div class="alphaDecisionActions">
+        <button class="alphaDecisionBtn change" type="button" onclick="alphaSubmitDecision('${alphaDecisionEsc(share.id)}','change')">✎ Enviar sugestão</button>
+        <button class="alphaDecisionBtn secondary" type="button" onclick="alphaDecisionClose()">Cancelar</button>
+      </div>`;
+  }else{
+    const cls=actionSafe==='reject'?'reject':'';
+    const icon=actionSafe==='accept'?'✓':'✕';
+    actionArea=`<div class="alphaDecisionActions">
+      <button class="alphaDecisionBtn ${cls}" type="button" onclick="alphaSubmitDecision('${alphaDecisionEsc(share.id)}','${actionSafe}')">${icon} ${alphaDecisionEsc(actionTitle)}</button>
+      <button class="alphaDecisionBtn secondary" type="button" onclick="alphaDecisionClose()">Cancelar</button>
+    </div>`;
+  }
+
+  overlay.innerHTML=`<section class="alphaDecisionCard" role="dialog" aria-modal="true" aria-label="Decisão PROJECT ALPHA">
+    <div class="alphaDecisionBrand">PROJECT ALPHA · DECISÃO</div>
+    <h2>${alphaDecisionEsc(share?.title||'Experiência Alpha')}</h2>
+    <div class="alphaDecisionQuestion">${alphaDecisionEsc(share?.question||'Que te parece este plano?')}</div>
+    <div class="alphaDecisionSummary">${alphaDecisionEsc(share?.summary||'')}${playlist}</div>
+    ${actionArea}
+  </section>`;
+  document.body.appendChild(overlay);
+}
+async function alphaSubmitDecision(id,action){
+  try{
+    const suggestion=action==='change'
+      ? String(document.getElementById('alphaDecisionSuggestion')?.value||'').trim()
+      :'';
+    if(action==='change'&&!suggestion){
+      toast('Escreve primeiro a alteração que queres sugerir.');
+      document.getElementById('alphaDecisionSuggestion')?.focus();
+      return;
+    }
+
+    const r=await fetch(alphaBackendUrl()+'/api/share/'+encodeURIComponent(id)+'/respond',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action,suggestion})
+    });
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok||!d.share)throw new Error(d.error||'Não foi possível registar a decisão.');
+
+    const status=d.share.status;
+    const box=document.querySelector('#alphaDecisionOverlay .alphaDecisionCard');
+    if(box){
+      box.innerHTML=`<div class="alphaDecisionBrand">PROJECT ALPHA · RESPOSTA REGISTADA</div>
+        <h2>${alphaDecisionEsc(alphaDecisionStatusLabel(status))}</h2>
+        <div class="alphaDecisionResult">${status==='accepted'
+          ?'✓ A aprovação ficou registada.'
+          :status==='rejected'
+            ?'✕ A rejeição ficou registada.'
+            :'✎ A tua sugestão ficou associada a esta experiência.'}
+          ${d.share.suggestion?`<div class="alphaDecisionSummary">${alphaDecisionEsc(d.share.suggestion)}</div>`:''}
+        </div>
+        <div class="alphaDecisionActions"><button class="alphaDecisionBtn secondary" type="button" onclick="alphaDecisionClose()">Fechar</button></div>`;
+    }
+  }catch(e){
+    toast(String(e.message||e));
+  }
+}
+async function alphaHandleIncomingDecisionLink(){
+  const qs=new URLSearchParams(location.search);
+  const id=String(qs.get('alpha_share')||'').trim();
+  const action=String(qs.get('alpha_action')||'').trim();
+  if(!id||!['accept','change','reject'].includes(action))return false;
+
+  try{
+    const r=await fetch(alphaBackendUrl()+'/api/share/'+encodeURIComponent(id),{cache:'no-store'});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok||!d.share)throw new Error(d.error||'Esta proposta já não está disponível.');
+    alphaDecisionRender(d.share,action);
+    return true;
+  }catch(e){
+    const overlay=document.createElement('div');
+    overlay.id='alphaDecisionOverlay';
+    overlay.className='alphaDecisionOverlay';
+    overlay.innerHTML=`<section class="alphaDecisionCard"><div class="alphaDecisionBrand">PROJECT ALPHA</div>
+      <h2>Proposta indisponível</h2>
+      <div class="alphaDecisionQuestion">${alphaDecisionEsc(e.message||e)}</div>
+      <div class="alphaDecisionActions"><button class="alphaDecisionBtn secondary" type="button" onclick="alphaDecisionClose()">Fechar</button></div></section>`;
+    document.body.appendChild(overlay);
+    return false;
+  }
+}
+
 async function alphaEnsureShareDecision(c,m){
-  if(m?.alphaShare?.id&&m?.alphaShare?.acceptUrl&&m?.alphaShare?.changeUrl&&m?.alphaShare?.rejectUrl)return m.alphaShare;
+  const hasShare=Boolean(m?.alphaShare?.id&&m?.alphaShare?.acceptUrl&&m?.alphaShare?.changeUrl&&m?.alphaShare?.rejectUrl);
+  const legacyRenderLinks=hasShare&&[m.alphaShare.acceptUrl,m.alphaShare.changeUrl,m.alphaShare.rejectUrl].some(u=>/\.onrender\.com\/share\//i.test(String(u||'')));
+  if(hasShare&&!legacyRenderLinks)return m.alphaShare;
+  if(legacyRenderLinks){
+    delete m.alphaShare;
+    delete m.alphaShareStatus;
+  }
   const playlist=m?.spotifyPlaylist?.url?m.spotifyPlaylist:alphaLatestPlaylistForConversation(c);
   const title=String(c?.title||'Experiência Alpha').trim();
   const summary=alphaCleanWhatsAppText(m?.shareSummary||m?.text||'');
@@ -5356,7 +5550,8 @@ async function alphaLifestyleSend(){
       whatsappShare:Boolean(contextualWhatsApp),
       shareSummary:contextualWhatsApp?String(d.shareSummary||reply).trim():'',
       shareAudience:contextualWhatsApp?(d.shareAudience&&d.shareAudience!=='none'?d.shareAudience:alphaShareAudienceFromPrompt(displayText)):'none',
-      shareQuestion:contextualWhatsApp?String(d.shareQuestion||alphaShareQuestion(alphaShareAudienceFromPrompt(displayText))).trim():''
+      shareQuestion:contextualWhatsApp?String(d.shareQuestion||alphaShareQuestion(alphaShareAudienceFromPrompt(displayText))).trim():'',
+      placeCards:real&&d&&Array.isArray(d.placeCards)?d.placeCards.slice(0,18):[]
     });
   }
 
@@ -5430,12 +5625,12 @@ function alphaOpenPathsHub(){go('field');setTimeout(()=>$('mapPathsHub')?.scroll
 function alphaMigrateLegacyChat(){const oldKey=userKey('alpha_lifestyle_chat_v2_'),done=userKey('alpha_ai_migrated_34_');if(localStorage.getItem(done))return;try{const old=JSON.parse(localStorage.getItem(oldKey)||'[]');if(Array.isArray(old)&&old.length&&!alphaConversations().length){const first=old.find(x=>x.role==='user')?.text||'Experiência anterior',c=alphaCreateConversation(first);c.messages=old.map(m=>({role:m.role,text:m.text,at:new Date().toISOString(),source:'legacy-3.3'}));alphaUpsertConversation(c)}}catch{}localStorage.setItem(done,'1')}
 function alphaAfterLogin34(){
   alphaMigrateLegacyChat();
-  // Regra 3.5.8: abrir a Alpha nunca retoma silenciosamente uma conversa antiga.
+  // Regra 3.6.0: abrir a Alpha nunca retoma silenciosamente uma conversa antiga.
   // O histórico permanece intacto e só é retomado por escolha explícita.
   alphaStartFreshConversation({focus:false,compose:false});
 }
 
-/* ALPHA 3.5.8 · shell fitting
+/* ALPHA 3.6.0 · shell fitting
    Mede a barra inferior em vez de assumir uma altura fixa. */
 let alphaShellRAF=0;
 function alphaFitShell(){
@@ -5510,11 +5705,14 @@ setTimeout(alphaFitShell,180);
 setTimeout(()=>{
   if(authUser())alphaAfterLogin34();
   alphaApplyIconSystem(document);
-  setTimeout(()=>alphaResumeSpotifyPending(),220);
+  setTimeout(async()=>{
+    await alphaHandleIncomingDecisionLink();
+    await alphaResumeSpotifyPending();
+  },220);
 },160);
 
 </script>
 
-<script>window.ALPHA_DOMAIN_GATE_BUILD='3.5.8-whatsapp-share-id-accept-change-reject';</script>
+<script>window.ALPHA_DOMAIN_GATE_BUILD='3.6.0-visual-place-cards-google-places';</script>
 </body>
 </html>
