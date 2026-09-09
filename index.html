@@ -2152,32 +2152,35 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 .alphaSpotifyRemote button.busy{opacity:.55}
 @media(max-width:380px){.alphaSpotifyRemote{grid-template-columns:repeat(4,42px)!important;gap:9px!important}.alphaSpotifyRemote button{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important}}
 
-/* ALPHA 4.2 · Global Spotify Remote */
-.alphaSpotifyGlobal{position:fixed;z-index:2147482500;right:18px;top:calc(env(safe-area-inset-top,0px) + 86px);pointer-events:none}
+/* ALPHA 4.3.1 · CLEAN SPOTIFY REMOTE — footer driven, compact, artwork background */
+.alphaSpotifyGlobal{position:fixed;z-index:2147482500;inset:0;pointer-events:none}
 .alphaSpotifyGlobal[hidden]{display:none!important}
-.alphaSpotifyFab{pointer-events:auto;width:58px;height:58px;border:0;border-radius:50%;display:grid;place-items:center;background:#fff;box-shadow:0 7px 24px rgba(0,0,0,.24);padding:0}
-.alphaSpotifyLogoGlyph{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#1ed760;color:#071b10;font-size:0}
-.alphaSpotifyLogoGlyph:before{content:'♫';font-size:22px;font-weight:900;color:#071b10}
-.alphaSpotifyFab.playing .alphaSpotifyLogoGlyph{box-shadow:0 0 0 5px rgba(30,215,96,.15)}
-.alphaSpotifyOverlay{pointer-events:auto;position:absolute;right:0;top:68px;width:min(390px,calc(100vw - 28px));padding:16px;border-radius:24px;background:rgba(15,24,25,.97);border:1px solid rgba(82,221,157,.3);box-shadow:0 18px 55px rgba(0,0,0,.42);backdrop-filter:blur(18px)}
+.alphaSpotifyFab{display:none!important}
+.alphaSpotifyOverlay{pointer-events:auto;position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 112px);transform:translateX(-50%);width:min(430px,calc(100vw - 28px));min-height:220px;padding:18px 20px 17px;border-radius:28px;overflow:hidden;background:rgba(12,18,19,.94);border:1px solid rgba(255,255,255,.16);box-shadow:0 18px 55px rgba(0,0,0,.48);isolation:isolate}
+.alphaSpotifyOverlay::before{content:'';position:absolute;z-index:-2;inset:-22px;background-image:linear-gradient(rgba(6,10,11,.52),rgba(6,10,11,.68)),var(--alpha-spotify-art,none);background-size:cover;background-position:center;filter:blur(8px) saturate(1.08);transform:scale(1.08)}
+.alphaSpotifyOverlay::after{content:'';position:absolute;z-index:-1;inset:0;background:linear-gradient(180deg,rgba(5,9,10,.18),rgba(5,9,10,.62))}
 .alphaSpotifyOverlay[hidden]{display:none!important}
-.alphaSpotifyOverlayHead{display:flex;align-items:center;gap:12px}
-.alphaSpotifyNow{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
-.alphaSpotifyNow img{width:58px;height:58px;border-radius:10px;object-fit:cover;flex:0 0 auto}
+.alphaSpotifyOverlayHead{display:flex;align-items:flex-start;gap:10px;min-height:60px}
+.alphaSpotifyNow{min-width:0;flex:1;display:block;padding-right:4px}
+.alphaSpotifyNow img{display:none!important}
 .alphaSpotifyNow div{min-width:0;display:grid;gap:2px}
-.alphaSpotifyNow b,.alphaSpotifyNow span,.alphaSpotifyNow small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.alphaSpotifyNow b{font-size:16px}.alphaSpotifyNow span{font-size:13px;opacity:.78}.alphaSpotifyNow small{font-size:11px;opacity:.56}
-.alphaSpotifyClose{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:26px;line-height:1}
-.alphaSpotifyProgress{height:3px;background:rgba(255,255,255,.12);border-radius:9px;overflow:hidden;margin:14px 2px}
-.alphaSpotifyProgress i{display:block;height:100%;width:0;background:#1ed760;border-radius:inherit;transition:width .35s linear}
-.alphaSpotifyGlobalControls{display:grid;grid-template-columns:repeat(4,52px);justify-content:center;align-items:center;gap:13px}
-.alphaSpotifyGlobalControls button{width:52px;height:52px;border-radius:50%;padding:0;display:grid;place-items:center}
-.alphaSpotifyGlobalControls button span{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;line-height:1}
-.alphaSpotifyGlobalControls button.main{width:58px;height:58px;margin:-3px}
-.alphaSpotifyGlobalControls button.main.playing span{transform:translateY(-1px)} /* só corrige opticamente a pausa */
-.alphaSpotifyGlobalControls button.active{border-color:#1ed760;color:#1ed760}
-.alphaSpotifyGlobalNote{font-size:12px;text-align:center;margin-top:10px;color:#ffd46a;min-height:0}
-@media(max-width:390px){.alphaSpotifyGlobal{right:12px}.alphaSpotifyOverlay{right:0}.alphaSpotifyGlobalControls{grid-template-columns:repeat(4,48px);gap:10px}.alphaSpotifyGlobalControls button{width:48px;height:48px}}
+.alphaSpotifyNow b,.alphaSpotifyNow span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 8px rgba(0,0,0,.55)}
+.alphaSpotifyNow b{font-size:22px;line-height:1.18}.alphaSpotifyNow span{font-size:16px;opacity:.9}.alphaSpotifyNow small{display:none!important}
+.alphaSpotifyTopActions{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+.alphaSpotifyShuffleTop,.alphaSpotifyClose{width:38px;height:38px;min-width:38px;border-radius:50%;padding:0;display:grid;place-items:center;background:rgba(8,12,13,.38);border:1px solid rgba(255,255,255,.22);color:#fff;backdrop-filter:blur(8px)}
+.alphaSpotifyShuffleTop{font-size:18px}.alphaSpotifyShuffleTop.active{color:#1ed760;border-color:rgba(30,215,96,.7);background:rgba(8,35,18,.48)}
+.alphaSpotifyClose{font-size:27px;line-height:1;font-weight:400}
+.alphaSpotifyProgress{height:4px;background:rgba(255,255,255,.30);border-radius:99px;overflow:hidden;margin:17px 0 5px}
+.alphaSpotifyProgress i{display:block;height:100%;width:0;background:#fff;border-radius:inherit;transition:width .35s linear}
+.alphaSpotifyTimes{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.78);font-variant-numeric:tabular-nums;margin-bottom:10px}
+.alphaSpotifyGlobalControls{display:grid;grid-template-columns:64px 78px 64px;justify-content:center;align-items:center;gap:22px}
+.alphaSpotifyGlobalControls button{width:64px;height:64px;border:0;background:transparent;color:#fff;padding:0;display:grid;place-items:center;border-radius:50%}
+.alphaSpotifyGlobalControls button span{display:flex;width:100%;height:100%;align-items:center;justify-content:center;font-size:36px;font-weight:800;line-height:1}
+.alphaSpotifyGlobalControls button.main{width:78px;height:78px;background:rgba(255,255,255,.94);color:#101516;box-shadow:0 4px 18px rgba(0,0,0,.28)}
+.alphaSpotifyGlobalControls button.main span{font-size:34px}.alphaSpotifyGlobalControls button.main.playing span{transform:translateY(-1px)}
+.alphaSpotifyGlobalControls button.busy{opacity:.55}
+.alphaSpotifyGlobalNote{font-size:12px;text-align:center;margin-top:8px;color:#ffd46a;min-height:0}
+@media(max-width:390px){.alphaSpotifyOverlay{width:calc(100vw - 20px);bottom:calc(env(safe-area-inset-bottom,0px) + 104px);padding:16px 17px}.alphaSpotifyGlobalControls{grid-template-columns:58px 72px 58px;gap:18px}.alphaSpotifyGlobalControls button{width:58px;height:58px}.alphaSpotifyGlobalControls button.main{width:72px;height:72px}}
 
 /* ALPHA 4.2.2 · Premium navigation entitlement fix
    GOLD / PLATINUM / ORGANIZATION do not see "Premium" in footer or sidebar. */
@@ -2199,16 +2202,6 @@ nav.bottom .nav{min-width:0!important;padding:8px 2px!important}
 nav.bottom .nav > span:last-child{font-size:clamp(9px,2.5vw,12px)!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .alphaCalendarHubCard,.alphaCalendarAgendaCard{overflow:hidden}
 .alphaCalendarHubHead{display:flex;gap:14px;align-items:flex-start;justify-content:space-between}.alphaCalendarHubHead h1{margin:.2rem 0}.alphaCalendarProviderRow{display:flex;gap:8px;overflow:auto;padding:10px 0 4px}.alphaCalendarProviderRow span{white-space:nowrap;border:1px solid #294149;border-radius:999px;padding:7px 10px;color:var(--muted);font-size:12px}.alphaCalendarProviderRow .ready{color:#dffff2;border-color:#287b62;background:#10352d}.alphaCalendarToolbar{display:grid;grid-template-columns:42px 62px 1fr 42px;gap:8px;align-items:center;margin:14px 0 8px}.alphaCalendarToolbar button{height:40px;border:1px solid #294149;border-radius:12px;background:#10262e;color:#fff}.alphaCalendarToolbar b{text-align:center}.alphaCalendarWeek,.alphaCalendarGrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.alphaCalendarWeek span{text-align:center;color:var(--muted);font-size:11px;padding:6px 0}.alphaCalendarDay{min-height:72px;border:1px solid #263d44;border-radius:12px;background:#0b1a20;color:#fff;padding:7px;text-align:left;position:relative}.alphaCalendarDay.other{opacity:.35}.alphaCalendarDay.today{border-color:#35dca4;box-shadow:inset 0 0 0 1px rgba(53,220,164,.25)}.alphaCalendarDay.selected{background:#12362d}.alphaCalendarDayNum{font-weight:850}.alphaCalendarDots{display:flex;gap:3px;flex-wrap:wrap;margin-top:8px}.alphaCalendarDot{width:6px;height:6px;border-radius:50%;background:#35dca4}.alphaCalendarAgenda{display:flex;flex-direction:column;gap:9px}.alphaCalendarEvent{width:100%;border:1px solid #294149;border-radius:14px;background:#0d2026;color:#fff;padding:12px;text-align:left;display:grid;grid-template-columns:58px 1fr;gap:12px}.alphaCalendarEventTime{font-weight:900;color:#54e0b2}.alphaCalendarEvent small{display:block;color:var(--muted);margin-top:3px}.alphaCalendarEmpty{color:var(--muted);padding:16px 2px}.alphaCalendarEditor{position:fixed;z-index:2400;inset:0;background:rgba(0,0,0,.68);display:grid;place-items:center;padding:18px}.alphaCalendarEditor[hidden]{display:none!important}.alphaCalendarEditorCard{width:min(520px,100%);max-height:90vh;overflow:auto;background:#0b1b20;border:1px solid #34535b;border-radius:22px;padding:18px;box-shadow:0 24px 70px rgba(0,0,0,.55)}.alphaCalendarEditorHead{display:flex;justify-content:space-between;align-items:center;font-size:21px;margin-bottom:14px}.alphaCalendarEditorHead button{width:38px;height:38px;border:0;border-radius:50%;background:#1b2c31;color:#fff;font-size:26px}.alphaCalendarEditorCard label{display:flex;flex-direction:column;gap:6px;color:var(--muted);font-size:13px;margin:10px 0}.alphaCalendarEditorCard input,.alphaCalendarEditorCard textarea,.alphaCalendarEditorCard select{width:100%;box-sizing:border-box;background:#08161b;color:#fff;border:1px solid #294149;border-radius:12px;padding:12px;font:inherit}.alphaCalendarEditorCols{display:grid;grid-template-columns:1fr 1fr;gap:10px}.alphaCalendarEditorActions{display:flex;justify-content:flex-end;gap:9px;margin-top:14px}@media(max-width:520px){.alphaCalendarHubHead{display:block}.alphaCalendarHubHead .btn{margin-top:8px}.alphaCalendarDay{min-height:58px;padding:5px}.alphaCalendarEditorCols{grid-template-columns:1fr}.alphaCalendarToolbar{grid-template-columns:38px 58px 1fr 38px}}
-
-.alphaCalLinkedPlaces{margin:14px 0 4px;border-top:1px solid #294149;padding-top:12px}
-.alphaCalLinkedPlaces[hidden]{display:none!important}
-.alphaCalLinkedTitle{font-size:13px;font-weight:900;color:#54e0b2;text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px}
-.alphaCalLinkedCard{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px;align-items:start;border:1px solid #294149;border-radius:14px;background:#0d2026;padding:9px;margin:8px 0}
-.alphaCalLinkedCard img{width:72px;height:72px;border-radius:10px;object-fit:cover}
-.alphaCalLinkedCard b{display:block;color:#fff;margin-bottom:3px}
-.alphaCalLinkedCard small{display:block;color:var(--muted);line-height:1.35;margin-top:2px}
-.alphaCalLinkedCard a{display:inline-block;margin-top:6px;color:#62e7b9;font-size:12px;font-weight:800;text-decoration:none}
-@media(max-width:420px){.alphaCalLinkedCard{grid-template-columns:56px minmax(0,1fr)}.alphaCalLinkedCard img{width:56px;height:56px}}
 </style>
 </head>
 <body class="alphaWelcomeActive">
@@ -2843,7 +2836,6 @@ Estação de São Bento
     <div class="alphaCalendarEditorCols"><label>Fim<input id="alphaCalEndTime" type="time"></label><label>Origem<select id="alphaCalProvider"><option value="alpha">ALPHA</option><option value="google" disabled>Google · em breve</option><option value="outlook" disabled>Outlook · em breve</option><option value="apple" disabled>Apple · em breve</option></select></label></div>
     <label>Local<input id="alphaCalLocation" type="text" placeholder="Local opcional"></label>
     <label>Notas<textarea id="alphaCalNotes" rows="3" placeholder="Notas opcionais"></textarea></label>
-    <div id="alphaCalLinkedPlaces" class="alphaCalLinkedPlaces" hidden></div>
     <div class="alphaCalendarEditorActions"><button id="alphaCalDelete" class="btn secondary" type="button" onclick="alphaCalendarDeleteCurrent()" hidden>Eliminar</button><button class="btn green" type="button" onclick="alphaCalendarSaveEditor()">Guardar</button></div>
   </div>
 </div>
@@ -3047,7 +3039,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='4.3.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='4.3.1',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -7246,121 +7238,6 @@ function alphaCalendarEventsForMessage(i){
   const c=alphaCurrentConversation(),m=c?.messages?.[Number(i)||0];
   return Array.isArray(m?.calendarEvents)?m.calendarEvents.filter(e=>e&&e.title&&e.start):[];
 }
-function alphaCalendarMessageContext(i){
-  const c=alphaCurrentConversation(),m=c?.messages?.[Number(i)||0];
-  const events=Array.isArray(m?.calendarEvents)?m.calendarEvents.filter(e=>e&&e.title&&e.start):[];
-  const placeCards=Array.isArray(m?.placeCards)?m.placeCards.filter(p=>p&&p.name).slice(0,12):[];
-  return {conversation:c,message:m,events,placeCards};
-}
-function alphaCalendarDateOnly(v){
-  const m=String(v||'').match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if(m)return `${m[1]}-${m[2]}-${m[3]}`;
-  const d=new Date(v);
-  if(!Number.isFinite(d.getTime()))return'';
-  return `${d.getFullYear()}-${alphaCalendarPad(d.getMonth()+1)}-${alphaCalendarPad(d.getDate())}`;
-}
-function alphaCalendarTimeLabel(v){
-  const d=new Date(v);
-  if(!Number.isFinite(d.getTime()))return'';
-  return new Intl.DateTimeFormat('pt-PT',{hour:'2-digit',minute:'2-digit'}).format(d);
-}
-function alphaCalendarHumanDate(v){
-  const date=alphaCalendarDateOnly(v);if(!date)return'';
-  const d=new Date(date+'T12:00:00');
-  return new Intl.DateTimeFormat('pt-PT',{weekday:'short',day:'2-digit',month:'short',year:'numeric'}).format(d);
-}
-function alphaCalendarPlanTitle(ctx){
-  const c=ctx?.conversation,m=ctx?.message,events=ctx?.events||[];
-  return String(c?.title||m?.title||events[0]?.title||'Experiência ALPHA').trim();
-}
-function alphaCalendarPlanLocation(ctx){
-  const rows=(ctx?.events||[]).map(e=>String(e.location||'').trim()).filter(Boolean);
-  if(!rows.length)return'';
-  const uniq=[...new Set(rows)];
-  if(uniq.length===1)return uniq[0];
-  const cityish=uniq.map(x=>x.split(',')[0].trim()).filter(Boolean);
-  const c=[...new Set(cityish)];
-  return c.length===1?c[0]:uniq[0];
-}
-function alphaCalendarPlanRange(ctx){
-  const events=ctx?.events||[];
-  const starts=events.map(e=>alphaCalendarDateOnly(e.start)).filter(Boolean).sort();
-  const ends=events.map(e=>alphaCalendarDateOnly(e.end||e.start)).filter(Boolean).sort();
-  const start=starts[0]||'';
-  const visibleEnd=ends[ends.length-1]||starts[starts.length-1]||start;
-  // Google Calendar usa fim exclusivo para eventos de dia inteiro.
-  const googleEnd=visibleEnd?alphaCalendarAddDays(visibleEnd,1):'';
-  return {start,visibleEnd,googleEnd};
-}
-function alphaCalendarPlaceSummary(p){
-  const lines=[];
-  if(p.address)lines.push(`Morada: ${p.address}`);
-  if(p.openingHours)lines.push(`Horário: ${Array.isArray(p.openingHours)?p.openingHours.join(' · '):p.openingHours}`);
-  if(p.lastEntry)lines.push(`Última entrada: ${p.lastEntry}`);
-  const price=Array.isArray(p.prices)?p.prices.filter(Boolean).slice(0,3).join(' · '):p.prices;
-  if(price)lines.push(`Preços: ${price}`);
-  if(p.duration)lines.push(`Duração: ${p.duration}`);
-  const link=p.ticketUrl||p.website||p.url||'';
-  if(link)lines.push(`Mais informação: ${link}`);
-  return lines;
-}
-function alphaCalendarPlanDescription(ctx){
-  const events=ctx?.events||[],cards=ctx?.placeCards||[];
-  const range=alphaCalendarPlanRange(ctx);
-  const out=[];
-  out.push(`PLANO ALPHA — ${alphaCalendarPlanTitle(ctx)}`);
-  if(range.start){
-    out.push(`Datas: ${alphaCalendarHumanDate(range.start)}${range.visibleEnd&&range.visibleEnd!==range.start?' → '+alphaCalendarHumanDate(range.visibleEnd):''}`);
-  }
-  const loc=alphaCalendarPlanLocation(ctx);if(loc)out.push(`Destino: ${loc}`);
-  out.push('', 'ITINERÁRIO');
-  events.forEach((e,idx)=>{
-    const day=alphaCalendarHumanDate(e.start);
-    const time=e.allDay?'Dia inteiro':alphaCalendarTimeLabel(e.start);
-    const end=!e.allDay&&e.end?alphaCalendarTimeLabel(e.end):'';
-    out.push(`${idx+1}. ${day}${time?' · '+time+(end?'–'+end:''):''} — ${e.title}`);
-    if(e.location)out.push(`   ${e.location}`);
-    if(e.description)out.push(`   ${String(e.description).replace(/\s+/g,' ').trim()}`);
-  });
-  if(cards.length){
-    out.push('', 'LOCAIS / CARTÕES ALPHA');
-    cards.forEach((p,idx)=>{
-      out.push(`${idx+1}. ${p.name}`);
-      alphaCalendarPlaceSummary(p).forEach(x=>out.push(`   ${x}`));
-    });
-  }
-  out.push('', 'Criado pela ALPHA.');
-  return out.join('\n').trim();
-}
-function alphaCalendarAggregateEvent(i){
-  const ctx=alphaCalendarMessageContext(i);
-  if(!ctx.events.length)return null;
-  const range=alphaCalendarPlanRange(ctx);
-  return {
-    title:alphaCalendarPlanTitle(ctx),
-    start:range.start,
-    end:range.googleEnd,
-    allDay:true,
-    location:alphaCalendarPlanLocation(ctx),
-    description:alphaCalendarPlanDescription(ctx),
-    url:''
-  };
-}
-function alphaOpenGoogleCalendarPlan(i){
-  const e=alphaCalendarAggregateEvent(i);
-  if(!e)return toast('Não há um plano preparado para o calendário.');
-  const start=alphaCalendarGoogleDate(e.start,true);
-  const end=alphaCalendarGoogleDate(e.end,true);
-  if(!start||!end)return toast('Não consegui preparar as datas do plano.');
-  const qs=new URLSearchParams({
-    action:'TEMPLATE',
-    text:e.title||'Experiência ALPHA',
-    dates:`${start}/${end}`,
-    details:e.description||'',
-    location:e.location||''
-  });
-  window.open('https://calendar.google.com/calendar/render?'+qs.toString(),'_blank','noopener');
-}
 function alphaOpenGoogleCalendarEvent(e){
   if(!e)return;
   const allDay=!!e.allDay;
@@ -7381,13 +7258,11 @@ function alphaOpenGoogleCalendarEvent(e){
   });
   window.open('https://calendar.google.com/calendar/render?'+qs.toString(),'_blank','noopener');
 }
-function alphaDownloadCalendarICS(events,conversationTitle='Experiência ALPHA',context=null){
+function alphaDownloadCalendarICS(events,conversationTitle='Experiência ALPHA'){
   const rows=(events||[]).filter(e=>e&&e.title&&e.start);
   if(!rows.length)return toast('Não há eventos preparados para o calendário.');
   const now=new Date();
   const stamp=alphaCalendarICSTime(now.toISOString(),false);
-  const sharedSummary=context?alphaCalendarPlanDescription(context):'';
-  const cards=Array.isArray(context?.placeCards)?context.placeCards:[];
   const parts=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//PROJECT ALPHA//Calendar//PT','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
   rows.forEach((e,idx)=>{
     const allDay=!!e.allDay;
@@ -7406,14 +7281,9 @@ function alphaDownloadCalendarICS(events,conversationTitle='Experiência ALPHA',
     if(end)parts.push(allDay?`DTEND;VALUE=DATE:${end}`:`DTEND:${end}`);
     parts.push(`SUMMARY:${alphaCalendarEscapeICS(e.title||conversationTitle)}`);
     if(e.location)parts.push(`LOCATION:${alphaCalendarEscapeICS(e.location)}`);
-    const desc=[e.description,sharedSummary,e.url].filter(Boolean).join('\n\n');
+    const desc=[e.description,e.url].filter(Boolean).join('\n\n');
     if(desc)parts.push(`DESCRIPTION:${alphaCalendarEscapeICS(desc)}`);
     if(e.url)parts.push(`URL:${alphaCalendarEscapeICS(e.url)}`);
-    // URI attachments são opcionais no standard; clientes que não os suportam ignoram-nos.
-    cards.slice(0,8).forEach(p=>{
-      const uri=p.photo||p.image||p.website||p.ticketUrl||'';
-      if(/^https?:\/\//i.test(String(uri)))parts.push(`ATTACH;VALUE=URI:${alphaCalendarEscapeICS(uri)}`);
-    });
     parts.push('END:VEVENT');
   });
   parts.push('END:VCALENDAR');
@@ -7428,18 +7298,12 @@ function alphaCloseCalendarModal(){
   $('alphaCalendarModal')?.remove();
 }
 function alphaOpenCalendarModal(i){
-  const ctx=alphaCalendarMessageContext(i),c=ctx.conversation,events=ctx.events;
-  const added=alphaCalendarImportAIEvents(events,{
-    placeCards:ctx.placeCards,
-    planTitle:alphaCalendarPlanTitle(ctx),
-    planSummary:alphaCalendarPlanDescription(ctx),
-    conversationId:c?.id||'',
-    requestId:ctx.message?.requestId||''
-  });
+  const c=alphaCurrentConversation();
+  const events=alphaCalendarEventsForMessage(i);
+  alphaCalendarImportAIEvents(events);
   if(!c||!events.length)return toast('A ALPHA ainda não tem um horário definido para esta experiência.');
-  if(added)toast(`${added} evento${added===1?'':'s'} adicionado${added===1?'':'s'} ao Calendário ALPHA.`);
   alphaCloseCalendarModal();
-  const first=events[0],range=alphaCalendarPlanRange(ctx);
+  const first=events[0];
   const modal=document.createElement('div');
   modal.id='alphaCalendarModal';
   modal.className='alphaCalendarModal';
@@ -7450,17 +7314,17 @@ function alphaOpenCalendarModal(i){
         <button type="button" onclick="alphaCloseCalendarModal()" aria-label="Fechar">×</button>
       </div>
       <div class="alphaCalendarPreview">
-        <b>${esc(alphaCalendarPlanTitle(ctx))}</b>
-        <span>${esc(range.start||first.start||'')}${range.visibleEnd&&range.visibleEnd!==range.start?' → '+esc(range.visibleEnd):''}${alphaCalendarPlanLocation(ctx)?' · '+esc(alphaCalendarPlanLocation(ctx)):''}</span>
-        <em>${events.length} evento${events.length===1?'':'s'} preparado${events.length===1?'':'s'} · guardado no Calendário ALPHA</em>
+        <b>${esc(first.title||c.title||'Experiência ALPHA')}</b>
+        <span>${esc(first.start||'')}${first.location?' · '+esc(first.location):''}</span>
+        ${events.length>1?`<em>${events.length} eventos preparados</em>`:''}
       </div>
-      <button class="alphaCalendarPrimary" type="button" onclick="alphaOpenGoogleCalendarPlan(${Number(i)||0});alphaCloseCalendarModal()">
-        ${alphaCalendarIcon()}<span>Google Calendar · plano completo</span>
+      <button class="alphaCalendarPrimary" type="button" onclick="alphaOpenGoogleCalendarEvent(alphaCalendarEventsForMessage(${Number(i)||0})[0]);alphaCloseCalendarModal()">
+        ${alphaCalendarIcon()}<span>Google Calendar${events.length>1?' · primeiro evento':''}</span>
       </button>
-      <button class="alphaCalendarSecondary" type="button" onclick="(()=>{const ctx=alphaCalendarMessageContext(${Number(i)||0});alphaDownloadCalendarICS(ctx.events,alphaCalendarPlanTitle(ctx),ctx);alphaCloseCalendarModal()})()">
-        ${alphaCalendarIcon()}<span>Adicionar plano completo (.ics)</span>
+      <button class="alphaCalendarSecondary" type="button" onclick="alphaDownloadCalendarICS(alphaCalendarEventsForMessage(${Number(i)||0}),alphaCurrentConversation()?.title||'Experiência ALPHA');alphaCloseCalendarModal()">
+        ${alphaCalendarIcon()}<span>${events.length>1?'Adicionar plano completo (.ics)':'Adicionar com ficheiro .ics'}</span>
       </button>
-      <p>Google recebe o plano completo como um evento contínuo entre a primeira e a última data. O .ics mantém os eventos individuais e funciona com Google Calendar, Samsung Calendar, Outlook, Apple Calendar e outras apps compatíveis.</p>
+      <p>O ficheiro .ics funciona com Google Calendar, Samsung Calendar, Outlook, Apple Calendar e outras apps compatíveis.</p>
     </div>`;
   document.body.appendChild(modal);
 }
@@ -7557,65 +7421,20 @@ function alphaCalendarRender(){
   const future=alphaCalendarSelectedDate?all:all.filter(e=>e.date>=today).slice(0,12);
   agenda.innerHTML=future.length?future.map(e=>`<button class="alphaCalendarEvent" type="button" onclick="alphaCalendarOpenEditor('${esc(e.id)}')"><span class="alphaCalendarEventTime">${esc(e.time||'Dia')}</span><span><b>${esc(e.title)}</b><small>${esc(e.date)}${e.location?' · '+esc(e.location):''} · ${esc((e.provider||'alpha').toUpperCase())}</small></span></button>`).join(''):'<div class="alphaCalendarEmpty">Sem eventos'+(alphaCalendarSelectedDate?' neste dia':' próximos')+'.</div>';
 }
-function alphaCalendarLinkedPlacesHtml(cards=[]){
-  const rows=(Array.isArray(cards)?cards:[]).filter(p=>p&&p.name).slice(0,8);
-  if(!rows.length)return'';
-  return `<div class="alphaCalLinkedTitle">Locais associados</div>${rows.map((p,idx)=>{
-    const photo=p.photo||p.image||'';
-    const info=[p.address,p.openingHours?`Horário: ${Array.isArray(p.openingHours)?p.openingHours.join(' · '):p.openingHours}`:'',Array.isArray(p.prices)&&p.prices.length?`Preços: ${p.prices.slice(0,2).join(' · ')}`:(p.prices?`Preços: ${p.prices}`:'')].filter(Boolean);
-    const link=p.ticketUrl||p.website||'';
-    return `<article class="alphaCalLinkedCard">
-      ${photo?`<img src="${esc(photo)}" alt="" loading="lazy">`:''}
-      <div><b>${esc(p.name)}</b>${info.map(x=>`<small>${esc(x)}</small>`).join('')}
-      ${link?`<a href="${esc(link)}" target="_blank" rel="noopener">Website / bilhetes</a>`:''}</div>
-    </article>`;
-  }).join('')}`;
-}
 function alphaCalendarOpenEditor(id=''){
   const e=alphaCalendarEvents().find(x=>x.id===id)||null,today=alphaCalendarSelectedDate||alphaCalendarISODate(new Date());
-  $('alphaCalEventId').value=e?.id||'';$('alphaCalTitle').value=e?.title||'';$('alphaCalDate').value=e?.date||today;$('alphaCalTime').value=e?.time||'';$('alphaCalEndTime').value=e?.endTime||'';$('alphaCalLocation').value=e?.location||'';$('alphaCalNotes').value=e?.notes||'';$('alphaCalProvider').value=e?.provider||'alpha';$('alphaCalDelete').hidden=!e;$('alphaCalendarEditorTitle').textContent=e?'Editar evento':'Novo evento';
-  const linked=$('alphaCalLinkedPlaces');if(linked){linked.innerHTML=alphaCalendarLinkedPlacesHtml(e?.placeCards||[]);linked.hidden=!linked.innerHTML}
-  $('alphaCalendarEditor').dataset.editingId=e?.id||'';
-  $('alphaCalendarEditor').hidden=false;setTimeout(()=>$('alphaCalTitle')?.focus(),50)
+  $('alphaCalEventId').value=e?.id||'';$('alphaCalTitle').value=e?.title||'';$('alphaCalDate').value=e?.date||today;$('alphaCalTime').value=e?.time||'';$('alphaCalEndTime').value=e?.endTime||'';$('alphaCalLocation').value=e?.location||'';$('alphaCalNotes').value=e?.notes||'';$('alphaCalProvider').value=e?.provider||'alpha';$('alphaCalDelete').hidden=!e;$('alphaCalendarEditorTitle').textContent=e?'Editar evento':'Novo evento';$('alphaCalendarEditor').hidden=false;setTimeout(()=>$('alphaCalTitle')?.focus(),50)
 }
 function alphaCalendarCloseEditor(){$('alphaCalendarEditor').hidden=true}
 function alphaCalendarSaveEditor(){
   const title=$('alphaCalTitle').value.trim(),date=$('alphaCalDate').value;if(!title||!date)return toast('Indica o título e a data.');
   let a=alphaCalendarEvents(),id=$('alphaCalEventId').value||('cal_'+Date.now()+'_'+Math.random().toString(36).slice(2,7));
-  const previous=a.find(x=>x.id===id)||{};
-  const e={...previous,id,title,date,time:$('alphaCalTime').value,endTime:$('alphaCalEndTime').value,location:$('alphaCalLocation').value.trim(),notes:$('alphaCalNotes').value.trim(),provider:'alpha',updatedAt:new Date().toISOString()};
+  const e={id,title,date,time:$('alphaCalTime').value,endTime:$('alphaCalEndTime').value,location:$('alphaCalLocation').value.trim(),notes:$('alphaCalNotes').value.trim(),provider:'alpha',updatedAt:new Date().toISOString()};
   a=a.filter(x=>x.id!==id);a.push(e);alphaCalendarSaveEvents(a);alphaCalendarSelectedDate=date;alphaCalendarCursor=new Date(date+'T12:00:00');alphaCalendarCloseEditor();alphaCalendarRender();toast('Evento guardado na agenda ALPHA.');
 }
 function alphaCalendarDeleteCurrent(){const id=$('alphaCalEventId').value;if(!id)return;alphaCalendarSaveEvents(alphaCalendarEvents().filter(e=>e.id!==id));alphaCalendarCloseEditor();alphaCalendarRender();toast('Evento eliminado.');}
-function alphaCalendarImportAIEvents(events=[],meta={}){
-  let a=alphaCalendarEvents(),added=0;
-  for(const x of events){
-    if(!x?.title||!x?.start)continue;
-    const d=new Date(x.start);if(Number.isNaN(d.getTime()))continue;
-    const date=alphaCalendarISODate(d),time=x.allDay?'':String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-    const endD=x.end?new Date(x.end):null,endTime=x.allDay||!endD||Number.isNaN(endD.getTime())?'':String(endD.getHours()).padStart(2,'0')+':'+String(endD.getMinutes()).padStart(2,'0');
-    const sig=(x.title+'|'+x.start);
-    const existing=a.find(e=>e.aiSignature===sig);
-    if(existing){
-      // Atualiza metadados ricos sem duplicar o evento.
-      existing.placeCards=Array.isArray(meta.placeCards)?meta.placeCards:existing.placeCards||[];
-      existing.planTitle=meta.planTitle||existing.planTitle||'';
-      existing.planSummary=meta.planSummary||existing.planSummary||'';
-      existing.conversationId=meta.conversationId||existing.conversationId||'';
-      existing.requestId=meta.requestId||existing.requestId||'';
-      existing.updatedAt=new Date().toISOString();
-      continue;
-    }
-    a.push({
-      id:'ai_'+Date.now()+'_'+added,title:x.title,date,time,endTime,location:x.location||'',
-      notes:x.description||'',provider:'alpha',aiSignature:sig,
-      placeCards:Array.isArray(meta.placeCards)?meta.placeCards:[],
-      planTitle:meta.planTitle||'',planSummary:meta.planSummary||'',
-      conversationId:meta.conversationId||'',requestId:meta.requestId||'',
-      updatedAt:new Date().toISOString()
-    });added++;
-  }
-  alphaCalendarSaveEvents(a);return added;
+function alphaCalendarImportAIEvents(events=[]){
+  let a=alphaCalendarEvents(),added=0;for(const x of events){if(!x?.title||!x?.start)continue;const d=new Date(x.start);if(Number.isNaN(d.getTime()))continue;const date=alphaCalendarISODate(d),time=x.allDay?'':String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');const sig=(x.title+'|'+x.start);if(a.some(e=>e.aiSignature===sig))continue;a.push({id:'ai_'+Date.now()+'_'+added,title:x.title,date,time,endTime:'',location:x.location||'',notes:x.description||'',provider:'alpha',aiSignature:sig,updatedAt:new Date().toISOString()});added++}if(added)alphaCalendarSaveEvents(a);return added;
 }
 async function alphaSpotifyFooterAction(){
   try{
@@ -8157,30 +7976,30 @@ setTimeout(()=>{
 
 </script>
 
-<script>const ALPHA_VISIBLE_VERSION='v4.3.0 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='4.3.0-calendar-hub-plan-complete-cards';
+<script>const ALPHA_VISIBLE_VERSION='v4.3.1 · TEST';
+window.ALPHA_DOMAIN_GATE_BUILD='4.3.1-clean-spotify-remote';
 window.addEventListener('online',alphaPrewarmBackend,{passive:true});
 setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
 </script>
 
 <div id="alphaSpotifyGlobal" class="alphaSpotifyGlobal" hidden>
-  <button id="alphaSpotifyFab" class="alphaSpotifyFab" type="button" aria-label="Abrir Spotify Remote" onclick="alphaSpotifyToggleRemote(true)">
-    <span class="alphaSpotifyLogoGlyph">●</span>
-  </button>
   <section id="alphaSpotifyOverlay" class="alphaSpotifyOverlay" hidden aria-label="Spotify Remote">
     <div class="alphaSpotifyOverlayHead">
       <div class="alphaSpotifyNow">
         <img id="alphaSpotifyCover" alt="" />
         <div><b id="alphaSpotifyTrack">Spotify</b><span id="alphaSpotifyArtists"></span><small id="alphaSpotifyDevice"></small></div>
       </div>
-      <button type="button" class="alphaSpotifyClose" onclick="alphaSpotifyToggleRemote(false)" aria-label="Fechar">×</button>
+      <div class="alphaSpotifyTopActions">
+        <button type="button" id="alphaSpotifyShuffle" class="alphaSpotifyShuffleTop" onclick="alphaSpotifyGlobalShuffle(this)" aria-label="Aleatório" title="Aleatório">⇄</button>
+        <button type="button" class="alphaSpotifyClose" onclick="alphaSpotifyToggleRemote(false)" aria-label="Fechar">×</button>
+      </div>
     </div>
     <div class="alphaSpotifyProgress"><i id="alphaSpotifyProgressBar"></i></div>
+    <div class="alphaSpotifyTimes"><span id="alphaSpotifyElapsed">0:00</span><span id="alphaSpotifyDuration">0:00</span></div>
     <div class="alphaSpotifyGlobalControls">
-      <button type="button" onclick="alphaSpotifyGlobalAction('previous',this)" aria-label="Anterior"><span>‹‹</span></button>
+      <button type="button" onclick="alphaSpotifyGlobalAction('previous',this)" aria-label="Anterior"><span>◀</span></button>
       <button type="button" id="alphaSpotifyMainToggle" class="main" onclick="alphaSpotifyGlobalToggle(this)" aria-label="Reproduzir ou pausar"><span>▶</span></button>
-      <button type="button" onclick="alphaSpotifyGlobalAction('next',this)" aria-label="Seguinte"><span>››</span></button>
-      <button type="button" id="alphaSpotifyShuffle" onclick="alphaSpotifyGlobalShuffle(this)" aria-label="Aleatório"><span>⤨</span></button>
+      <button type="button" onclick="alphaSpotifyGlobalAction('next',this)" aria-label="Seguinte"><span>▶</span></button>
     </div>
     <div id="alphaSpotifyGlobalNote" class="alphaSpotifyGlobalNote"></div>
   </section>
@@ -8204,19 +8023,19 @@ function alphaSpotifySetGlobalVisible(show){
 }
 function alphaSpotifyRenderGlobal(state){
   const root=document.getElementById('alphaSpotifyGlobal');
-  const fab=document.getElementById('alphaSpotifyFab');
-  if(!root||!fab)return;
+  if(!root)return;
   const pb=state?.playback||{};
   const hasPlayback=!!(pb.available&&pb.track);
   root.hidden=!hasPlayback;
   if(!hasPlayback)return;
   alphaSpotifyGlobalState=state;
   const cover=document.getElementById('alphaSpotifyCover');
-  if(cover){cover.src=pb.image||'';cover.style.display=pb.image?'block':'none'}
+  if(cover)cover.src=pb.image||'';
+  const overlay=document.getElementById('alphaSpotifyOverlay');
+  if(overlay)overlay.style.setProperty('--alpha-spotify-art',pb.image?`url(\"${String(pb.image).replace(/\"/g,'')}\")`:'none');
   const track=document.getElementById('alphaSpotifyTrack');if(track)track.textContent=pb.track||'Spotify';
   const artists=document.getElementById('alphaSpotifyArtists');if(artists)artists.textContent=(pb.artists||[]).join(', ');
-  const dev=document.getElementById('alphaSpotifyDevice');
-  if(dev)dev.textContent=pb.device?.name?('A tocar em '+pb.device.name):'';
+  const dev=document.getElementById('alphaSpotifyDevice');if(dev)dev.textContent='';
   const toggle=document.getElementById('alphaSpotifyMainToggle');
   if(toggle){
     toggle.dataset.playing=pb.isPlaying?'1':'0';
@@ -8226,9 +8045,12 @@ function alphaSpotifyRenderGlobal(state){
   const sh=document.getElementById('alphaSpotifyShuffle');if(sh)sh.classList.toggle('active',!!pb.shuffle);
   const pct=pb.durationMs>0?Math.max(0,Math.min(100,(pb.progressMs/pb.durationMs)*100)):0;
   const bar=document.getElementById('alphaSpotifyProgressBar');if(bar)bar.style.width=pct+'%';
+  const fmt=ms=>{const sec=Math.max(0,Math.floor((Number(ms)||0)/1000)),m=Math.floor(sec/60),r=sec%60;return m+':'+String(r).padStart(2,'0')};
+  const elapsed=document.getElementById('alphaSpotifyElapsed');if(elapsed)elapsed.textContent=fmt(pb.progressMs);
+  const duration=document.getElementById('alphaSpotifyDuration');if(duration)duration.textContent=fmt(pb.durationMs);
   const note=document.getElementById('alphaSpotifyGlobalNote');
   if(note)note.textContent=pb.device?.restricted?'Este dispositivo não permite controlo remoto.':'';
-  fab.classList.toggle('playing',!!pb.isPlaying);
+
 }
 async function alphaSpotifyPollGlobal(force=false){
   if(alphaSpotifyGlobalBusy&&!force)return;
