@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="3.6.9">
+<meta name="alpha-version" content="3.6.11">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 3.6.9 — AI Chat App Mode</title>
+<title>Project Alpha 3.6.11 — AI Chat App Mode</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -432,6 +432,14 @@ linear-gradient(145deg,rgba(14,45,38,.96),rgba(12,27,35,.98) 55%,rgba(35,25,58,.
 .aiChatMenu button{border:0;background:transparent;color:var(--text);text-align:left;padding:12px;border-radius:12px;font:inherit;font-weight:750}
 .aiChatMenu button:active{background:#142a31}
 .aiResponseActions{display:flex;gap:3px;align-items:center;margin:5px 5% 1px 0;flex-wrap:wrap}
+.alphaResponseTotalTime{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:34px;padding:0 7px 0 2px;
+  color:#8fa29d;font-size:11px;font-weight:850;
+  font-variant-numeric:tabular-nums;letter-spacing:.025em;
+  white-space:nowrap;user-select:none;
+}
+
 .aiResponseActions button{border:0;background:transparent;color:#9fb2ac;padding:6px 7px;border-radius:9px;font-size:16px;cursor:pointer}
 .aiResponseActions button:active{background:#142a31;color:#fff}
 .aiResponseActions .aiActionText{font-size:11px;padding-inline:8px}
@@ -2121,7 +2129,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.9 · Family Login</small></div></div>
+    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.11 · Family Login</small></div></div>
     <div class="authWelcomeBrand"><div class="logo compassSeeking"></div><div class="alphaWelcomeEyebrow">ALPHA · OUTDOOR LIFESTYLE AI</div><h1>Bem-vindo à Alpha</h1><p>Descobrir · Confiar · Viver</p></div>
     <p class="muted" style="text-align:center">Escolhe o teu perfil para começares. Nesta versão Alpha usamos as 4 contas familiares de teste e o PIN <b>1234</b>.</p>
     <label>Utilizador</label>
@@ -2139,7 +2147,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.9 · DELETE CONVERSATIONS · RESPONSE TIMER · Intent · Research · Synthesis</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.11 · VERIFIED RESEARCH · RESPONSE TIME · DELETE CONVERSATIONS · Intent · Research · Synthesis</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -2242,7 +2250,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 3.6.9 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 3.6.11 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
       <div class="eyebrow">AI JOURNEY · MULTI-STOP</div>
@@ -2895,7 +2903,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='3.6.9',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='3.6.11',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -6250,7 +6258,12 @@ function alphaRenderPlaceCards(m){
 
 function alphaResponseActions(i,m){
   const up=m.rating==='up'?' aria-pressed="true"':'',down=m.rating==='down'?' aria-pressed="true"':'';
+  const responseTime=Number(m?.responseTimeMs);
+  const responseTimeHtml=Number.isFinite(responseTime)&&responseTime>=0
+    ?`<span class="alphaResponseTotalTime" title="Tempo total de construção e apresentação da resposta">⏱ ${alphaFormatResponseTime(responseTime)}</span>`
+    :'';
   return `<div class="aiResponseActions" aria-label="Ações da resposta">
+    ${responseTimeHtml}
     <button title="Copiar" aria-label="Copiar resposta" onclick="alphaCopyResponse(${i})">⧉</button>
     <button title="Gostei" aria-label="Gostei" onclick="alphaRateResponse(${i},'up')"${up}>👍</button>
     <button title="Não gostei" aria-label="Não gostei" onclick="alphaRateResponse(${i},'down')"${down}>👎</button>
@@ -7450,6 +7463,9 @@ async function alphaLifestyleSend(){
   // A resposta pertence SEMPRE à conversa que originou o pedido.
   let target=alphaConversationById(conversationId);
   const pending=alphaPendingRequests.get(conversationId);
+  // Tempo total desde o envio até a resposta estar pronta para ser colocada na conversa.
+  // Fica persistido na própria mensagem para continuar visível após reload/reabertura.
+  const responseTimeMs=Math.max(0,Date.now()-Number(pending?.startedAt||Date.now()));
 
   // Se a conversa foi apagada entretanto, ou este pedido já foi substituído,
   // descartamos a resposta em vez de a colocar noutra conversa.
@@ -7471,6 +7487,7 @@ async function alphaLifestyleSend(){
       at:new Date().toISOString(),
       source:real?'backend':'local',
       requestId,
+      responseTimeMs,
       scope:real&&d?d.scope:null,
       playlistTitle:contextualMusic?String(d.playlistTitle||d.title||target.title||'Playlist Alpha'):null,
       playlistTracks:contextualMusic?d.playlistTracks.slice(0,100):[],
@@ -7668,8 +7685,8 @@ setTimeout(()=>{
 
 </script>
 
-<script>const ALPHA_VISIBLE_VERSION='v3.6.9 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='3.6.9-sidebar-delete-conversations';
+<script>const ALPHA_VISIBLE_VERSION='v3.6.11 · TEST';
+window.ALPHA_DOMAIN_GATE_BUILD='3.6.11-verified-research-cascade';
 window.addEventListener('online',alphaPrewarmBackend,{passive:true});
 setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
 </script>
