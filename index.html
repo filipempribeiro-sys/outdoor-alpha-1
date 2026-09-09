@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="3.6.8">
+<meta name="alpha-version" content="3.6.9">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 3.6.8 — AI Chat App Mode</title>
+<title>Project Alpha 3.6.9 — AI Chat App Mode</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -1345,6 +1345,20 @@ body.alphaComposeMode #lifestyleAI::before{
   background:transparent!important;color:#f1f7f4!important;
   text-align:left!important;font-weight:500!important;
 }
+.alphaSidebarConversationRow{
+  display:grid;grid-template-columns:minmax(0,1fr) 42px;align-items:center;gap:4px;
+  border-radius:12px;
+}
+.alphaSidebarConversationRow.active{background:rgba(255,255,255,.045)}
+.alphaSidebarDeleteBtn{
+  width:38px;height:38px;border:0;border-radius:10px;background:transparent;color:#8fa09c;
+  display:grid;place-items:center;cursor:pointer;opacity:.78;
+}
+.alphaSidebarDeleteBtn:active{background:rgba(255,107,107,.12);color:#ff8a8a}
+.alphaSidebarDeleteBtn svg{
+  width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;
+}
+
 .alphaSidebarConversation.active{background:rgba(255,255,255,.075)!important}
 .alphaSidebarBubble{
   width:20px;height:20px;border:2px solid currentColor;border-radius:50%;position:relative;opacity:.9
@@ -2107,7 +2121,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.7 · Family Login</small></div></div>
+    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.9 · Family Login</small></div></div>
     <div class="authWelcomeBrand"><div class="logo compassSeeking"></div><div class="alphaWelcomeEyebrow">ALPHA · OUTDOOR LIFESTYLE AI</div><h1>Bem-vindo à Alpha</h1><p>Descobrir · Confiar · Viver</p></div>
     <p class="muted" style="text-align:center">Escolhe o teu perfil para começares. Nesta versão Alpha usamos as 4 contas familiares de teste e o PIN <b>1234</b>.</p>
     <label>Utilizador</label>
@@ -2125,7 +2139,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.7 · FINAL RESPONSE DELIVERY FIX · Intent · Research · Synthesis</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.9 · DELETE CONVERSATIONS · RESPONSE TIMER · Intent · Research · Synthesis</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -2228,7 +2242,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 3.6.7 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 3.6.9 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
       <div class="eyebrow">AI JOURNEY · MULTI-STOP</div>
@@ -2881,7 +2895,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='3.6.7',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='3.6.9',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -5971,11 +5985,18 @@ function alphaRenderChatSidebar(filter=''){
   }
   host.innerHTML=rows.map(c=>{
     const id=String(c.id||'').replace(/'/g,"\\'");
-    return `<button class="alphaSidebarConversation ${c.id===active?'active':''}" type="button" onclick="alphaOpenConversation('${id}');alphaCloseChatMenu()">
-      <span class="alphaSidebarBubble" aria-hidden="true"></span>
-      <span class="alphaSidebarConversationTitle">${esc(c.title||'Nova experiência')}</span>
-      ${c.id===active?'<span class="alphaSidebarActiveDot" aria-hidden="true"></span>':''}
-    </button>`;
+    const title=esc(c.title||'Nova experiência');
+    return `<div class="alphaSidebarConversationRow ${c.id===active?'active':''}">
+      <button class="alphaSidebarConversation ${c.id===active?'active':''}" type="button" onclick="alphaOpenConversation('${id}');alphaCloseChatMenu()">
+        <span class="alphaSidebarBubble" aria-hidden="true"></span>
+        <span class="alphaSidebarConversationTitle">${title}</span>
+        ${c.id===active?'<span class="alphaSidebarActiveDot" aria-hidden="true"></span>':''}
+      </button>
+      <button class="alphaSidebarDeleteBtn" type="button" aria-label="Apagar conversa ${title}" title="Apagar conversa"
+        onclick="event.stopPropagation();alphaDeleteConversationFromSidebar('${id}')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.8c0-.45.35-.8.8-.8h4.4c.45 0 .8.35.8.8V7M7 7l.7 12c.04.58.52 1 1.1 1h6.4c.58 0 1.06-.42 1.1-1L17 7M10 10.5v6M14 10.5v6"/></svg>
+      </button>
+    </div>`;
   }).join('');
 }
 function alphaFocusSidebarSearch(){
@@ -6278,6 +6299,26 @@ function alphaRenderHistory(){
 function alphaOpenConversation(id){const input=$('lifestylePrompt');if(input&&alphaActiveConversationId())alphaSetDraft(input.value);document.body.classList.remove('alphaComposeMode');alphaSetActiveConversationId(id);alphaClearUnread(id);alphaSetSendBusy(alphaPendingRequests.has(id));alphaRestoreDraft();renderAlphaLifestyleThread();alphaCloseHistory();go('home',{history:false});alphaSyncChatMode();requestAnimationFrame(()=>alphaFitShell?.())}
 function alphaRenameConversation(id){const all=alphaConversations(),c=all.find(x=>x.id===id);if(!c)return;const n=prompt('Novo título:',c.title);if(n===null)return;c.title=alphaNormalizeTitle(n);c.titleSource='user';c.updatedAt=new Date().toISOString();alphaSaveConversations(all);alphaRenderHistory();alphaRenderChatSidebar?.($('alphaSidebarSearch')?.value||'');renderAlphaLifestyleThread()}
 function alphaDeleteConversation(id){const all=alphaConversations(),c=all.find(x=>x.id===id);if(!c||!confirm('Apagar "'+c.title+'"?'))return;alphaSaveConversations(all.filter(x=>x.id!==id));alphaSetDraft('',id);alphaClearUnread(id);alphaPendingRequests.delete(id);if(alphaActiveConversationId()===id)alphaSetActiveConversationId('');alphaRenderHistory();alphaRenderChatSidebar?.($('alphaSidebarSearch')?.value||'');renderAlphaLifestyleThread()}
+function alphaDeleteConversationFromSidebar(id){
+  const all=alphaConversations(),c=all.find(x=>x.id===id);
+  if(!c)return;
+  if(!confirm('Apagar a conversa "'+(c.title||'Nova experiência')+'"?'))return;
+  const wasActive=alphaActiveConversationId()===id;
+  alphaSaveConversations(all.filter(x=>x.id!==id));
+  alphaSetDraft('',id);
+  alphaClearUnread(id);
+  alphaProgressStop?.(id);
+  alphaPendingRequests.delete(id);
+  if(wasActive){
+    alphaSetActiveConversationId('');
+    alphaStartFreshConversation({focus:false,compose:false});
+  }else{
+    renderAlphaLifestyleThread();
+  }
+  alphaRenderHistory();
+  alphaRenderChatSidebar($('alphaSidebarSearch')?.value||'');
+  toast('Conversa apagada');
+}
 function alphaLifestyleQuick(text){if($('lifestylePrompt')){$('lifestylePrompt').value=text;alphaResizeComposerNow()}go('home');setTimeout(()=>$('lifestyleAI')?.scrollIntoView({behavior:'smooth',block:'start'}),80)}
 function alphaCurrentContext(){const u=authUser(),ctx={membership:effectiveTier()};if(u)ctx.user={id:u.id,firstName:u.shortName||u.name};if(pos&&Number.isFinite(pos.latitude)&&Number.isFinite(pos.longitude))ctx.location={latitude:pos.latitude,longitude:pos.longitude};if(headerWeatherLast)ctx.weather={place:headerWeatherLast.place||null,temp:headerWeatherLast.temp??null,retrievedAt:new Date(headerWeatherLast.time||Date.now()).toISOString()};return ctx}
 function alphaExtractRecentIntent(text){const p=String(text||'').trim().split(/(?<=[.!?])\s+|\n+/).filter(Boolean);return p.slice(-4).join(' ')||String(text||'')}
@@ -7627,8 +7668,8 @@ setTimeout(()=>{
 
 </script>
 
-<script>const ALPHA_VISIBLE_VERSION='v3.6.8 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='3.6.8-response-timer-delivery-fix';
+<script>const ALPHA_VISIBLE_VERSION='v3.6.9 · TEST';
+window.ALPHA_DOMAIN_GATE_BUILD='3.6.9-sidebar-delete-conversations';
 window.addEventListener('online',alphaPrewarmBackend,{passive:true});
 setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
 </script>
