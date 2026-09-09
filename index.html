@@ -2226,11 +2226,11 @@ nav.bottom .nav > span:last-child{font-size:clamp(9px,2.5vw,12px)!important;whit
 </style>
 
 <style id="alphaSpotify439Final">
-/* ALPHA 4.3.9 · Spotify Remote final */
+/* ALPHA 4.3.11 · Spotify Remote persistence + glass final */
 .alphaSpotifyGlobal{z-index:900!important}
-.alphaSpotifyOverlay{top:calc(env(safe-area-inset-top,0px) + 12px)!important;width:min(430px,calc(100vw - 20px))!important;padding:14px 18px 12px!important;border-radius:24px!important;background:rgba(7,18,19,.34)!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:0 12px 32px rgba(0,0,0,.22)!important;-webkit-backdrop-filter:blur(14px) saturate(1.12)!important;backdrop-filter:blur(14px) saturate(1.12)!important}
-.alphaSpotifyOverlay::before{opacity:.30!important;filter:blur(16px) saturate(1.05)!important;background-image:linear-gradient(rgba(4,12,13,.10),rgba(4,12,13,.28)),var(--alpha-spotify-art,none)!important}
-.alphaSpotifyOverlay::after{background:linear-gradient(180deg,rgba(3,10,11,.04),rgba(3,10,11,.18))!important}
+.alphaSpotifyOverlay{top:calc(env(safe-area-inset-top,0px) + 12px)!important;width:min(430px,calc(100vw - 20px))!important;padding:14px 18px 12px!important;border-radius:24px!important;background:rgba(7,18,19,.16)!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:0 12px 32px rgba(0,0,0,.22)!important;-webkit-backdrop-filter:blur(14px) saturate(1.12)!important;backdrop-filter:blur(14px) saturate(1.12)!important}
+.alphaSpotifyOverlay::before{opacity:.18!important;filter:blur(18px) saturate(1.08)!important;background-image:linear-gradient(rgba(4,12,13,.04),rgba(4,12,13,.12)),var(--alpha-spotify-art,none)!important}
+.alphaSpotifyOverlay::after{background:linear-gradient(180deg,rgba(3,10,11,.015),rgba(3,10,11,.07))!important}
 body.alphaChatMode .alphaSpotifyOverlay,body.alphaComposeMode .alphaSpotifyOverlay{top:calc(env(safe-area-inset-top,0px) + 12px)!important}
 .alphaSpotifyGlobalControls{height:54px!important;margin:0 76px 5px!important;grid-template-columns:48px 58px 48px!important;gap:18px!important}
 .alphaSpotifyGlobalControls button{height:50px!important;width:48px!important}.alphaSpotifyGlobalControls button.main{height:50px!important;width:58px!important}
@@ -2241,7 +2241,7 @@ body.alphaChatMode .alphaSpotifyOverlay,body.alphaComposeMode .alphaSpotifyOverl
 .alphaSpotifyNow div{min-width:0!important;display:grid!important;gap:1px!important}
 .alphaSpotifyNow b{font-size:15px!important}.alphaSpotifyNow span{font-size:12px!important}
 .alphaSpotifyBottomActions{display:flex!important;justify-content:flex-end!important;align-items:center!important;gap:7px!important;height:38px!important;margin:0!important;flex:0 0 auto!important}
-.alphaSpotifyShuffleTop,.alphaSpotifyClose{background:rgba(3,10,11,.18)!important;width:34px!important;height:34px!important;min-width:34px!important;border-radius:10px!important}
+.alphaSpotifyShuffleTop,.alphaSpotifyClose{background:rgba(3,10,11,.10)!important;width:34px!important;height:34px!important;min-width:34px!important;border-radius:10px!important}
 #chatMenuBtn,#alphaChatNewBtn,.alphaChatMenuBtn,.alphaChatNewBtn,.chatMenuBtn,.newConversationBtn{position:relative!important;z-index:1200!important}
 body[data-alpha-view="home"] #alphaSpotifyGlobal{display:none!important}
 @media(max-width:390px){.alphaSpotifyGlobalControls{margin-left:68px!important;margin-right:68px!important;gap:13px!important}}
@@ -3082,7 +3082,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='4.3.9',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='4.3.11',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -3567,11 +3567,14 @@ function alphaApplyView(id){
     }
   },120);
   if(alphaShellView==='experience')syncReview();
+  if(!isHome&&alphaSpotifyRemoteWanted){
+    requestAnimationFrame(()=>alphaSpotifyApplyRemoteContext?.());
+  }
   if(isHome){
     requestAnimationFrame(()=>alphaSyncChatMode?.());
-    /* 4.3.2: a Home nunca recebe o Remote. A música continua a tocar. */
+    /* 4.3.11: a Home nunca recebe o Remote, mas preserva o estado para ele reaparecer nas áreas internas. */
     if(!document.body.classList.contains('alphaChatMode')&&!document.body.classList.contains('alphaComposeMode')){
-      alphaSpotifyToggleRemote?.(false);
+      const box=document.getElementById('alphaSpotifyOverlay');if(box)box.hidden=true;
       alphaSpotifySetGlobalVisible?.(false);
     }
   }
@@ -7492,7 +7495,7 @@ async function alphaSpotifyFooterAction(){
     const pureHome=alphaShellView==='home'&&!document.body.classList.contains('alphaChatMode')&&!document.body.classList.contains('alphaComposeMode');
     if(pureHome){
       /* Entrar no Chat sem reiniciar a shell/Home e sem mostrar o Remote durante a transição. */
-      alphaSpotifyToggleRemote?.(false);
+      const box=document.getElementById('alphaSpotifyOverlay');if(box)box.hidden=true;
       alphaSpotifySetGlobalVisible?.(false);
       alphaSetWelcomeNavHidden?.(false);
       const ov=document.getElementById('alphaWelcomeOverlay');
@@ -8044,8 +8047,8 @@ setTimeout(()=>{
 
 </script>
 
-<script>const ALPHA_VISIBLE_VERSION='v4.3.9 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='4.3.9-spotify-remote-final';
+<script>const ALPHA_VISIBLE_VERSION='v4.3.11 · TEST';
+window.ALPHA_DOMAIN_GATE_BUILD='4.3.11-spotify-remote-persistence-final';
 window.addEventListener('online',alphaPrewarmBackend,{passive:true});
 setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
 </script>
@@ -8076,6 +8079,27 @@ setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
 let alphaSpotifyGlobalState=null;
 let alphaSpotifyGlobalTimer=null;
 let alphaSpotifyGlobalBusy=false;
+let alphaSpotifyRemoteWanted=false;
+try{alphaSpotifyRemoteWanted=sessionStorage.getItem('alpha_spotify_remote_wanted_v1')==='1'}catch{}
+function alphaSpotifyRememberRemote(open){
+  alphaSpotifyRemoteWanted=!!open;
+  try{sessionStorage.setItem('alpha_spotify_remote_wanted_v1',open?'1':'0')}catch{}
+}
+function alphaSpotifyContextual(){
+  return alphaShellView!=='home'||document.body.classList.contains('alphaChatMode')||document.body.classList.contains('alphaComposeMode');
+}
+function alphaSpotifyApplyRemoteContext(){
+  const root=document.getElementById('alphaSpotifyGlobal');
+  const box=document.getElementById('alphaSpotifyOverlay');
+  if(!root||!box)return;
+  const contextual=alphaSpotifyContextual();
+  if(!contextual){root.hidden=true;box.hidden=true;return;}
+  if(alphaSpotifyRemoteWanted){
+    root.hidden=false;box.hidden=false;alphaSpotifyPollGlobal(true);
+  }else{
+    box.hidden=true;
+  }
+}
 
 function alphaSpotifyConnectedLocally(){
   try{
@@ -8094,12 +8118,12 @@ function alphaSpotifyRenderGlobal(state){
   if(!root)return;
   const pb=state?.playback||{};
   const hasPlayback=!!(pb.available&&pb.track);
-  const contextual=alphaShellView!=='home'||document.body.classList.contains('alphaChatMode')||document.body.classList.contains('alphaComposeMode');
-  /* monitoriza sempre, mas nunca injeta o Remote na Home limpa */
-  root.hidden=!(hasPlayback&&contextual);
+  const contextual=alphaSpotifyContextual();
+  /* monitoriza sempre, mas só mostra o Remote se o utilizador o tiver aberto na ALPHA */
+  root.hidden=!(hasPlayback&&contextual&&alphaSpotifyRemoteWanted);
   if(!hasPlayback){alphaSpotifyGlobalState=state;return;}
   alphaSpotifyGlobalState=state;
-  if(!contextual)return;
+  if(!contextual||!alphaSpotifyRemoteWanted)return;
   const cover=document.getElementById('alphaSpotifyCover');
   if(cover)cover.src=pb.image||'';
   const overlay=document.getElementById('alphaSpotifyOverlay');
@@ -8137,11 +8161,13 @@ async function alphaSpotifyPollGlobal(force=false){
   }catch(e){}
   finally{alphaSpotifyGlobalBusy=false}
 }
-function alphaSpotifyToggleRemote(open){
+function alphaSpotifyToggleRemote(open,{remember=true}={}){
   const box=document.getElementById('alphaSpotifyOverlay');if(!box)return;
-  const pureHome=alphaShellView==='home'&&!document.body.classList.contains('alphaChatMode')&&!document.body.classList.contains('alphaComposeMode');
-  if(open&&pureHome){box.hidden=true;alphaSpotifySetGlobalVisible(false);return;}
+  if(remember)alphaSpotifyRememberRemote(open);
+  const contextual=alphaSpotifyContextual();
+  if(!contextual){box.hidden=true;alphaSpotifySetGlobalVisible(false);return;}
   box.hidden=!open;
+  alphaSpotifySetGlobalVisible(!!open);
   if(open)alphaSpotifyPollGlobal(true);
 }
 async function alphaSpotifyGlobalAction(action,button){
