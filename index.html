@@ -2226,7 +2226,7 @@ nav.bottom .nav > span:last-child{font-size:clamp(9px,2.5vw,12px)!important;whit
 </style>
 
 <style id="alphaSpotify439Final">
-/* ALPHA 4.3.11 · Spotify Remote persistence + glass final */
+/* ALPHA 4.3.13 · Spotify Remote persistence + glass final */
 .alphaSpotifyGlobal{z-index:900!important}
 .alphaSpotifyOverlay{top:calc(env(safe-area-inset-top,0px) + 12px)!important;width:min(430px,calc(100vw - 20px))!important;padding:14px 18px 12px!important;border-radius:24px!important;background:rgba(7,18,19,.16)!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:0 12px 32px rgba(0,0,0,.22)!important;-webkit-backdrop-filter:blur(14px) saturate(1.12)!important;backdrop-filter:blur(14px) saturate(1.12)!important}
 .alphaSpotifyOverlay::before{opacity:.18!important;filter:blur(18px) saturate(1.08)!important;background-image:linear-gradient(rgba(4,12,13,.04),rgba(4,12,13,.12)),var(--alpha-spotify-art,none)!important}
@@ -3082,7 +3082,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='4.3.11',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='4.3.13',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -3572,7 +3572,7 @@ function alphaApplyView(id){
   }
   if(isHome){
     requestAnimationFrame(()=>alphaSyncChatMode?.());
-    /* 4.3.11: a Home nunca recebe o Remote, mas preserva o estado para ele reaparecer nas áreas internas. */
+    /* 4.3.13: a Home nunca recebe o Remote, mas preserva o estado para ele reaparecer nas áreas internas. */
     if(!document.body.classList.contains('alphaChatMode')&&!document.body.classList.contains('alphaComposeMode')){
       const box=document.getElementById('alphaSpotifyOverlay');if(box)box.hidden=true;
       alphaSpotifySetGlobalVisible?.(false);
@@ -3621,7 +3621,16 @@ function alphaEnterChatHistory(){
   if(alphaHistoryHandling)return;
   const state=history.state||{};
   if(state.alphaShell==='chat')return;
-  try{history.pushState({...state,alphaShell:'chat',view:'home',chat:true},'')}catch{}
+  try{
+    /* 4.3.13 · Android Back authority:
+       o primeiro BACK a partir de qualquer Chat/Compose fullscreen volta SEMPRE à Home ALPHA.
+       Se viemos de Mapa/LIVE/Perfil/etc., criamos primeiro uma âncora Home explícita. */
+    const alreadyHome=state.alphaShell==='view'&&state.view==='home'&&state.chat!==true;
+    if(!alreadyHome){
+      history.pushState({...state,alphaShell:'view',view:'home',chat:false,alphaBackHome:true},'');
+    }
+    history.pushState({...history.state,alphaShell:'chat',view:'home',chat:true},'');
+  }catch{}
 }
 
 function alphaExitChatToHome(){
@@ -6135,6 +6144,12 @@ function alphaStartFreshConversation({focus=false,compose=false}={}){
   document.body.classList.remove('alphaChatMode');
   document.body.classList.toggle('alphaComposeMode',!!compose);
   $('lifestyleAI')?.classList.remove('chatStarted');
+  /* 4.3.13: Nova conversa fullscreen também arma o histórico Android,
+     mesmo antes de existir a primeira mensagem. */
+  if(compose)alphaEnterChatHistory?.();
+  if(alphaSpotifyRemoteWanted&&compose){
+    requestAnimationFrame(()=>alphaSpotifyApplyRemoteContext?.());
+  }
 
   alphaCloseHistory();
   alphaCloseFloatingMenus?.();
@@ -6181,6 +6196,16 @@ function alphaSyncChatMode(){
 
   $('lifestyleAI')?.classList.toggle('chatStarted',started);
   if(!started&&!document.body.classList.contains('alphaComposeMode'))alphaCloseChatMenu();
+
+  /* 4.3.13: o Chat fullscreen também é contexto Spotify válido.
+     alphaOpenConversation() passa por go('home') antes de alphaSyncChatMode(),
+     por isso o Remote era escondido durante a transição e nunca reaplicado. */
+  if(alphaSpotifyRemoteWanted){
+    requestAnimationFrame(()=>alphaSpotifyApplyRemoteContext?.());
+  }else if(alphaShellView==='home'&&!document.body.classList.contains('alphaChatMode')&&!document.body.classList.contains('alphaComposeMode')){
+    const box=document.getElementById('alphaSpotifyOverlay');if(box)box.hidden=true;
+    alphaSpotifySetGlobalVisible?.(false);
+  }
 }
 function alphaCloseChatMenu(){$('aiChatMenu')?.classList.remove('show');$('alphaSidebarSearchWrap')?.classList.remove('open')}
 function alphaCloseAttachMenu(){$('alphaAttachMenu')?.classList.remove('show')}
@@ -8047,8 +8072,8 @@ setTimeout(()=>{
 
 </script>
 
-<script>const ALPHA_VISIBLE_VERSION='v4.3.11 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='4.3.11-spotify-remote-persistence-final';
+<script>const ALPHA_VISIBLE_VERSION='v4.3.13 · TEST';
+window.ALPHA_DOMAIN_GATE_BUILD='4.3.13-spotify-remote-persistence-final';
 window.addEventListener('online',alphaPrewarmBackend,{passive:true});
 setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
 </script>
