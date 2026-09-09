@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="3.6.7">
+<meta name="alpha-version" content="3.6.8">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 3.6.7 — AI Chat App Mode</title>
+<title>Project Alpha 3.6.8 — AI Chat App Mode</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -615,6 +615,7 @@ body.alphaChatMode #lifestyleAI .lifestyleThread{
 .alphaGeneratingRow{margin:10px 0 14px 2px;max-width:min(94%,520px)}
 .alphaLiveProgress{border:1px solid rgba(160,140,255,.16);background:linear-gradient(180deg,rgba(32,29,52,.42),rgba(10,25,31,.22));border-radius:18px;padding:11px 13px;box-shadow:0 8px 26px rgba(0,0,0,.10)}
 .alphaLiveProgressHead{display:flex;align-items:center;gap:9px;color:#bbaaff;font-size:13px;font-weight:800;letter-spacing:.01em;margin-bottom:7px}
+.alphaResponseTimer{margin-left:auto;font-variant-numeric:tabular-nums;color:rgba(224,217,255,.82);font-size:12px;font-weight:850;letter-spacing:.04em}
 .alphaLivePulse{width:8px;height:8px;border-radius:50%;background:#a88cff;box-shadow:0 0 0 0 rgba(168,140,255,.38);animation:alphaLivePulse 1.35s ease-out infinite}
 @keyframes alphaLivePulse{0%{box-shadow:0 0 0 0 rgba(168,140,255,.40)}70%{box-shadow:0 0 0 7px rgba(168,140,255,0)}100%{box-shadow:0 0 0 0 rgba(168,140,255,0)}}
 .alphaProgressSteps{display:grid;gap:5px}
@@ -2124,7 +2125,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.7 · FINAL CALENDAR REQUEST-ID FIX · Intent · Research · Synthesis</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.7 · FINAL RESPONSE DELIVERY FIX · Intent · Research · Synthesis</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -7136,16 +7137,27 @@ function alphaProgressStepsFor(text,attachments=[]){
   steps.push('A finalizar');
   return [...new Set(steps)].slice(0,7);
 }
+function alphaFormatResponseTime(ms){
+  const total=Math.max(0,Math.floor(Number(ms||0)/1000));
+  const m=Math.floor(total/60);
+  const s=total%60;
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
 function alphaProgressRecord(id){return alphaPendingRequests.get(id)||null}
 function alphaProgressStart(id,text,attachments=[]){
   const p=alphaProgressRecord(id);if(!p)return;
-  p.progressSteps=alphaProgressStepsFor(text,attachments);p.progressIndex=0;p.progressStartedAt=Date.now();
+  p.progressSteps=alphaProgressStepsFor(text,attachments);p.progressIndex=0;p.progressStartedAt=Date.now();p.lastStepAdvanceAt=p.progressStartedAt;
   if(p.progressTimer)clearInterval(p.progressTimer);
   p.progressTimer=setInterval(()=>{
     const cur=alphaProgressRecord(id);if(!cur){clearInterval(p.progressTimer);return}
+    const now=Date.now();
     const max=Math.max(0,(cur.progressSteps?.length||1)-2);
-    if((cur.progressIndex||0)<max){cur.progressIndex=(cur.progressIndex||0)+1;alphaProgressRefresh(id)}
-  },2400);
+    if((cur.progressIndex||0)<max && now-(cur.lastStepAdvanceAt||cur.progressStartedAt||now)>=3000){
+      cur.progressIndex=(cur.progressIndex||0)+1;
+      cur.lastStepAdvanceAt=now;
+    }
+    alphaProgressRefresh(id);
+  },1000);
   alphaProgressRefresh(id);
 }
 function alphaProgressSet(id,label){
@@ -7168,7 +7180,8 @@ function alphaGeneratingRow(c){
   const steps=Array.isArray(p.progressSteps)&&p.progressSteps.length?p.progressSteps:['A preparar o pedido','A compor a resposta','A finalizar'];
   const idx=Math.max(0,Math.min(Number(p.progressIndex||0),steps.length-1));
   const rows=steps.map((label,i)=>'<div class="alphaProgressStep '+(i<idx?'done':i===idx?'active':'')+'"><span class="alphaProgressMark">'+(i<idx?'✓':i===idx?'●':'○')+'</span><span>'+esc(label)+(i===idx?'<span class="alphaProgressDots"><i></i><i></i><i></i></span>':'')+'</span></div>').join('');
-  return '<div class="aiGeneratingRow"><div class="alphaLiveProgress"><div class="alphaLiveProgressHead"><span class="alphaLivePulse"></span><span>A ALPHA está a trabalhar</span></div><div class="alphaProgressSteps">'+rows+'</div><div class="alphaProgressNote">Progresso operacional da experiência — não mostra raciocínio interno.</div></div></div>';
+  const elapsed=alphaFormatResponseTime(Date.now()-(p.progressStartedAt||p.startedAt||Date.now()));
+  return '<div class="aiGeneratingRow"><div class="alphaLiveProgress"><div class="alphaLiveProgressHead"><span class="alphaLivePulse"></span><span>A ALPHA está a trabalhar</span><span class="alphaResponseTimer">⏱ '+elapsed+'</span></div><div class="alphaProgressSteps">'+rows+'</div><div class="alphaProgressNote">Progresso operacional da experiência — não mostra raciocínio interno.</div></div></div>';
 }
 
 
@@ -7301,42 +7314,41 @@ async function alphaCallBackend(c,text,attachments=[],requestId=''){
     }
   });
 
-  let last=null;
-  const chatTimeouts=[150000,120000];
-  for(let attempt=0;attempt<2;attempt++){
-    const ctrl=new AbortController();
-    const timer=setTimeout(()=>ctrl.abort(),chatTimeouts[attempt]);
-    try{
-      const r=await fetch(base+'/api/chat',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','Accept':'application/json','X-Request-Id':requestId||('req_'+Date.now()+'_'+Math.random().toString(36).slice(2,9))},
-        body:payload,
-        cache:'no-store',
-        signal:ctrl.signal
-      });
-      const raw=await r.text();let d={};try{d=JSON.parse(raw)}catch{}
-      if(r.ok&&d?.ok!==false){
-        alphaBackendState='ready';
-        alphaBackendLastReadyAt=Date.now();
-        return d;
-      }
-      last=new Error(String(d?.detail||d?.error||('HTTP '+r.status)));
-      // 4xx funcionais não beneficiam de repetir o mesmo pedido.
-      if(r.status<500&&r.status!==408&&r.status!==429)throw last;
-    }catch(e){
-      last=e?.name==='AbortError'?new Error('CHAT_TIMEOUT'):e;
-    }finally{
-      clearTimeout(timer);
+  // Uma única chamada longa: o backend pode precisar de pesquisar várias fontes.
+  // Não repetimos automaticamente o mesmo pedido, evitando trabalho duplicado e respostas órfãs.
+  const ctrl=new AbortController();
+  const timer=setTimeout(()=>ctrl.abort(),360000);
+  try{
+    const r=await fetch(base+'/api/chat',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Accept':'application/json',
+        'X-Request-Id':requestId||('req_'+Date.now()+'_'+Math.random().toString(36).slice(2,9))
+      },
+      body:payload,
+      cache:'no-store',
+      signal:ctrl.signal
+    });
+
+    const raw=await r.text();
+    let d={};
+    try{d=JSON.parse(raw)}catch{
+      throw new Error('Resposta inválida do serviço Alpha');
     }
 
-    if(attempt===0){
-      alphaProgressSet(c.id,'A aguardar a conclusão do pedido');
-      // Antes da segunda tentativa, confirma que o backend continua vivo.
-      try{await alphaWakeBackend({force:true,silent:true})}catch{}
-      await new Promise(r=>setTimeout(r,650));
+    if(!r.ok||d?.ok===false){
+      throw new Error(String(d?.detail||d?.error||('HTTP '+r.status)));
     }
+
+    alphaBackendState='ready';
+    alphaBackendLastReadyAt=Date.now();
+    return d;
+  }catch(e){
+    throw e?.name==='AbortError'?new Error('CHAT_TIMEOUT'):e;
+  }finally{
+    clearTimeout(timer);
   }
-  throw last||new Error('Falha de ligação ao backend');
 }
 async function alphaLifestyleSend(){
   const input=$('lifestylePrompt'),state=$('lifestyleState');if(!input)return;
@@ -7615,8 +7627,8 @@ setTimeout(()=>{
 
 </script>
 
-<script>const ALPHA_VISIBLE_VERSION='v3.6.7 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='3.6.7-open-place-cards-dedup-merge';
+<script>const ALPHA_VISIBLE_VERSION='v3.6.8 · TEST';
+window.ALPHA_DOMAIN_GATE_BUILD='3.6.8-response-timer-delivery-fix';
 window.addEventListener('online',alphaPrewarmBackend,{passive:true});
 setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
 </script>
