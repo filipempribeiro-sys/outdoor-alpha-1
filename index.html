@@ -1924,6 +1924,51 @@ nav.bottom .nav .alphaNavIcon svg{
   margin-bottom:18px!important;
 }
 
+
+/* ============================================================
+   ALPHA 3.6.7 · FINAL CLEAN UX FIX
+   ============================================================ */
+
+/* Welcome is a clean, branding-only surface. */
+body.alphaWelcomeActive .alphaInternalMenuBtn,
+body.alphaWelcomeActive #lifestyleAI .aiTopbar.alphaFloatingHeader,
+body.alphaWelcomeActive .alphaConversationSidebar,
+body.alphaWelcomeActive .alphaInternalSidebar,
+body.alphaWelcomeActive .alphaInternalScrim{
+  display:none!important;
+}
+
+/* More breathing room between hamburger and first internal card. */
+body:not([data-alpha-view="home"]) .view.active{
+  padding-top:calc(env(safe-area-inset-top) + 112px)!important;
+}
+.alphaInternalMenuBtn{
+  top:calc(env(safe-area-inset-top) + 10px)!important;
+}
+
+/* Navigation buttons contain exactly ONE custom icon. */
+nav.bottom .nav > .alphaIcon,
+nav.bottom .nav > .alphaIconSlot,
+.alphaInternalNavList button > .alphaIcon,
+.alphaInternalNavList button > .alphaIconSlot{
+  display:none!important;
+}
+nav.bottom .nav .alphaNavIcon,
+.alphaInternalNavList .alphaInternalNavIcon{
+  display:grid!important;
+  place-items:center!important;
+  flex:0 0 auto!important;
+}
+nav.bottom .nav .alphaNavIcon svg,
+.alphaInternalNavList .alphaInternalNavIcon svg{
+  display:block!important;
+}
+
+/* Profile ends after user/account features; no development manifesto. */
+#profile{
+  padding-bottom:calc(env(safe-area-inset-bottom) + 20px)!important;
+}
+
 </style>
 </head>
 <body class="alphaWelcomeActive">
@@ -1958,7 +2003,7 @@ nav.bottom .nav .alphaNavIcon svg{
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.7 · FINAL SHELL · Intent · Research · Synthesis</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.7 · FINAL CLEAN UX · Intent · Research · Synthesis</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -2628,47 +2673,6 @@ Estação de São Bento
     <p class="small muted">Ferramenta temporária para a família testar cada UX. Em produção o utilizador não escolhe o tier manualmente.</p>
     <div class="row"><button class="btn secondary" onclick="simulateTier('FREE')">FREE</button><button class="btn secondary" onclick="simulateSilverEarned()">SILVER</button><button class="btn purple" onclick="simulateTier('GOLD')">EARLY GOLD</button><button class="btn secondary" onclick="simulateTier('PLATINUM')">PLATINUM</button><button class="btn secondary" onclick="simulateTier('ORGANIZATION')">ORGANIZATIONS</button></div>
   </div>
-  <div class="card">
-    <div class="eyebrow">Alpha 2.0.3</div><h2>Estado do teste</h2>
-    <div class="list">
-      <div class="item">✓ GPS real + tracking</div>
-      <div class="item">✓ Mapa vetorial real</div>
-      <div class="item">◉ Discovery de trails reais via OpenStreetMap</div>
-      <div class="item">◉ Trail Detail · ficha antes do GO com dados reais disponíveis</div>
-      <div class="item">◉ Destination Planner · pesquisa explícita + cache</div>
-      <div class="item">◉ Monumentos/POIs, refeições e alojamento via OSM/Overpass</div><div class="item">✓ GOLD EXPLORE 2.0.0 · rota visível + ações no fim da seleção · ✓ GOLD EXPLORE · CURATED · destaques para visitar sem trekking + seleção + mapa + Wikipedia quando disponível</div>
-      <div class="item">◉ AI Experience Composer local · cria plano real sem inventar dados</div>
-      <div class="item">◉ Equipa de teste · 4 participantes + registo de contribuições</div>
-      <div class="item">◉ Multi-destino · sem presets · Portugal/Espanha/outros destinos</div>
-      <div class="item">◉ Diário persistente · destinos, planos, componentes realizados e reviews</div>
-      <div class="item">◉ Future CTO Concept #02 · Smart Budget & Choice Composer</div>
-      <div class="item">◉ 2–3 alternativas por refeição e alojamento · seleção substituível</div>
-      <div class="item">◉ Hotel + apartamento/AL · preço real quando existir, PREDICTED quando estimado</div>
-      <div class="item">◉ Budget Guard · custo conhecido vs orçamento</div>
-      <div class="item">◉ Budget-First · orçamento decide o âmbito da experiência</div>
-      <div class="item">◉ Budget Advisor · aconselha remover alojamento/refeições pagas quando não cabem</div>
-      <div class="item">◉ Experience Expander · orçamento folgado acrescenta experiências/opções</div>
-      <div class="item">◉ Meteorologia real via Open-Meteo</div>
-      <div class="item">◉ Trail AI Decision Engine local</div>
-      <div class="item">✓ Reports LIVE georreferenciados</div>
-      <div class="item">✓ Persistência local dos reports</div>
-      <div class="item">✓ Trail Fit / Today Fit / Worth It / Reality Pulse</div>
-      <div class="item">◉ Wearable demo + resumo de atividade</div>
-      <div class="item">◉ Experience Review dinâmico · só componentes concluídos</div>
-      <div class="item">◉ Experience Story + partilha nativa</div>
-      <div class="item">○ Backend / sync entre utilizadores ainda não implementado</div>
-      <div class="item">○ Integração real Health Connect / Apple Health / fabricantes ainda não implementada</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="eyebrow">Princípios congelados</div>
-    <div class="list">
-      <div class="item">🛡️ Segurança nunca é Premium.</div>
-      <div class="item">◉ A IA não inventa realidade.</div>
-      <div class="item">🔐 Saúde, localização e partilha são opt-in.</div>
-      <div class="item">⚡ Complexidade disponível nunca é complexidade obrigatória.</div>
-    </div>
-  </div>
 </section>
 
 </div>
@@ -2708,19 +2712,19 @@ Estação de São Bento
     <button type="button" class="alphaInternalClose" onclick="alphaCloseInternalSidebar()" aria-label="Fechar">×</button>
   </div>
   <div class="alphaInternalNavList">
-    <button type="button" data-target="home" onclick="alphaInternalNavigate('home')">
+    <button type="button" data-alpha-iconified="1" data-target="home" onclick="alphaInternalNavigate('home')">
       <span class="alphaInternalNavIcon alphaNavCompass"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 5.5 16.2 16 12 13.8 7.8 16 12 5.5Z"/></svg></span><span>Alpha</span>
     </button>
-    <button type="button" data-target="field" onclick="alphaInternalNavigate('field')">
+    <button type="button" data-alpha-iconified="1" data-target="field" onclick="alphaInternalNavigate('field')">
       <span class="alphaInternalNavIcon"><svg viewBox="0 0 24 24"><path d="M8 5.5 18 12 8 18.5Z"/></svg></span><span>Mapa/GO</span>
     </button>
-    <button type="button" data-target="report" onclick="alphaInternalNavigate('report')">
+    <button type="button" data-alpha-iconified="1" data-target="report" onclick="alphaInternalNavigate('report')">
       <span class="alphaInternalNavIcon"><svg viewBox="0 0 24 24"><path d="M7 21V4"/><path d="M7 5h10l-2.4 3L17 11H7"/></svg></span><span>LIVE</span>
     </button>
-    <button type="button" data-target="premiumInfo" onclick="alphaInternalOpenPremium()">
+    <button type="button" data-alpha-iconified="1" data-target="premiumInfo" onclick="alphaInternalOpenPremium()">
       <span class="alphaInternalNavIcon alphaPremiumStars"><svg viewBox="0 0 24 24"><path d="m9 3 1.2 3.3L13.5 7.5l-3.3 1.2L9 12l-1.2-3.3-3.3-1.2 3.3-1.2L9 3Z"/><path d="m17 11 1 2.7 2.7 1-2.7 1-1 2.8-1-2.8-2.7-1 2.7-1 1-2.7Z"/></svg></span><span>Premium</span>
     </button>
-    <button type="button" data-target="profile" onclick="alphaInternalNavigate('profile')">
+    <button type="button" data-alpha-iconified="1" data-target="profile" onclick="alphaInternalNavigate('profile')">
       <span class="alphaInternalNavIcon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c.7-5 3.1-7.5 7.5-7.5s6.8 2.5 7.5 7.5"/></svg></span><span>Perfil</span>
     </button>
   </div>
@@ -2728,19 +2732,19 @@ Estação de São Bento
 <div id="alphaInternalScrim" class="alphaInternalScrim" onclick="alphaCloseInternalSidebar()" aria-hidden="true"></div>
 
 <nav class="bottom" aria-label="Navegação principal">
-  <button class="nav active" data-id="home" onclick="go('home')">
+  <button class="nav active" data-alpha-iconified="1" data-id="home" onclick="go('home')">
     <span class="alphaNavIcon alphaNavCompass" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 5.5 16.2 16 12 13.8 7.8 16 12 5.5Z"/></svg></span><span>Alpha</span>
   </button>
-  <button class="nav" data-id="field" onclick="go('field')">
+  <button class="nav" data-alpha-iconified="1" data-id="field" onclick="go('field')">
     <span class="alphaNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5 18 12 8 18.5Z"/></svg></span><span>Mapa/GO</span>
   </button>
-  <button class="nav" data-id="report" onclick="go('report')">
+  <button class="nav" data-alpha-iconified="1" data-id="report" onclick="go('report')">
     <span class="alphaNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 21V4"/><path d="M7 5h10l-2.4 3L17 11H7"/></svg></span><span>LIVE</span>
   </button>
-  <button id="premiumNav" class="nav premiumNav" data-id="premiumInfo" onclick="openPremium()">
+  <button id="premiumNav" class="nav premiumNav" data-alpha-iconified="1" data-id="premiumInfo" onclick="openPremium()">
     <span class="alphaNavIcon alphaPremiumStars" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 3 1.2 3.3L13.5 7.5l-3.3 1.2L9 12l-1.2-3.3-3.3-1.2 3.3-1.2L9 3Z"/><path d="m17 11 1 2.7 2.7 1-2.7 1-1 2.8-1-2.8-2.7-1 2.7-1 1-2.7Z"/></svg></span><span>Premium</span>
   </button>
-  <button class="nav" data-id="profile" onclick="go('profile')">
+  <button class="nav" data-alpha-iconified="1" data-id="profile" onclick="go('profile')">
     <span class="alphaNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c.7-5 3.1-7.5 7.5-7.5s6.8 2.5 7.5 7.5"/></svg></span><span>Perfil</span>
   </button>
 </nav>
@@ -2821,6 +2825,7 @@ function alphaShowWelcome({firstForUser=false}={}){
     }catch(e){}
     sub.textContent=resume;
   }
+  alphaSetWelcomeNavHidden(true);
   ov.classList.remove('leaving');
   ov.classList.add('show');
   ov.setAttribute('aria-hidden','false');
@@ -2834,6 +2839,7 @@ function alphaHideWelcome(){
   setTimeout(()=>{
     ov.classList.remove('show','leaving');
     ov.setAttribute('aria-hidden','true');
+    alphaSetWelcomeNavHidden(false);
   },280);
 }
 function alphaWelcomeKeyForUser(id){return ALPHA_LAST_WELCOME_PREFIX+id}
@@ -3189,20 +3195,6 @@ let alphaShellHistoryReady=false;
 let alphaHistoryHandling=false;
 
 
-function alphaCleanProfileDevSections(){
-  const profile=$('profile');if(!profile)return;
-  const cards=[...profile.querySelectorAll('.card')];
-  for(const card of cards){
-    const t=String(card.innerText||'').trim();
-    if(
-      /ALPHA 2\.0\.3/i.test(t) ||
-      /Estado do teste/i.test(t) ||
-      /Princípios congelados/i.test(t)
-    ){
-      card.remove();
-    }
-  }
-}
 
 function alphaApplyView(id){
   alphaShellView=id||'home';
@@ -3237,7 +3229,6 @@ function alphaApplyView(id){
     }
   },120);
   if(alphaShellView==='experience')syncReview();
-  if(alphaShellView==='profile')alphaCleanProfileDevSections();
 }
 
 
@@ -5712,23 +5703,16 @@ try{
 ['tripBudget','tripPeople','tripNights','mealStyle','stayStyle'].forEach(id=>{const el=$(id);if(el)el.addEventListener('input',()=>renderBudgetAdvice())});
 renderBudgetAdvice();
 
-try{
-  const p=$('profile');
-  if(p){
-    new MutationObserver(()=>alphaCleanProfileDevSections()).observe(p,{childList:true,subtree:true});
-  }
-}catch{}
 
 try{let cc=JSON.parse(localStorage.getItem(scopedTrailCacheKey())||'null');if(cc&&cc.trails&&Date.now()-cc.time<21600000){nearbyTrails=cc.trails;renderTrails();$('trailStatus').textContent=nearbyTrails.length+' trails carregados do cache deste destino.'}}catch{}
 fetchWeather(false);
 startHeaderWeatherGPS();
 applyDeviceLanguage();if($('deviceLangBadge'))$('deviceLangBadge').textContent=DEVICE_LOCALE+' ·';
 alphaEnsureHistory?.();
-alphaCleanProfileDevSections?.();
 setupFreshPWA();checkForFreshBuild(false);alphaPrewarmBackend();
 setTimeout(()=>{
-  const w=$('welcome')||$('welcomeScreen');
-  const visible=!!w&&(w.classList.contains('show')||getComputedStyle(w).display!=='none'&&getComputedStyle(w).visibility!=='hidden'&&getComputedStyle(w).opacity!=='0');
+  const w=$('alphaWelcomeOverlay');
+  const visible=!!w&&w.classList.contains('show');
   if(!visible)alphaSetWelcomeNavHidden(false);
 },900);
 
@@ -6319,7 +6303,9 @@ function alphaFindLeadingTextNode(el){
   while((n=w.nextNode())){if(String(n.nodeValue||'').trim())return n}return null;
 }
 function alphaDecorateButton(btn){
-  if(!btn||btn.dataset.alphaIconified==='1'||btn.id==='alphaSendBtn'||btn.querySelector('.alphaIconSlot,.alphaIcon'))return;
+  if(!btn||btn.dataset.alphaIconified==='1'||btn.id==='alphaSendBtn'||
+     btn.matches?.('nav.bottom .nav,.alphaInternalNavList button')||
+     btn.querySelector('.alphaIconSlot,.alphaIcon,.alphaNavIcon,.alphaInternalNavIcon'))return;
   const text=String(btn.textContent||'').trim();if(!text)return;
   let found=ALPHA_ICON_PREFIXES.find(([prefix])=>text.startsWith(prefix));
   if(!found){
@@ -6333,7 +6319,19 @@ function alphaDecorateButton(btn){
   if(prefix&&node){node.nodeValue=String(node.nodeValue||'').replace(prefix,'').replace(/^\s+/,'')}
   btn.insertAdjacentHTML('afterbegin',alphaIcon(name));btn.classList.add('alphaIconified');btn.dataset.alphaIconified='1';
 }
+
+function alphaNormalizeNavigationIcons(){
+  document.querySelectorAll('nav.bottom .nav,.alphaInternalNavList button').forEach(btn=>{
+    [...btn.children].forEach(ch=>{
+      if(ch.classList?.contains('alphaIcon')||ch.classList?.contains('alphaIconSlot'))ch.remove();
+    });
+    btn.classList.remove('alphaIconified');
+    btn.dataset.alphaIconified='1';
+  });
+}
+
 function alphaApplyIconSystem(root=document){
+  alphaNormalizeNavigationIcons();
   alphaFillIconSlots(root);
   root.querySelectorAll?.('button,.btn,.nav,.lifestyleChip').forEach(alphaDecorateButton);
   root.querySelectorAll?.('.pathsIcon').forEach(el=>{if(el.dataset.alphaIconified)return;const t=el.textContent.trim();const m=ALPHA_ICON_PREFIXES.find(([p])=>t.startsWith(p));if(m){el.textContent='';el.innerHTML=alphaIcon(m[1]);el.dataset.alphaIconified='1'}});
