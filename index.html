@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="4.0.2">
+<meta name="alpha-version" content="4.1.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 4.0.2 — AI Chat App Mode</title>
+<title>Project Alpha 4.1.0 — AI Chat App Mode</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -2124,6 +2124,32 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 .alphaHoursLine{display:grid;grid-template-columns:minmax(130px,1fr) auto;gap:14px;align-items:start;padding:9px 0;border-top:1px solid rgba(255,255,255,.07)}
 .alphaHoursLine span{color:rgba(255,255,255,.68);line-height:1.4}.alphaHoursLine b{color:rgba(255,255,255,.95);font-weight:750;line-height:1.4;text-align:right}
 @media(max-width:520px){.alphaHoursLine{grid-template-columns:1fr;gap:3px}.alphaHoursLine b{text-align:left}}
+
+/* ALPHA 4.1 · Spotify Remote: grupo e glifos geometricamente centrados */
+.alphaContextAction{width:100%}
+.alphaSpotifyRemoteWrap{width:100%;display:flex;justify-content:center;align-items:center;margin:6px 0 4px}
+.alphaSpotifyRemote{
+  display:grid!important;
+  grid-template-columns:repeat(4,46px)!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:12px!important;
+  width:max-content!important;
+  margin:0 auto!important;
+}
+.alphaSpotifyRemote button{
+  width:46px!important;height:46px!important;min-width:46px!important;min-height:46px!important;
+  padding:0!important;margin:0!important;border-radius:50%!important;
+  display:grid!important;place-items:center!important;
+  line-height:1!important;text-align:center!important;
+}
+.alphaSpotifyRemote button span{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;height:100%;line-height:1;font-size:18px;font-weight:900;
+  transform:none!important;
+}
+.alphaSpotifyRemote button.busy{opacity:.55}
+@media(max-width:380px){.alphaSpotifyRemote{grid-template-columns:repeat(4,42px)!important;gap:9px!important}.alphaSpotifyRemote button{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important}}
 </style>
 </head>
 <body class="alphaWelcomeActive">
@@ -2140,7 +2166,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.0.2 · Family Login</small></div></div>
+    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.1.0 · Family Login</small></div></div>
     <div class="authWelcomeBrand"><div class="logo compassSeeking"></div><div class="alphaWelcomeEyebrow">ALPHA · OUTDOOR LIFESTYLE AI</div><h1>Bem-vindo à Alpha</h1><p>Descobrir · Confiar · Viver</p></div>
     <p class="muted" style="text-align:center">Escolhe o teu perfil para começares. Nesta versão Alpha usamos as 4 contas familiares de teste e o PIN <b>1234</b>.</p>
     <label>Utilizador</label>
@@ -2158,7 +2184,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.0.2 · OFFICIAL SITE CRAWL · VERIFIED RESEARCH · RESPONSE TIME · DELETE CONVERSATIONS</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.1.0 · OFFICIAL SITE CRAWL · VERIFIED RESEARCH · RESPONSE TIME · DELETE CONVERSATIONS</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -2261,7 +2287,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 4.0.2 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 4.1.0 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
       <div class="eyebrow">AI JOURNEY · MULTI-STOP</div>
@@ -2914,7 +2940,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='4.0.2',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='4.1.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -6591,31 +6617,44 @@ function alphaSaveSpotifyPending(v){v?localStorage.setItem(alphaSpotifyPendingKe
 function alphaLoadSpotifyPending(){try{return JSON.parse(localStorage.getItem(alphaSpotifyPendingKey())||'null')}catch{return null}}
 
 
-async function alphaSpotifyRemote(action,playlist=null){
+async function alphaSpotifyRemote(action,playlist=null,button=null){
   try{
+    if(button){button.disabled=true;button.classList.add('busy')}
     const st=await alphaSpotifyStatus();
     if(!st.connected){
       await alphaSpotifyAuth({conversationId:alphaActiveConversationId(),requestId:'remote_'+Date.now(),nextAction:'remote',openAfter:false});
       return;
     }
     const base=alphaBackendUrl();
+    const stateR=await fetch(base+'/api/spotify/player?sessionId='+encodeURIComponent(alphaSpotifySessionId()),{cache:'no-store'});
+    const state=await stateR.json().catch(()=>({}));
+    if(!stateR.ok)throw new Error(state.error||'Não foi possível consultar o Spotify.');
+    if(!state.activeDevice){
+      throw new Error('Abre o Spotify e inicia qualquer música num dispositivo. Depois volta à ALPHA e usa o Remote.');
+    }
     const r=await fetch(base+'/api/spotify/player/'+encodeURIComponent(action),{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({sessionId:alphaSpotifySessionId(),contextUri:action==='play'?(playlist?.uri||''):''})
+      body:JSON.stringify({
+        sessionId:alphaSpotifySessionId(),
+        deviceId:state.activeDevice.id,
+        contextUri:playlist?.uri||'',
+        startPlaylist:false
+      })
     });
     const d=await r.json().catch(()=>({}));
     if(!r.ok)throw new Error(d.error||'Spotify Remote indisponível');
-    toast(action==='play'?'Spotify a reproduzir':action==='pause'?'Spotify em pausa':action==='next'?'Faixa seguinte':'Faixa anterior');
+    toast((action==='play'?'A reproduzir':action==='pause'?'Em pausa':action==='next'?'Faixa seguinte':'Faixa anterior')+' · '+(d.device?.name||'Spotify'));
   }catch(e){toast(String(e?.message||e))}
+  finally{if(button){button.disabled=false;button.classList.remove('busy')}}
 }
 function alphaSpotifyRemoteBar(p){
   if(!p?.url)return'';
-  return `<div class="alphaSpotifyRemote" role="group" aria-label="Spotify Remote">
-    <button type="button" onclick='alphaSpotifyRemote("previous",${JSON.stringify(p)})' aria-label="Anterior">‹‹</button>
-    <button type="button" onclick='alphaSpotifyRemote("play",${JSON.stringify(p)})' aria-label="Reproduzir">▶</button>
-    <button type="button" onclick='alphaSpotifyRemote("pause",${JSON.stringify(p)})' aria-label="Pausa">Ⅱ</button>
-    <button type="button" onclick='alphaSpotifyRemote("next",${JSON.stringify(p)})' aria-label="Seguinte">››</button>
-  </div>`;
+  return `<div class="alphaSpotifyRemoteWrap"><div class="alphaSpotifyRemote" role="group" aria-label="Spotify Remote">
+    <button type="button" onclick='alphaSpotifyRemote("previous",${JSON.stringify(p)},this)' aria-label="Faixa anterior"><span>‹‹</span></button>
+    <button type="button" onclick='alphaSpotifyRemote("play",${JSON.stringify(p)},this)' aria-label="Reproduzir"><span>▶</span></button>
+    <button type="button" onclick='alphaSpotifyRemote("pause",${JSON.stringify(p)},this)' aria-label="Pausa"><span>Ⅱ</span></button>
+    <button type="button" onclick='alphaSpotifyRemote("next",${JSON.stringify(p)},this)' aria-label="Faixa seguinte"><span>››</span></button>
+  </div></div>`;
 }
 
 function alphaShouldOfferWhatsApp(text){
@@ -6640,6 +6679,16 @@ function alphaCleanWhatsAppText(s){
     .replace(/^\s*[-•]\s+/gm,'• ')
     .replace(/\n{3,}/g,'\n\n')
     .trim();
+}
+
+function alphaConversationHasShareIntent(c){
+  if(!c||!Array.isArray(c.messages))return false;
+  for(let i=c.messages.length-1;i>=Math.max(0,c.messages.length-8);i--){
+    const m=c.messages[i];
+    if(m?.whatsappShare||m?.alphaShare?.id)return true;
+    if(m?.role==='user'&&alphaShouldOfferWhatsApp(m.text||''))return true;
+  }
+  return false;
 }
 function alphaLatestPlaylistForConversation(c){
   if(!c||!Array.isArray(c.messages))return null;
@@ -6761,6 +6810,7 @@ async function alphaCreateSpotifyPlaylistForMessage(conversationId,requestId){
   const d=await r.json().catch(()=>({}));
   if(!r.ok||!d.playlist)throw new Error(d.error||'Não foi possível criar a playlist.');
   m.spotifyPlaylist=d.playlist;
+    if(alphaConversationHasShareIntent(c))m.whatsappShare=true;
   ref.conversation.conversationState=ref.conversation.conversationState||{};
   ref.conversation.conversationState.spotifyPlaylistId=d.playlist.id||'';
   ref.conversation.conversationState.spotifyPlaylistUrl=d.playlist.url||'';
@@ -7553,7 +7603,7 @@ async function alphaLifestyleSend(){
   // Evita resposta duplicada ao mesmo requestId.
   if(!target.messages.some(m=>m.role==='ai'&&m.requestId===requestId)){
     const contextualMusic=real&&d&&d.scope==='CONTEXTUAL'&&Array.isArray(d.playlistTracks)&&d.playlistTracks.length>0;
-    const contextualWhatsApp=real&&d&&d.scope!=='OUT_OF_SCOPE'&&(alphaShouldOfferWhatsApp(displayText)||String(d.shareSummary||'').trim());
+    const contextualWhatsApp=real&&d&&d.scope!=='OUT_OF_SCOPE'&&(alphaShouldOfferWhatsApp(displayText)||String(d.shareSummary||'').trim()||alphaConversationHasShareIntent(target));
     const inheritedPlaylist=alphaLatestPlaylistForConversation(target);
     target.messages.push({
       role:'ai',
@@ -7759,8 +7809,8 @@ setTimeout(()=>{
 
 </script>
 
-<script>const ALPHA_VISIBLE_VERSION='v4.0.2 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='4.0.2-official-site-crawl';
+<script>const ALPHA_VISIBLE_VERSION='v4.1.0 · TEST';
+window.ALPHA_DOMAIN_GATE_BUILD='4.1.0-official-site-crawl';
 window.addEventListener('online',alphaPrewarmBackend,{passive:true});
 setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
 </script>
