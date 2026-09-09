@@ -8,67 +8,48 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: alpha-backend-keep-awake
-  cancel-in-progress: true
-
 jobs:
   wake-alpha:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 3
 
     steps:
-      - name: Keep ALPHA backend awake
+      - name: Ping ALPHA backend
         shell: bash
         run: |
           set -euo pipefail
 
           BASE_URL="https://alpha-ai-backend-m6l3.onrender.com/api/health"
+          TS="$(date +%s)"
+          URL="${BASE_URL}?source=github-actions&ts=${TS}"
 
-          echo "ALPHA keep-awake iniciado."
-          echo "Cada execução mantém-se ativa entre agendamentos."
-          echo
+          echo "=============================================="
+          echo "ALPHA Backend Keep Awake"
+          echo "UTC: $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+          echo "URL: ${URL}"
+          echo "=============================================="
 
-          # O GitHub agenda este workflow de 5 em 5 minutos.
-          # Enquanto o próximo run não arrancar, este job continua
-          # a fazer ping a cada 3 minutos. Quando o novo run começa,
-          # concurrency.cancel-in-progress cancela este e substitui-o.
-          #
-          # Assim, atrasos do scheduler do GitHub não deixam o Render
-          # sem tráfego durante longos intervalos.
+          BODY_FILE="$(mktemp)"
 
-          for attempt in 1 2 3 4 5 6; do
-            TS="$(date +%s)"
-            URL="${BASE_URL}?source=github-actions&attempt=${attempt}&ts=${TS}"
-
-            echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] Ping ${attempt}/6"
-
-            success=0
-
-            for retry in 1 2 3; do
-              if curl                 --fail                 --silent                 --show-error                 --location                 --connect-timeout 10                 --max-time 45                 --retry 0                 -H "Accept: application/json"                 -H "Cache-Control: no-cache"                 -H "Pragma: no-cache"                 -H "User-Agent: ALPHA-KeepAlive/3.6.7"                 "$URL"; then
-
-                echo
-                echo "Backend ALPHA respondeu."
-                success=1
-                break
-              fi
-
-              echo
-              echo "Tentativa ${retry}/3 falhou."
-              sleep 5
-            done
-
-            if [ "$success" -ne 1 ]; then
-              echo "O backend não respondeu neste ciclo; o workflow continuará a tentar."
-            fi
-
-            # Não dormir depois do último ciclo.
-            if [ "$attempt" -lt 6 ]; then
-              echo "Novo ping dentro de 3 minutos..."
-              sleep 180
-            fi
-          done
+          HTTP_CODE="$(
+            curl               --silent               --show-error               --location               --connect-timeout 15               --max-time 60               --retry 2               --retry-delay 5               --retry-all-errors               -H "Accept: application/json"               -H "Cache-Control: no-cache"               -H "Pragma: no-cache"               -H "User-Agent: ALPHA-KeepAlive/3.6.7"               --output "${BODY_FILE}"               --write-out "%{http_code}"               "${URL}"
+          )"
 
           echo
-          echo "Ciclo keep-awake concluído."
+          echo "HTTP STATUS: ${HTTP_CODE}"
+          echo "RESPOSTA:"
+          cat "${BODY_FILE}" || true
+          echo
+          echo
+
+          if [[ ! "${HTTP_CODE}" =~ ^2[0-9][0-9]$ ]]; then
+            echo "ERRO: o backend ALPHA não respondeu com HTTP 2xx."
+            exit 1
+          fi
+
+          if ! grep -q '"ok"[[:space:]]*:[[:space:]]*true' "${BODY_FILE}"; then
+            echo "ERRO: o endpoint respondeu, mas não confirmou ok:true."
+            exit 1
+          fi
+
+          echo "SUCESSO: backend ALPHA acordado e /api/health respondeu corretamente."
