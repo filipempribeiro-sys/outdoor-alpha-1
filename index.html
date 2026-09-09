@@ -1760,6 +1760,78 @@ body:not([data-alpha-view="home"]) .app{
   .alphaInternalMenuBtn{width:48px;height:48px}
 }
 
+
+/* ============================================================
+   ALPHA 3.6.7 · SHELL HOTFIX
+   Footer only on Home + no duplicated legacy nav icons
+   ============================================================ */
+
+/* hidden wins over every older .bottom display rule */
+[hidden]{display:none!important}
+
+/* Nas páginas internas o footer NÃO existe, independentemente de CSS legado. */
+body[data-alpha-view="field"] nav.bottom,
+body[data-alpha-view="report"] nav.bottom,
+body[data-alpha-view="premiumInfo"] nav.bottom,
+body[data-alpha-view="profile"] nav.bottom,
+body[data-alpha-view="experience"] nav.bottom,
+body[data-alpha-view="trip"] nav.bottom{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+
+/* No chat/composer também nunca existe footer/header global. */
+body.alphaChatMode nav.bottom,
+body.alphaComposeMode nav.bottom,
+body.alphaChatMode .top,
+body.alphaComposeMode .top{
+  display:none!important;
+  visibility:hidden!important;
+}
+
+/* Remove qualquer ícone legado criado por pseudo-elementos / content CSS.
+   Ficam APENAS os SVG novos. */
+nav.bottom .nav::before,
+nav.bottom .nav::after,
+nav.bottom .nav > br{
+  display:none!important;
+  content:none!important;
+}
+
+/* Um único ícone por item, sem stacking vertical duplicado. */
+nav.bottom .nav{
+  line-height:1!important;
+}
+nav.bottom .nav .alphaNavIcon{
+  display:grid!important;
+  width:26px!important;
+  height:26px!important;
+  margin:0!important;
+}
+nav.bottom .nav .alphaNavIcon svg{
+  display:block!important;
+  width:26px!important;
+  height:26px!important;
+}
+
+/* Home: footer normal com 5 opções e ícones exclusivos. */
+body[data-alpha-view="home"]:not(.alphaChatMode):not(.alphaComposeMode) nav.bottom:not([hidden]){
+  display:grid!important;
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+}
+
+/* Nas páginas internas reduzimos ligeiramente o vazio acima do 1.º card. */
+body:not([data-alpha-view="home"]) .view.active{
+  padding-top:calc(env(safe-area-inset-top) + 58px)!important;
+}
+.alphaInternalMenuBtn{
+  top:calc(env(safe-area-inset-top) + 9px)!important;
+}
+
 </style>
 </head>
 <body>
@@ -3027,8 +3099,9 @@ let alphaHistoryHandling=false;
 function alphaApplyView(id){
   alphaShellView=id||'home';
   document.body.dataset.alphaView=alphaShellView;
+  const isHome=alphaShellView==='home';
 
-  if(alphaShellView!=='home'){
+  if(!isHome){
     document.body.classList.remove('alphaChatMode','alphaComposeMode');
     alphaCloseChatMenu?.();
   }
@@ -3036,6 +3109,13 @@ function alphaApplyView(id){
   document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===alphaShellView));
   document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===alphaShellView));
   document.querySelectorAll('.alphaInternalNavList [data-target]').forEach(n=>n.classList.toggle('active',n.dataset.target===alphaShellView));
+
+  /* 3.6.7 shell authority:
+     header + footer globais existem SOMENTE na Home Alpha. */
+  const globalHeader=document.querySelector('.top');
+  const globalFooter=document.querySelector('nav.bottom');
+  if(globalHeader)globalHeader.hidden=!isHome;
+  if(globalFooter)globalFooter.hidden=!isHome;
 
   alphaCloseInternalSidebar?.();
   window.scrollTo(0,0);
@@ -5617,11 +5697,20 @@ function alphaSyncChatMode(){
   const started=alphaChatHasMessages();
   const wasStarted=document.body.classList.contains('alphaChatMode');
   document.body.classList.toggle('alphaChatMode',started);
+  const globalHeader=document.querySelector('.top');
+  const globalFooter=document.querySelector('nav.bottom');
+
   if(started){
     document.body.classList.remove('alphaComposeMode');
     document.body.dataset.alphaView='home';
+    if(globalHeader)globalHeader.hidden=true;
+    if(globalFooter)globalFooter.hidden=true;
     if(!wasStarted)alphaEnterChatHistory?.();
+  }else{
+    if(globalHeader)globalHeader.hidden=false;
+    if(globalFooter)globalFooter.hidden=false;
   }
+
   $('lifestyleAI')?.classList.toggle('chatStarted',started);
   if(!started&&!document.body.classList.contains('alphaComposeMode'))alphaCloseChatMenu();
 }
