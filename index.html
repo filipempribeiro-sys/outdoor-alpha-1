@@ -1832,9 +1832,101 @@ body:not([data-alpha-view="home"]) .view.active{
   top:calc(env(safe-area-inset-top) + 9px)!important;
 }
 
+
+/* ============================================================
+   ALPHA 3.6.7 · FINAL UX RECTIFICATION
+   ============================================================ */
+
+/* WELCOME: nenhum menu/hamburger/nova conversa deve surgir durante o regresso. */
+body.alphaWelcomeActive .alphaInternalMenuBtn,
+body.alphaWelcomeActive #lifestyleAI .aiTopbar.alphaFloatingHeader,
+body.alphaWelcomeActive .alphaConversationSidebar,
+body.alphaWelcomeActive .alphaInternalSidebar,
+body.alphaWelcomeActive .alphaInternalScrim{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+
+/* Páginas internas: criar espaço visual real entre menu e 1.º container. */
+body:not([data-alpha-view="home"]) .view.active{
+  padding-top:calc(env(safe-area-inset-top) + 88px)!important;
+}
+.alphaInternalMenuBtn{
+  top:calc(env(safe-area-inset-top) + 10px)!important;
+}
+
+/* FOOTER HOME: eliminar definitivamente qualquer ícone legado duplicado. */
+nav.bottom .nav{
+  font-size:0!important;
+}
+nav.bottom .nav > *{
+  font-size:initial;
+}
+nav.bottom .nav > span:last-child{
+  font-size:13px!important;
+}
+nav.bottom .nav::before,
+nav.bottom .nav::after{
+  display:none!important;
+  content:none!important;
+}
+nav.bottom .nav > br{
+  display:none!important;
+}
+nav.bottom .nav .alphaNavIcon{
+  display:grid!important;
+  place-items:center!important;
+  width:27px!important;
+  height:27px!important;
+  margin:0 auto 2px!important;
+}
+nav.bottom .nav .alphaNavIcon svg{
+  width:27px!important;
+  height:27px!important;
+}
+
+/* SIDEBAR INTERNO: idem — apenas um SVG por item. */
+.alphaInternalNavList button{
+  font-size:0!important;
+}
+.alphaInternalNavList button > *{
+  font-size:initial;
+}
+.alphaInternalNavList button > span:last-child{
+  font-size:17px!important;
+}
+.alphaInternalNavList button::before,
+.alphaInternalNavList button::after{
+  display:none!important;
+  content:none!important;
+}
+.alphaInternalNavIcon{
+  width:27px!important;
+  height:27px!important;
+  display:grid!important;
+  place-items:center!important;
+  margin:0!important;
+}
+.alphaInternalNavIcon svg{
+  width:27px!important;
+  height:27px!important;
+}
+
+/* Sidebar de conversas: não mostrar dock de navegação para evitar duplicações. */
+.alphaConversationSidebar .alphaSidebarDock{
+  display:none!important;
+}
+
+/* Perfil: depois de remover blocos dev/teste, dar um fecho visual mais limpo. */
+#profile .card:last-child{
+  margin-bottom:18px!important;
+}
+
 </style>
 </head>
-<body>
+<body class="alphaWelcomeActive">
 <div id="toast" class="toast"></div>
 <div id="alphaWelcomeOverlay" class="alphaWelcomeOverlay" aria-hidden="true">
   <div class="alphaWelcomeInner">
@@ -3096,6 +3188,22 @@ let alphaShellView='home';
 let alphaShellHistoryReady=false;
 let alphaHistoryHandling=false;
 
+
+function alphaCleanProfileDevSections(){
+  const profile=$('profile');if(!profile)return;
+  const cards=[...profile.querySelectorAll('.card')];
+  for(const card of cards){
+    const t=String(card.innerText||'').trim();
+    if(
+      /ALPHA 2\.0\.3/i.test(t) ||
+      /Estado do teste/i.test(t) ||
+      /Princípios congelados/i.test(t)
+    ){
+      card.remove();
+    }
+  }
+}
+
 function alphaApplyView(id){
   alphaShellView=id||'home';
   document.body.dataset.alphaView=alphaShellView;
@@ -3129,6 +3237,16 @@ function alphaApplyView(id){
     }
   },120);
   if(alphaShellView==='experience')syncReview();
+  if(alphaShellView==='profile')alphaCleanProfileDevSections();
+}
+
+
+function alphaSetWelcomeNavHidden(hidden){
+  document.body.classList.toggle('alphaWelcomeActive',!!hidden);
+  if(hidden){
+    alphaCloseChatMenu?.();
+    alphaCloseInternalSidebar?.();
+  }
 }
 
 function alphaEnsureHistory(){
@@ -5593,12 +5711,26 @@ try{
 }catch{}
 ['tripBudget','tripPeople','tripNights','mealStyle','stayStyle'].forEach(id=>{const el=$(id);if(el)el.addEventListener('input',()=>renderBudgetAdvice())});
 renderBudgetAdvice();
+
+try{
+  const p=$('profile');
+  if(p){
+    new MutationObserver(()=>alphaCleanProfileDevSections()).observe(p,{childList:true,subtree:true});
+  }
+}catch{}
+
 try{let cc=JSON.parse(localStorage.getItem(scopedTrailCacheKey())||'null');if(cc&&cc.trails&&Date.now()-cc.time<21600000){nearbyTrails=cc.trails;renderTrails();$('trailStatus').textContent=nearbyTrails.length+' trails carregados do cache deste destino.'}}catch{}
 fetchWeather(false);
 startHeaderWeatherGPS();
 applyDeviceLanguage();if($('deviceLangBadge'))$('deviceLangBadge').textContent=DEVICE_LOCALE+' ·';
 alphaEnsureHistory?.();
+alphaCleanProfileDevSections?.();
 setupFreshPWA();checkForFreshBuild(false);alphaPrewarmBackend();
+setTimeout(()=>{
+  const w=$('welcome')||$('welcomeScreen');
+  const visible=!!w&&(w.classList.contains('show')||getComputedStyle(w).display!=='none'&&getComputedStyle(w).visibility!=='hidden'&&getComputedStyle(w).opacity!=='0');
+  if(!visible)alphaSetWelcomeNavHidden(false);
+},900);
 
 function adaptOrientation(){
   const landscape=window.matchMedia&&window.matchMedia('(orientation: landscape)').matches;
