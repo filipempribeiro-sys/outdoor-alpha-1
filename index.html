@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="4.2.2">
+<meta name="alpha-version" content="4.3.2">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 4.2.2 — AI Chat App Mode</title>
+<title>Project Alpha 4.3.2 — Contextual Top Spotify Remote</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -2165,14 +2165,17 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
   pointer-events:auto;position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 68px);bottom:auto;
   transform:translateX(-50%);width:min(430px,calc(100vw - 28px));min-height:0;
   padding:11px 15px 10px;border-radius:20px;overflow:hidden;
-  background:rgba(9,15,16,.72);border:1px solid rgba(255,255,255,.14);
+  background:rgba(9,15,16,.52);border:1px solid rgba(255,255,255,.12);
   box-shadow:0 10px 32px rgba(0,0,0,.30);isolation:isolate;
-  -webkit-backdrop-filter:blur(16px) saturate(1.08);backdrop-filter:blur(16px) saturate(1.08)
+  -webkit-backdrop-filter:blur(13px) saturate(1.04);backdrop-filter:blur(13px) saturate(1.04)
 }
-/* no Chat há topbar própria; o Remote fica imediatamente abaixo */
+/* O Remote fica LITERALMENTE por baixo da barra de controlos: a topbar tem z-index superior.
+   Não é empurrado para baixo; começa atrás dela e fica visível através da transparência. */
+body.alphaChatMode #lifestyleAI .aiTopbar.alphaFloatingHeader,
+body.alphaComposeMode #lifestyleAI .aiTopbar.alphaFloatingHeader{z-index:2147483000!important}
 body.alphaChatMode .alphaSpotifyOverlay,
-body.alphaComposeMode .alphaSpotifyOverlay{top:calc(env(safe-area-inset-top,0px) + 58px)}
-.alphaSpotifyOverlay::before{content:'';position:absolute;z-index:-2;inset:-18px;background-image:linear-gradient(rgba(5,9,10,.54),rgba(5,9,10,.70)),var(--alpha-spotify-art,none);background-size:cover;background-position:center;filter:blur(10px) saturate(1.05);transform:scale(1.08);opacity:.82}
+body.alphaComposeMode .alphaSpotifyOverlay{top:calc(env(safe-area-inset-top,0px) + 10px)}
+.alphaSpotifyOverlay::before{content:'';position:absolute;z-index:-2;inset:-18px;background-image:linear-gradient(rgba(5,9,10,.34),rgba(5,9,10,.52)),var(--alpha-spotify-art,none);background-size:cover;background-position:center;filter:blur(10px) saturate(1.05);transform:scale(1.08);opacity:.68}
 .alphaSpotifyOverlay::after{content:'';position:absolute;z-index:-1;inset:0;background:linear-gradient(180deg,rgba(5,9,10,.10),rgba(5,9,10,.38))}
 .alphaSpotifyOverlay[hidden]{display:none!important}
 .alphaSpotifyOverlayHead{display:flex;align-items:center;gap:8px;min-height:39px}
@@ -2181,16 +2184,17 @@ body.alphaComposeMode .alphaSpotifyOverlay{top:calc(env(safe-area-inset-top,0px)
 .alphaSpotifyNow div{min-width:0;display:grid;gap:0}
 .alphaSpotifyNow b,.alphaSpotifyNow span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 7px rgba(0,0,0,.55)}
 .alphaSpotifyNow b{font-size:18px;line-height:1.18}.alphaSpotifyNow span{font-size:13px;line-height:1.25;opacity:.88}.alphaSpotifyNow small{display:none!important}
-.alphaSpotifyTopActions{display:flex;align-items:center;gap:4px;flex:0 0 auto}
+.alphaSpotifyTopActions{display:none!important}
+.alphaSpotifyBottomActions{display:flex;justify-content:center;align-items:center;gap:18px;height:28px;margin-top:-1px}
 .alphaSpotifyShuffleTop,.alphaSpotifyClose{width:29px;height:29px;min-width:29px;border-radius:9px;padding:0;display:grid;place-items:center;background:rgba(5,9,10,.20);border:0;color:rgba(255,255,255,.86)}
 .alphaSpotifyShuffleTop{font-size:15px}.alphaSpotifyShuffleTop.active{color:#1ed760;background:rgba(5,25,13,.32)}
 .alphaSpotifyClose{font-size:23px;line-height:1;font-weight:300}
 .alphaSpotifyProgress{height:3px;background:rgba(255,255,255,.26);border-radius:99px;overflow:hidden;margin:7px 0 2px}
 .alphaSpotifyProgress i{display:block;height:100%;width:0;background:#fff;border-radius:inherit;transition:width .35s linear}
 .alphaSpotifyTimes{display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,.68);font-variant-numeric:tabular-nums;margin-bottom:1px}
-.alphaSpotifyGlobalControls{display:grid;grid-template-columns:54px 64px 54px;justify-content:center;align-items:center;gap:25px;height:54px;margin-top:0}
-.alphaSpotifyGlobalControls button{width:54px;height:54px;border:0!important;background:transparent!important;color:#fff;padding:0!important;margin:0!important;display:grid;place-items:center;border-radius:0!important;box-shadow:none!important}
-.alphaSpotifyGlobalControls button.main{width:64px;height:54px;background:transparent!important;color:#fff!important;box-shadow:none!important}
+.alphaSpotifyGlobalControls{display:grid;grid-template-columns:54px 64px 54px;justify-content:center;align-items:center;gap:25px;height:48px;margin-top:0}
+.alphaSpotifyGlobalControls button{width:54px;height:48px;border:0!important;background:transparent!important;color:#fff;padding:0!important;margin:0!important;display:grid;place-items:center;border-radius:0!important;box-shadow:none!important}
+.alphaSpotifyGlobalControls button.main{width:64px;height:48px;background:transparent!important;color:#fff!important;box-shadow:none!important}
 .alphaSpotifyGlobalControls button svg{display:block;width:34px;height:34px;fill:currentColor;stroke:none}
 .alphaSpotifyGlobalControls button.main svg{width:40px;height:40px}
 .alphaSpotifyGlobalControls button.busy{opacity:.5}
@@ -2235,7 +2239,7 @@ nav.bottom .nav > span:last-child{font-size:clamp(9px,2.5vw,12px)!important;whit
 </div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.2.2 · Family Login</small></div></div>
+    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.3.2 · Family Login</small></div></div>
     <div class="authWelcomeBrand"><div class="logo compassSeeking"></div><div class="alphaWelcomeEyebrow">ALPHA · OUTDOOR LIFESTYLE AI</div><h1>Bem-vindo à Alpha</h1><p>Descobrir · Confiar · Viver</p></div>
     <p class="muted" style="text-align:center">Escolhe o teu perfil para começares. Nesta versão Alpha usamos as 4 contas familiares de teste e o PIN <b>1234</b>.</p>
     <label>Utilizador</label>
@@ -2253,7 +2257,7 @@ nav.bottom .nav > span:last-child{font-size:clamp(9px,2.5vw,12px)!important;whit
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.2.2 · OFFICIAL SITE CRAWL · VERIFIED RESEARCH · RESPONSE TIME · DELETE CONVERSATIONS</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.3.2 · OFFICIAL SITE CRAWL · VERIFIED RESEARCH · RESPONSE TIME · DELETE CONVERSATIONS</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -2356,7 +2360,7 @@ nav.bottom .nav > span:last-child{font-size:clamp(9px,2.5vw,12px)!important;whit
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 4.2.2 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 4.3.2 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
       <div class="eyebrow">AI JOURNEY · MULTI-STOP</div>
@@ -8007,8 +8011,8 @@ setTimeout(()=>{
 
 </script>
 
-<script>const ALPHA_VISIBLE_VERSION='v4.3.1 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='4.3.2-contextual-top-spotify-remote';
+<script>const ALPHA_VISIBLE_VERSION='v4.3.2 · TEST';
+window.ALPHA_DOMAIN_GATE_BUILD='4.3.2-contextual-top-spotify-remote-under-controls';
 window.addEventListener('online',alphaPrewarmBackend,{passive:true});
 setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
 </script>
@@ -8020,10 +8024,6 @@ setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
         <img id="alphaSpotifyCover" alt="" />
         <div><b id="alphaSpotifyTrack">Spotify</b><span id="alphaSpotifyArtists"></span><small id="alphaSpotifyDevice"></small></div>
       </div>
-      <div class="alphaSpotifyTopActions">
-        <button type="button" id="alphaSpotifyShuffle" class="alphaSpotifyShuffleTop" onclick="alphaSpotifyGlobalShuffle(this)" aria-label="Aleatório" title="Aleatório">⇄</button>
-        <button type="button" class="alphaSpotifyClose" onclick="alphaSpotifyToggleRemote(false)" aria-label="Fechar">×</button>
-      </div>
     </div>
     <div class="alphaSpotifyProgress"><i id="alphaSpotifyProgressBar"></i></div>
     <div class="alphaSpotifyTimes"><span id="alphaSpotifyElapsed">0:00</span><span id="alphaSpotifyDuration">0:00</span></div>
@@ -8031,6 +8031,10 @@ setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
       <button type="button" onclick="alphaSpotifyGlobalAction('previous',this)" aria-label="Anterior"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 6h3v20H7zM25 7v18L11 16z"/></svg></button>
       <button type="button" id="alphaSpotifyMainToggle" class="main" onclick="alphaSpotifyGlobalToggle(this)" aria-label="Reproduzir ou pausar"><svg id="alphaSpotifyMainIcon" viewBox="0 0 32 32" aria-hidden="true"><path d="M10 6l16 10-16 10z"/></svg></button>
       <button type="button" onclick="alphaSpotifyGlobalAction('next',this)" aria-label="Seguinte"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M22 6h3v20h-3zM7 7l14 9L7 25z"/></svg></button>
+    </div>
+    <div class="alphaSpotifyBottomActions" aria-label="Ações do Spotify Remote">
+      <button type="button" id="alphaSpotifyShuffle" class="alphaSpotifyShuffleTop" onclick="alphaSpotifyGlobalShuffle(this)" aria-label="Aleatório" title="Aleatório">⇄</button>
+      <button type="button" class="alphaSpotifyClose" onclick="alphaSpotifyToggleRemote(false)" aria-label="Fechar">×</button>
     </div>
     <div id="alphaSpotifyGlobalNote" class="alphaSpotifyGlobalNote"></div>
   </section>
