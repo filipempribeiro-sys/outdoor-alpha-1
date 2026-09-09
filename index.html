@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="4.1.0">
+<meta name="alpha-version" content="4.2.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 4.1.0 — AI Chat App Mode</title>
+<title>Project Alpha 4.2.0 — AI Chat App Mode</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -2150,6 +2150,33 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 }
 .alphaSpotifyRemote button.busy{opacity:.55}
 @media(max-width:380px){.alphaSpotifyRemote{grid-template-columns:repeat(4,42px)!important;gap:9px!important}.alphaSpotifyRemote button{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important}}
+
+/* ALPHA 4.2 · Global Spotify Remote */
+.alphaSpotifyGlobal{position:fixed;z-index:2147482500;right:18px;top:calc(env(safe-area-inset-top,0px) + 86px);pointer-events:none}
+.alphaSpotifyGlobal[hidden]{display:none!important}
+.alphaSpotifyFab{pointer-events:auto;width:58px;height:58px;border:0;border-radius:50%;display:grid;place-items:center;background:#fff;box-shadow:0 7px 24px rgba(0,0,0,.24);padding:0}
+.alphaSpotifyLogoGlyph{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#1ed760;color:#071b10;font-size:0}
+.alphaSpotifyLogoGlyph:before{content:'♫';font-size:22px;font-weight:900;color:#071b10}
+.alphaSpotifyFab.playing .alphaSpotifyLogoGlyph{box-shadow:0 0 0 5px rgba(30,215,96,.15)}
+.alphaSpotifyOverlay{pointer-events:auto;position:absolute;right:0;top:68px;width:min(390px,calc(100vw - 28px));padding:16px;border-radius:24px;background:rgba(15,24,25,.97);border:1px solid rgba(82,221,157,.3);box-shadow:0 18px 55px rgba(0,0,0,.42);backdrop-filter:blur(18px)}
+.alphaSpotifyOverlay[hidden]{display:none!important}
+.alphaSpotifyOverlayHead{display:flex;align-items:center;gap:12px}
+.alphaSpotifyNow{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
+.alphaSpotifyNow img{width:58px;height:58px;border-radius:10px;object-fit:cover;flex:0 0 auto}
+.alphaSpotifyNow div{min-width:0;display:grid;gap:2px}
+.alphaSpotifyNow b,.alphaSpotifyNow span,.alphaSpotifyNow small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.alphaSpotifyNow b{font-size:16px}.alphaSpotifyNow span{font-size:13px;opacity:.78}.alphaSpotifyNow small{font-size:11px;opacity:.56}
+.alphaSpotifyClose{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:26px;line-height:1}
+.alphaSpotifyProgress{height:3px;background:rgba(255,255,255,.12);border-radius:9px;overflow:hidden;margin:14px 2px}
+.alphaSpotifyProgress i{display:block;height:100%;width:0;background:#1ed760;border-radius:inherit;transition:width .35s linear}
+.alphaSpotifyGlobalControls{display:grid;grid-template-columns:repeat(4,52px);justify-content:center;align-items:center;gap:13px}
+.alphaSpotifyGlobalControls button{width:52px;height:52px;border-radius:50%;padding:0;display:grid;place-items:center}
+.alphaSpotifyGlobalControls button span{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;line-height:1}
+.alphaSpotifyGlobalControls button.main{width:58px;height:58px;margin:-3px}
+.alphaSpotifyGlobalControls button.main.playing span{transform:translateY(-1px)} /* só corrige opticamente a pausa */
+.alphaSpotifyGlobalControls button.active{border-color:#1ed760;color:#1ed760}
+.alphaSpotifyGlobalNote{font-size:12px;text-align:center;margin-top:10px;color:#ffd46a;min-height:0}
+@media(max-width:390px){.alphaSpotifyGlobal{right:12px}.alphaSpotifyOverlay{right:0}.alphaSpotifyGlobalControls{grid-template-columns:repeat(4,48px);gap:10px}.alphaSpotifyGlobalControls button{width:48px;height:48px}}
 </style>
 </head>
 <body class="alphaWelcomeActive">
@@ -2166,7 +2193,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.1.0 · Family Login</small></div></div>
+    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.2.0 · Family Login</small></div></div>
     <div class="authWelcomeBrand"><div class="logo compassSeeking"></div><div class="alphaWelcomeEyebrow">ALPHA · OUTDOOR LIFESTYLE AI</div><h1>Bem-vindo à Alpha</h1><p>Descobrir · Confiar · Viver</p></div>
     <p class="muted" style="text-align:center">Escolhe o teu perfil para começares. Nesta versão Alpha usamos as 4 contas familiares de teste e o PIN <b>1234</b>.</p>
     <label>Utilizador</label>
@@ -2184,7 +2211,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.1.0 · OFFICIAL SITE CRAWL · VERIFIED RESEARCH · RESPONSE TIME · DELETE CONVERSATIONS</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.2.0 · OFFICIAL SITE CRAWL · VERIFIED RESEARCH · RESPONSE TIME · DELETE CONVERSATIONS</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -2287,7 +2314,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 4.1.0 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 4.2.0 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
       <div class="eyebrow">AI JOURNEY · MULTI-STOP</div>
@@ -2940,7 +2967,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='4.1.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='4.2.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -6648,13 +6675,8 @@ async function alphaSpotifyRemote(action,playlist=null,button=null){
   finally{if(button){button.disabled=false;button.classList.remove('busy')}}
 }
 function alphaSpotifyRemoteBar(p){
-  if(!p?.url)return'';
-  return `<div class="alphaSpotifyRemoteWrap"><div class="alphaSpotifyRemote" role="group" aria-label="Spotify Remote">
-    <button type="button" onclick='alphaSpotifyRemote("previous",${JSON.stringify(p)},this)' aria-label="Faixa anterior"><span>‹‹</span></button>
-    <button type="button" onclick='alphaSpotifyRemote("play",${JSON.stringify(p)},this)' aria-label="Reproduzir"><span>▶</span></button>
-    <button type="button" onclick='alphaSpotifyRemote("pause",${JSON.stringify(p)},this)' aria-label="Pausa"><span>Ⅱ</span></button>
-    <button type="button" onclick='alphaSpotifyRemote("next",${JSON.stringify(p)},this)' aria-label="Faixa seguinte"><span>››</span></button>
-  </div></div>`;
+  // 4.2: o Remote deixou de pertencer à mensagem. O controlo é global, como no Waze.
+  return "";
 }
 
 function alphaShouldOfferWhatsApp(text){
@@ -7809,10 +7831,135 @@ setTimeout(()=>{
 
 </script>
 
-<script>const ALPHA_VISIBLE_VERSION='v4.1.0 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='4.1.0-official-site-crawl';
+<script>const ALPHA_VISIBLE_VERSION='v4.2.0 · TEST';
+window.ALPHA_DOMAIN_GATE_BUILD='4.2.0-official-site-crawl';
 window.addEventListener('online',alphaPrewarmBackend,{passive:true});
 setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
+</script>
+
+<div id="alphaSpotifyGlobal" class="alphaSpotifyGlobal" hidden>
+  <button id="alphaSpotifyFab" class="alphaSpotifyFab" type="button" aria-label="Abrir Spotify Remote" onclick="alphaSpotifyToggleRemote(true)">
+    <span class="alphaSpotifyLogoGlyph">●</span>
+  </button>
+  <section id="alphaSpotifyOverlay" class="alphaSpotifyOverlay" hidden aria-label="Spotify Remote">
+    <div class="alphaSpotifyOverlayHead">
+      <div class="alphaSpotifyNow">
+        <img id="alphaSpotifyCover" alt="" />
+        <div><b id="alphaSpotifyTrack">Spotify</b><span id="alphaSpotifyArtists"></span><small id="alphaSpotifyDevice"></small></div>
+      </div>
+      <button type="button" class="alphaSpotifyClose" onclick="alphaSpotifyToggleRemote(false)" aria-label="Fechar">×</button>
+    </div>
+    <div class="alphaSpotifyProgress"><i id="alphaSpotifyProgressBar"></i></div>
+    <div class="alphaSpotifyGlobalControls">
+      <button type="button" onclick="alphaSpotifyGlobalAction('previous',this)" aria-label="Anterior"><span>‹‹</span></button>
+      <button type="button" id="alphaSpotifyMainToggle" class="main" onclick="alphaSpotifyGlobalToggle(this)" aria-label="Reproduzir ou pausar"><span>▶</span></button>
+      <button type="button" onclick="alphaSpotifyGlobalAction('next',this)" aria-label="Seguinte"><span>››</span></button>
+      <button type="button" id="alphaSpotifyShuffle" onclick="alphaSpotifyGlobalShuffle(this)" aria-label="Aleatório"><span>⤨</span></button>
+    </div>
+    <div id="alphaSpotifyGlobalNote" class="alphaSpotifyGlobalNote"></div>
+  </section>
+</div>
+<script>
+let alphaSpotifyGlobalState=null;
+let alphaSpotifyGlobalTimer=null;
+let alphaSpotifyGlobalBusy=false;
+
+function alphaSpotifyConnectedLocally(){
+  try{return !!localStorage.getItem('alphaSpotifySessionId')}catch{return false}
+}
+function alphaSpotifySetGlobalVisible(show){
+  const root=document.getElementById('alphaSpotifyGlobal');
+  if(root)root.hidden=!show;
+}
+function alphaSpotifyRenderGlobal(state){
+  const root=document.getElementById('alphaSpotifyGlobal');
+  const fab=document.getElementById('alphaSpotifyFab');
+  if(!root||!fab)return;
+  const pb=state?.playback||{};
+  const hasPlayback=!!(pb.available&&pb.track);
+  root.hidden=!hasPlayback;
+  if(!hasPlayback)return;
+  alphaSpotifyGlobalState=state;
+  const cover=document.getElementById('alphaSpotifyCover');
+  if(cover){cover.src=pb.image||'';cover.style.display=pb.image?'block':'none'}
+  const track=document.getElementById('alphaSpotifyTrack');if(track)track.textContent=pb.track||'Spotify';
+  const artists=document.getElementById('alphaSpotifyArtists');if(artists)artists.textContent=(pb.artists||[]).join(', ');
+  const dev=document.getElementById('alphaSpotifyDevice');
+  if(dev)dev.textContent=pb.device?.name?('A tocar em '+pb.device.name):'';
+  const toggle=document.getElementById('alphaSpotifyMainToggle');
+  if(toggle){
+    toggle.dataset.playing=pb.isPlaying?'1':'0';
+    toggle.querySelector('span').textContent=pb.isPlaying?'Ⅱ':'▶';
+    toggle.classList.toggle('playing',!!pb.isPlaying);
+  }
+  const sh=document.getElementById('alphaSpotifyShuffle');if(sh)sh.classList.toggle('active',!!pb.shuffle);
+  const pct=pb.durationMs>0?Math.max(0,Math.min(100,(pb.progressMs/pb.durationMs)*100)):0;
+  const bar=document.getElementById('alphaSpotifyProgressBar');if(bar)bar.style.width=pct+'%';
+  const note=document.getElementById('alphaSpotifyGlobalNote');
+  if(note)note.textContent=pb.device?.restricted?'Este dispositivo não permite controlo remoto.':'';
+  fab.classList.toggle('playing',!!pb.isPlaying);
+}
+async function alphaSpotifyPollGlobal(force=false){
+  if(alphaSpotifyGlobalBusy&&!force)return;
+  if(!alphaSpotifyConnectedLocally()){alphaSpotifySetGlobalVisible(false);return}
+  alphaSpotifyGlobalBusy=true;
+  try{
+    const r=await fetch(alphaBackendUrl()+'/api/spotify/player?sessionId='+encodeURIComponent(alphaSpotifySessionId()),{cache:'no-store'});
+    const d=await r.json().catch(()=>({}));
+    if(r.status===401){alphaSpotifySetGlobalVisible(false);return}
+    if(r.ok)alphaSpotifyRenderGlobal(d);
+  }catch(e){}
+  finally{alphaSpotifyGlobalBusy=false}
+}
+function alphaSpotifyToggleRemote(open){
+  const box=document.getElementById('alphaSpotifyOverlay');if(!box)return;
+  box.hidden=!open;
+  if(open)alphaSpotifyPollGlobal(true);
+}
+async function alphaSpotifyGlobalAction(action,button){
+  const pb=alphaSpotifyGlobalState?.playback||{};
+  if(pb.device?.restricted){toast('Este dispositivo Spotify não aceita comandos remotos.');return}
+  try{
+    if(button)button.disabled=true;
+    const r=await fetch(alphaBackendUrl()+'/api/spotify/player/'+action,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({sessionId:alphaSpotifySessionId(),deviceId:pb.device?.id||''})
+    });
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(d.error||'Não foi possível controlar o Spotify.');
+    setTimeout(()=>alphaSpotifyPollGlobal(true),350);
+  }catch(e){toast(String(e?.message||e))}
+  finally{if(button)button.disabled=false}
+}
+function alphaSpotifyGlobalToggle(button){
+  const playing=alphaSpotifyGlobalState?.playback?.isPlaying;
+  return alphaSpotifyGlobalAction(playing?'pause':'play',button);
+}
+async function alphaSpotifyGlobalShuffle(button){
+  const pb=alphaSpotifyGlobalState?.playback||{};
+  const next=!pb.shuffle;
+  try{
+    if(button)button.disabled=true;
+    const r=await fetch(alphaBackendUrl()+'/api/spotify/player/shuffle',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({sessionId:alphaSpotifySessionId(),deviceId:pb.device?.id||'',state:next})
+    });
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(d.error||'Não foi possível alterar o modo aleatório.');
+    setTimeout(()=>alphaSpotifyPollGlobal(true),350);
+  }catch(e){toast(String(e?.message||e))}
+  finally{if(button)button.disabled=false}
+}
+function alphaSpotifyStartGlobalMonitor(){
+  clearInterval(alphaSpotifyGlobalTimer);
+  alphaSpotifyPollGlobal(true);
+  alphaSpotifyGlobalTimer=setInterval(()=>{
+    if(document.visibilityState==='visible')alphaSpotifyPollGlobal(false);
+  },5000);
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')alphaSpotifyPollGlobal(true)});
+window.addEventListener('focus',()=>alphaSpotifyPollGlobal(true));
+window.addEventListener('load',()=>setTimeout(alphaSpotifyStartGlobalMonitor,900));
 </script>
 </body>
 </html>
