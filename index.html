@@ -2152,35 +2152,52 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 .alphaSpotifyRemote button.busy{opacity:.55}
 @media(max-width:380px){.alphaSpotifyRemote{grid-template-columns:repeat(4,42px)!important;gap:9px!important}.alphaSpotifyRemote button{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important}}
 
-/* ALPHA 4.3.1 · CLEAN SPOTIFY REMOTE — footer driven, compact, artwork background */
+/* ALPHA 4.3.2 · CONTEXTUAL TOP SPOTIFY REMOTE
+   - nunca abre na Home
+   - Home > Spotify entra primeiro no Chat fullscreen
+   - Chat: topo sob a topbar; páginas internas: topo sob o hamburger
+   - conteúdo faz scroll por baixo do Remote
+   - controlos simples, sem bolas, altura mínima */
 .alphaSpotifyGlobal{position:fixed;z-index:2147482500;inset:0;pointer-events:none}
 .alphaSpotifyGlobal[hidden]{display:none!important}
 .alphaSpotifyFab{display:none!important}
-.alphaSpotifyOverlay{pointer-events:auto;position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 112px);transform:translateX(-50%);width:min(430px,calc(100vw - 28px));min-height:220px;padding:18px 20px 17px;border-radius:28px;overflow:hidden;background:rgba(12,18,19,.94);border:1px solid rgba(255,255,255,.16);box-shadow:0 18px 55px rgba(0,0,0,.48);isolation:isolate}
-.alphaSpotifyOverlay::before{content:'';position:absolute;z-index:-2;inset:-22px;background-image:linear-gradient(rgba(6,10,11,.52),rgba(6,10,11,.68)),var(--alpha-spotify-art,none);background-size:cover;background-position:center;filter:blur(8px) saturate(1.08);transform:scale(1.08)}
-.alphaSpotifyOverlay::after{content:'';position:absolute;z-index:-1;inset:0;background:linear-gradient(180deg,rgba(5,9,10,.18),rgba(5,9,10,.62))}
+.alphaSpotifyOverlay{
+  pointer-events:auto;position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 68px);bottom:auto;
+  transform:translateX(-50%);width:min(430px,calc(100vw - 28px));min-height:0;
+  padding:11px 15px 10px;border-radius:20px;overflow:hidden;
+  background:rgba(9,15,16,.72);border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 10px 32px rgba(0,0,0,.30);isolation:isolate;
+  -webkit-backdrop-filter:blur(16px) saturate(1.08);backdrop-filter:blur(16px) saturate(1.08)
+}
+/* no Chat há topbar própria; o Remote fica imediatamente abaixo */
+body.alphaChatMode .alphaSpotifyOverlay,
+body.alphaComposeMode .alphaSpotifyOverlay{top:calc(env(safe-area-inset-top,0px) + 58px)}
+.alphaSpotifyOverlay::before{content:'';position:absolute;z-index:-2;inset:-18px;background-image:linear-gradient(rgba(5,9,10,.54),rgba(5,9,10,.70)),var(--alpha-spotify-art,none);background-size:cover;background-position:center;filter:blur(10px) saturate(1.05);transform:scale(1.08);opacity:.82}
+.alphaSpotifyOverlay::after{content:'';position:absolute;z-index:-1;inset:0;background:linear-gradient(180deg,rgba(5,9,10,.10),rgba(5,9,10,.38))}
 .alphaSpotifyOverlay[hidden]{display:none!important}
-.alphaSpotifyOverlayHead{display:flex;align-items:flex-start;gap:10px;min-height:60px}
-.alphaSpotifyNow{min-width:0;flex:1;display:block;padding-right:4px}
+.alphaSpotifyOverlayHead{display:flex;align-items:center;gap:8px;min-height:39px}
+.alphaSpotifyNow{min-width:0;flex:1;display:block;padding-right:2px}
 .alphaSpotifyNow img{display:none!important}
-.alphaSpotifyNow div{min-width:0;display:grid;gap:2px}
-.alphaSpotifyNow b,.alphaSpotifyNow span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 8px rgba(0,0,0,.55)}
-.alphaSpotifyNow b{font-size:22px;line-height:1.18}.alphaSpotifyNow span{font-size:16px;opacity:.9}.alphaSpotifyNow small{display:none!important}
-.alphaSpotifyTopActions{display:flex;align-items:center;gap:7px;flex:0 0 auto}
-.alphaSpotifyShuffleTop,.alphaSpotifyClose{width:38px;height:38px;min-width:38px;border-radius:50%;padding:0;display:grid;place-items:center;background:rgba(8,12,13,.38);border:1px solid rgba(255,255,255,.22);color:#fff;backdrop-filter:blur(8px)}
-.alphaSpotifyShuffleTop{font-size:18px}.alphaSpotifyShuffleTop.active{color:#1ed760;border-color:rgba(30,215,96,.7);background:rgba(8,35,18,.48)}
-.alphaSpotifyClose{font-size:27px;line-height:1;font-weight:400}
-.alphaSpotifyProgress{height:4px;background:rgba(255,255,255,.30);border-radius:99px;overflow:hidden;margin:17px 0 5px}
+.alphaSpotifyNow div{min-width:0;display:grid;gap:0}
+.alphaSpotifyNow b,.alphaSpotifyNow span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 7px rgba(0,0,0,.55)}
+.alphaSpotifyNow b{font-size:18px;line-height:1.18}.alphaSpotifyNow span{font-size:13px;line-height:1.25;opacity:.88}.alphaSpotifyNow small{display:none!important}
+.alphaSpotifyTopActions{display:flex;align-items:center;gap:4px;flex:0 0 auto}
+.alphaSpotifyShuffleTop,.alphaSpotifyClose{width:29px;height:29px;min-width:29px;border-radius:9px;padding:0;display:grid;place-items:center;background:rgba(5,9,10,.20);border:0;color:rgba(255,255,255,.86)}
+.alphaSpotifyShuffleTop{font-size:15px}.alphaSpotifyShuffleTop.active{color:#1ed760;background:rgba(5,25,13,.32)}
+.alphaSpotifyClose{font-size:23px;line-height:1;font-weight:300}
+.alphaSpotifyProgress{height:3px;background:rgba(255,255,255,.26);border-radius:99px;overflow:hidden;margin:7px 0 2px}
 .alphaSpotifyProgress i{display:block;height:100%;width:0;background:#fff;border-radius:inherit;transition:width .35s linear}
-.alphaSpotifyTimes{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.78);font-variant-numeric:tabular-nums;margin-bottom:10px}
-.alphaSpotifyGlobalControls{display:grid;grid-template-columns:64px 78px 64px;justify-content:center;align-items:center;gap:22px}
-.alphaSpotifyGlobalControls button{width:64px;height:64px;border:0;background:transparent;color:#fff;padding:0;display:grid;place-items:center;border-radius:50%}
-.alphaSpotifyGlobalControls button span{display:flex;width:100%;height:100%;align-items:center;justify-content:center;font-size:36px;font-weight:800;line-height:1}
-.alphaSpotifyGlobalControls button.main{width:78px;height:78px;background:rgba(255,255,255,.94);color:#101516;box-shadow:0 4px 18px rgba(0,0,0,.28)}
-.alphaSpotifyGlobalControls button.main span{font-size:34px}.alphaSpotifyGlobalControls button.main.playing span{transform:translateY(-1px)}
-.alphaSpotifyGlobalControls button.busy{opacity:.55}
-.alphaSpotifyGlobalNote{font-size:12px;text-align:center;margin-top:8px;color:#ffd46a;min-height:0}
-@media(max-width:390px){.alphaSpotifyOverlay{width:calc(100vw - 20px);bottom:calc(env(safe-area-inset-bottom,0px) + 104px);padding:16px 17px}.alphaSpotifyGlobalControls{grid-template-columns:58px 72px 58px;gap:18px}.alphaSpotifyGlobalControls button{width:58px;height:58px}.alphaSpotifyGlobalControls button.main{width:72px;height:72px}}
+.alphaSpotifyTimes{display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,.68);font-variant-numeric:tabular-nums;margin-bottom:1px}
+.alphaSpotifyGlobalControls{display:grid;grid-template-columns:54px 64px 54px;justify-content:center;align-items:center;gap:25px;height:54px;margin-top:0}
+.alphaSpotifyGlobalControls button{width:54px;height:54px;border:0!important;background:transparent!important;color:#fff;padding:0!important;margin:0!important;display:grid;place-items:center;border-radius:0!important;box-shadow:none!important}
+.alphaSpotifyGlobalControls button.main{width:64px;height:54px;background:transparent!important;color:#fff!important;box-shadow:none!important}
+.alphaSpotifyGlobalControls button svg{display:block;width:34px;height:34px;fill:currentColor;stroke:none}
+.alphaSpotifyGlobalControls button.main svg{width:40px;height:40px}
+.alphaSpotifyGlobalControls button.busy{opacity:.5}
+.alphaSpotifyGlobalNote{font-size:10px;text-align:center;margin-top:2px;color:#ffd46a;min-height:0}
+/* autoridade absoluta: Home limpa, mesmo que o monitor Spotify esteja ativo */
+body[data-alpha-view="home"]:not(.alphaChatMode):not(.alphaComposeMode) #alphaSpotifyGlobal{display:none!important}
+@media(max-width:390px){.alphaSpotifyOverlay{width:calc(100vw - 20px);padding:10px 13px 9px}.alphaSpotifyGlobalControls{grid-template-columns:50px 60px 50px;gap:20px}.alphaSpotifyGlobalControls button{width:50px}.alphaSpotifyGlobalControls button.main{width:60px}}
 
 /* ALPHA 4.2.2 · Premium navigation entitlement fix
    GOLD / PLATINUM / ORGANIZATION do not see "Premium" in footer or sidebar. */
@@ -3524,7 +3541,14 @@ function alphaApplyView(id){
     }
   },120);
   if(alphaShellView==='experience')syncReview();
-  if(isHome)requestAnimationFrame(()=>alphaSyncChatMode?.());
+  if(isHome){
+    requestAnimationFrame(()=>alphaSyncChatMode?.());
+    /* 4.3.2: a Home nunca recebe o Remote. A música continua a tocar. */
+    if(!document.body.classList.contains('alphaChatMode')&&!document.body.classList.contains('alphaComposeMode')){
+      alphaSpotifyToggleRemote?.(false);
+      alphaSpotifySetGlobalVisible?.(false);
+    }
+  }
 }
 
 
@@ -7371,6 +7395,7 @@ async function alphaResumeSpotifyPending(){
     if(p.global){
       alphaSaveSpotifyPending(null);
       toast('Spotify ligado à ALPHA.');
+      if(alphaShellView==='home'&&!document.body.classList.contains('alphaChatMode')&&!document.body.classList.contains('alphaComposeMode'))alphaReturnToChat();
       setTimeout(()=>{alphaSpotifySetGlobalVisible(true);alphaSpotifyToggleRemote(true);alphaSpotifyPollGlobal(true)},250);
       return;
     }
@@ -7438,6 +7463,12 @@ function alphaCalendarImportAIEvents(events=[]){
 }
 async function alphaSpotifyFooterAction(){
   try{
+    /* 4.3.2: na Home, Spotify abre sempre dentro do Chat fullscreen. */
+    const pureHome=alphaShellView==='home'&&!document.body.classList.contains('alphaChatMode')&&!document.body.classList.contains('alphaComposeMode');
+    if(pureHome){
+      alphaReturnToChat();
+      await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+    }
     const st=await alphaSpotifyStatus();
     if(!st.configured)return toast('Spotify ainda não está configurado no backend da ALPHA.');
     if(!st.connected){await alphaSpotifyAuth({global:true,openAfter:false});return}
@@ -7977,7 +8008,7 @@ setTimeout(()=>{
 </script>
 
 <script>const ALPHA_VISIBLE_VERSION='v4.3.1 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='4.3.1-clean-spotify-remote';
+window.ALPHA_DOMAIN_GATE_BUILD='4.3.2-contextual-top-spotify-remote';
 window.addEventListener('online',alphaPrewarmBackend,{passive:true});
 setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
 </script>
@@ -7997,9 +8028,9 @@ setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
     <div class="alphaSpotifyProgress"><i id="alphaSpotifyProgressBar"></i></div>
     <div class="alphaSpotifyTimes"><span id="alphaSpotifyElapsed">0:00</span><span id="alphaSpotifyDuration">0:00</span></div>
     <div class="alphaSpotifyGlobalControls">
-      <button type="button" onclick="alphaSpotifyGlobalAction('previous',this)" aria-label="Anterior"><span>◀</span></button>
-      <button type="button" id="alphaSpotifyMainToggle" class="main" onclick="alphaSpotifyGlobalToggle(this)" aria-label="Reproduzir ou pausar"><span>▶</span></button>
-      <button type="button" onclick="alphaSpotifyGlobalAction('next',this)" aria-label="Seguinte"><span>▶</span></button>
+      <button type="button" onclick="alphaSpotifyGlobalAction('previous',this)" aria-label="Anterior"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 6h3v20H7zM25 7v18L11 16z"/></svg></button>
+      <button type="button" id="alphaSpotifyMainToggle" class="main" onclick="alphaSpotifyGlobalToggle(this)" aria-label="Reproduzir ou pausar"><svg id="alphaSpotifyMainIcon" viewBox="0 0 32 32" aria-hidden="true"><path d="M10 6l16 10-16 10z"/></svg></button>
+      <button type="button" onclick="alphaSpotifyGlobalAction('next',this)" aria-label="Seguinte"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M22 6h3v20h-3zM7 7l14 9L7 25z"/></svg></button>
     </div>
     <div id="alphaSpotifyGlobalNote" class="alphaSpotifyGlobalNote"></div>
   </section>
@@ -8026,9 +8057,12 @@ function alphaSpotifyRenderGlobal(state){
   if(!root)return;
   const pb=state?.playback||{};
   const hasPlayback=!!(pb.available&&pb.track);
-  root.hidden=!hasPlayback;
-  if(!hasPlayback)return;
+  const contextual=alphaShellView!=='home'||document.body.classList.contains('alphaChatMode')||document.body.classList.contains('alphaComposeMode');
+  /* monitoriza sempre, mas nunca injeta o Remote na Home limpa */
+  root.hidden=!(hasPlayback&&contextual);
+  if(!hasPlayback){alphaSpotifyGlobalState=state;return;}
   alphaSpotifyGlobalState=state;
+  if(!contextual)return;
   const cover=document.getElementById('alphaSpotifyCover');
   if(cover)cover.src=pb.image||'';
   const overlay=document.getElementById('alphaSpotifyOverlay');
@@ -8039,7 +8073,8 @@ function alphaSpotifyRenderGlobal(state){
   const toggle=document.getElementById('alphaSpotifyMainToggle');
   if(toggle){
     toggle.dataset.playing=pb.isPlaying?'1':'0';
-    toggle.querySelector('span').textContent=pb.isPlaying?'Ⅱ':'▶';
+    const icon=document.getElementById('alphaSpotifyMainIcon');
+    if(icon)icon.innerHTML=pb.isPlaying?'<path d="M9 7h5v18H9zM18 7h5v18h-5z"/>':'<path d="M10 6l16 10-16 10z"/>';
     toggle.classList.toggle('playing',!!pb.isPlaying);
   }
   const sh=document.getElementById('alphaSpotifyShuffle');if(sh)sh.classList.toggle('active',!!pb.shuffle);
@@ -8067,6 +8102,8 @@ async function alphaSpotifyPollGlobal(force=false){
 }
 function alphaSpotifyToggleRemote(open){
   const box=document.getElementById('alphaSpotifyOverlay');if(!box)return;
+  const pureHome=alphaShellView==='home'&&!document.body.classList.contains('alphaChatMode')&&!document.body.classList.contains('alphaComposeMode');
+  if(open&&pureHome){box.hidden=true;alphaSpotifySetGlobalVisible(false);return;}
   box.hidden=!open;
   if(open)alphaSpotifyPollGlobal(true);
 }
