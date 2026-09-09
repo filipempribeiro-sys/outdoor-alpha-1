@@ -1,0 +1,22 @@
+name: ALPHA Backend Keep Awake
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  wake-alpha:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wake ALPHA backend
+        run: |
+          echo "A acordar o backend ALPHA..."
+          curl --fail --silent --show-error \
+            --max-time 45 \
+            --retry 2 \
+            --retry-delay 5 \
+            "https://alpha-ai-backend-m6l3.onrender.com/api/health"
+          echo ""
+          echo "Backend ALPHA respondeu."
