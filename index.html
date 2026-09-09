@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="4.0.0">
+<meta name="alpha-version" content="4.0.1">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 4.0.0 — AI Chat App Mode</title>
+<title>Project Alpha 4.0.1 — AI Chat App Mode</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -2113,6 +2113,12 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 .alphaCalendarSecondary{border:1px solid rgba(255,255,255,.12)!important;background:#132126!important;color:#f5f8f7!important}
 .alphaCalendarSheet p{margin:13px 2px 2px;color:#91a19c;font-size:12px;line-height:1.45}
 
+
+.alphaPlaceInfoGrid{display:grid;gap:10px;margin:14px 0}
+.alphaPlaceInfoRow{display:grid;grid-template-columns:minmax(105px,.42fr) 1fr;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,.08)}
+.alphaPlaceInfoRow b{color:#6ee7b7;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.alphaPlaceInfoRow span{color:rgba(255,255,255,.88);line-height:1.45}
+@media(max-width:520px){.alphaPlaceInfoRow{grid-template-columns:1fr;gap:4px}}
 </style>
 </head>
 <body class="alphaWelcomeActive">
@@ -2129,7 +2135,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.0.0 · Family Login</small></div></div>
+    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.0.1 · Family Login</small></div></div>
     <div class="authWelcomeBrand"><div class="logo compassSeeking"></div><div class="alphaWelcomeEyebrow">ALPHA · OUTDOOR LIFESTYLE AI</div><h1>Bem-vindo à Alpha</h1><p>Descobrir · Confiar · Viver</p></div>
     <p class="muted" style="text-align:center">Escolhe o teu perfil para começares. Nesta versão Alpha usamos as 4 contas familiares de teste e o PIN <b>1234</b>.</p>
     <label>Utilizador</label>
@@ -2147,7 +2153,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.0.0 · OFFICIAL SITE CRAWL · VERIFIED RESEARCH · RESPONSE TIME · DELETE CONVERSATIONS</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.0.1 · OFFICIAL SITE CRAWL · VERIFIED RESEARCH · RESPONSE TIME · DELETE CONVERSATIONS</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -2250,7 +2256,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 4.0.0 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 4.0.1 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
       <div class="eyebrow">AI JOURNEY · MULTI-STOP</div>
@@ -2903,7 +2909,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='4.0.0',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='4.0.1',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -6209,19 +6215,50 @@ function alphaOpenPlaceDetail(key){
   const overlay=alphaEnsurePlaceModal(),host=document.getElementById('alphaPlaceDetailContent');
   const photo=alphaPlacePhotoUrl(p),rating=alphaPlaceRating(p),reviews=alphaPlaceReviews(p);
   const price=alphaPriceLevelLabel(p.priceLevel),hours=Array.isArray(p.openingHours)?p.openingHours.filter(Boolean):[];
+  const list=v=>Array.isArray(v)?v.filter(Boolean):v?[v]:[];
+  const info=[];
+  const row=(label,value)=>{
+    if(value===undefined||value===null||value===""||(Array.isArray(value)&&!value.length))return;
+    const vals=Array.isArray(value)?value:[value];
+    info.push(`<div class="alphaPlaceInfoRow"><b>${esc(label)}</b><span>${vals.map(x=>esc(String(x))).join('<br>')}</span></div>`);
+  };
+  row('Estado',p.currentStatus);
+  row('Última entrada',p.lastEntry);
+  row('Preços',p.prices);
+  row('Bilhete família',p.familyTicket);
+  row('Escalões',p.ageBands);
+  row('Descontos',p.discounts);
+  row('Dias/condições gratuitas',p.freeEntry);
+  row('Duração',p.duration);
+  row('Telefone',p.telephone||p.phone);
+  row('Email',p.email);
+  row('Acessibilidade',p.accessibility);
+  row('Estacionamento',p.parking);
+  row('Transportes',p.publicTransport);
+  row('Serviços',p.services);
+  row('Regras',p.rules);
+  const sourceCount=list(p.sourceUrls).length;
+  const researchBadge=Number.isFinite(Number(p.researchCompleteness))
+    ?`<span class="alphaVerified">✓ ${Math.round(Number(p.researchCompleteness))}% pesquisado</span>`
+    :`<span class="alphaVerified">✓ VERIFICADO</span>`;
+
   host.innerHTML=`${photo?`<img class="alphaPlaceModalPhoto" src="${esc(photo)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`:''}
     <div class="alphaPlaceModalBody">
-      <div class="alphaPlaceTopline"><div class="alphaPlaceCategory">${esc(alphaCategoryLabel(p.category))}</div><span class="alphaVerified">✓ VERIFICADO</span></div>
+      <div class="alphaPlaceTopline"><div class="alphaPlaceCategory">${esc(alphaCategoryLabel(p.category))}</div>${researchBadge}</div>
       <h2>${esc(p.name)}</h2>
       ${rating!==null?`<div class="alphaPlaceRating"><span class="alphaStars">${alphaStars(rating)}</span><b>${rating.toFixed(1)}</b>${reviews!==null?`<span class="alphaPlaceMeta">${reviews.toLocaleString('pt-PT')} avaliações</span>`:''}</div>`:''}
       ${p.address?`<div class="alphaPlaceModalMeta">${esc(p.address)}</div>`:''}
       ${price?`<div class="alphaPlaceModalMeta">${esc(price)}</div>`:''}
       ${p.description?`<p class="alphaPlaceModalDesc">${esc(p.description)}</p>`:''}
       ${hours.length?`<details class="alphaPlaceHours" open><summary>Horários</summary><div>${hours.map(esc).join('<br>')}</div></details>`:''}
+      ${info.length?`<div class="alphaPlaceInfoGrid">${info.join('')}</div>`:''}
+      ${sourceCount?`<div class="alphaPlaceModalMeta">${sourceCount} fonte${sourceCount===1?'':'s'} usada${sourceCount===1?'':'s'} na investigação</div>`:''}
       <div class="alphaPlaceModalActions">
         <button type="button" onclick="alphaShowPlaceOnMap('${key}')">Mapa</button>
         <button type="button" class="primary" onclick="alphaNavigatePlace('${key}')">Ir agora</button>
-        ${p.website?`<button type="button" onclick="alphaOpenExternal('${esc(p.website)}')">Site</button>`:''}
+        ${p.website?`<button type="button" onclick="alphaOpenExternal('${esc(p.website)}')">Website</button>`:''}
+        ${p.ticketUrl?`<button type="button" onclick="alphaOpenExternal('${esc(p.ticketUrl)}')">Bilhetes</button>`:''}
+        ${p.telephone?`<button type="button" onclick="alphaOpenExternal('tel:${esc(p.telephone)}')">Ligar</button>`:''}
       </div>
     </div>`;
   overlay.classList.add('open');document.body.classList.add('alphaPlaceModalMode');alphaPlaceModalOpen=true;
@@ -6598,10 +6635,19 @@ function alphaConversationMemory(c){
   const latestPlaylist=alphaLatestPlaylistForConversation(c);
   const latestSpec=alphaLatestPlaylistSpecForConversation(c);
   const state=c?.conversationState&&typeof c.conversationState==='object'?c.conversationState:{};
+  let latestPlaceCards=[];
+  if(Array.isArray(c?.messages)){
+    for(let i=c.messages.length-1;i>=0;i--){
+      if(Array.isArray(c.messages[i]?.placeCards)&&c.messages[i].placeCards.length){
+        latestPlaceCards=c.messages[i].placeCards.slice(0,4);break;
+      }
+    }
+  }
   return {
     conversationTitle:c?.title||null,
     experienceType:c?.experienceType||null,
     places:Array.isArray(c?.places)?c.places:[],
+    latestPlaceCards,
     state:{
       goal:String(state.goal||''),
       occasion:String(state.occasion||''),
@@ -7685,8 +7731,8 @@ setTimeout(()=>{
 
 </script>
 
-<script>const ALPHA_VISIBLE_VERSION='v4.0.0 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='4.0.0-official-site-crawl';
+<script>const ALPHA_VISIBLE_VERSION='v4.0.1 · TEST';
+window.ALPHA_DOMAIN_GATE_BUILD='4.0.1-official-site-crawl';
 window.addEventListener('online',alphaPrewarmBackend,{passive:true});
 setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
 </script>
