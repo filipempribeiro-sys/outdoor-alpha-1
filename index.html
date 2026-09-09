@@ -2039,6 +2039,57 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
   stroke-linejoin:round!important;
 }
 
+
+/* ============================================================
+   ALPHA 3.6.7 · CALENDAR ACTION
+   ============================================================ */
+.alphaCalendarAction{
+  min-height:48px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  padding:10px 15px!important;
+  border-radius:999px!important;
+  border:1px solid rgba(74,224,170,.28)!important;
+  background:rgba(18,53,46,.72)!important;
+  color:#effff9!important;
+  font-weight:850!important;
+}
+.alphaCalendarIcon{
+  width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto;
+}
+.alphaCalendarModal{position:fixed;z-index:2500;inset:0;display:flex;align-items:flex-end;justify-content:center}
+.alphaCalendarScrim{position:absolute;inset:0;background:rgba(0,0,0,.58);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.alphaCalendarSheet{
+  position:relative;z-index:1;width:min(100% - 18px,560px);
+  margin:0 9px calc(env(safe-area-inset-bottom) + 10px);
+  padding:18px;border-radius:24px;
+  background:#0b1a1d;border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 24px 80px rgba(0,0,0,.5);
+}
+.alphaCalendarSheetHead{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.alphaCalendarSheetHead small{display:block;color:#58dcae;font-weight:900;letter-spacing:.08em;margin-bottom:4px}
+.alphaCalendarSheetHead h3{margin:0;font-size:22px}
+.alphaCalendarSheetHead>button{
+  width:40px;height:40px;border-radius:999px;border:0;background:rgba(255,255,255,.07);color:#fff;font-size:28px;line-height:1
+}
+.alphaCalendarPreview{
+  display:flex;flex-direction:column;gap:4px;
+  margin:16px 0;padding:13px 14px;border-radius:16px;
+  background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08)
+}
+.alphaCalendarPreview b{font-size:16px}
+.alphaCalendarPreview span{color:#aebbb7;font-size:14px}
+.alphaCalendarPreview em{color:#65ddb2;font-style:normal;font-size:13px;font-weight:800}
+.alphaCalendarPrimary,.alphaCalendarSecondary{
+  width:100%!important;min-height:52px!important;margin-top:9px!important;
+  display:flex!important;align-items:center!important;gap:12px!important;
+  padding:0 16px!important;border-radius:16px!important;font-weight:900!important;text-align:left!important
+}
+.alphaCalendarPrimary{border:1px solid rgba(78,225,170,.35)!important;background:#123b31!important;color:#f3fff9!important}
+.alphaCalendarSecondary{border:1px solid rgba(255,255,255,.12)!important;background:#132126!important;color:#f5f8f7!important}
+.alphaCalendarSheet p{margin:13px 2px 2px;color:#91a19c;font-size:12px;line-height:1.45}
+
 </style>
 </head>
 <body class="alphaWelcomeActive">
@@ -2073,7 +2124,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.7 · FINAL CLEAN UX · Intent · Research · Synthesis</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.7 · FINAL CALENDAR · Intent · Research · Synthesis</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -6871,6 +6922,130 @@ async function alphaOpenWhatsAppResponse(i){
   }
   await alphaOpenWhatsAppFromMessage(c,m);
 }
+
+function alphaCalendarPad(n){return String(n).padStart(2,'0')}
+function alphaCalendarGoogleDate(value,allDay=false){
+  if(!value)return'';
+  if(allDay){
+    const m=String(value).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    return m?`${m[1]}${m[2]}${m[3]}`:'';
+  }
+  const d=new Date(value);
+  if(!Number.isFinite(d.getTime()))return'';
+  return `${d.getUTCFullYear()}${alphaCalendarPad(d.getUTCMonth()+1)}${alphaCalendarPad(d.getUTCDate())}T${alphaCalendarPad(d.getUTCHours())}${alphaCalendarPad(d.getUTCMinutes())}${alphaCalendarPad(d.getUTCSeconds())}Z`;
+}
+function alphaCalendarAddDays(dateText,days=1){
+  const m=String(dateText||'').match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if(!m)return dateText||'';
+  const d=new Date(Date.UTC(Number(m[1]),Number(m[2])-1,Number(m[3])+days));
+  return `${d.getUTCFullYear()}-${alphaCalendarPad(d.getUTCMonth()+1)}-${alphaCalendarPad(d.getUTCDate())}`;
+}
+function alphaCalendarEscapeICS(v){
+  return String(v||'').replace(/\\/g,'\\\\').replace(/\r?\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');
+}
+function alphaCalendarICSTime(value,allDay=false){
+  if(allDay)return String(value||'').replace(/-/g,'').slice(0,8);
+  const d=new Date(value);
+  if(!Number.isFinite(d.getTime()))return'';
+  return `${d.getUTCFullYear()}${alphaCalendarPad(d.getUTCMonth()+1)}${alphaCalendarPad(d.getUTCDate())}T${alphaCalendarPad(d.getUTCHours())}${alphaCalendarPad(d.getUTCMinutes())}${alphaCalendarPad(d.getUTCSeconds())}Z`;
+}
+function alphaCalendarEventsForMessage(i){
+  const c=alphaCurrentConversation(),m=c?.messages?.[Number(i)||0];
+  return Array.isArray(m?.calendarEvents)?m.calendarEvents.filter(e=>e&&e.title&&e.start):[];
+}
+function alphaOpenGoogleCalendarEvent(e){
+  if(!e)return;
+  const allDay=!!e.allDay;
+  const start=alphaCalendarGoogleDate(e.start,allDay);
+  let end=alphaCalendarGoogleDate(e.end,allDay);
+  if(allDay){
+    const endDate=(e.end&&e.end!==e.start)?e.end:alphaCalendarAddDays(e.start,1);
+    end=alphaCalendarGoogleDate(endDate,true);
+  }
+  if(!start)return toast('Não consegui preparar este evento.');
+  const details=[e.description,e.url].filter(Boolean).join('\n\n');
+  const qs=new URLSearchParams({
+    action:'TEMPLATE',
+    text:e.title||'Experiência ALPHA',
+    dates:`${start}/${end||start}`,
+    details,
+    location:e.location||''
+  });
+  window.open('https://calendar.google.com/calendar/render?'+qs.toString(),'_blank','noopener');
+}
+function alphaDownloadCalendarICS(events,conversationTitle='Experiência ALPHA'){
+  const rows=(events||[]).filter(e=>e&&e.title&&e.start);
+  if(!rows.length)return toast('Não há eventos preparados para o calendário.');
+  const now=new Date();
+  const stamp=alphaCalendarICSTime(now.toISOString(),false);
+  const parts=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//PROJECT ALPHA//Calendar//PT','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
+  rows.forEach((e,idx)=>{
+    const allDay=!!e.allDay;
+    const uid=`alpha-${Date.now()}-${idx}@project-alpha`;
+    let start=alphaCalendarICSTime(e.start,allDay);
+    let end;
+    if(allDay){
+      const endDate=(e.end&&e.end!==e.start)?e.end:alphaCalendarAddDays(e.start,1);
+      end=alphaCalendarICSTime(endDate,true);
+    }else{
+      end=alphaCalendarICSTime(e.end||e.start,false);
+    }
+    if(!start)return;
+    parts.push('BEGIN:VEVENT',`UID:${uid}`,`DTSTAMP:${stamp}`);
+    parts.push(allDay?`DTSTART;VALUE=DATE:${start}`:`DTSTART:${start}`);
+    if(end)parts.push(allDay?`DTEND;VALUE=DATE:${end}`:`DTEND:${end}`);
+    parts.push(`SUMMARY:${alphaCalendarEscapeICS(e.title||conversationTitle)}`);
+    if(e.location)parts.push(`LOCATION:${alphaCalendarEscapeICS(e.location)}`);
+    const desc=[e.description,e.url].filter(Boolean).join('\n\n');
+    if(desc)parts.push(`DESCRIPTION:${alphaCalendarEscapeICS(desc)}`);
+    if(e.url)parts.push(`URL:${alphaCalendarEscapeICS(e.url)}`);
+    parts.push('END:VEVENT');
+  });
+  parts.push('END:VCALENDAR');
+  const blob=new Blob([parts.join('\r\n')+'\r\n'],{type:'text/calendar;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=(String(conversationTitle||'experiencia-alpha').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').toLowerCase()||'experiencia-alpha')+'.ics';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+}
+function alphaCloseCalendarModal(){
+  $('alphaCalendarModal')?.remove();
+}
+function alphaOpenCalendarModal(i){
+  const c=alphaCurrentConversation();
+  const events=alphaCalendarEventsForMessage(i);
+  if(!c||!events.length)return toast('A ALPHA ainda não tem um horário definido para esta experiência.');
+  alphaCloseCalendarModal();
+  const first=events[0];
+  const modal=document.createElement('div');
+  modal.id='alphaCalendarModal';
+  modal.className='alphaCalendarModal';
+  modal.innerHTML=`<div class="alphaCalendarScrim" onclick="alphaCloseCalendarModal()"></div>
+    <div class="alphaCalendarSheet" role="dialog" aria-modal="true" aria-label="Adicionar ao calendário">
+      <div class="alphaCalendarSheetHead">
+        <div><small>ALPHA · CALENDÁRIO</small><h3>${esc(events.length>1?'Adicionar plano ao calendário':'Adicionar ao calendário')}</h3></div>
+        <button type="button" onclick="alphaCloseCalendarModal()" aria-label="Fechar">×</button>
+      </div>
+      <div class="alphaCalendarPreview">
+        <b>${esc(first.title||c.title||'Experiência ALPHA')}</b>
+        <span>${esc(first.start||'')}${first.location?' · '+esc(first.location):''}</span>
+        ${events.length>1?`<em>${events.length} eventos preparados</em>`:''}
+      </div>
+      <button class="alphaCalendarPrimary" type="button" onclick="alphaOpenGoogleCalendarEvent(alphaCalendarEventsForMessage(${Number(i)||0})[0]);alphaCloseCalendarModal()">
+        ${alphaCalendarIcon()}<span>Google Calendar${events.length>1?' · primeiro evento':''}</span>
+      </button>
+      <button class="alphaCalendarSecondary" type="button" onclick="alphaDownloadCalendarICS(alphaCalendarEventsForMessage(${Number(i)||0}),alphaCurrentConversation()?.title||'Experiência ALPHA');alphaCloseCalendarModal()">
+        ${alphaCalendarIcon()}<span>${events.length>1?'Adicionar plano completo (.ics)':'Adicionar com ficheiro .ics'}</span>
+      </button>
+      <p>O ficheiro .ics funciona com Google Calendar, Samsung Calendar, Outlook, Apple Calendar e outras apps compatíveis.</p>
+    </div>`;
+  document.body.appendChild(modal);
+}
+function alphaCalendarIcon(){
+  return `<svg class="alphaCalendarIcon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="15" rx="3"/><path d="M7.5 3.5v4M16.5 3.5v4M3.5 9.5h17"/><path d="M8 13h3v3H8z"/></svg>`;
+}
+
 function alphaContextActions(m,i){
   if(!m)return'';
   const actions=[];
@@ -6881,6 +7056,10 @@ function alphaContextActions(m,i){
     }else{
       actions.push(`<button class="alphaSpotifyAction" type="button" onclick="alphaEnsureSpotifyPlaylist(${Number(i)||0})">${alphaIcon('music')}Ligar Spotify e criar playlist</button>`);
     }
+  }
+  if(Array.isArray(m.calendarEvents)&&m.calendarEvents.length){
+    const calLabel=m.calendarEvents.length>1?'Adicionar plano ao calendário':'Adicionar ao calendário';
+    actions.push(`<button class="alphaCalendarAction" type="button" onclick="alphaOpenCalendarModal(${Number(i)||0})">${alphaCalendarIcon()}<span>${calLabel}</span></button>`);
   }
   if(m.whatsappShare){
     actions.push(`<button class="alphaWhatsAppAction" type="button" onclick="alphaOpenWhatsAppResponse(${Number(i)||0})">${alphaIcon('share')}Partilhar no WhatsApp</button>`);
@@ -6945,12 +7124,14 @@ function alphaProgressStepsFor(text,attachments=[]){
   const hasStay=/\b(hotel|alojamento|dormir|estadia|airbnb)\b/.test(t);
   const hasMusic=/\b(spotify|playlist|música|musica)\b/.test(t);
   const hasShare=/\b(whatsapp|partilha|partilhar|envia|enviar)\b/.test(t);
+  const hasCalendar=/\b(calend[aá]rio|agenda|agendar|marca|marcar)\b/.test(t);
 
   if(attachments.length)steps.push('A processar os anexos');
   if(hasPlaces||hasWeather||hasRoute||hasStay)steps.push('A consultar dados relevantes');
   if(hasRoute)steps.push('A montar a experiência');
   if(hasMusic)steps.push('A preparar a componente Spotify');
   if(hasShare)steps.push('A preparar a partilha');
+  if(hasCalendar)steps.push('A preparar o calendário');
   steps.push('A compor a resposta');
   steps.push('A finalizar');
   return [...new Set(steps)].slice(0,7);
@@ -7245,6 +7426,7 @@ async function alphaLifestyleSend(){
       shareSummary:contextualWhatsApp?String(d.shareSummary||reply).trim():'',
       shareAudience:contextualWhatsApp?(d.shareAudience&&d.shareAudience!=='none'?d.shareAudience:alphaShareAudienceFromPrompt(displayText)):'none',
       shareQuestion:contextualWhatsApp?String(d.shareQuestion||alphaShareQuestion(alphaShareAudienceFromPrompt(displayText))).trim():'',
+      calendarEvents:real&&d&&Array.isArray(d.calendarEvents)?d.calendarEvents.slice(0,12):[],
       placeCards:real&&d&&Array.isArray(d.placeCards)?d.placeCards.slice(0,18):[]
     });
   }
