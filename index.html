@@ -2764,10 +2764,10 @@ Estação de São Bento
   <div class="alphaSidebarSectionTitle">Conversas</div>
   <div id="alphaSidebarConversationList" class="alphaSidebarConversationList"></div>
   <div class="alphaSidebarDock" aria-label="Navegação">
-    <button type="button" onclick="alphaChatNavigate('field')" aria-label="Mapa/GO" title="Mapa/GO"><span>▷</span></button>
-    <button type="button" onclick="alphaChatNavigate('report')" aria-label="LIVE" title="LIVE"><span>⚑</span></button>
-    <button type="button" onclick="alphaChatOpenPremium()" aria-label="Premium" title="Premium"><span>✦</span></button>
-    <button type="button" onclick="alphaChatNavigate('profile')" aria-label="Perfil" title="Perfil">
+    <button type="button" data-alpha-iconified="1" onclick="alphaChatNavigate('field')" aria-label="Mapa/GO" title="Mapa/GO"><span>▷</span></button>
+    <button type="button" data-alpha-iconified="1" onclick="alphaChatNavigate('report')" aria-label="LIVE" title="LIVE"><span>⚑</span></button>
+    <button type="button" data-alpha-iconified="1" onclick="alphaChatOpenPremium()" aria-label="Premium" title="Premium"><span>✦</span></button>
+    <button type="button" data-alpha-iconified="1" onclick="alphaChatNavigate('profile')" aria-label="Perfil" title="Perfil">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c.7-5 3.1-7.5 7.5-7.5s6.8 2.5 7.5 7.5"/></svg>
     </button>
   </div>
@@ -6374,7 +6374,7 @@ function alphaFindLeadingTextNode(el){
 }
 function alphaDecorateButton(btn){
   if(!btn||btn.dataset.alphaIconified==='1'||btn.id==='alphaSendBtn'||
-     btn.matches?.('nav.bottom .nav,.alphaInternalNavList button')||
+     btn.matches?.('nav.bottom .nav,.alphaInternalNavList button,.alphaSidebarDock button')||
      btn.querySelector('.alphaIconSlot,.alphaIcon,.alphaNavIcon,.alphaInternalNavIcon'))return;
   const text=String(btn.textContent||'').trim();if(!text)return;
   let found=ALPHA_ICON_PREFIXES.find(([prefix])=>text.startsWith(prefix));
@@ -6391,7 +6391,7 @@ function alphaDecorateButton(btn){
 }
 
 function alphaNormalizeNavigationIcons(){
-  document.querySelectorAll('nav.bottom .nav,.alphaInternalNavList button').forEach(btn=>{
+  document.querySelectorAll('nav.bottom .nav,.alphaInternalNavList button,.alphaSidebarDock button').forEach(btn=>{
     [...btn.children].forEach(ch=>{
       if(ch.classList?.contains('alphaIcon')||ch.classList?.contains('alphaIconSlot'))ch.remove();
     });
@@ -6938,25 +6938,22 @@ function alphaConversationStatus(id){if(alphaPendingRequests.has(id))return 'gen
 function alphaStatusSignal(id){const st=alphaConversationStatus(id);if(st==='generating')return '<span class="aiConversationSignal generating"><i class="aiSignalDot pulse"></i>A responder</span>';if(st==='new')return '<span class="aiConversationSignal new"><i class="aiSignalDot"></i>Nova</span>';if(st==='draft')return '<span class="aiConversationSignal draft"><i class="aiSignalDot"></i>Rascunho</span>';return ''}
 function alphaProgressStepsFor(text,attachments=[]){
   const t=String(text||'').toLocaleLowerCase('pt-PT');
-  const steps=['A interpretar o pedido'];
-  const hasPlaces=/\b(porto|lisboa|sintra|cascais|coimbra|braga|guimarães|guimaraes|aveiro|évora|evora|faro|sesimbra|arrábida|arrabida|serra|praia|restaurante|almoç|almoc|jantar|museu|monumento|palácio|palacio|castelo|miradouro|parque|estacionamento|visitar|visita|roteiro|percurso|passeio|escapad|turismo|cultural)\b/.test(t);
-  const hasRoute=/\b(percurso|rota|roteiro|caminho|a pé|ape|carro|conduzir|desloca|estacionamento|trajeto|itinerário|itinerario)\b/.test(t);
-  const hasWeather=/\b(tempo|meteorolog|chuva|vento|temperatura|amanhã|amanha|hoje|fim de semana)\b/.test(t);
-  const hasFood=/\b(restaurante|almoç|almoc|jantar|comer|refeição|refeicao|romântico|romantico)\b/.test(t);
+  const steps=['A preparar o pedido'];
+  const hasPlaces=/\b(visitar|local|museu|aqu[aá]rio|restaurante|miradouro|parque|praia|monumento|passeio|onde|perto|estacionamento)\b/.test(t);
+  const hasWeather=/\b(hoje|amanh[aã]|tempo|meteorolog|chuva|vento|calor|frio|tarde|manh[aã])\b/.test(t);
+  const hasRoute=/\b(rota|percurso|caminho|ir para|como chegar|carro|conduzir|viagem|trail|trilho|caminhada|dia)\b/.test(t);
   const hasStay=/\b(hotel|alojamento|dormir|estadia|airbnb)\b/.test(t);
   const hasMusic=/\b(spotify|playlist|música|musica)\b/.test(t);
   const hasShare=/\b(whatsapp|partilha|partilhar|envia|enviar)\b/.test(t);
-  if(attachments.length)steps.push('A analisar os anexos');
-  if(hasPlaces)steps.push(hasFood?'A procurar locais e restaurantes reais':'A procurar locais reais');
-  if(hasWeather)steps.push('A verificar condições relevantes');
-  if(hasRoute)steps.push('A estruturar o percurso');
-  if(hasStay)steps.push('A verificar opções de estadia');
+
+  if(attachments.length)steps.push('A processar os anexos');
+  if(hasPlaces||hasWeather||hasRoute||hasStay)steps.push('A consultar dados relevantes');
+  if(hasRoute)steps.push('A montar a experiência');
   if(hasMusic)steps.push('A preparar a componente Spotify');
   if(hasShare)steps.push('A preparar a partilha');
-  if(hasPlaces)steps.push('A validar detalhes e fotografias');
-  steps.push('A organizar a melhor resposta');
-  steps.push('A finalizar a experiência');
-  return [...new Set(steps)].slice(0,8);
+  steps.push('A compor a resposta');
+  steps.push('A finalizar');
+  return [...new Set(steps)].slice(0,7);
 }
 function alphaProgressRecord(id){return alphaPendingRequests.get(id)||null}
 function alphaProgressStart(id,text,attachments=[]){
@@ -6987,7 +6984,7 @@ function alphaProgressStop(id){const p=alphaProgressRecord(id);if(p?.progressTim
 function alphaGeneratingRow(c){
   const p=c?.id?alphaProgressRecord(c.id):null;
   if(!p)return '<div class="aiGeneratingRow"><span>A Alpha está a responder</span><span class="aiGeneratingDots"><i></i><i></i><i></i></span></div>';
-  const steps=Array.isArray(p.progressSteps)&&p.progressSteps.length?p.progressSteps:['A interpretar o pedido','A organizar a resposta','A finalizar a experiência'];
+  const steps=Array.isArray(p.progressSteps)&&p.progressSteps.length?p.progressSteps:['A preparar o pedido','A compor a resposta','A finalizar'];
   const idx=Math.max(0,Math.min(Number(p.progressIndex||0),steps.length-1));
   const rows=steps.map((label,i)=>'<div class="alphaProgressStep '+(i<idx?'done':i===idx?'active':'')+'"><span class="alphaProgressMark">'+(i<idx?'✓':i===idx?'●':'○')+'</span><span>'+esc(label)+(i===idx?'<span class="alphaProgressDots"><i></i><i></i><i></i></span>':'')+'</span></div>').join('');
   return '<div class="aiGeneratingRow"><div class="alphaLiveProgress"><div class="alphaLiveProgressHead"><span class="alphaLivePulse"></span><span>A ALPHA está a trabalhar</span></div><div class="alphaProgressSteps">'+rows+'</div><div class="alphaProgressNote">Progresso operacional da experiência — não mostra raciocínio interno.</div></div></div>';
@@ -7124,13 +7121,14 @@ async function alphaCallBackend(c,text,attachments=[]){
   });
 
   let last=null;
+  const chatTimeouts=[150000,120000];
   for(let attempt=0;attempt<2;attempt++){
     const ctrl=new AbortController();
-    const timer=setTimeout(()=>ctrl.abort(),95000);
+    const timer=setTimeout(()=>ctrl.abort(),chatTimeouts[attempt]);
     try{
       const r=await fetch(base+'/api/chat',{
         method:'POST',
-        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        headers:{'Content-Type':'application/json','Accept':'application/json','X-Request-Id':requestId},
         body:payload,
         cache:'no-store',
         signal:ctrl.signal
@@ -7151,7 +7149,7 @@ async function alphaCallBackend(c,text,attachments=[]){
     }
 
     if(attempt===0){
-      alphaProgressSet(c.id,'A restabelecer a ligação ao motor Alpha');
+      alphaProgressSet(c.id,'A aguardar a conclusão do pedido');
       // Antes da segunda tentativa, confirma que o backend continua vivo.
       try{await alphaWakeBackend({force:true,silent:true})}catch{}
       await new Promise(r=>setTimeout(r,650));
