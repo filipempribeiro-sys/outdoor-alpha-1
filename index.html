@@ -1969,6 +1969,76 @@ nav.bottom .nav .alphaNavIcon svg,
   padding-bottom:calc(env(safe-area-inset-bottom) + 20px)!important;
 }
 
+
+/* ============================================================
+   ALPHA 3.6.7 · CHAT SIDEBAR + INTERNAL SPACING HOTFIX
+   ============================================================ */
+
+/* Páginas internas: aproximar o primeiro container do hamburger,
+   mantendo uma margem curta e consistente. */
+body:not([data-alpha-view="home"]) .view.active{
+  padding-top:calc(env(safe-area-inset-top) + 82px)!important;
+}
+.alphaInternalMenuBtn{
+  top:calc(env(safe-area-inset-top) + 10px)!important;
+}
+
+/* HOME: sidebar de conversas sem navegação duplicada,
+   porque o footer principal já está visível. */
+body[data-alpha-view="home"]:not(.alphaChatMode):not(.alphaComposeMode)
+.alphaConversationSidebar .alphaSidebarDock{
+  display:none!important;
+}
+
+/* CHAT: o footer global está escondido, por isso a navegação
+   volta a aparecer no fundo do sidebar, apenas com ícones. */
+body.alphaChatMode .alphaConversationSidebar .alphaSidebarDock,
+body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock{
+  display:grid!important;
+  grid-template-columns:repeat(4,1fr)!important;
+  align-items:center!important;
+  gap:8px!important;
+  margin-top:auto!important;
+  padding:12px 4px 2px!important;
+  border-top:1px solid rgba(255,255,255,.10)!important;
+}
+
+body.alphaChatMode .alphaConversationSidebar .alphaSidebarDock button,
+body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock button{
+  display:grid!important;
+  place-items:center!important;
+  width:100%!important;
+  height:48px!important;
+  min-height:48px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:14px!important;
+  background:transparent!important;
+  color:#edf5f2!important;
+}
+
+body.alphaChatMode .alphaConversationSidebar .alphaSidebarDock button:active,
+body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock button:active{
+  background:rgba(255,255,255,.08)!important;
+}
+
+body.alphaChatMode .alphaConversationSidebar .alphaSidebarDock span,
+body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock span{
+  font-size:25px!important;
+  line-height:1!important;
+}
+
+body.alphaChatMode .alphaConversationSidebar .alphaSidebarDock svg,
+body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
+  width:26px!important;
+  height:26px!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.9!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+
 </style>
 </head>
 <body class="alphaWelcomeActive">
