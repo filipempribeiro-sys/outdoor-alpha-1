@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="4.0.1">
+<meta name="alpha-version" content="4.0.2">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 4.0.1 — AI Chat App Mode</title>
+<title>Project Alpha 4.0.2 — AI Chat App Mode</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -2119,6 +2119,11 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 .alphaPlaceInfoRow b{color:#6ee7b7;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
 .alphaPlaceInfoRow span{color:rgba(255,255,255,.88);line-height:1.45}
 @media(max-width:520px){.alphaPlaceInfoRow{grid-template-columns:1fr;gap:4px}}
+
+.alphaHoursList{display:grid;gap:8px;margin-top:10px}
+.alphaHoursLine{display:grid;grid-template-columns:minmax(130px,1fr) auto;gap:14px;align-items:start;padding:9px 0;border-top:1px solid rgba(255,255,255,.07)}
+.alphaHoursLine span{color:rgba(255,255,255,.68);line-height:1.4}.alphaHoursLine b{color:rgba(255,255,255,.95);font-weight:750;line-height:1.4;text-align:right}
+@media(max-width:520px){.alphaHoursLine{grid-template-columns:1fr;gap:3px}.alphaHoursLine b{text-align:left}}
 </style>
 </head>
 <body class="alphaWelcomeActive">
@@ -2135,7 +2140,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div id="authGate" class="authGate">
   <div class="authBox">
-    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.0.1 · Family Login</small></div></div>
+    <div class="brand legacyAuthBrand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.0.2 · Family Login</small></div></div>
     <div class="authWelcomeBrand"><div class="logo compassSeeking"></div><div class="alphaWelcomeEyebrow">ALPHA · OUTDOOR LIFESTYLE AI</div><h1>Bem-vindo à Alpha</h1><p>Descobrir · Confiar · Viver</p></div>
     <p class="muted" style="text-align:center">Escolhe o teu perfil para começares. Nesta versão Alpha usamos as 4 contas familiares de teste e o PIN <b>1234</b>.</p>
     <label>Utilizador</label>
@@ -2153,7 +2158,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.0.1 · OFFICIAL SITE CRAWL · VERIFIED RESEARCH · RESPONSE TIME · DELETE CONVERSATIONS</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 4.0.2 · OFFICIAL SITE CRAWL · VERIFIED RESEARCH · RESPONSE TIME · DELETE CONVERSATIONS</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -2256,7 +2261,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
       <div id="exploreChatMessages" class="chatMessages"></div>
       <div id="exploreChatSuggestions" class="chatSuggestions"></div>
       <div class="chatComposer"><input id="exploreChatInput" placeholder="Pergunta o que quiseres sobre este destino…" onkeydown="if(event.key==='Enter'){event.preventDefault();sendExploreChat()}"><button class="btn purple" onclick="sendExploreChat()">Enviar</button></div>
-      <div class="chatMeta">Alpha 4.0.1 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
+      <div class="chatMeta">Alpha 4.0.2 · Context · Trust · Trip Planner sobre o core completo 2.4.0. Não inventa horários, preços ou disponibilidade.</div>
     </div>
     <div id="multiStopPlanner" class="multiStopPlanner">
       <div class="eyebrow">AI JOURNEY · MULTI-STOP</div>
@@ -2862,7 +2867,7 @@ Estação de São Bento
     <button type="button" class="alphaInternalClose" onclick="alphaCloseInternalSidebar()" aria-label="Fechar">×</button>
   </div>
   <div class="alphaInternalNavList">
-    <button type="button" data-alpha-iconified="1" data-target="home" onclick="alphaInternalNavigate('home')">
+    <button type="button" data-alpha-iconified="1" data-target="home" onclick="alphaReturnToChat()">
       <span class="alphaInternalNavIcon alphaNavCompass"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 5.5 16.2 16 12 13.8 7.8 16 12 5.5Z"/></svg></span><span>Alpha</span>
     </button>
     <button type="button" data-alpha-iconified="1" data-target="field" onclick="alphaInternalNavigate('field')">
@@ -2882,7 +2887,7 @@ Estação de São Bento
 <div id="alphaInternalScrim" class="alphaInternalScrim" onclick="alphaCloseInternalSidebar()" aria-hidden="true"></div>
 
 <nav class="bottom" aria-label="Navegação principal">
-  <button class="nav active" data-alpha-iconified="1" data-id="home" onclick="go('home')">
+  <button class="nav active" data-alpha-iconified="1" data-id="home" onclick="alphaReturnToChat()">
     <span class="alphaNavIcon alphaNavCompass" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 5.5 16.2 16 12 13.8 7.8 16 12 5.5Z"/></svg></span><span>Alpha</span>
   </button>
   <button class="nav" data-alpha-iconified="1" data-id="field" onclick="go('field')">
@@ -2909,7 +2914,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='4.0.1',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='4.0.2',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -3379,6 +3384,7 @@ function alphaApplyView(id){
     }
   },120);
   if(alphaShellView==='experience')syncReview();
+  if(isHome)requestAnimationFrame(()=>alphaSyncChatMode?.());
 }
 
 
@@ -3442,6 +3448,9 @@ window.addEventListener('popstate',e=>{
     const st=e.state||{};
     if(st.alphaShell==='chat'){
       alphaApplyView('home');
+      const c=alphaCurrentConversation?.();
+      if(c&&c.messages?.length)alphaOpenConversation(c.id);
+      else alphaStartFreshConversation({focus:false,compose:true});
       alphaSyncChatMode?.();
     }else{
       if(document.body.classList.contains('alphaChatMode')||document.body.classList.contains('alphaComposeMode')){
@@ -6041,6 +6050,16 @@ function alphaCloseInternalSidebar(){
   $('alphaInternalSidebar')?.classList.remove('show');
   $('alphaInternalScrim')?.classList.remove('show');
 }
+
+function alphaReturnToChat(){
+ alphaCloseInternalSidebar?.(); alphaCloseChatMenu?.();
+ const c=alphaCurrentConversation?.();
+ if(c&&Array.isArray(c.messages)&&c.messages.length){alphaOpenConversation(c.id);return}
+ go('home',{history:false});
+ alphaStartFreshConversation({focus:false,compose:true});
+ alphaSyncChatMode?.();
+ requestAnimationFrame(()=>alphaFitShell?.());
+}
 function alphaInternalNavigate(id){
   alphaCloseInternalSidebar();
   go(id);
@@ -6050,7 +6069,7 @@ function alphaInternalOpenPremium(){
   openPremium();
 }
 
-function alphaChatNavigate(id){alphaCloseChatMenu();document.body.classList.remove('alphaChatMode','alphaComposeMode');go(id)}
+function alphaChatNavigate(id){alphaCloseChatMenu();if(id==='home'){alphaReturnToChat();return}document.body.classList.remove('alphaChatMode','alphaComposeMode');go(id)}
 function alphaChatOpenPremium(){alphaCloseChatMenu();document.body.classList.remove('alphaChatMode','alphaComposeMode');openPremium()}
 function alphaCopyResponse(i){
   const c=alphaCurrentConversation(),m=c?.messages?.[i];if(!m)return;
@@ -6210,6 +6229,15 @@ function alphaClosePlaceDetail(){
   if(alphaPlaceModalHistoryArmed&&history.state?.alphaPlaceModal)history.back();
   else alphaHidePlaceDetailFromPop();
 }
+
+function alphaFormatHoursPt(value){
+ const raw=(Array.isArray(value)?value:[value]).filter(Boolean).flatMap(v=>String(v).split(/\s*;\s*/)).map(v=>v.trim()).filter(Boolean);
+ const rr=[[/\bJan(?:uary)?\b/gi,'janeiro'],[/\bFeb(?:ruary)?\b/gi,'fevereiro'],[/\bMar(?:ch)?\b/gi,'março'],[/\bApr(?:il)?\b/gi,'abril'],[/\bMay\b/gi,'maio'],[/\bJun(?:e)?\b/gi,'junho'],[/\bJul(?:y)?\b/gi,'julho'],[/\bAug(?:ust)?\b/gi,'agosto'],[/\bSep(?:t(?:ember)?)?\b/gi,'setembro'],[/\bOct(?:ober)?\b/gi,'outubro'],[/\bNov(?:ember)?\b/gi,'novembro'],[/\bDec(?:ember)?\b/gi,'dezembro'],[/\bMo\b/gi,'segunda-feira'],[/\bTu\b/gi,'terça-feira'],[/\bWe\b/gi,'quarta-feira'],[/\bTh\b/gi,'quinta-feira'],[/\bFr\b/gi,'sexta-feira'],[/\bSa\b/gi,'sábado'],[/\bSu\b/gi,'domingo'],[/\boff\b/gi,'encerrado'],[/\bclosed\b/gi,'encerrado']];
+ return [...new Set(raw.map(s=>{rr.forEach(([a,b])=>s=s.replace(a,b));return s.replace(/(\d{1,2}):(\d{2})-(\d{1,2}):(\d{2})/g,'$1:$2 — $3:$4').replace(/\s+/g,' ').trim()}))];
+}
+function alphaHoursPresentation(value){
+ return alphaFormatHoursPt(value).map(raw=>{const m=raw.match(/^(.+?)\s+(\d{1,2}:\d{2}\s*[—-]\s*\d{1,2}:\d{2})(.*)$/);return m?{label:(m[1]+m[3]).trim(),time:m[2].replace(/\s*-\s*/,' — '),raw}:{label:'',time:'',raw}});
+}
 function alphaOpenPlaceDetail(key){
   const p=alphaPlaceCardRegistry.get(key);if(!p)return;
   const overlay=alphaEnsurePlaceModal(),host=document.getElementById('alphaPlaceDetailContent');
@@ -6250,7 +6278,7 @@ function alphaOpenPlaceDetail(key){
       ${p.address?`<div class="alphaPlaceModalMeta">${esc(p.address)}</div>`:''}
       ${price?`<div class="alphaPlaceModalMeta">${esc(price)}</div>`:''}
       ${p.description?`<p class="alphaPlaceModalDesc">${esc(p.description)}</p>`:''}
-      ${hours.length?`<details class="alphaPlaceHours" open><summary>Horários</summary><div>${hours.map(esc).join('<br>')}</div></details>`:''}
+      ${hours.length?`<details class="alphaPlaceHours" open><summary>Horários</summary><div class="alphaHoursList">${alphaHoursPresentation(hours).map(h=>`<div class="alphaHoursLine">${h.label?`<span>${esc(h.label)}</span>`:''}${h.time?`<b>${esc(h.time)}</b>`:`<b>${esc(h.raw)}</b>`}</div>`).join('')}</div></details>`:''}
       ${info.length?`<div class="alphaPlaceInfoGrid">${info.join('')}</div>`:''}
       ${sourceCount?`<div class="alphaPlaceModalMeta">${sourceCount} fonte${sourceCount===1?'':'s'} usada${sourceCount===1?'':'s'} na investigação</div>`:''}
       <div class="alphaPlaceModalActions">
@@ -7731,8 +7759,8 @@ setTimeout(()=>{
 
 </script>
 
-<script>const ALPHA_VISIBLE_VERSION='v4.0.1 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='4.0.1-official-site-crawl';
+<script>const ALPHA_VISIBLE_VERSION='v4.0.2 · TEST';
+window.ALPHA_DOMAIN_GATE_BUILD='4.0.2-official-site-crawl';
 window.addEventListener('online',alphaPrewarmBackend,{passive:true});
 setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
 </script>
