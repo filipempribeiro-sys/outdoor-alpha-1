@@ -2124,7 +2124,7 @@ body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock svg{
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.7 · FINAL CALENDAR · Intent · Research · Synthesis</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.7 · FINAL CALENDAR REQUEST-ID FIX · Intent · Research · Synthesis</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -7265,7 +7265,7 @@ function alphaSetSendBusy(busy){
   if(btn)btn.disabled=!!busy;
 }
 
-async function alphaCallBackend(c,text,attachments=[]){
+async function alphaCallBackend(c,text,attachments=[],requestId=''){
   const base=alphaBackendUrl();if(!base)throw new Error('BACKEND_NOT_CONFIGURED');
 
   // NOTA 2: a chamada pesada só arranca depois de o /api/health responder.
@@ -7309,7 +7309,7 @@ async function alphaCallBackend(c,text,attachments=[]){
     try{
       const r=await fetch(base+'/api/chat',{
         method:'POST',
-        headers:{'Content-Type':'application/json','Accept':'application/json','X-Request-Id':requestId},
+        headers:{'Content-Type':'application/json','Accept':'application/json','X-Request-Id':requestId||('req_'+Date.now()+'_'+Math.random().toString(36).slice(2,9))},
         body:payload,
         cache:'no-store',
         signal:ctrl.signal
@@ -7383,7 +7383,7 @@ async function alphaLifestyleSend(){
 
   let d=null,reply='',real=false;
   try{
-    d=await alphaCallBackend(c,displayText,attachments);
+    d=await alphaCallBackend(c,displayText,attachments,requestId);
     alphaProgressSet(conversationId,'A validar e montar o resultado');
     reply=String(d.answer||'').trim();
     if(!reply)throw new Error('empty');
