@@ -1385,6 +1385,381 @@ body.alphaComposeMode .bottom{display:none!important}
   .aiChatMenu.alphaConversationSidebar{width:min(88vw,360px)!important}
 }
 
+
+/* ============================================================
+   ALPHA 3.6.7 FINAL FIX 2 · CONTEXTUAL HEADER + SIDEBAR
+   HOME:
+   - controlos DENTRO do container ALPHA
+   - footer normal visível
+   - sidebar apenas conversas
+   CHAT/COMPOSE:
+   - controlos flutuantes
+   - footer escondido
+   - sidebar com dock GO/LIVE/Premium/Perfil
+   ============================================================ */
+
+/* O container é sempre a referência dos controlos no HOME. */
+#lifestyleAI{
+  position:relative!important;
+}
+
+/* HOME — os dois botões pertencem ao cartão, não ao topo global da app. */
+body:not(.alphaChatMode):not(.alphaComposeMode) #lifestyleAI .aiTopbar.alphaFloatingHeader{
+  position:absolute!important;
+  top:16px!important;
+  left:18px!important;
+  right:18px!important;
+  height:50px!important;
+  min-height:50px!important;
+  z-index:30!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  pointer-events:none!important;
+}
+body:not(.alphaChatMode):not(.alphaComposeMode) #lifestyleAI .alphaFloatingMenu,
+body:not(.alphaChatMode):not(.alphaComposeMode) #lifestyleAI .alphaNewChatBtn{
+  width:50px!important;
+  height:50px!important;
+  min-width:50px!important;
+  min-height:50px!important;
+}
+
+/* O título começa por baixo dos controlos no HOME. */
+body:not(.alphaChatMode):not(.alphaComposeMode) #lifestyleAI > h1{
+  margin-top:78px!important;
+}
+
+/* HOME não precisa do fade do chat no topo. */
+body:not(.alphaChatMode):not(.alphaComposeMode) #lifestyleAI::before{
+  display:none!important;
+  content:none!important;
+}
+body:not(.alphaChatMode):not(.alphaComposeMode) #lifestyleAI .lifestyleThread{
+  padding-top:0!important;
+  -webkit-mask-image:none!important;
+  mask-image:none!important;
+}
+
+/* CHAT/COMPOSE — comportamento flutuante como ChatGPT. */
+body.alphaChatMode #lifestyleAI .aiTopbar.alphaFloatingHeader,
+body.alphaComposeMode #lifestyleAI .aiTopbar.alphaFloatingHeader{
+  position:absolute!important;
+  top:calc(env(safe-area-inset-top) + 10px)!important;
+  left:12px!important;
+  right:12px!important;
+  z-index:90!important;
+  height:52px!important;
+  min-height:52px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  pointer-events:none!important;
+}
+
+/* O hamburger NUNCA desaparece. */
+#lifestyleAI .aiChatMenuBtn.alphaFloatingMenu{
+  display:grid!important;
+  visibility:visible!important;
+  opacity:1!important;
+  place-items:center!important;
+}
+#lifestyleAI .alphaNewChatBtn{
+  display:grid!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+
+/* Centramento geométrico do hamburger. */
+.alphaHamburger{
+  position:relative!important;
+  width:24px!important;
+  height:18px!important;
+  margin:0!important;
+  padding:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:space-between!important;
+  align-items:center!important;
+  transform:none!important;
+}
+.alphaHamburger i{
+  width:24px!important;
+  height:3px!important;
+  flex:0 0 3px!important;
+  margin:0!important;
+  border-radius:999px!important;
+}
+
+/* Sidebar igual em espírito ao ChatGPT: identidade, pesquisa,
+   nova conversa, histórico e conversa ativa. */
+.aiChatMenu.alphaConversationSidebar{
+  width:min(88vw,390px)!important;
+  padding:calc(env(safe-area-inset-top) + 12px) 12px calc(env(safe-area-inset-bottom) + 12px)!important;
+  gap:6px!important;
+}
+.alphaSidebarHead{
+  min-height:58px!important;
+  padding:0 4px 4px!important;
+}
+.alphaSidebarBrand{
+  gap:10px!important;
+  font-size:22px!important;
+  font-weight:900!important;
+}
+.alphaSidebarSearchBtn{
+  width:46px!important;
+  height:46px!important;
+}
+.alphaSidebarNew{
+  min-height:48px!important;
+  padding:10px 12px!important;
+  font-size:16px!important;
+}
+.alphaSidebarSectionTitle{
+  padding:16px 12px 7px!important;
+  text-transform:none!important;
+  letter-spacing:0!important;
+  font-size:15px!important;
+  color:#f2f6f4!important;
+}
+.alphaSidebarConversation{
+  min-height:48px!important;
+  border-radius:10px!important;
+  grid-template-columns:24px minmax(0,1fr) 10px!important;
+}
+.alphaSidebarConversation.active{
+  background:rgba(255,255,255,.085)!important;
+}
+.alphaSidebarConversationTitle{
+  font-size:15px!important;
+}
+
+/* HOME: o footer já está à vista, portanto NÃO repetimos navegação no sidebar. */
+body:not(.alphaChatMode):not(.alphaComposeMode) .alphaConversationSidebar .alphaSidebarDock{
+  display:none!important;
+}
+
+/* CHAT/COMPOSE: footer desaparece; a navegação surge no fundo do sidebar. */
+body.alphaChatMode .alphaConversationSidebar .alphaSidebarDock,
+body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock{
+  display:grid!important;
+  grid-template-columns:repeat(4,1fr)!important;
+  gap:8px!important;
+  padding:10px 2px 0!important;
+  border-top:1px solid rgba(255,255,255,.10)!important;
+}
+body.alphaChatMode .alphaConversationSidebar .alphaSidebarDock button,
+body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock button{
+  height:48px!important;
+  min-height:48px!important;
+  width:100%!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
+}
+body.alphaChatMode .bottom,
+body.alphaComposeMode .bottom{
+  display:none!important;
+}
+body:not(.alphaChatMode):not(.alphaComposeMode) .bottom{
+  display:grid!important;
+}
+
+/* No chat, o conteúdo passa por baixo do header e desvanece. */
+body.alphaChatMode #lifestyleAI::before,
+body.alphaComposeMode #lifestyleAI::before{
+  display:block!important;
+  content:""!important;
+  height:96px!important;
+  background:linear-gradient(to bottom,
+    rgba(7,26,29,.98) 0%,
+    rgba(7,26,29,.78) 38%,
+    rgba(7,26,29,.28) 72%,
+    transparent 100%)!important;
+}
+body.alphaChatMode #lifestyleAI .lifestyleThread,
+body.alphaComposeMode #lifestyleAI .lifestyleThread{
+  padding-top:76px!important;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 72px,#000 100%)!important;
+  mask-image:linear-gradient(to bottom,transparent 0,#000 72px,#000 100%)!important;
+}
+
+@media(max-width:620px){
+  body:not(.alphaChatMode):not(.alphaComposeMode) #lifestyleAI .aiTopbar.alphaFloatingHeader{
+    top:14px!important;
+    left:14px!important;
+    right:14px!important;
+  }
+  .aiChatMenu.alphaConversationSidebar{
+    width:min(90vw,360px)!important;
+  }
+}
+
+
+/* ============================================================
+   ALPHA 3.6.7 · FINAL SHELL RECTIFICATION
+   ============================================================ */
+
+/* Ícones de navegação inequívocos: Alpha = bússola; Premium = estrelas. */
+.bottom .nav{
+  display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+  gap:4px!important;
+}
+.bottom .nav > span:last-child{font-size:13px;line-height:1.05}
+.alphaNavIcon,.alphaInternalNavIcon{
+  width:25px;height:25px;display:grid;place-items:center;flex:0 0 auto;
+}
+.alphaNavIcon svg,.alphaInternalNavIcon svg{
+  width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;
+}
+.alphaNavCompass svg path,.alphaInternalNavIcon.alphaNavCompass svg path{fill:currentColor;stroke:none}
+.alphaPremiumStars svg path,.alphaInternalNavIcon.alphaPremiumStars svg path{fill:none}
+
+/* HEADER GLOBAL: só existe na página inicial Alpha, nunca no chat. */
+body:not([data-alpha-view="home"]) .top,
+body.alphaChatMode .top,
+body.alphaComposeMode .top{
+  display:none!important;
+}
+body[data-alpha-view="home"]:not(.alphaChatMode):not(.alphaComposeMode) .top{
+  display:flex!important;
+}
+
+/* FOOTER GLOBAL: exclusivamente na página inicial Alpha e fora do chat. */
+body:not([data-alpha-view="home"]) .bottom,
+body.alphaChatMode .bottom,
+body.alphaComposeMode .bottom{
+  display:none!important;
+}
+body[data-alpha-view="home"]:not(.alphaChatMode):not(.alphaComposeMode) .bottom{
+  display:grid!important;
+}
+
+/* HOME: menu e nova conversa ficam DENTRO do container ALPHA. */
+body[data-alpha-view="home"]:not(.alphaChatMode):not(.alphaComposeMode) #lifestyleAI .aiTopbar.alphaFloatingHeader{
+  position:absolute!important;
+  top:16px!important;left:18px!important;right:18px!important;
+  z-index:40!important;
+}
+body[data-alpha-view="home"]:not(.alphaChatMode):not(.alphaComposeMode) #lifestyleAI > h1{
+  margin-top:78px!important;
+}
+
+/* CHAT: só controlos próprios da conversa; sem header/footer global. */
+body.alphaChatMode #lifestyleAI .aiTopbar.alphaFloatingHeader,
+body.alphaComposeMode #lifestyleAI .aiTopbar.alphaFloatingHeader{
+  position:absolute!important;
+  top:calc(env(safe-area-inset-top) + 10px)!important;
+}
+
+/* PÁGINAS INTERNAS: nenhum logo/weather/footer/nova conversa.
+   Só hamburger da navegação contextual. */
+.alphaInternalMenuBtn{
+  display:none;
+  position:fixed;z-index:1150;
+  top:calc(env(safe-area-inset-top) + 12px);left:14px;
+  width:50px;height:50px;padding:0;
+  border-radius:999px;border:1px solid rgba(255,255,255,.12);
+  background:rgba(28,30,32,.90);color:#fff;
+  box-shadow:0 8px 28px rgba(0,0,0,.32);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  place-items:center;
+}
+body:not([data-alpha-view="home"]) .alphaInternalMenuBtn{
+  display:grid!important;
+}
+body.alphaChatMode .alphaInternalMenuBtn,
+body.alphaComposeMode .alphaInternalMenuBtn{
+  display:none!important;
+}
+
+/* Dá espaço apenas ao primeiro card das páginas internas para o hamburger. */
+body:not([data-alpha-view="home"]) .view.active{
+  padding-top:calc(env(safe-area-inset-top) + 70px)!important;
+}
+body:not([data-alpha-view="home"]) .view.active > .card:first-child{
+  margin-top:0!important;
+}
+
+/* Sidebar interna: só navegação, sem conversas e sem nova conversa. */
+.alphaInternalSidebar{
+  position:fixed;z-index:1700;
+  top:0;bottom:0;left:0;
+  width:min(82vw,340px);
+  padding:calc(env(safe-area-inset-top) + 16px) 14px calc(env(safe-area-inset-bottom) + 16px);
+  background:rgba(6,15,18,.99);
+  border-right:1px solid rgba(255,255,255,.10);
+  border-radius:0 22px 22px 0;
+  box-shadow:22px 0 60px rgba(0,0,0,.48);
+  transform:translateX(-104%);opacity:0;visibility:hidden;
+  transition:transform .22s ease,opacity .18s ease,visibility .22s;
+  display:flex;flex-direction:column;
+}
+.alphaInternalSidebar.show{transform:translateX(0);opacity:1;visibility:visible}
+.alphaInternalSidebarTop{
+  min-height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 4px 12px;
+}
+.alphaInternalBrand{display:flex;align-items:center;gap:10px;font-size:21px;font-weight:900}
+.alphaInternalClose{
+  width:44px;height:44px;border-radius:999px;background:transparent;color:#fff;
+  border:0;font-size:31px;font-weight:300;display:grid;place-items:center;
+}
+.alphaInternalNavList{display:flex;flex-direction:column;gap:5px;padding-top:8px}
+.alphaInternalNavList button{
+  min-height:54px;width:100%;display:flex;align-items:center;gap:15px;
+  border:0;border-radius:14px;background:transparent;color:#f3f8f6;
+  padding:8px 13px;text-align:left;font:inherit;font-size:17px;font-weight:750;
+}
+.alphaInternalNavList button.active{background:rgba(255,255,255,.085)}
+.alphaInternalNavList button:active{background:rgba(255,255,255,.12)}
+.alphaInternalScrim{
+  position:fixed;z-index:1650;inset:0;background:rgba(0,0,0,.48);
+  opacity:0;visibility:hidden;transition:opacity .18s ease,visibility .18s;
+}
+.alphaInternalScrim.show{opacity:1;visibility:visible}
+
+/* O sidebar de CONVERSAS é exclusivamente da área Alpha/chat.
+   Nas páginas internas nunca aparece. */
+body:not([data-alpha-view="home"]) .alphaConversationSidebar{display:none!important}
+body:not([data-alpha-view="home"]) #alphaInternalSidebar{display:flex!important}
+
+/* No HOME o sidebar de conversas não repete navegação, já que o footer está disponível. */
+body[data-alpha-view="home"]:not(.alphaChatMode):not(.alphaComposeMode) .alphaConversationSidebar .alphaSidebarDock{
+  display:none!important;
+}
+
+/* No CHAT o sidebar de conversas continua disponível, mas a navegação do footer não é duplicada. */
+body.alphaChatMode .alphaConversationSidebar .alphaSidebarDock,
+body.alphaComposeMode .alphaConversationSidebar .alphaSidebarDock{
+  display:none!important;
+}
+
+/* Limpeza visual das páginas internas sem header/footer. */
+body:not([data-alpha-view="home"]) .app{
+  padding-top:0!important;
+  padding-bottom:calc(env(safe-area-inset-bottom) + 12px)!important;
+}
+
+/* Hamburger perfeitamente centrado em qualquer shell. */
+.alphaInternalMenuBtn .alphaHamburger,
+.alphaFloatingMenu .alphaHamburger{
+  width:24px!important;height:18px!important;
+  display:flex!important;flex-direction:column!important;
+  justify-content:space-between!important;align-items:center!important;
+  margin:0!important;padding:0!important;
+}
+.alphaInternalMenuBtn .alphaHamburger i,
+.alphaFloatingMenu .alphaHamburger i{
+  width:24px!important;height:3px!important;flex:0 0 3px!important;
+  margin:0!important;border-radius:999px!important;background:currentColor!important;
+}
+
+@media(max-width:620px){
+  .alphaInternalSidebar{width:min(86vw,340px)}
+  .alphaInternalMenuBtn{width:48px;height:48px}
+}
+
 </style>
 </head>
 <body>
@@ -1419,7 +1794,7 @@ body.alphaComposeMode .bottom{display:none!important}
 </div>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.7 · FINAL FIX · Intent · Research · Synthesis</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>PROJECT ALPHA</b><small>Alpha 3.6.7 · FINAL SHELL · Intent · Research · Synthesis</small></div></div>
   <button id="headerWeather" class="headerWeather" type="button" onclick="refreshHeaderWeather(true)" aria-label="Atualizar meteorologia">
     <span id="headerWeatherIcon" class="headerWeatherIcon">◌</span>
     <span class="headerWeatherMain"><b id="headerWeatherTemp">--°</b><small id="headerWeatherPlace">A localizar…</small></span>
@@ -2148,7 +2523,7 @@ Estação de São Bento
   <button class="alphaSidebarNew" type="button" onclick="alphaNewConversation();alphaCloseChatMenu()">
     <span class="alphaSidebarCompose">✎</span><span>Nova conversa</span>
   </button>
-  <div class="alphaSidebarSectionTitle">Recentes</div>
+  <div class="alphaSidebarSectionTitle">Conversas</div>
   <div id="alphaSidebarConversationList" class="alphaSidebarConversationList"></div>
   <div class="alphaSidebarDock" aria-label="Navegação">
     <button type="button" onclick="alphaChatNavigate('field')" aria-label="Mapa/GO" title="Mapa/GO"><span>▷</span></button>
@@ -2159,16 +2534,56 @@ Estação de São Bento
     </button>
   </div>
 </div>
-<nav class="bottom">
-  <button class="nav active" data-id="home" onclick="go('home')">✦<br>Alpha</button>
-  <button class="nav" data-id="field" onclick="go('field')">▶<br>Mapa/GO</button>
-  <button class="nav" data-id="report" onclick="go('report')">⚑<br>LIVE</button>
-  <button id="premiumNav" class="nav premiumNav" data-id="premiumInfo" onclick="openPremium()">✦<br>Premium</button>
-  <button class="nav" data-id="profile" onclick="go('profile')">●<br>Perfil</button>
+<button id="alphaInternalMenuBtn" class="alphaInternalMenuBtn" type="button" onclick="alphaToggleInternalSidebar(event)" aria-label="Abrir navegação" title="Navegação">
+  <span class="alphaHamburger" aria-hidden="true"><i></i><i></i><i></i></span>
+</button>
+
+<aside id="alphaInternalSidebar" class="alphaInternalSidebar" aria-label="Navegação ALPHA">
+  <div class="alphaInternalSidebarTop">
+    <div class="alphaInternalBrand"><span class="alphaSidebarLogo logo" aria-hidden="true"></span><b>ALPHA</b></div>
+    <button type="button" class="alphaInternalClose" onclick="alphaCloseInternalSidebar()" aria-label="Fechar">×</button>
+  </div>
+  <div class="alphaInternalNavList">
+    <button type="button" data-target="home" onclick="alphaInternalNavigate('home')">
+      <span class="alphaInternalNavIcon alphaNavCompass"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 5.5 16.2 16 12 13.8 7.8 16 12 5.5Z"/></svg></span><span>Alpha</span>
+    </button>
+    <button type="button" data-target="field" onclick="alphaInternalNavigate('field')">
+      <span class="alphaInternalNavIcon"><svg viewBox="0 0 24 24"><path d="M8 5.5 18 12 8 18.5Z"/></svg></span><span>Mapa/GO</span>
+    </button>
+    <button type="button" data-target="report" onclick="alphaInternalNavigate('report')">
+      <span class="alphaInternalNavIcon"><svg viewBox="0 0 24 24"><path d="M7 21V4"/><path d="M7 5h10l-2.4 3L17 11H7"/></svg></span><span>LIVE</span>
+    </button>
+    <button type="button" data-target="premiumInfo" onclick="alphaInternalOpenPremium()">
+      <span class="alphaInternalNavIcon alphaPremiumStars"><svg viewBox="0 0 24 24"><path d="m9 3 1.2 3.3L13.5 7.5l-3.3 1.2L9 12l-1.2-3.3-3.3-1.2 3.3-1.2L9 3Z"/><path d="m17 11 1 2.7 2.7 1-2.7 1-1 2.8-1-2.8-2.7-1 2.7-1 1-2.7Z"/></svg></span><span>Premium</span>
+    </button>
+    <button type="button" data-target="profile" onclick="alphaInternalNavigate('profile')">
+      <span class="alphaInternalNavIcon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c.7-5 3.1-7.5 7.5-7.5s6.8 2.5 7.5 7.5"/></svg></span><span>Perfil</span>
+    </button>
+  </div>
+</aside>
+<div id="alphaInternalScrim" class="alphaInternalScrim" onclick="alphaCloseInternalSidebar()" aria-hidden="true"></div>
+
+<nav class="bottom" aria-label="Navegação principal">
+  <button class="nav active" data-id="home" onclick="go('home')">
+    <span class="alphaNavIcon alphaNavCompass" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 5.5 16.2 16 12 13.8 7.8 16 12 5.5Z"/></svg></span><span>Alpha</span>
+  </button>
+  <button class="nav" data-id="field" onclick="go('field')">
+    <span class="alphaNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5 18 12 8 18.5Z"/></svg></span><span>Mapa/GO</span>
+  </button>
+  <button class="nav" data-id="report" onclick="go('report')">
+    <span class="alphaNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 21V4"/><path d="M7 5h10l-2.4 3L17 11H7"/></svg></span><span>LIVE</span>
+  </button>
+  <button id="premiumNav" class="nav premiumNav" data-id="premiumInfo" onclick="openPremium()">
+    <span class="alphaNavIcon alphaPremiumStars" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 3 1.2 3.3L13.5 7.5l-3.3 1.2L9 12l-1.2-3.3-3.3-1.2 3.3-1.2L9 3Z"/><path d="m17 11 1 2.7 2.7 1-2.7 1-1 2.8-1-2.8-2.7-1 2.7-1 1-2.7Z"/></svg></span><span>Premium</span>
+  </button>
+  <button class="nav" data-id="profile" onclick="go('profile')">
+    <span class="alphaNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c.7-5 3.1-7.5 7.5-7.5s6.8 2.5 7.5 7.5"/></svg></span><span>Perfil</span>
+  </button>
 </nav>
 
 <script>
 const $=id=>document.getElementById(id);
+document.body.dataset.alphaView='home';
 let pos=null,watchId=null,photoData='',map=null,userMarker=null,reportMarkers=[],selectedTrailMarker=null;
 let activityRunning=false,activityStartedAt=null,activitySeconds=0,activityDistance=0,lastActivityPos=null,activityTimer=null;
 let wearableConnected=false,heartRate=null,globalRating=5,expPhotoData='',shareFile=null;
@@ -2604,7 +3019,102 @@ function closeQuickReport(){if($('quickReport'))$('quickReport').style.display='
 function chooseQuickReport(type){closeQuickReport();if($('rtype'))$('rtype').value=type;go('report');setTimeout(()=>{const el=$('rtype');if(el)el.scrollIntoView({behavior:'smooth',block:'center'})},100)}
 
 function toast(m){let t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.remove('show'),2800)}
-function go(id){if(id!=='home'){document.body.classList.remove('alphaChatMode');alphaCloseChatMenu?.();}document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===id));window.scrollTo(0,0);if(id==='field')setTimeout(()=>{initMap();if(map){map.resize();renderMapReports();renderTrailLayer();renderSelectedTrail();renderExploreMarkers();renderMultiStopMarkers();renderExploreRoute();renderLiveTrack();setTimeout(()=>{map.resize();if(exploreRouteGeoJSON&&!liveNavActive)fitActiveRoute(false)},180)}},120);if(id==='experience')syncReview()}
+const ALPHA_SHELL_HOME='home';
+let alphaShellView='home';
+let alphaShellHistoryReady=false;
+let alphaHistoryHandling=false;
+
+function alphaApplyView(id){
+  alphaShellView=id||'home';
+  document.body.dataset.alphaView=alphaShellView;
+
+  if(alphaShellView!=='home'){
+    document.body.classList.remove('alphaChatMode','alphaComposeMode');
+    alphaCloseChatMenu?.();
+  }
+
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===alphaShellView));
+  document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.id===alphaShellView));
+  document.querySelectorAll('.alphaInternalNavList [data-target]').forEach(n=>n.classList.toggle('active',n.dataset.target===alphaShellView));
+
+  alphaCloseInternalSidebar?.();
+  window.scrollTo(0,0);
+
+  if(alphaShellView==='field')setTimeout(()=>{
+    initMap();
+    if(map){
+      map.resize();renderMapReports();renderTrailLayer();renderSelectedTrail();
+      renderExploreMarkers();renderMultiStopMarkers();renderExploreRoute();renderLiveTrack();
+      setTimeout(()=>{map.resize();if(exploreRouteGeoJSON&&!liveNavActive)fitActiveRoute(false)},180)
+    }
+  },120);
+  if(alphaShellView==='experience')syncReview();
+}
+
+function alphaEnsureHistory(){
+  if(alphaShellHistoryReady)return;
+  alphaShellHistoryReady=true;
+  try{
+    const state=history.state||{};
+    if(!state.alphaShell){
+      history.replaceState({...state,alphaShell:'view',view:'home',chat:false},'');
+    }
+  }catch{}
+}
+
+function go(id,opts={}){
+  id=id||'home';
+  alphaEnsureHistory();
+
+  const sameView=alphaShellView===id;
+  const historyEnabled=opts.history!==false && !alphaHistoryHandling;
+  if(historyEnabled && (!sameView || opts.forceHistory)){
+    try{
+      const state={...(history.state||{}),alphaShell:'view',view:id,chat:false};
+      if(opts.replace)history.replaceState(state,'');
+      else history.pushState(state,'');
+    }catch{}
+  }
+  alphaApplyView(id);
+}
+
+function alphaEnterChatHistory(){
+  alphaEnsureHistory();
+  if(alphaHistoryHandling)return;
+  const state=history.state||{};
+  if(state.alphaShell==='chat')return;
+  try{history.pushState({...state,alphaShell:'chat',view:'home',chat:true},'')}catch{}
+}
+
+function alphaExitChatToHome(){
+  document.body.classList.remove('alphaChatMode','alphaComposeMode');
+  $('lifestyleAI')?.classList.remove('chatStarted');
+  alphaApplyView('home');
+  renderAlphaLifestyleThread?.();
+  requestAnimationFrame(()=>alphaFitShell?.());
+}
+
+window.addEventListener('popstate',e=>{
+  /* O modal de local tem prioridade sobre a shell. */
+  if(alphaPlaceModalOpen){alphaHidePlaceDetailFromPop();return}
+
+  alphaHistoryHandling=true;
+  try{
+    const st=e.state||{};
+    if(st.alphaShell==='chat'){
+      alphaApplyView('home');
+      alphaSyncChatMode?.();
+    }else{
+      if(document.body.classList.contains('alphaChatMode')||document.body.classList.contains('alphaComposeMode')){
+        alphaExitChatToHome();
+      }
+      alphaApplyView(st.view||'home');
+    }
+  }finally{
+    setTimeout(()=>{alphaHistoryHandling=false},0);
+  }
+});
+
 function reports(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
 function saveReports(r){localStorage.setItem(KEY,JSON.stringify(r))}
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -5007,6 +5517,7 @@ try{let cc=JSON.parse(localStorage.getItem(scopedTrailCacheKey())||'null');if(cc
 fetchWeather(false);
 startHeaderWeatherGPS();
 applyDeviceLanguage();if($('deviceLangBadge'))$('deviceLangBadge').textContent=DEVICE_LOCALE+' ·';
+alphaEnsureHistory?.();
 setupFreshPWA();checkForFreshBuild(false);alphaPrewarmBackend();
 
 function adaptOrientation(){
@@ -5104,8 +5615,13 @@ function alphaFormatConversationDate(x){try{return new Intl.DateTimeFormat('pt-P
 function alphaChatHasMessages(){const c=alphaCurrentConversation();return !!(c&&Array.isArray(c.messages)&&c.messages.length)}
 function alphaSyncChatMode(){
   const started=alphaChatHasMessages();
+  const wasStarted=document.body.classList.contains('alphaChatMode');
   document.body.classList.toggle('alphaChatMode',started);
-  if(started)document.body.classList.remove('alphaComposeMode');
+  if(started){
+    document.body.classList.remove('alphaComposeMode');
+    document.body.dataset.alphaView='home';
+    if(!wasStarted)alphaEnterChatHistory?.();
+  }
   $('lifestyleAI')?.classList.toggle('chatStarted',started);
   if(!started&&!document.body.classList.contains('alphaComposeMode'))alphaCloseChatMenu();
 }
@@ -5148,8 +5664,30 @@ function alphaToggleChatMenu(e){
   if(willOpen){
     alphaRenderChatSidebar($('alphaSidebarSearch')?.value||'');
     menu?.classList.add('show');
+    requestAnimationFrame(()=>alphaRenderChatSidebar($('alphaSidebarSearch')?.value||''));
   }else menu?.classList.remove('show');
 }
+function alphaToggleInternalSidebar(e){
+  e?.stopPropagation?.();
+  const side=$('alphaInternalSidebar'),scrim=$('alphaInternalScrim');
+  const open=!side?.classList.contains('show');
+  alphaCloseChatMenu?.();
+  side?.classList.toggle('show',open);
+  scrim?.classList.toggle('show',open);
+}
+function alphaCloseInternalSidebar(){
+  $('alphaInternalSidebar')?.classList.remove('show');
+  $('alphaInternalScrim')?.classList.remove('show');
+}
+function alphaInternalNavigate(id){
+  alphaCloseInternalSidebar();
+  go(id);
+}
+function alphaInternalOpenPremium(){
+  alphaCloseInternalSidebar();
+  openPremium();
+}
+
 function alphaChatNavigate(id){alphaCloseChatMenu();document.body.classList.remove('alphaChatMode','alphaComposeMode');go(id)}
 function alphaChatOpenPremium(){alphaCloseChatMenu();document.body.classList.remove('alphaChatMode','alphaComposeMode');openPremium()}
 function alphaCopyResponse(i){
@@ -5333,7 +5871,7 @@ function alphaOpenPlaceDetail(key){
   overlay.classList.add('open');document.body.classList.add('alphaPlaceModalMode');alphaPlaceModalOpen=true;
   try{history.pushState({...history.state,alphaPlaceModal:true},'');alphaPlaceModalHistoryArmed=true}catch{alphaPlaceModalHistoryArmed=false}
 }
-window.addEventListener('popstate',()=>{if(alphaPlaceModalOpen)alphaHidePlaceDetailFromPop()});
+
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&alphaPlaceModalOpen){e.preventDefault();alphaClosePlaceDetail()}});
 
 function alphaRenderPlaceCards(m){
@@ -5410,7 +5948,7 @@ function alphaRenderHistory(){
     </div>`;
   }).join('');
 }
-function alphaOpenConversation(id){const input=$('lifestylePrompt');if(input&&alphaActiveConversationId())alphaSetDraft(input.value);document.body.classList.remove('alphaComposeMode');alphaSetActiveConversationId(id);alphaClearUnread(id);alphaSetSendBusy(alphaPendingRequests.has(id));alphaRestoreDraft();renderAlphaLifestyleThread();alphaCloseHistory();go('home');requestAnimationFrame(()=>alphaFitShell?.())}
+function alphaOpenConversation(id){const input=$('lifestylePrompt');if(input&&alphaActiveConversationId())alphaSetDraft(input.value);document.body.classList.remove('alphaComposeMode');alphaSetActiveConversationId(id);alphaClearUnread(id);alphaSetSendBusy(alphaPendingRequests.has(id));alphaRestoreDraft();renderAlphaLifestyleThread();alphaCloseHistory();go('home',{history:false});alphaSyncChatMode();requestAnimationFrame(()=>alphaFitShell?.())}
 function alphaRenameConversation(id){const all=alphaConversations(),c=all.find(x=>x.id===id);if(!c)return;const n=prompt('Novo título:',c.title);if(n===null)return;c.title=alphaNormalizeTitle(n);c.titleSource='user';c.updatedAt=new Date().toISOString();alphaSaveConversations(all);alphaRenderHistory();alphaRenderChatSidebar?.($('alphaSidebarSearch')?.value||'');renderAlphaLifestyleThread()}
 function alphaDeleteConversation(id){const all=alphaConversations(),c=all.find(x=>x.id===id);if(!c||!confirm('Apagar "'+c.title+'"?'))return;alphaSaveConversations(all.filter(x=>x.id!==id));alphaSetDraft('',id);alphaClearUnread(id);alphaPendingRequests.delete(id);if(alphaActiveConversationId()===id)alphaSetActiveConversationId('');alphaRenderHistory();alphaRenderChatSidebar?.($('alphaSidebarSearch')?.value||'');renderAlphaLifestyleThread()}
 function alphaLifestyleQuick(text){if($('lifestylePrompt')){$('lifestylePrompt').value=text;alphaResizeComposerNow()}go('home');setTimeout(()=>$('lifestyleAI')?.scrollIntoView({behavior:'smooth',block:'start'}),80)}
