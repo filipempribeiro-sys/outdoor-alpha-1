@@ -2224,6 +2224,28 @@ nav.bottom .nav > span:last-child{font-size:clamp(9px,2.5vw,12px)!important;whit
 .alphaCalendarHubCard,.alphaCalendarAgendaCard{overflow:hidden}
 .alphaCalendarHubHead{display:flex;gap:14px;align-items:flex-start;justify-content:space-between}.alphaCalendarHubHead h1{margin:.2rem 0}.alphaCalendarProviderRow{display:flex;gap:8px;overflow:auto;padding:10px 0 4px}.alphaCalendarProviderRow span{white-space:nowrap;border:1px solid #294149;border-radius:999px;padding:7px 10px;color:var(--muted);font-size:12px}.alphaCalendarProviderRow .ready{color:#dffff2;border-color:#287b62;background:#10352d}.alphaCalendarToolbar{display:grid;grid-template-columns:42px 62px 1fr 42px;gap:8px;align-items:center;margin:14px 0 8px}.alphaCalendarToolbar button{height:40px;border:1px solid #294149;border-radius:12px;background:#10262e;color:#fff}.alphaCalendarToolbar b{text-align:center}.alphaCalendarWeek,.alphaCalendarGrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.alphaCalendarWeek span{text-align:center;color:var(--muted);font-size:11px;padding:6px 0}.alphaCalendarDay{min-height:72px;border:1px solid #263d44;border-radius:12px;background:#0b1a20;color:#fff;padding:7px;text-align:left;position:relative}.alphaCalendarDay.other{opacity:.35}.alphaCalendarDay.today{border-color:#35dca4;box-shadow:inset 0 0 0 1px rgba(53,220,164,.25)}.alphaCalendarDay.selected{background:#12362d}.alphaCalendarDayNum{font-weight:850}.alphaCalendarDots{display:flex;gap:3px;flex-wrap:wrap;margin-top:8px}.alphaCalendarDot{width:6px;height:6px;border-radius:50%;background:#35dca4}.alphaCalendarAgenda{display:flex;flex-direction:column;gap:9px}.alphaCalendarEvent{width:100%;border:1px solid #294149;border-radius:14px;background:#0d2026;color:#fff;padding:12px;text-align:left;display:grid;grid-template-columns:58px 1fr;gap:12px}.alphaCalendarEventTime{font-weight:900;color:#54e0b2}.alphaCalendarEvent small{display:block;color:var(--muted);margin-top:3px}.alphaCalendarEmpty{color:var(--muted);padding:16px 2px}.alphaCalendarEditor{position:fixed;z-index:2400;inset:0;background:rgba(0,0,0,.68);display:grid;place-items:center;padding:18px}.alphaCalendarEditor[hidden]{display:none!important}.alphaCalendarEditorCard{width:min(520px,100%);max-height:90vh;overflow:auto;background:#0b1b20;border:1px solid #34535b;border-radius:22px;padding:18px;box-shadow:0 24px 70px rgba(0,0,0,.55)}.alphaCalendarEditorHead{display:flex;justify-content:space-between;align-items:center;font-size:21px;margin-bottom:14px}.alphaCalendarEditorHead button{width:38px;height:38px;border:0;border-radius:50%;background:#1b2c31;color:#fff;font-size:26px}.alphaCalendarEditorCard label{display:flex;flex-direction:column;gap:6px;color:var(--muted);font-size:13px;margin:10px 0}.alphaCalendarEditorCard input,.alphaCalendarEditorCard textarea,.alphaCalendarEditorCard select{width:100%;box-sizing:border-box;background:#08161b;color:#fff;border:1px solid #294149;border-radius:12px;padding:12px;font:inherit}.alphaCalendarEditorCols{display:grid;grid-template-columns:1fr 1fr;gap:10px}.alphaCalendarEditorActions{display:flex;justify-content:flex-end;gap:9px;margin-top:14px}@media(max-width:520px){.alphaCalendarHubHead{display:block}.alphaCalendarHubHead .btn{margin-top:8px}.alphaCalendarDay{min-height:58px;padding:5px}.alphaCalendarEditorCols{grid-template-columns:1fr}.alphaCalendarToolbar{grid-template-columns:38px 58px 1fr 38px}}
 </style>
+
+<style id="alphaSpotify439Final">
+/* ALPHA 4.3.9 · Spotify Remote final */
+.alphaSpotifyGlobal{z-index:900!important}
+.alphaSpotifyOverlay{top:calc(env(safe-area-inset-top,0px) + 12px)!important;width:min(430px,calc(100vw - 20px))!important;padding:14px 18px 12px!important;border-radius:24px!important;background:rgba(7,18,19,.34)!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:0 12px 32px rgba(0,0,0,.22)!important;-webkit-backdrop-filter:blur(14px) saturate(1.12)!important;backdrop-filter:blur(14px) saturate(1.12)!important}
+.alphaSpotifyOverlay::before{opacity:.30!important;filter:blur(16px) saturate(1.05)!important;background-image:linear-gradient(rgba(4,12,13,.10),rgba(4,12,13,.28)),var(--alpha-spotify-art,none)!important}
+.alphaSpotifyOverlay::after{background:linear-gradient(180deg,rgba(3,10,11,.04),rgba(3,10,11,.18))!important}
+body.alphaChatMode .alphaSpotifyOverlay,body.alphaComposeMode .alphaSpotifyOverlay{top:calc(env(safe-area-inset-top,0px) + 12px)!important}
+.alphaSpotifyGlobalControls{height:54px!important;margin:0 76px 5px!important;grid-template-columns:48px 58px 48px!important;gap:18px!important}
+.alphaSpotifyGlobalControls button{height:50px!important;width:48px!important}.alphaSpotifyGlobalControls button.main{height:50px!important;width:58px!important}
+.alphaSpotifyProgress{margin:5px 8px 2px!important}.alphaSpotifyTimes{margin:0 8px 7px!important}
+.alphaSpotifyMetaRow{display:flex;align-items:center;gap:10px;min-height:46px}
+.alphaSpotifyNow{display:flex!important;align-items:center!important;gap:9px!important;min-width:0!important;flex:1!important;padding:0!important}
+.alphaSpotifyNow img{display:block!important;width:42px!important;height:42px!important;flex:0 0 42px!important;border-radius:9px!important;object-fit:cover!important;background:rgba(255,255,255,.08)}
+.alphaSpotifyNow div{min-width:0!important;display:grid!important;gap:1px!important}
+.alphaSpotifyNow b{font-size:15px!important}.alphaSpotifyNow span{font-size:12px!important}
+.alphaSpotifyBottomActions{display:flex!important;justify-content:flex-end!important;align-items:center!important;gap:7px!important;height:38px!important;margin:0!important;flex:0 0 auto!important}
+.alphaSpotifyShuffleTop,.alphaSpotifyClose{background:rgba(3,10,11,.18)!important;width:34px!important;height:34px!important;min-width:34px!important;border-radius:10px!important}
+#chatMenuBtn,#alphaChatNewBtn,.alphaChatMenuBtn,.alphaChatNewBtn,.chatMenuBtn,.newConversationBtn{position:relative!important;z-index:1200!important}
+body[data-alpha-view="home"] #alphaSpotifyGlobal{display:none!important}
+@media(max-width:390px){.alphaSpotifyGlobalControls{margin-left:68px!important;margin-right:68px!important;gap:13px!important}}
+</style>
 </head>
 <body class="alphaWelcomeActive">
 <div id="toast" class="toast"></div>
@@ -3060,7 +3082,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='4.3.1',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='4.3.9',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -7467,16 +7489,27 @@ function alphaCalendarImportAIEvents(events=[]){
 }
 async function alphaSpotifyFooterAction(){
   try{
-    /* 4.3.2: na Home, Spotify abre sempre dentro do Chat fullscreen. */
     const pureHome=alphaShellView==='home'&&!document.body.classList.contains('alphaChatMode')&&!document.body.classList.contains('alphaComposeMode');
     if(pureHome){
-      alphaReturnToChat();
-      await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+      /* Entrar no Chat sem reiniciar a shell/Home e sem mostrar o Remote durante a transição. */
+      alphaSpotifyToggleRemote?.(false);
+      alphaSpotifySetGlobalVisible?.(false);
+      alphaSetWelcomeNavHidden?.(false);
+      const ov=document.getElementById('alphaWelcomeOverlay');
+      if(ov){ov.classList.remove('show','leaving');ov.setAttribute('aria-hidden','true')}
+      const c=alphaCurrentConversation?.();
+      if(c&&Array.isArray(c.messages)&&c.messages.length) alphaOpenConversation(c.id);
+      else alphaStartFreshConversation({focus:false,compose:true});
+      alphaSyncChatMode?.();
+      await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+      if(!document.body.classList.contains('alphaChatMode')&&!document.body.classList.contains('alphaComposeMode')) return;
     }
     const st=await alphaSpotifyStatus();
     if(!st.configured)return toast('Spotify ainda não está configurado no backend da ALPHA.');
     if(!st.connected){await alphaSpotifyAuth({global:true,openAfter:false});return}
-    alphaSpotifySetGlobalVisible(true);alphaSpotifyToggleRemote(true);await alphaSpotifyPollGlobal(true);
+    alphaSpotifySetGlobalVisible(true);
+    alphaSpotifyToggleRemote(true);
+    await alphaSpotifyPollGlobal(true);
     if(!alphaSpotifyGlobalState?.playback?.available)toast('Spotify ligado. Abre o Spotify num dispositivo para ativar o Remote.');
   }catch(e){toast(String(e?.message||e))}
 }
@@ -8011,30 +8044,30 @@ setTimeout(()=>{
 
 </script>
 
-<script>const ALPHA_VISIBLE_VERSION='v4.3.2 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='4.3.2-contextual-top-spotify-remote-under-controls';
+<script>const ALPHA_VISIBLE_VERSION='v4.3.9 · TEST';
+window.ALPHA_DOMAIN_GATE_BUILD='4.3.9-spotify-remote-final';
 window.addEventListener('online',alphaPrewarmBackend,{passive:true});
 setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
 </script>
 
 <div id="alphaSpotifyGlobal" class="alphaSpotifyGlobal" hidden>
   <section id="alphaSpotifyOverlay" class="alphaSpotifyOverlay" hidden aria-label="Spotify Remote">
-    <div class="alphaSpotifyOverlayHead">
-      <div class="alphaSpotifyNow">
-        <img id="alphaSpotifyCover" alt="" />
-        <div><b id="alphaSpotifyTrack">Spotify</b><span id="alphaSpotifyArtists"></span><small id="alphaSpotifyDevice"></small></div>
-      </div>
-    </div>
-    <div class="alphaSpotifyProgress"><i id="alphaSpotifyProgressBar"></i></div>
-    <div class="alphaSpotifyTimes"><span id="alphaSpotifyElapsed">0:00</span><span id="alphaSpotifyDuration">0:00</span></div>
     <div class="alphaSpotifyGlobalControls">
       <button type="button" onclick="alphaSpotifyGlobalAction('previous',this)" aria-label="Anterior"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 6h3v20H7zM25 7v18L11 16z"/></svg></button>
       <button type="button" id="alphaSpotifyMainToggle" class="main" onclick="alphaSpotifyGlobalToggle(this)" aria-label="Reproduzir ou pausar"><svg id="alphaSpotifyMainIcon" viewBox="0 0 32 32" aria-hidden="true"><path d="M10 6l16 10-16 10z"/></svg></button>
       <button type="button" onclick="alphaSpotifyGlobalAction('next',this)" aria-label="Seguinte"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M22 6h3v20h-3zM7 7l14 9L7 25z"/></svg></button>
     </div>
-    <div class="alphaSpotifyBottomActions" aria-label="Ações do Spotify Remote">
-      <button type="button" id="alphaSpotifyShuffle" class="alphaSpotifyShuffleTop" onclick="alphaSpotifyGlobalShuffle(this)" aria-label="Aleatório" title="Aleatório">⇄</button>
-      <button type="button" class="alphaSpotifyClose" onclick="alphaSpotifyToggleRemote(false)" aria-label="Fechar">×</button>
+    <div class="alphaSpotifyProgress"><i id="alphaSpotifyProgressBar"></i></div>
+    <div class="alphaSpotifyTimes"><span id="alphaSpotifyElapsed">0:00</span><span id="alphaSpotifyDuration">0:00</span></div>
+    <div class="alphaSpotifyMetaRow">
+      <div class="alphaSpotifyNow">
+        <img id="alphaSpotifyCover" alt="" />
+        <div><b id="alphaSpotifyTrack">Spotify</b><span id="alphaSpotifyArtists"></span><small id="alphaSpotifyDevice"></small></div>
+      </div>
+      <div class="alphaSpotifyBottomActions">
+        <button type="button" id="alphaSpotifyShuffle" class="alphaSpotifyShuffleTop" onclick="alphaSpotifyGlobalShuffle(this)" aria-label="Aleatório" title="Aleatório">⇄</button>
+        <button type="button" class="alphaSpotifyClose" onclick="alphaSpotifyToggleRemote(false)" aria-label="Fechar">×</button>
+      </div>
     </div>
     <div id="alphaSpotifyGlobalNote" class="alphaSpotifyGlobalNote"></div>
   </section>
