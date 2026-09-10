@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#071116">
-<meta name="alpha-version" content="4.3.15">
+<meta name="alpha-version" content="4.3.16">
 <link rel="manifest" href="manifest.webmanifest">
 <link href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
-<title>Project Alpha 4.3.2 — Contextual Top Spotify Remote</title>
+<title>Project Alpha 4.3.16 — Full System Hardening</title>
 <style>
 :root{
   --bg:#071116;--panel:#0d1a21;--panel2:#11242b;--line:#20343b;
@@ -2226,7 +2226,7 @@ nav.bottom .nav > span:last-child{font-size:clamp(9px,2.5vw,12px)!important;whit
 </style>
 
 <style id="alphaSpotify439Final">
-/* ALPHA 4.3.15 · Spotify Remote persistence + glass final */
+/* ALPHA 4.3.16 · Spotify Remote persistence + glass final */
 .alphaSpotifyGlobal{z-index:900!important}
 .alphaSpotifyOverlay{top:calc(env(safe-area-inset-top,0px) + 12px)!important;width:min(430px,calc(100vw - 20px))!important;padding:14px 18px 12px!important;border-radius:24px!important;background:rgba(7,18,19,.16)!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:0 12px 32px rgba(0,0,0,.22)!important;-webkit-backdrop-filter:blur(14px) saturate(1.12)!important;backdrop-filter:blur(14px) saturate(1.12)!important}
 .alphaSpotifyOverlay::before{opacity:.18!important;filter:blur(18px) saturate(1.08)!important;background-image:linear-gradient(rgba(4,12,13,.04),rgba(4,12,13,.12)),var(--alpha-spotify-art,none)!important}
@@ -2298,8 +2298,9 @@ body[data-alpha-view="home"] #alphaSpotifyGlobal{display:none!important}
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19h4l10-10a2.2 2.2 0 0 0-4-4L5 15v4Z"/><path d="M13.5 6.5l4 4"/><path d="M19 14v5H5V5h5"/></svg>
       </button>
     </div>
-    <h1>O que queres <span class="green">fazer hoje?</span></h1>
-    <p class="muted lifestyleAILead">Diz à Alpha o que te apetece, o tempo que tens, com quem vais ou simplesmente conta-lhe o contexto. A aplicação adapta as ferramentas ao teu objetivo — não és tu que tens de te adaptar à aplicação.</p>
+    <h1 id="alphaHomeGreeting">O que queres <span class="green">fazer hoje?</span></h1>
+    <p id="alphaOlenIdentity" class="muted lifestyleAILead" style="display:none"></p>
+    <p id="alphaHomePrompt" class="muted lifestyleAILead">Diz à Alpha o que te apetece, o tempo que tens, com quem vais ou simplesmente conta-lhe o contexto. A aplicação adapta as ferramentas ao teu objetivo — não és tu que tens de te adaptar à aplicação.</p>
     <div class="lifestyleQuick">
       <button class="lifestyleChip" onclick="alphaLifestyleQuick('Quero ideias para hoje perto de mim')">✦ Ideias para hoje</button>
       <button class="lifestyleChip" onclick="alphaWorthItToday()">⭐ Vale a pena ir hoje?</button>
@@ -3082,7 +3083,7 @@ let nearbyTrails=[],selectedTrail=null,weatherNow=null,trailLayerBound=false,tra
 let headerWeatherWatchId=null,headerWeatherLast=null,headerWeatherBusy=false;
 let explorePlaces=[],exploreSelected=new Set(),exploreCategories=new Set(['all']),exploreCenter=null,exploreMarkers=[],exploreRouteGeoJSON=null,exploreRouteOrdered=[],multiStopMarkers=[],multiStopPlan=null;
 let exploreChatHistory=[],exploreChatStarted=false,activeExploreNavTarget=null;
-const APP_VERSION='4.3.15',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
+const APP_VERSION='4.3.16',ACTIVE_ROUTE_KEY='alpha_active_route_v5';
 let lastFreshBuildCheck=0;
 let liveNavActive=false,navFollow=true,navigationMode='walk',navTrack=[],navTrackDistance=0,mapFallbackFullscreen=false;
 const KEY='alpha_reports', ACT_KEY='alpha_activity', EXP_KEY='alpha_experience', TRAIL_CACHE='alpha_trails_cache', EXPERIENCE_PLAN_KEY='alpha_experience_plan', SAVED_TRAILS_KEY='alpha_saved_trails', DEST_KEY='alpha_destination', PLACES_KEY='alpha_experience_places', TESTER_KEY='alpha_current_tester', CONTRIB_KEY='alpha_contributions', DEST_HISTORY_KEY='alpha_destination_history', EXPERIENCE_HISTORY_KEY='alpha_experience_history';
@@ -3116,7 +3117,7 @@ function alphaStartCompass(){
   alphaSetCompassRotation(0);
   alphaAllLogos().forEach(el=>el.classList.remove('compassLive'));
   alphaAllLogos().forEach(el=>el.classList.add('compassSeeking'));
-  alphaCompassStatus('A iniciar a ALPHA '+APP_VERSION+' · TESTE…');
+  alphaCompassStatus('A iniciar a ALPHA '+APP_VERSION+'…');
   setTimeout(alphaFinishLogoIntro,2950);
 }
 async function alphaRequestCompassPermission(){
@@ -3124,6 +3125,54 @@ async function alphaRequestCompassPermission(){
   alphaStartCompass();
   return true;
 }
+const ALPHA_OLEN_HOME_COUNT_PREFIX='alpha_olen_home_intro_count_';
+const ALPHA_OLEN_SESSION_PREFIX='alpha_olen_session_counted_';
+
+function alphaOlenHomeKey(userId){
+  return ALPHA_OLEN_HOME_COUNT_PREFIX+String(userId||'guest');
+}
+function alphaOlenSessionKey(userId){
+  return ALPHA_OLEN_SESSION_PREFIX+String(userId||'guest');
+}
+function alphaRegisterOlenSession(){
+  const u=authUser();if(!u)return 0;
+  const sessionKey=alphaOlenSessionKey(u.id);
+  let count=Math.max(0,Number(localStorage.getItem(alphaOlenHomeKey(u.id))||0));
+  if(!sessionStorage.getItem(sessionKey)){
+    count+=1;
+    localStorage.setItem(alphaOlenHomeKey(u.id),String(count));
+    sessionStorage.setItem(sessionKey,'1');
+  }
+  return count;
+}
+function alphaRenderOlenHome(){
+  const u=authUser();if(!u)return;
+  const title=$('alphaHomeGreeting'),identity=$('alphaOlenIdentity'),prompt=$('alphaHomePrompt');
+  if(!title||!identity||!prompt)return;
+  const name=esc(u.shortName||String(u.name||'').split(/\s+/)[0]||'');
+  const count=alphaRegisterOlenSession();
+
+  if(count<=1){
+    title.innerHTML='Olá, '+name+'. O meu nome é <span class="green">OLEN.</span>';
+    identity.textContent='Outdoor Lifestyle Experience Navigator';
+    identity.style.display='';
+    prompt.innerHTML='<b>Diz-me, o que queres fazer hoje?</b>';
+    return;
+  }
+  if(count<=3){
+    title.innerHTML='Olá, '+name+'. <span class="green">OLEN</span> por aqui.';
+    identity.style.display='none';
+    identity.textContent='';
+    prompt.innerHTML='<b>O que queres fazer hoje?</b>';
+    return;
+  }
+
+  title.innerHTML='Olá, '+name+'. <span class="green">O que queres fazer hoje?</span>';
+  identity.style.display='none';
+  identity.textContent='';
+  prompt.textContent='Diz-me o que te apetece, o tempo que tens, com quem vais ou simplesmente conta-me o contexto.';
+}
+
 function alphaGreetingForTime(){
   const h=new Date().getHours();
   if(h<12)return'Bom dia';
@@ -3233,7 +3282,7 @@ function alphaLogin(){
   if(!localStorage.getItem(entKey))localStorage.setItem(entKey,JSON.stringify(createInitialEntitlement(profile)));
   currentTester=profile.shortName;localStorage.setItem(userKey(TESTER_KEY),currentTester);
   const firstWelcome=!alphaWasWelcomedBefore(profile.id);
-  $('loginPin').value='';$('authGate').classList.remove('show');applyEntitlements();alphaAfterLogin34();if($('lifestylePrompt'))$('lifestylePrompt').value='';
+  $('loginPin').value='';$('authGate').classList.remove('show');applyEntitlements();alphaAfterLogin34();alphaRenderOlenHome();if($('lifestylePrompt'))$('lifestylePrompt').value='';
   alphaShowWelcome({firstForUser:firstWelcome});alphaMarkWelcomeSeen();
   toast('Bem-vindo, '+profile.shortName+' · '+tierLabel(effectiveTier()));
 }
@@ -3571,8 +3620,8 @@ function alphaApplyView(id){
     requestAnimationFrame(()=>alphaSpotifyApplyRemoteContext?.());
   }
   if(isHome){
-    requestAnimationFrame(()=>alphaSyncChatMode?.());
-    /* 4.3.15: a Home nunca recebe o Remote, mas preserva o estado para ele reaparecer nas áreas internas. */
+    /* 4.3.16: Home é uma superfície visual própria. Ter uma conversa ativa guardada
+       não pode reabrir automaticamente o Chat. O Chat só abre por ação explícita. */
     if(!document.body.classList.contains('alphaChatMode')&&!document.body.classList.contains('alphaComposeMode')){
       const box=document.getElementById('alphaSpotifyOverlay');if(box)box.hidden=true;
       alphaSpotifySetGlobalVisible?.(false);
@@ -3598,7 +3647,7 @@ function alphaEnsureHistory(){
   }catch{}
 }
 
-/* ALPHA 4.3.15 · NAVEGAÇÃO ROOT-HOME
+/* ALPHA 4.3.16 · NAVEGAÇÃO ROOT-HOME
    A Home visual é a raiz real da PWA.
    Existe no máximo UM estado interno por cima da Home.
    Assim, Back Android em Chat/Mapa/LIVE/Calendário/Perfil/Premium volta
@@ -3665,48 +3714,57 @@ function alphaEnterChatHistory(){
   alphaArmInternalHistory(alphaInternalHistoryState('chat','home'));
 }
 
-function alphaExitChatToHome(){
+function alphaShowCanonicalHome(){
+  /* 4.3.16: esta é a Home visual mostrada no ecrã inicial da ALPHA.
+     Preserva conversas/drafts, mas sai sempre de Chat/Compose e de áreas internas. */
+  alphaCloseInternalSidebar?.();
+  alphaCloseChatMenu?.();
+  alphaCloseHistory?.();
+  alphaCloseFloatingMenus?.();
+  alphaPreserveCurrentDraft?.();
+
   document.body.classList.remove('alphaChatMode','alphaComposeMode');
   $('lifestyleAI')?.classList.remove('chatStarted');
+
+  const host=$('lifestyleThread');
+  if(host){host.classList.remove('show');host.innerHTML='';host.scrollTop=0;}
+  const input=$('lifestylePrompt');
+  if(input){input.value='';alphaAutoResizeInput?.(input);}
+  if($('lifestyleState'))$('lifestyleState').textContent='';
+
   alphaApplyView('home');
-  renderAlphaLifestyleThread?.();
+  const globalHeader=document.querySelector('.top');
+  const globalFooter=document.querySelector('nav.bottom');
+  if(globalHeader)globalHeader.hidden=false;
+  if(globalFooter)globalFooter.hidden=false;
+
+  /* Home esconde o Remote sem esquecer a preferência nem parar o Spotify. */
+  const box=document.getElementById('alphaSpotifyOverlay');if(box)box.hidden=true;
+  alphaSpotifySetGlobalVisible?.(false);
   requestAnimationFrame(()=>alphaFitShell?.());
 }
 
+function alphaExitChatToHome(){
+  alphaShowCanonicalHome();
+}
+
 window.addEventListener('popstate',e=>{
-  /* O modal de local tem prioridade sobre a shell. */
+  /* Hierarquia Android: modal -> Home -> sistema. */
   if(alphaPlaceModalOpen){alphaHidePlaceDetailFromPop();return}
 
   alphaHistoryHandling=true;
   try{
     const st=e.state||{};
-    if(st.alphaShell==='chat'){
-      /* Estado chat só é usado quando avançamos para o Chat.
-         Num popstate normal o destino esperado é a Home, mas mantemos
-         esta recuperação para históricos antigos existentes no Android. */
-      alphaApplyView('home');
-      const c=alphaCurrentConversation?.();
-      if(c&&c.messages?.length)alphaOpenConversation(c.id);
-      else alphaStartFreshConversation({focus:false,compose:true});
-      alphaSyncChatMode?.();
+    const internalView=(st.alphaShell==='view'&&st.view&&st.view!=='home'&&!st.chat)?st.view:'';
+
+    /* Forward pode restaurar uma aba interna normal. Estados Chat antigos nunca
+       são reanimados pelo Back: resolvem para a Home canónica. */
+    if(internalView){
+      document.body.classList.remove('alphaChatMode','alphaComposeMode');
+      $('lifestyleAI')?.classList.remove('chatStarted');
+      alphaApplyView(internalView);
     }else{
-      /* Qualquer popstate que não seja explicitamente um estado interno válido
-         regressa à Home visual canónica. */
-      const target=(st.alphaShell==='view'&&st.view&&st.view!=='home')?st.view:'home';
-      if(target==='home'){
-        document.body.classList.remove('alphaChatMode','alphaComposeMode');
-        $('lifestyleAI')?.classList.remove('chatStarted');
-        alphaApplyView('home');
-        renderAlphaLifestyleThread?.();
-        if(alphaSpotifyRemoteWanted){
-          const box=document.getElementById('alphaSpotifyOverlay');if(box)box.hidden=true;
-          alphaSpotifySetGlobalVisible?.(false);
-        }
-        requestAnimationFrame(()=>alphaFitShell?.());
-      }else{
-        document.body.classList.remove('alphaChatMode','alphaComposeMode');
-        alphaApplyView(target);
-      }
+      alphaShowCanonicalHome();
     }
   }finally{
     setTimeout(()=>{alphaHistoryHandling=false},0);
@@ -6224,7 +6282,6 @@ function alphaFormatConversationDate(x){try{return new Intl.DateTimeFormat('pt-P
 function alphaChatHasMessages(){const c=alphaCurrentConversation();return !!(c&&Array.isArray(c.messages)&&c.messages.length)}
 function alphaSyncChatMode(){
   const started=alphaChatHasMessages();
-  const wasStarted=document.body.classList.contains('alphaChatMode');
   document.body.classList.toggle('alphaChatMode',started);
   const globalHeader=document.querySelector('.top');
   const globalFooter=document.querySelector('nav.bottom');
@@ -6234,7 +6291,7 @@ function alphaSyncChatMode(){
     document.body.dataset.alphaView='home';
     if(globalHeader)globalHeader.hidden=true;
     if(globalFooter)globalFooter.hidden=true;
-    if(!wasStarted)alphaEnterChatHistory?.();
+    alphaEnterChatHistory?.();
   }else{
     if(globalHeader)globalHeader.hidden=false;
     if(globalFooter)globalFooter.hidden=false;
@@ -6243,7 +6300,7 @@ function alphaSyncChatMode(){
   $('lifestyleAI')?.classList.toggle('chatStarted',started);
   if(!started&&!document.body.classList.contains('alphaComposeMode'))alphaCloseChatMenu();
 
-  /* 4.3.15: o Chat fullscreen também é contexto Spotify válido.
+  /* 4.3.16: o Chat fullscreen também é contexto Spotify válido.
      alphaOpenConversation() passa por go('home') antes de alphaSyncChatMode(),
      por isso o Remote era escondido durante a transição e nunca reaplicado. */
   if(alphaSpotifyRemoteWanted){
@@ -6638,7 +6695,21 @@ function alphaRenderHistory(){
     </div>`;
   }).join('');
 }
-function alphaOpenConversation(id){const input=$('lifestylePrompt');if(input&&alphaActiveConversationId())alphaSetDraft(input.value);document.body.classList.remove('alphaComposeMode');alphaSetActiveConversationId(id);alphaClearUnread(id);alphaSetSendBusy(alphaPendingRequests.has(id));alphaRestoreDraft();renderAlphaLifestyleThread();alphaCloseHistory();go('home',{history:false});alphaSyncChatMode();requestAnimationFrame(()=>alphaFitShell?.())}
+function alphaOpenConversation(id){
+  const input=$('lifestylePrompt');
+  if(input&&alphaActiveConversationId())alphaSetDraft(input.value);
+  go('home',{history:false});
+  document.body.classList.remove('alphaComposeMode');
+  alphaSetActiveConversationId(id);
+  alphaClearUnread(id);
+  alphaSetSendBusy(alphaPendingRequests.has(id));
+  alphaRestoreDraft();
+  alphaEnterChatHistory?.();
+  renderAlphaLifestyleThread();
+  alphaCloseHistory();
+  alphaSyncChatMode();
+  requestAnimationFrame(()=>alphaFitShell?.());
+}
 function alphaRenameConversation(id){const all=alphaConversations(),c=all.find(x=>x.id===id);if(!c)return;const n=prompt('Novo título:',c.title);if(n===null)return;c.title=alphaNormalizeTitle(n);c.titleSource='user';c.updatedAt=new Date().toISOString();alphaSaveConversations(all);alphaRenderHistory();alphaRenderChatSidebar?.($('alphaSidebarSearch')?.value||'');renderAlphaLifestyleThread()}
 function alphaDeleteConversation(id){const all=alphaConversations(),c=all.find(x=>x.id===id);if(!c||!confirm('Apagar "'+c.title+'"?'))return;alphaSaveConversations(all.filter(x=>x.id!==id));alphaSetDraft('',id);alphaClearUnread(id);alphaPendingRequests.delete(id);if(alphaActiveConversationId()===id)alphaSetActiveConversationId('');alphaRenderHistory();alphaRenderChatSidebar?.($('alphaSidebarSearch')?.value||'');renderAlphaLifestyleThread()}
 function alphaDeleteConversationFromSidebar(id){
@@ -7708,7 +7779,7 @@ async function alphaHealthProbe(timeoutMs=12000){
     const r=await fetch(base+'/api/health?wake='+Date.now(),{
       method:'GET',
       cache:'no-store',
-      headers:{'Accept':'application/json','Cache-Control':'no-cache'},
+      headers:{'Accept':'application/json'},
       signal:ctrl.signal
     });
     if(!r.ok)throw new Error('HEALTH_HTTP_'+r.status);
@@ -7765,8 +7836,36 @@ function alphaSetSendBusy(busy){
   if(btn)btn.disabled=!!busy;
 }
 
+function alphaBackendError(message,{code='ALPHA_ERROR',status=0,requestId='',detail=''}={}){
+  const e=new Error(String(message||code||'ALPHA_ERROR'));
+  e.alphaCode=String(code||'ALPHA_ERROR');
+  e.httpStatus=Number(status)||0;
+  e.requestId=String(requestId||'');
+  e.alphaDetail=String(detail||message||'').slice(0,300);
+  return e;
+}
+function alphaChatFailurePresentation(e){
+  const code=String(e?.alphaCode||e?.message||'ALPHA_ERROR');
+  const status=Number(e?.httpStatus||0);
+  const requestId=String(e?.requestId||'');
+  let message='Não consegui concluir esta investigação. O teu pedido ficou guardado nesta conversa — toca em ↻ para tentar novamente.';
+
+  if(/BACKEND_NOT_CONFIGURED|BACKEND_WAKE_FAILED|NETWORK_ERROR|Failed to fetch|NetworkError/i.test(code)){
+    message='Não consegui estabelecer ligação ao serviço ALPHA. O teu pedido ficou guardado nesta conversa — toca em ↻ para tentar novamente.';
+  }else if(/CHAT_TIMEOUT|UPSTREAM_TIMEOUT|TIMEOUT/i.test(code)||status===504){
+    message='A investigação ultrapassou o tempo limite antes de ficar concluída. O pedido ficou guardado — toca em ↻ para tentar novamente.';
+  }else if(/RATE_LIMIT/i.test(code)||status===429){
+    message='Há demasiados pedidos neste momento. O teu pedido ficou guardado — espera um pouco e toca em ↻ para tentar novamente.';
+  }else if(/ALPHA_CONFIG/i.test(code)||status===503){
+    message='A ALPHA está acessível, mas há uma configuração do serviço que precisa de ser corrigida. O teu pedido ficou guardado para poderes tentar novamente.';
+  }else if(/ALPHA_CHAT_UPSTREAM|ALPHA_RESPONSE_INVALID|HTTP_5/i.test(code)||status>=500){
+    message='A ALPHA está online, mas uma etapa da investigação não conseguiu concluir. O teu pedido ficou guardado nesta conversa — toca em ↻ para tentar novamente.';
+  }
+  return {message,code,status,requestId};
+}
+
 async function alphaCallBackend(c,text,attachments=[],requestId=''){
-  const base=alphaBackendUrl();if(!base)throw new Error('BACKEND_NOT_CONFIGURED');
+  const base=alphaBackendUrl();if(!base)throw alphaBackendError('BACKEND_NOT_CONFIGURED',{code:'BACKEND_NOT_CONFIGURED'});
 
   // NOTA 2: a chamada pesada só arranca depois de o /api/health responder.
   // O GitHub keep-alive deverá mantê-lo quente; isto é a rede de segurança.
@@ -7777,7 +7876,7 @@ async function alphaCallBackend(c,text,attachments=[],requestId=''){
     }
   }catch(e){
     alphaProgressSet(c.id,'A tentar acordar o serviço Alpha');
-    throw new Error('BACKEND_WAKE_FAILED: '+String(e?.message||e));
+    throw alphaBackendError('BACKEND_WAKE_FAILED',{code:'BACKEND_WAKE_FAILED',detail:String(e?.message||e)});
   }
 
   const history=c.messages.slice(0,-1).slice(-16).map(m=>({role:m.role==='ai'?'assistant':'user',content:m.text}));
@@ -7821,18 +7920,25 @@ async function alphaCallBackend(c,text,attachments=[],requestId=''){
     const raw=await r.text();
     let d={};
     try{d=JSON.parse(raw)}catch{
-      throw new Error('Resposta inválida do serviço Alpha');
+      throw alphaBackendError('Resposta inválida do serviço Alpha',{code:'ALPHA_RESPONSE_INVALID',status:r.status,requestId:r.headers.get('X-Request-Id')||requestId});
     }
 
     if(!r.ok||d?.ok===false){
-      throw new Error(String(d?.detail||d?.error||('HTTP '+r.status)));
+      throw alphaBackendError(String(d?.error||d?.detail||('HTTP '+r.status)),{
+        code:String(d?.code||('HTTP_'+r.status)),status:r.status,
+        requestId:String(d?.requestId||r.headers.get('X-Request-Id')||requestId),
+        detail:String(d?.detail||d?.error||'')
+      });
     }
 
     alphaBackendState='ready';
     alphaBackendLastReadyAt=Date.now();
     return d;
   }catch(e){
-    throw e?.name==='AbortError'?new Error('CHAT_TIMEOUT'):e;
+    if(e?.name==='AbortError')throw alphaBackendError('CHAT_TIMEOUT',{code:'CHAT_TIMEOUT',requestId});
+    if(e?.alphaCode)throw e;
+    if(e instanceof TypeError)throw alphaBackendError('NETWORK_ERROR',{code:'NETWORK_ERROR',requestId,detail:String(e?.message||e)});
+    throw alphaBackendError(String(e?.message||e),{code:'ALPHA_FRONTEND_ERROR',requestId,detail:String(e?.message||e)});
   }finally{
     clearTimeout(timer);
   }
@@ -7872,6 +7978,7 @@ async function alphaLifestyleSend(){
   alphaRenderAttachments();
   alphaCloseAttachMenu();
   renderAlphaLifestyleThread();
+  alphaSyncChatMode?.();
 
   if(state)state.textContent='A Alpha está a interpretar…';
   alphaPendingRequests.set(conversationId,{requestId,startedAt:Date.now(),progressSteps:[],progressIndex:0,progressTimer:null});
@@ -7880,16 +7987,17 @@ async function alphaLifestyleSend(){
   if($('aiHistoryDrawer')?.classList.contains('show'))alphaRenderHistory();
   if(alphaActiveConversationId()===conversationId)alphaSetSendBusy(true);
 
-  let d=null,reply='',real=false;
+  let d=null,reply='',real=false,chatFailure=null;
   try{
     d=await alphaCallBackend(c,displayText,attachments,requestId);
     alphaProgressSet(conversationId,'A validar e montar o resultado');
     reply=String(d.answer||'').trim();
-    if(!reply)throw new Error('empty');
+    if(!reply)throw alphaBackendError('Resposta vazia',{code:'ALPHA_RESPONSE_INVALID',requestId});
     real=true;
   }catch(e){
     console.error('alpha_chat_frontend',e);
-    reply='Não consegui concluir este pedido porque o serviço da Alpha ficou temporariamente indisponível. O teu pedido ficou guardado nesta conversa — toca em ↻ para tentar novamente.';
+    chatFailure=alphaChatFailurePresentation(e);
+    reply=chatFailure.message;
   }
 
   // CRÍTICO: nunca usamos alphaCurrentConversation() aqui.
@@ -7921,6 +8029,9 @@ async function alphaLifestyleSend(){
       source:real?'backend':'local',
       requestId,
       responseTimeMs,
+      errorCode:real?null:(chatFailure?.code||'ALPHA_ERROR'),
+      errorRequestId:real?null:(chatFailure?.requestId||requestId),
+      errorHttpStatus:real?null:(chatFailure?.status||0),
       scope:real&&d?d.scope:null,
       playlistTitle:contextualMusic?String(d.playlistTitle||d.title||target.title||'Playlist Alpha'):null,
       playlistTracks:contextualMusic?d.playlistTracks.slice(0,100):[],
@@ -8012,6 +8123,7 @@ function alphaOpenPathsHub(){go('field');setTimeout(()=>$('mapPathsHub')?.scroll
 function alphaMigrateLegacyChat(){const oldKey=userKey('alpha_lifestyle_chat_v2_'),done=userKey('alpha_ai_migrated_34_');if(localStorage.getItem(done))return;try{const old=JSON.parse(localStorage.getItem(oldKey)||'[]');if(Array.isArray(old)&&old.length&&!alphaConversations().length){const first=old.find(x=>x.role==='user')?.text||'Experiência anterior',c=alphaCreateConversation(first);c.messages=old.map(m=>({role:m.role,text:m.text,at:new Date().toISOString(),source:'legacy-3.3'}));alphaUpsertConversation(c)}}catch{}localStorage.setItem(done,'1')}
 function alphaAfterLogin34(){
   alphaMigrateLegacyChat();
+  alphaRenderOlenHome();
 
   const activeId=alphaActiveConversationId();
   const active=activeId?alphaConversationById(activeId):null;
@@ -8019,7 +8131,7 @@ function alphaAfterLogin34(){
   const qs=new URLSearchParams(location.search);
   const explicitReturn=externalContext||qs.has('alpha_share')||qs.has('code')||qs.has('state');
 
-  /* 4.3.15:
+  /* 4.3.16:
      - um arranque/reabertura normal da PWA começa SEMPRE na Home visual;
      - regressos explícitos de Spotify/WhatsApp/mapas podem retomar o Chat. */
   if(active&&explicitReturn){
@@ -8121,8 +8233,8 @@ setTimeout(()=>{
 
 </script>
 
-<script>const ALPHA_VISIBLE_VERSION='v4.3.12 · TEST';
-window.ALPHA_DOMAIN_GATE_BUILD='4.3.12-spotify-remote-persistence-final';
+<script>const ALPHA_VISIBLE_VERSION='v4.3.16';
+window.ALPHA_DOMAIN_GATE_BUILD='4.3.16-full-system-hardening';
 window.addEventListener('online',alphaPrewarmBackend,{passive:true});
 setTimeout(()=>{alphaResizeComposerNow();alphaPrewarmBackend();},120);
 </script>
