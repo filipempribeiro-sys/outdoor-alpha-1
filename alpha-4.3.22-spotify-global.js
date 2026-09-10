@@ -1,8 +1,8 @@
-/* ALPHA 4.3.26 · GLOBAL CONTROLS + CALENDAR + NATURAL SWIPE
+/* ALPHA 4.3.27 · GLOBAL CONTROLS + CALENDAR + NATURAL SWIPE
    Base: 4.3.18 stable + Spotify global
    - Home: Spotify apenas no footer; Novo chat no topo direito
    - Chat: cápsula única Spotify + Novo chat
-   - Vistas 3–7: Spotify sempre visível no topo direito e alinhado com Menu
+   - Vistas 3–7: Spotify sempre visível no topo direito e alinhado visualmente com Menu
    - Calendário incorporado no footer
    - Swipe LEFT = avançar; Swipe RIGHT = voltar
    - Ordem de navegação por swipe: Home → Mapa/GO → Calendário → LIVE → Premium → Perfil
@@ -10,7 +10,7 @@
 */
 (()=>{
 'use strict';
-const VERSION='4.3.26';
+const VERSION='4.3.27';
 const REMOTE_KEY='alpha_spotify_remote_explicit_v4324';
 const $=id=>document.getElementById(id);
 const isChat=()=>document.body?.classList.contains('alphaChatMode')||document.body?.classList.contains('alphaComposeMode');
@@ -31,7 +31,7 @@ function remoteEls(){return {root:$('alphaSpotifyGlobal'),box:$('alphaSpotifyOve
 function remoteVisible(){const {root,box}=remoteEls();return !!root&&!root.hidden&&(!box||!box.hidden)}
 async function setRemote(open){const {root,box}=remoteEls();setWanted(open);if(root)root.hidden=!open;if(box)box.hidden=!open;if(open){try{if(typeof window.alphaSpotifyPollGlobal==='function')await window.alphaSpotifyPollGlobal(true)}catch(e){console.warn('[ALPHA '+VERSION+'] poll',e)}try{if(typeof window.alphaSpotifyRefreshGlobal==='function')await window.alphaSpotifyRefreshGlobal(true)}catch{}}syncButtons()}
 async function toggleRemote(){await setRemote(!(wanted()&&remoteVisible()))}
-window.alphaSpotifyToggleGlobal4326=toggleRemote;window.alphaSpotifyToggleGlobal4325=toggleRemote;window.alphaSpotifyToggleGlobal4324=toggleRemote;window.alphaSpotifyToggleGlobal4323=toggleRemote;window.alphaSpotifyToggleGlobal4322=toggleRemote;
+window.alphaSpotifyToggleGlobal4327=toggleRemote;window.alphaSpotifyToggleGlobal4326=toggleRemote;window.alphaSpotifyToggleGlobal4325=toggleRemote;window.alphaSpotifyToggleGlobal4324=toggleRemote;window.alphaSpotifyToggleGlobal4323=toggleRemote;window.alphaSpotifyToggleGlobal4322=toggleRemote;
 function spotifyIcon(size=27){return '<svg viewBox="0 0 24 24" aria-hidden="true" style="width:'+size+'px;height:'+size+'px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round"><circle cx="12" cy="12" r="9"/><path d="M7.5 9.2c3.4-1 7.2-.7 10.1.8M8.2 12.3c2.9-.8 6-.5 8.6.7M9 15.2c2.3-.6 4.8-.4 6.8.5"/></svg>'}
 function calendarIcon(){return '<span class="alphaNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span><span>Calendário</span>'}
 function styles(){if($('alphaSpotify4324Style'))return;const s=document.createElement('style');s.id='alphaSpotify4324Style';s.textContent=`
@@ -61,7 +61,8 @@ function alignGlobalWithMenu(b){
   if(!b)return;
   const r=visibleMenuRect();
   if(r){
-    b.style.top=Math.round(r.top)+'px';
+    /* Ajuste ótico: o círculo do Menu tem halo/sombra que começa ~7 CSS px acima da caixa do botão. */
+    b.style.top=Math.round(Math.max(0,r.top-7))+'px';
     b.style.right=Math.round(Math.max(12,r.left))+'px';
     b.style.width=Math.round(r.width)+'px';
     b.style.height=Math.round(r.height)+'px';
@@ -99,5 +100,5 @@ interceptLegacySpotify();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(reconcile,80)});
 document.addEventListener('click',()=>setTimeout(reconcile,40),true);
 setTimeout(reconcile,120);setTimeout(reconcile,500);setTimeout(reconcile,1000);setInterval(reconcile,1200);
-function version(){document.querySelector('meta[name="alpha-version"]')?.setAttribute('content',VERSION);const v=$('alphaTestVersion');if(v)v.textContent='v'+VERSION;const s=$('alphaCompassStatus');if(s&&/A iniciar a ALPHA/i.test(s.textContent||''))s.textContent='A iniciar a ALPHA '+VERSION+'…'}setTimeout(version,100);setTimeout(version,700);console.info('[ALPHA '+VERSION+'] SPOTIFY TOP 3-7 + SWIPE ativo');
+function version(){document.querySelector('meta[name="alpha-version"]')?.setAttribute('content',VERSION);const v=$('alphaTestVersion');if(v)v.textContent='v'+VERSION;const s=$('alphaCompassStatus');if(s&&/A iniciar a ALPHA/i.test(s.textContent||''))s.textContent='A iniciar a ALPHA '+VERSION+'…'}setTimeout(version,100);setTimeout(version,700);console.info('[ALPHA '+VERSION+'] SPOTIFY TOP ALIGN + SWIPE ativo');
 })();
