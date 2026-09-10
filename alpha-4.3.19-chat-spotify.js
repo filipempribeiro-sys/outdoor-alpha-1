@@ -1,32 +1,22 @@
-/* ALPHA 4.3.20 · CHAT SPOTIFY TOGGLE
-   Mantém o comportamento da 4.3.18 nas restantes vistas.
-   No Chat:
-   - o Spotify Remote NÃO abre automaticamente;
-   - existe sempre um botão Spotify junto ao botão Nova conversa;
-   - o mesmo Spotify continua disponível na sidebar;
-   - tocar no botão Spotify liga/desliga o Remote;
-   - o X do Remote deixa de ser mostrado.
-*/
+/* ALPHA 4.3.21 · CHAT SPOTIFY TOGGLE — STABILITY FIX */
 (()=>{
 'use strict';
-const VERSION='4.3.20';
-const CHAT_REMOTE_KEY='alpha_chat_spotify_remote_explicit_v4320';
-let wasChat=false;
+const VERSION='4.3.21';
+const CHAT_REMOTE_KEY='alpha_chat_spotify_remote_explicit_v4321';
+let wasChat=false, syncQueued=false, syncing=false;
 const $=id=>document.getElementById(id);
-const isChat=()=>document.body.classList.contains('alphaChatMode')||document.body.classList.contains('alphaComposeMode');
+const isChat=()=>document.body?.classList.contains('alphaChatMode')||document.body?.classList.contains('alphaComposeMode');
 function setExplicit(v){try{sessionStorage.setItem(CHAT_REMOTE_KEY,v?'1':'0')}catch{}}
 function explicit(){try{return sessionStorage.getItem(CHAT_REMOTE_KEY)==='1'}catch{return false}}
 function remoteVisible(){const root=$('alphaSpotifyGlobal'),box=$('alphaSpotifyOverlay');return !!root&&!!box&&!root.hidden&&!box.hidden}
 function spotifyIcon(size=25){return '<svg viewBox="0 0 24 24" aria-hidden="true" style="width:'+size+'px;height:'+size+'px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round"><circle cx="12" cy="12" r="9"/><path d="M7.5 9.2c3.4-1 7.2-.7 10.1.8M8.2 12.3c2.9-.8 6-.5 8.6.7M9 15.2c2.3-.6 4.8-.4 6.8.5"/></svg>'}
+function setHidden(el,value){if(el&&el.hidden!==value)el.hidden=value}
+function setClass(el,name,on){if(el&&el.classList.contains(name)!==on)el.classList.toggle(name,on)}
 function hideChatRemote(){
   if(!isChat())return;
   try{window.alphaSpotifyRemoteWanted=false}catch{}
   try{if(typeof window.alphaSpotifyRememberRemote==='function')window.alphaSpotifyRememberRemote(false)}catch{}
-  const root=$('alphaSpotifyGlobal'),box=$('alphaSpotifyOverlay');
-  if(box)box.hidden=true;
-  if(root)root.hidden=true;
-  setExplicit(false);
-  syncToggleState();
+  setHidden($('alphaSpotifyOverlay'),true);setHidden($('alphaSpotifyGlobal'),true);setExplicit(false);syncToggleState();
 }
 async function showChatRemote(){
   if(!isChat())return;
@@ -34,22 +24,14 @@ async function showChatRemote(){
   try{
     window.alphaSpotifyRemoteWanted=true;
     if(typeof window.alphaSpotifyRememberRemote==='function')window.alphaSpotifyRememberRemote(true);
-    const root=$('alphaSpotifyGlobal'),box=$('alphaSpotifyOverlay');
-    if(root)root.hidden=false;if(box)box.hidden=false;
+    setHidden($('alphaSpotifyGlobal'),false);setHidden($('alphaSpotifyOverlay'),false);
     if(typeof window.alphaSpotifyPollGlobal==='function')await window.alphaSpotifyPollGlobal(true);
     syncToggleState();
-  }catch(e){
-    console.warn('[ALPHA '+VERSION+'] Spotify Chat',e);
-    hideChatRemote();
-  }
+  }catch(e){console.warn('[ALPHA '+VERSION+'] Spotify Chat',e);hideChatRemote()}
 }
-async function toggleChatSpotify(){
-  if(remoteVisible()&&explicit())hideChatRemote();
-  else await showChatRemote();
-}
+async function toggleChatSpotify(){if(remoteVisible()&&explicit())hideChatRemote();else await showChatRemote()}
 window.alphaToggleChatSpotify4320=toggleChatSpotify;
 window.alphaOpenSpotifyFromChat4319=showChatRemote;
-
 function ensureStyle(){
   if($('alphaChatSpotifyStyle4320'))return;
   const st=document.createElement('style');st.id='alphaChatSpotifyStyle4320';st.textContent=`
@@ -60,56 +42,30 @@ function ensureStyle(){
     body.alphaChatMode .alphaChatSpotifyTop4320,body.alphaComposeMode .alphaChatSpotifyTop4320{margin-left:auto!important;margin-right:10px!important}
     body.alphaChatMode .alphaNewChatBtn,body.alphaComposeMode .alphaNewChatBtn{margin-left:0!important}
     @media(max-width:390px){.alphaChatSpotifyTop4320{width:54px!important;height:54px!important;min-width:54px!important;margin-right:8px!important}}
-  `;document.head.append(st);
+  `;document.head.append(st)
 }
 function ensureTopSpotifyButton(){
-  const bar=document.querySelector('#lifestyleAI .aiTopbar.alphaFloatingHeader');
-  const newBtn=bar?.querySelector('.alphaNewChatBtn');
-  if(!bar||!newBtn)return;
+  const bar=document.querySelector('#lifestyleAI .aiTopbar.alphaFloatingHeader'),newBtn=bar?.querySelector('.alphaNewChatBtn');if(!bar||!newBtn)return;
   let b=bar.querySelector('.alphaChatSpotifyTop4320');
-  if(!b){
-    b=document.createElement('button');
-    b.type='button';b.className='alphaChatSpotifyTop4320';b.setAttribute('aria-label','Spotify Remote');b.title='Spotify';b.innerHTML=spotifyIcon(27);
-    b.addEventListener('click',async e=>{e.preventDefault();e.stopPropagation();await toggleChatSpotify()});
-    bar.insertBefore(b,newBtn);
-  }
-  b.hidden=!isChat();
+  if(!b){b=document.createElement('button');b.type='button';b.className='alphaChatSpotifyTop4320';b.setAttribute('aria-label','Spotify Remote');b.title='Spotify';b.innerHTML=spotifyIcon(27);b.addEventListener('click',async e=>{e.preventDefault();e.stopPropagation();await toggleChatSpotify()});bar.insertBefore(b,newBtn)}
+  setHidden(b,!isChat())
 }
 function ensureChatSpotifyNav(){
-  const dock=document.querySelector('.alphaConversationSidebar .alphaSidebarDock');
-  if(!dock)return;
+  const dock=document.querySelector('.alphaConversationSidebar .alphaSidebarDock');if(!dock)return;
   let b=dock.querySelector('[data-alpha-chat-spotify="1"]');
-  if(!b){
-    b=document.createElement('button');b.type='button';b.dataset.alphaChatSpotify='1';b.dataset.alphaIconified='1';b.setAttribute('aria-label','Spotify');b.title='Spotify';b.innerHTML=spotifyIcon(26);
-    b.addEventListener('click',async e=>{e.preventDefault();e.stopPropagation();if(typeof window.alphaCloseChatMenu==='function')window.alphaCloseChatMenu();await toggleChatSpotify()});
-    const premium=[...dock.children].find(x=>/premium/i.test(String(x.getAttribute('aria-label')||x.title||'')));
-    dock.insertBefore(b,premium||dock.lastElementChild||null);
-  }
-  dock.style.gridTemplateColumns='repeat(5,1fr)';
+  if(!b){b=document.createElement('button');b.type='button';b.dataset.alphaChatSpotify='1';b.dataset.alphaIconified='1';b.setAttribute('aria-label','Spotify');b.title='Spotify';b.innerHTML=spotifyIcon(26);b.addEventListener('click',async e=>{e.preventDefault();e.stopPropagation();if(typeof window.alphaCloseChatMenu==='function')window.alphaCloseChatMenu();await toggleChatSpotify()});const premium=[...dock.children].find(x=>/premium/i.test(String(x.getAttribute('aria-label')||x.title||'')));dock.insertBefore(b,premium||dock.lastElementChild||null)}
+  if(dock.style.gridTemplateColumns!=='repeat(5, 1fr)')dock.style.gridTemplateColumns='repeat(5, 1fr)'
 }
-function syncToggleState(){
-  const on=isChat()&&explicit()&&remoteVisible();
-  document.querySelectorAll('.alphaChatSpotifyTop4320,[data-alpha-chat-spotify="1"]').forEach(b=>{b.classList.toggle('active',on);b.setAttribute('aria-pressed',on?'true':'false')});
-}
+function syncToggleState(){const on=isChat()&&explicit()&&remoteVisible();document.querySelectorAll('.alphaChatSpotifyTop4320,[data-alpha-chat-spotify="1"]').forEach(b=>{setClass(b,'active',on);const v=on?'true':'false';if(b.getAttribute('aria-pressed')!==v)b.setAttribute('aria-pressed',v)})}
 function syncChatRemotePolicy(){
-  ensureStyle();ensureTopSpotifyButton();ensureChatSpotifyNav();
-  const now=isChat();
-  if(now&&!wasChat){setExplicit(false);hideChatRemote()}
-  wasChat=now;
-  if(now&&!explicit()&&remoteVisible())hideChatRemote();
-  syncToggleState();
+  if(syncing)return;syncing=true;
+  try{ensureStyle();ensureTopSpotifyButton();ensureChatSpotifyNav();const now=isChat();if(now&&!wasChat){setExplicit(false);hideChatRemote()}wasChat=now;if(now&&!explicit()&&remoteVisible())hideChatRemote();syncToggleState()}finally{syncing=false}
 }
-
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(syncChatRemotePolicy,80)});
-window.addEventListener('pageshow',()=>setTimeout(syncChatRemotePolicy,80));
-window.addEventListener('focus',()=>setTimeout(syncChatRemotePolicy,80));
-const mo=new MutationObserver(()=>queueMicrotask(syncChatRemotePolicy));
-mo.observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['class','hidden','data-alpha-view']});
-setExplicit(false);
-setTimeout(syncChatRemotePolicy,120);
-setInterval(syncChatRemotePolicy,900);
-
+function queueSync(){if(syncQueued)return;syncQueued=true;requestAnimationFrame(()=>{syncQueued=false;syncChatRemotePolicy()})}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)queueSync()});window.addEventListener('pageshow',queueSync);window.addEventListener('focus',queueSync);
+/* Observar apenas mudanças estruturais. A 4.3.20 observava class/hidden e reagia às próprias alterações, podendo criar um ciclo de microtasks e bloquear a UI. */
+const mo=new MutationObserver(queueSync);mo.observe(document.documentElement,{subtree:true,childList:true});
+setExplicit(false);setTimeout(queueSync,120);setInterval(queueSync,1500);
 function version(){document.querySelector('meta[name="alpha-version"]')?.setAttribute('content',VERSION);const v=$('alphaTestVersion');if(v)v.textContent='v'+VERSION;const s=$('alphaCompassStatus');if(s&&/A iniciar a ALPHA/i.test(s.textContent||''))s.textContent='A iniciar a ALPHA '+VERSION+'…'}
-setTimeout(version,100);setTimeout(version,700);
-console.info('[ALPHA '+VERSION+'] CHAT SPOTIFY TOGGLE ativo');
+setTimeout(version,100);setTimeout(version,700);console.info('[ALPHA '+VERSION+'] CHAT SPOTIFY TOGGLE stability fix ativo');
 })();
