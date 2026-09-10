@@ -1,5 +1,5 @@
-const CACHE_NAME="project-alpha-v4.3.18-route-resume";
-const PATCH_URL="./alpha-4.3.17-fixes.js?v=4.3.18";
+const CACHE_NAME="project-alpha-v4.3.18-spotify-remote-layout";
+const PATCH_URL="./alpha-4.3.17-fixes.js?v=4.3.18-remote-layout";
 const SHELL=["./","./index.html","./manifest.webmanifest","./icon-192.png","./icon-512.png","./alpha-4.3.17-fixes.js"];
 
 self.addEventListener("install",e=>{
@@ -24,7 +24,7 @@ function with4318Patch(response){
     html=html.replace(/const APP_VERSION='4\.3\.16'/g,"const APP_VERSION='4.3.18'");
     html=html.replace(/const ALPHA_VISIBLE_VERSION='v4\.3\.16'/g,"const ALPHA_VISIBLE_VERSION='v4.3.18'");
     html=html.replace(/window\.ALPHA_DOMAIN_GATE_BUILD='4\.3\.16-full-system-hardening'/g,"window.ALPHA_DOMAIN_GATE_BUILD='4.3.18-route-resume'");
-    const headers=new Headers(response.headers);headers.delete("content-length");headers.set("Cache-Control","no-store");headers.set("X-Alpha-Patch","4.3.18");
+    const headers=new Headers(response.headers);headers.delete("content-length");headers.set("Cache-Control","no-store");headers.set("X-Alpha-Patch","4.3.18-remote-layout");
     return new Response(html,{status:response.status,statusText:response.statusText,headers});
   });
 }
