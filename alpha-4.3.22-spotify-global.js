@@ -1,16 +1,16 @@
-/* ALPHA 4.3.24 · GLOBAL CONTROLS + CALENDAR + NATURAL SWIPE
+/* ALPHA 4.3.25 · GLOBAL CONTROLS + CALENDAR + NATURAL SWIPE
    Base: 4.3.18 stable + Spotify global
    - Home: Spotify apenas no footer; Novo chat no topo direito
    - Chat: cápsula única Spotify + Novo chat
    - Restantes vistas: Spotify alinhado verticalmente com Menu
    - Calendário incorporado no footer
-   - Swipe RIGHT = avançar; Swipe LEFT = voltar
+   - Swipe LEFT = avançar; Swipe RIGHT = voltar
    - Ordem de navegação por swipe: Home → Mapa/GO → Calendário → LIVE → Premium → Perfil
    - Spotify é controlo global e não entra na sequência de páginas por swipe
 */
 (()=>{
 'use strict';
-const VERSION='4.3.24';
+const VERSION='4.3.25';
 const REMOTE_KEY='alpha_spotify_remote_explicit_v4324';
 const $=id=>document.getElementById(id);
 const isChat=()=>document.body?.classList.contains('alphaChatMode')||document.body?.classList.contains('alphaComposeMode');
@@ -22,7 +22,7 @@ function remoteEls(){return {root:$('alphaSpotifyGlobal'),box:$('alphaSpotifyOve
 function remoteVisible(){const {root,box}=remoteEls();return !!root&&!root.hidden&&(!box||!box.hidden)}
 async function setRemote(open){const {root,box}=remoteEls();setWanted(open);if(root)root.hidden=!open;if(box)box.hidden=!open;if(open){try{if(typeof window.alphaSpotifyPollGlobal==='function')await window.alphaSpotifyPollGlobal(true)}catch(e){console.warn('[ALPHA '+VERSION+'] poll',e)}try{if(typeof window.alphaSpotifyRefreshGlobal==='function')await window.alphaSpotifyRefreshGlobal(true)}catch{}}syncButtons()}
 async function toggleRemote(){await setRemote(!(wanted()&&remoteVisible()))}
-window.alphaSpotifyToggleGlobal4324=toggleRemote;window.alphaSpotifyToggleGlobal4323=toggleRemote;window.alphaSpotifyToggleGlobal4322=toggleRemote;
+window.alphaSpotifyToggleGlobal4325=toggleRemote;window.alphaSpotifyToggleGlobal4324=toggleRemote;window.alphaSpotifyToggleGlobal4323=toggleRemote;window.alphaSpotifyToggleGlobal4322=toggleRemote;
 function spotifyIcon(size=27){return '<svg viewBox="0 0 24 24" aria-hidden="true" style="width:'+size+'px;height:'+size+'px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round"><circle cx="12" cy="12" r="9"/><path d="M7.5 9.2c3.4-1 7.2-.7 10.1.8M8.2 12.3c2.9-.8 6-.5 8.6.7M9 15.2c2.3-.6 4.8-.4 6.8.5"/></svg>'}
 function calendarIcon(){return '<span class="alphaNavIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span><span>Calendário</span>'}
 function styles(){if($('alphaSpotify4324Style'))return;const s=document.createElement('style');s.id='alphaSpotify4324Style';s.textContent=`
@@ -41,16 +41,16 @@ function mkSpotifyButton(cls){const b=document.createElement('button');b.type='b
 function restoreNewChatToBar(){const bar=document.querySelector('#lifestyleAI .aiTopbar.alphaFloatingHeader');if(!bar)return;const cap=bar.querySelector('.alphaChatActions4324,.alphaChatActions4323,.alphaChatActions4322');const newBtn=cap?.querySelector('.alphaNewChatBtn')||bar.querySelector('.alphaNewChatBtn');if(newBtn&&newBtn.parentElement!==bar)bar.append(newBtn);cap?.remove()}
 function ensureChatCapsule(){const bar=document.querySelector('#lifestyleAI .aiTopbar.alphaFloatingHeader');if(!bar)return;let newBtn=bar.querySelector('.alphaNewChatBtn')||bar.querySelector('.alphaChatActions4323 .alphaNewChatBtn')||bar.querySelector('.alphaChatActions4322 .alphaNewChatBtn');if(!newBtn)return;bar.querySelector('.alphaChatSpotifyTop4320')?.remove();bar.querySelector('.alphaChatActions4322')?.remove();bar.querySelector('.alphaChatActions4323')?.remove();if(!isChat()){restoreNewChatToBar();return}let cap=bar.querySelector('.alphaChatActions4324');if(!cap){cap=document.createElement('div');cap.className='alphaChatActions4324';cap.append(mkSpotifyButton('alphaChatSpotify4324'));bar.append(cap)}if(newBtn.parentElement!==cap)cap.append(newBtn)}
 function alignGlobalWithMenu(b){const menu=document.querySelector('#lifestyleAI .alphaFloatingMenu,.alphaFloatingMenu');if(!b||!menu||!menu.getBoundingClientRect)return;const r=menu.getBoundingClientRect();if(r.width<20||r.height<20)return;const right=Math.max(12,window.innerWidth-r.right);b.style.top=Math.round(r.top)+'px';b.style.right=Math.round(right)+'px';b.style.width=Math.round(r.width)+'px';b.style.height=Math.round(r.height)+'px'}
-function ensureGlobalButton(){let b=$('alphaGlobalSpotify4324');['alphaGlobalSpotify4322','alphaGlobalSpotify4323'].forEach(id=>$ (id)?.remove());if(!b){b=mkSpotifyButton('alphaGlobalSpotify4324');b.id='alphaGlobalSpotify4324';document.body.append(b)}const show=!isChat()&&!isHome();b.hidden=!show;if(show)alignGlobalWithMenu(b)}
+function ensureGlobalButton(){let b=$('alphaGlobalSpotify4324');['alphaGlobalSpotify4322','alphaGlobalSpotify4323'].forEach(id=>$(id)?.remove());if(!b){b=mkSpotifyButton('alphaGlobalSpotify4324');b.id='alphaGlobalSpotify4324';document.body.append(b)}const show=!isChat()&&!isHome();b.hidden=!show;if(show)alignGlobalWithMenu(b)}
 function ensureCalendarFooter(){const nav=document.querySelector('nav.bottom,.bottom');if(!nav)return;let cal=$('calendarNav4324');if(!cal){cal=document.createElement('button');cal.id='calendarNav4324';cal.className='nav';cal.type='button';cal.dataset.alphaIconified='1';cal.dataset.id='calendarHub';cal.setAttribute('aria-label','Calendário');cal.innerHTML=calendarIcon();cal.addEventListener('click',e=>{e.preventDefault();if(typeof window.go==='function')window.go('calendarHub');else if(typeof window.alphaInternalNavigate==='function')window.alphaInternalNavigate('calendarHub');try{window.alphaCalendarRender?.()}catch{}});const spotify=$('spotifyNav');if(spotify&&spotify.parentElement===nav)nav.insertBefore(cal,spotify);else{const premium=$('premiumNav');if(premium&&premium.parentElement===nav)nav.insertBefore(cal,premium);else nav.append(cal)}}}
 function syncButtons(){const on=wanted()&&remoteVisible();document.querySelectorAll('.alphaSpotifyToggle4324').forEach(b=>{b.classList.toggle('active',on);b.setAttribute('aria-pressed',on?'true':'false')})}
 function interceptLegacySpotify(){document.addEventListener('click',e=>{const b=e.target.closest?.('#spotifyNav,[data-alpha-chat-spotify="1"],button[aria-label="Spotify"],button[aria-label="Spotify Remote"]');if(!b||b.classList.contains('alphaSpotifyToggle4324'))return;e.preventDefault();e.stopImmediatePropagation();toggleRemote()},true)}
 function reconcile(){styles();ensureCalendarFooter();ensureChatCapsule();ensureGlobalButton();syncButtons();const {root,box}=remoteEls();if(!wanted()){if(root&&!root.hidden)root.hidden=true;if(box&&!box.hidden)box.hidden=true}}
 
-/* Swipe natural pedido pelo utilizador:
-   RIGHT = avançar para a próxima página.
-   LEFT  = voltar para a página anterior.
-   Home --right--> Mapa/GO --right--> Calendário --right--> LIVE --right--> Premium --right--> Perfil
+/* Swipe natural:
+   LEFT  = avançar para a próxima página.
+   RIGHT = voltar para a página anterior.
+   Home --left--> Mapa/GO --left--> Calendário --left--> LIVE --left--> Premium --left--> Perfil
    Spotify não entra na sequência: é um controlo global, não uma página de navegação. */
 const SWIPE_ORDER=['home','field','calendarHub','report','premiumInfo','profile'];
 const VIEW_ALIASES={map:'field',mapgo:'field',go:'field',live:'report',premium:'premiumInfo'};
@@ -61,7 +61,7 @@ function normalizedView(){let v=currentView();return VIEW_ALIASES[v]||v}
 function navigateTo(v){if(v==='home'){if(typeof window.go==='function')window.go('home');return}if(typeof window.go==='function'){window.go(v);if(v==='calendarHub')try{window.alphaCalendarRender?.()}catch{};return}if(typeof window.alphaInternalNavigate==='function'){window.alphaInternalNavigate(v);if(v==='calendarHub')try{window.alphaCalendarRender?.()}catch{}}}
 function swipeNavigate(direction){if(isChat())return;const v=normalizedView();let i=SWIPE_ORDER.indexOf(v);if(i<0)i=0;const ni=i+direction;if(ni<0||ni>=SWIPE_ORDER.length)return;navigateTo(SWIPE_ORDER[ni])}
 document.addEventListener('touchstart',e=>{if(e.touches.length!==1)return;swipeBlocked=blockSwipeTarget(e.target);sx=e.touches[0].clientX;sy=e.touches[0].clientY;st=Date.now()},{passive:true});
-document.addEventListener('touchend',e=>{if(swipeBlocked||!e.changedTouches?.length)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy,dt=Date.now()-st;if(dt>700||Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.35)return;swipeNavigate(dx>0?1:-1)},{passive:true});
+document.addEventListener('touchend',e=>{if(swipeBlocked||!e.changedTouches?.length)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy,dt=Date.now()-st;if(dt>700||Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.35)return;swipeNavigate(dx<0?1:-1)},{passive:true});
 
 interceptLegacySpotify();window.addEventListener('pageshow',()=>setTimeout(reconcile,80));window.addEventListener('focus',()=>setTimeout(reconcile,80));window.addEventListener('resize',()=>setTimeout(reconcile,80),{passive:true});document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(reconcile,80)});setTimeout(reconcile,120);setTimeout(reconcile,800);setInterval(reconcile,1800);
 function version(){document.querySelector('meta[name="alpha-version"]')?.setAttribute('content',VERSION);const v=$('alphaTestVersion');if(v)v.textContent='v'+VERSION;const s=$('alphaCompassStatus');if(s&&/A iniciar a ALPHA/i.test(s.textContent||''))s.textContent='A iniciar a ALPHA '+VERSION+'…'}setTimeout(version,100);setTimeout(version,700);console.info('[ALPHA '+VERSION+'] CALENDAR + NATURAL SWIPE ativo');
