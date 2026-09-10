@@ -1,62 +1,28 @@
-/* ALPHA 4.3.30 · OLEN LOGO HOTFIX 7
-   Corrige apenas o logo do cabeçalho da sidebar:
-   - preserva Logo + OLEN + lupa
-   - seta/triângulo preto rigorosamente centrado no círculo
+/* ALPHA 4.3.30 · OLEN UI/DATA HOTFIX 7
+   - preserva logo centrado
+   - lupa pesquisa conversas; nunca cria nova conversa
+   - hamburger volta a aparecer em todas as páginas internas
+   - Agendados lê o formato REAL do Calendar Hub: date/time, além de start
 */
 (()=>{
 'use strict';
-function style(){
-  if(document.getElementById('alphaOlenLogoHotfix7Style')) return;
-  const s=document.createElement('style');
-  s.id='alphaOlenLogoHotfix7Style';
-  s.textContent=`
-.alphaOlenHead .alphaOlenBrandLogo{
-  width:44px!important;height:44px!important;min-width:44px!important;
-  border-radius:50%!important;overflow:hidden!important;
-  position:relative!important;display:grid!important;place-items:center!important;
-}
-.alphaOlenHead .alphaOlenBrandLogo .logo,
-.alphaOlenHead .alphaOlenBrandLogo img{
-  width:44px!important;height:44px!important;min-width:44px!important;
-  margin:0!important;padding:0!important;border-radius:50%!important;
-  object-fit:cover!important;object-position:50% 50%!important;
-  transform:none!important;
-}
-.alphaOlenHead .alphaOlenBrandLogoFallback{
-  width:44px!important;height:44px!important;border-radius:50%!important;
-  position:relative!important;
-  background:conic-gradient(from 200deg,#39d69b,#68a8ff,#39d69b)!important;
-}
-.alphaOlenHead .alphaOlenBrandLogoFallback:after{
-  content:''!important;
-  position:absolute!important;
-  left:50%!important;top:50%!important;
-  width:0!important;height:0!important;
-  border-left:10px solid transparent!important;
-  border-right:10px solid transparent!important;
-  border-bottom:20px solid #061014!important;
-  transform:translate(-50%,-50%)!important;
-  transform-origin:center!important;
-}
-`;
-  document.head.appendChild(s);
-}
-function ensureCenteredLogo(){
-  style();
-  const holder=document.querySelector('.alphaOlenHead .alphaOlenBrandLogo');
-  if(!holder) return;
-  holder.style.setProperty('display','grid','important');
-  holder.style.setProperty('place-items','center','important');
-  holder.style.setProperty('position','relative','important');
-  const media=holder.querySelector('.logo,img');
-  if(media){
-    media.style.setProperty('object-position','50% 50%','important');
-    media.style.setProperty('transform','none','important');
-    media.style.setProperty('margin','0','important');
-  }
-}
-new MutationObserver(()=>requestAnimationFrame(ensureCenteredLogo)).observe(document.documentElement,{subtree:true,childList:true});
-window.addEventListener('pageshow',ensureCenteredLogo,{passive:true});
-setTimeout(ensureCenteredLogo,80);setTimeout(ensureCenteredLogo,400);
-console.info('[ALPHA 4.3.30] OLEN logo hotfix7 ativo');
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function style(){if($('#alphaOlenHotfix7Style'))return;const s=document.createElement('style');s.id='alphaOlenHotfix7Style';s.textContent=`
+.alphaOlenHead .alphaOlenBrandLogo{width:44px!important;height:44px!important;min-width:44px!important;border-radius:50%!important;overflow:hidden!important;position:relative!important;display:grid!important;place-items:center!important}
+.alphaOlenHead .alphaOlenBrandLogo .logo,.alphaOlenHead .alphaOlenBrandLogo img{width:44px!important;height:44px!important;min-width:44px!important;margin:0!important;padding:0!important;border-radius:50%!important;object-fit:cover!important;object-position:50% 50%!important;transform:none!important}
+.alphaOlenHead .alphaOlenBrandLogoFallback{width:44px!important;height:44px!important;border-radius:50%!important;position:relative!important;background:conic-gradient(from 200deg,#39d69b,#68a8ff,#39d69b)!important}
+.alphaOlenHead .alphaOlenBrandLogoFallback:after{content:''!important;position:absolute!important;left:50%!important;top:50%!important;width:0!important;height:0!important;border-left:10px solid transparent!important;border-right:10px solid transparent!important;border-bottom:20px solid #061014!important;transform:translate(-50%,-50%)!important}
+body:not([data-alpha-view="home"]):not(.alphaChatMode):not(.alphaComposeMode):not(.alphaWelcomeActive) #alphaInternalMenuBtn{display:grid!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+`;document.head.appendChild(s)}
+function ensureLogo(){style();const h=$('.alphaOlenHead .alphaOlenBrandLogo');if(!h)return;h.style.setProperty('display','grid','important');h.style.setProperty('place-items','center','important');const m=h.querySelector('.logo,img');if(m){m.style.setProperty('object-position','50% 50%','important');m.style.setProperty('transform','none','important');m.style.setProperty('margin','0','important')}}
+function bindSearch(){const shell=$('.alphaOlenSidebar'),btn=shell?.querySelector('.alphaOlenSearch'),box=shell?.querySelector('.alphaOlenSearchBox'),input=box?.querySelector('input');if(!btn||!box||!input||btn.dataset.h7)return;btn.dataset.h7='1';btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();box.classList.toggle('show');if(box.classList.contains('show'))setTimeout(()=>input.focus(),20)},true);input.addEventListener('input',()=>{const q=input.value.trim().toLocaleLowerCase('pt-PT');const rows=[...shell.querySelectorAll('.alphaOlenRecents .alphaOlenRecent,.alphaPinnedList4330 .alphaOlenRecent')];rows.forEach(r=>r.hidden=!!q&&!r.textContent.toLocaleLowerCase('pt-PT').includes(q))})}
+function realCalendarEvents(){try{if(typeof window.alphaCalendarEvents==='function'){const a=window.alphaCalendarEvents();if(Array.isArray(a))return a}}catch{}const keys=[];try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('alpha_calendar_events_v1'))keys.push(k)}}catch{}for(const k of keys){try{const a=JSON.parse(localStorage.getItem(k)||'[]');if(Array.isArray(a)&&a.length)return a}catch{}}return[]}
+function eventDate(e){if(e?.start){const d=new Date(e.start);if(Number.isFinite(d.getTime()))return d}if(e?.date){const d=new Date(`${e.date}T${e.time||'00:00'}:00`);if(Number.isFinite(d.getTime()))return d}return null}
+function fmt(e){const d=eventDate(e);if(!d)return e?.date||'';const opts={weekday:'short',day:'2-digit',month:'short'};if(e.time||e.start)Object.assign(opts,{hour:'2-digit',minute:'2-digit'});return new Intl.DateTimeFormat('pt-PT',opts).format(d)}
+function renderScheduled(){const shell=$('.alphaOlenSidebar'),p=shell?.querySelector('.alphaOlenDataPanel6');if(!shell||!p)return;const a=realCalendarEvents().filter(e=>e&&(e.date||e.start)).sort((x,y)=>(eventDate(x)?.getTime()||0)-(eventDate(y)?.getTime()||0));p.innerHTML=`<div class="alphaOlenDataHead6"><button type="button" aria-label="Voltar">‹</button><b>Agendados</b></div>${a.length?`<div class="alphaOlenDataList6">${a.map(e=>`<article class="alphaOlenDataCard6"><b>${esc(e.title||'Experiência ALPHA')}</b><small>${esc(fmt(e))}${e.location?' · '+esc(e.location):''}</small>${e.notes||e.description?`<small>${esc(e.notes||e.description)}</small>`:''}</article>`).join('')}</div>`:`<div class="alphaOlenEmpty6">Não existem eventos agendados.</div>`}`;p.querySelector('.alphaOlenDataHead6 button')?.addEventListener('click',()=>{shell.classList.remove('alphaDataOpen6');p.classList.remove('show');$$('.alphaOlenItem').forEach(x=>x.classList.remove('active'))});shell.classList.add('alphaDataOpen6');p.classList.add('show')}
+function bindScheduled(){const b=$('.alphaOlenItem[data-kind="scheduled"]');if(!b||b.dataset.h7)return;b.dataset.h7='1';b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();$$('.alphaOlenItem').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderScheduled()},true)}
+function reconcile(){ensureLogo();bindSearch();bindScheduled();if(!document.body.classList.contains('alphaChatMode')&&!document.body.classList.contains('alphaComposeMode')&&document.body.dataset.alphaView!=='home'){const b=$('#alphaInternalMenuBtn');if(b){b.style.setProperty('display','grid','important');b.style.setProperty('opacity','1','important');b.style.setProperty('pointer-events','auto','important')}}}
+new MutationObserver(()=>requestAnimationFrame(reconcile)).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['class','hidden','data-alpha-view']});['pageshow','focus'].forEach(ev=>window.addEventListener(ev,()=>setTimeout(reconcile,40),{passive:true}));setInterval(reconcile,800);setTimeout(reconcile,80);setTimeout(reconcile,400);console.info('[ALPHA 4.3.30] OLEN hotfix7 ativo');
 })();
