@@ -1,7 +1,11 @@
 /* ALPHA 4.3.18 · FIELD TEST FIX PACK
    Correções não destrutivas sobre a 4.3.16.
    - OLEN no progresso do Chat
-   - Spotify Remote persistente no Chat
+   - Spotify Remote persistente no Chat e vistas secundárias
+   - Home sem Remote
+   - Chat fullscreen com Remote em overlay
+   - Mapa/GO, LIVE, Agenda, Premium e Perfil começam abaixo do Remote quando ativo;
+     ao fazer scroll, o conteúdo passa por baixo do Remote
    - sincronização modo ↔ marcador
    - mapa GO repaint/resize
    - rota persistida sem auto-retoma após reabrir a app
@@ -66,22 +70,53 @@ document.addEventListener('click',e=>{const b=e.target.closest?.('button,a');if(
 function distM(a,b){const R=6371000,p1=a[1]*Math.PI/180,p2=b[1]*Math.PI/180,dp=(b[1]-a[1])*Math.PI/180,dl=(b[0]-a[0])*Math.PI/180,h=Math.sin(dp/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin(dl/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
 function trimInitialSnapLoop(){safe(()=>{if(typeof pos==='undefined'||!pos||typeof exploreRouteGeoJSON==='undefined')return;const c=exploreRouteGeoJSON?.coordinates;if(!Array.isArray(c)||c.length<12)return;const gps=[Number(pos.longitude),Number(pos.latitude)];if(!gps.every(Number.isFinite))return;let travelled=0,lastNear=-1;for(let i=1;i<Math.min(c.length,220);i++){travelled+=distM(c[i-1],c[i]);if(travelled>40&&travelled<650&&distM(c[i],gps)<28)lastNear=i}if(lastNear>2){const removed=c.slice(0,lastNear+1).reduce((d,p,i,a)=>i?d+distM(a[i-1],p):0,0);if(removed>70){exploreRouteGeoJSON={...exploreRouteGeoJSON,coordinates:c.slice(lastNear)};if(typeof persistActiveRoute==='function')persistActiveRoute({trimmedInitialSnapLoop:true,trimmedMeters:Math.round(removed),mode:(typeof navigationMode!=='undefined'?navigationMode:'walk')});if(typeof renderExploreRoute==='function')renderExploreRoute()}}})}
 
-/* SPOTIFY */
-const REMOTE_KEY='alpha_spotify_remote_wanted_v2';function chatMode(){return document.body.classList.contains('alphaChatMode')||document.body.classList.contains('alphaComposeMode')}function remotePersisted(){try{return localStorage.getItem(REMOTE_KEY)!=='0'}catch{return true}}
-safe(()=>{if(typeof alphaSpotifyRememberRemote==='function')alphaSpotifyRememberRemote=function(open){alphaSpotifyRemoteWanted=!!open;try{localStorage.setItem(REMOTE_KEY,open?'1':'0');sessionStorage.setItem('alpha_spotify_remote_wanted_v1',open?'1':'0')}catch{}};if(chatMode()&&remotePersisted())alphaSpotifyRemoteWanted=true});
-function reviveSpotifyRemote(){safe(()=>{if(!chatMode())return;if(remotePersisted())alphaSpotifyRemoteWanted=true;if(typeof alphaSpotifyPollGlobal==='function')alphaSpotifyPollGlobal(true)})}
-window.addEventListener('pageshow',reviveSpotifyRemote);document.addEventListener('visibilitychange',()=>{if(!document.hidden)reviveSpotifyRemote()});window.addEventListener('focus',reviveSpotifyRemote);
+/* SPOTIFY · REMOTE GLOBAL + OFFSET INICIAL */
+const REMOTE_KEY='alpha_spotify_remote_wanted_v2';
+const REMOTE_SPACER='alphaRemoteSpacer4318';
+function chatMode(){return document.body.classList.contains('alphaChatMode')||document.body.classList.contains('alphaComposeMode')}
+function shellView(){return String(document.body.dataset.alphaView||'home')}
+function remotePersisted(){try{return localStorage.getItem(REMOTE_KEY)!=='0'}catch{return true}}
+function remoteAllowedHere(){return chatMode()||shellView()!=='home'}
+function remoteOverlay(){return document.querySelector('.alphaSpotifyOverlay')}
+function remoteVisible(){const el=remoteOverlay();return !!el&&!el.hidden&&!el.closest('[hidden]')&&visible(el)}
+function removeRemoteSpacers(except=null){document.querySelectorAll('.'+REMOTE_SPACER).forEach(el=>{if(el!==except)el.remove()})}
+function firstFlowAnchor(view,spacer){
+  const direct=[...view.children].find(el=>el!==spacer&&!['SCRIPT','STYLE'].includes(el.tagName)&&visible(el)&&!['fixed','absolute'].includes(getComputedStyle(el).position));
+  if(direct)return direct;
+  return [...view.querySelectorAll('.card,#mapShell,section,main,article')].find(el=>visible(el)&&!['fixed','absolute'].includes(getComputedStyle(el).position))||null;
+}
+function syncRemoteLayout(force=false){safe(()=>{
+  const isChat=chatMode(),viewName=shellView();
+  if(isChat||viewName==='home'||!remoteVisible()){removeRemoteSpacers();return}
+  const view=document.querySelector('.view.active');if(!view){removeRemoteSpacers();return}
+  let spacer=view.querySelector(':scope > .'+REMOTE_SPACER);
+  removeRemoteSpacers(spacer);
+  if(!spacer){spacer=document.createElement('div');spacer.className=REMOTE_SPACER;spacer.setAttribute('aria-hidden','true');spacer.style.cssText='height:0;min-height:0;margin:0;padding:0;border:0;pointer-events:none';view.prepend(spacer)}
+  if(spacer.dataset.ready==='1'&&!force)return;
+  spacer.style.height='0px';
+  const anchor=firstFlowAnchor(view,spacer),remote=remoteOverlay();
+  if(!anchor||!remote){spacer.remove();return}
+  const need=Math.max(0,Math.ceil(remote.getBoundingClientRect().bottom+14-anchor.getBoundingClientRect().top));
+  spacer.style.height=need+'px';spacer.dataset.ready='1';
+})}
+safe(()=>{if(typeof alphaSpotifyRememberRemote==='function')alphaSpotifyRememberRemote=function(open){alphaSpotifyRemoteWanted=!!open;try{localStorage.setItem(REMOTE_KEY,open?'1':'0');sessionStorage.setItem('alpha_spotify_remote_wanted_v1',open?'1':'0')}catch{}setTimeout(()=>syncRemoteLayout(true),40)};if(remoteAllowedHere()&&remotePersisted())alphaSpotifyRemoteWanted=true});
+function reviveSpotifyRemote(){safe(()=>{if(!remoteAllowedHere()){syncRemoteLayout();return}if(remotePersisted())alphaSpotifyRemoteWanted=true;if(typeof alphaSpotifyPollGlobal==='function')alphaSpotifyPollGlobal(true);setTimeout(()=>syncRemoteLayout(),80)})}
+window.addEventListener('pageshow',reviveSpotifyRemote);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)reviveSpotifyRemote()});
+window.addEventListener('focus',reviveSpotifyRemote);
+window.addEventListener('resize',()=>{document.querySelectorAll('.'+REMOTE_SPACER).forEach(el=>el.dataset.ready='0');setTimeout(()=>syncRemoteLayout(true),100)},{passive:true});
+window.addEventListener('orientationchange',()=>{document.querySelectorAll('.'+REMOTE_SPACER).forEach(el=>el.dataset.ready='0');setTimeout(()=>syncRemoteLayout(true),260)},{passive:true});
 
 /* VERSÃO VISÍVEL */
 function syncVisibleVersion(){document.querySelector('meta[name="alpha-version"]')?.setAttribute('content',VERSION);const v=$id('alphaTestVersion');if(v)v.textContent='v'+VERSION;const s=$id('alphaCompassStatus');if(s&&/A iniciar a ALPHA/i.test(s.textContent||''))s.textContent='A iniciar a ALPHA '+VERSION+'…'}
 
-let scheduled=false;function reconcile(){scheduled=false;fixPersonaLabels();hideUnverifiedRenderedRatings();compactPlaceDetails();watchMapVisibility();syncVisibleVersion();if(chatMode())reviveSpotifyRemote()}
-const mo=new MutationObserver(()=>{if(!scheduled){scheduled=true;requestAnimationFrame(reconcile)}});mo.observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['class','hidden','style']});
+let scheduled=false;function reconcile(){scheduled=false;fixPersonaLabels();hideUnverifiedRenderedRatings();compactPlaceDetails();watchMapVisibility();syncVisibleVersion();if(remoteAllowedHere())reviveSpotifyRemote();else syncRemoteLayout()}
+const mo=new MutationObserver(()=>{if(!scheduled){scheduled=true;requestAnimationFrame(reconcile)}});mo.observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['class','hidden','style','data-alpha-view']});
 
 /* Importante: suspender ANTES de qualquer restauro visual tardio do build base. */
 suspendPersistedRouteOnLaunch();
 setTimeout(()=>{suspendPersistedRouteOnLaunch();syncVehicleToMode();reconcile()},120);
-setTimeout(()=>{suspendPersistedRouteOnLaunch();reconcile();refreshGoMap(true);if(mapRequested()&&sessionStorage.getItem(RESUME_KEY)==='1')askResumeRoute()},800);
-setInterval(()=>{watchMapVisibility();if(chatMode())fixPersonaLabels()},1600);
+setTimeout(()=>{suspendPersistedRouteOnLaunch();reconcile();refreshGoMap(true);syncRemoteLayout(true);if(mapRequested()&&sessionStorage.getItem(RESUME_KEY)==='1')askResumeRoute()},800);
+setInterval(()=>{watchMapVisibility();if(chatMode())fixPersonaLabels();syncRemoteLayout()},1600);
 log('FIELD TEST FIX PACK ativo');
 })();
