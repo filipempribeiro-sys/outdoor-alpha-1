@@ -1,15 +1,17 @@
-/* ALPHA 4.3.30 · CHAT SIDEBAR STAGE 3.3 FIX
+/* ALPHA 4.3.30 · CHAT SIDEBAR STAGE 3.4 FIX
    Chat sidebar only.
    - keeps sidebar open during search and long-press actions
+   - closes sidebar only when selecting a conversation
    - hides the actual visible top-left chat menu trigger while sidebar is open
    - long press: Fixar/Desafixar, Renomear, Eliminar
    - pinned conversation shows green “Afixada” marker
    - Recentes: Mostrar todas / Ver menos
+   - conversation lists remain scrollable without a visible scrollbar
    Event-driven only: no polling / no global MutationObserver.
 */
 (()=>{
 'use strict';
-if(window.__alphaChatSidebarStage33Fix)return;window.__alphaChatSidebarStage33Fix=true;
+if(window.__alphaChatSidebarStage34Fix)return;window.__alphaChatSidebarStage34Fix=true;
 const META_KEY='alpha_olen_conversation_meta_v4330',HOLD=520,MOVE=12;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const svg=d=>`<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
@@ -19,13 +21,15 @@ function save(m){try{localStorage.setItem(META_KEY,JSON.stringify(m))}catch{}}
 function key(row){return row.dataset.convKey||row.dataset.alphaConvKey||row.querySelector('.alphaChatOlenRecentText4330')?.textContent?.replace(/\s*•\s*Afixada\s*$/i,'').trim().slice(0,160)||row.dataset.convId||'conversation'}
 function opened(){return document.body.classList.contains('alphaChatOlenOpen4330')}
 function sidebar(){return $('.alphaChatOlenSidebar4330')}
-function style(){if($('#alphaChatSidebarStage33FixStyle'))return;const s=document.createElement('style');s.id='alphaChatSidebarStage33FixStyle';s.textContent=`
+function style(){if($('#alphaChatSidebarStage34FixStyle'))return;const s=document.createElement('style');s.id='alphaChatSidebarStage34FixStyle';s.textContent=`
 body.alphaChatOlenOpen4330 [data-alpha-chat-menu-trigger="1"]{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
 body.alphaChatOlenOpen4330 .alphaChatActions4324{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
 .alphaChatConvActionScrim4330{position:fixed;inset:0;z-index:9800;background:rgba(0,0,0,.14)}
 .alphaChatConvActionMenu4330{position:fixed;z-index:9801;min-width:220px;max-width:calc(100vw - 28px);background:rgba(31,31,33,.985);border:1px solid rgba(255,255,255,.13);border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.45);padding:8px;backdrop-filter:blur(18px)}
 .alphaChatConvActionMenu4330 button{width:100%;height:54px;border:0;background:transparent;color:#f7f7f7;display:flex;align-items:center;gap:14px;padding:0 16px;border-radius:14px;text-align:left;font:700 16px/1.2 system-ui}.alphaChatConvActionMenu4330 button:active{background:rgba(255,255,255,.08)}.alphaChatConvActionMenu4330 svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.alphaChatConvActionMenu4330 .danger{color:#ff858c}
 .alphaChatOlenRecent4330.alphaPinned4330 .alphaChatOlenRecentText4330:after{content:' • Afixada';font-size:11px;color:#72ddb5;font-weight:800}
+.alphaChatOlenRecents4330,.alphaChatPinned4330{scrollbar-width:none!important;-ms-overflow-style:none!important}
+.alphaChatOlenRecents4330::-webkit-scrollbar,.alphaChatPinned4330::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
 `;document.head.appendChild(s)}
 
 const hidden=new Set();
@@ -40,9 +44,9 @@ function likelyMenuButton(el){
 }
 function hideVisibleMenu(){
   if(!opened())return;
-  $$('button,[role="button"]').forEach(el=>{if(!likelyMenuButton(el))return;if(!el.dataset.alphaStage33Display)el.dataset.alphaStage33Display=el.style.display||'';el.dataset.alphaChatMenuTrigger='1';el.style.setProperty('display','none','important');hidden.add(el)});
+  $$('button,[role="button"]').forEach(el=>{if(!likelyMenuButton(el))return;if(!el.dataset.alphaStage34Display)el.dataset.alphaStage34Display=el.style.display||'';el.dataset.alphaChatMenuTrigger='1';el.style.setProperty('display','none','important');hidden.add(el)});
 }
-function restoreHidden(){for(const el of hidden){if(!el?.isConnected)continue;el.style.removeProperty('display');const old=el.dataset.alphaStage33Display;if(old)el.style.display=old;delete el.dataset.alphaStage33Display}hidden.clear()}
+function restoreHidden(){for(const el of hidden){if(!el?.isConnected)continue;el.style.removeProperty('display');const old=el.dataset.alphaStage34Display;if(old)el.style.display=old;delete el.dataset.alphaStage34Display}hidden.clear()}
 function forceOpen(){
   const s=$('#aiChatMenu')||$('.alphaConversationSidebar');if(!s)return;
   document.body.classList.add('alphaChatOlenOpen4330');s.hidden=false;s.removeAttribute('hidden');s.setAttribute('aria-hidden','false');s.classList.add('show');hideVisibleMenu();
@@ -64,6 +68,13 @@ function keepSidebarForInternalAction(target){
 
 document.addEventListener('click',e=>{
   const sh=e.target?.closest?.('.alphaChatOlenSidebar4330');
+  const conversation=e.target?.closest?.('.alphaChatOlenRecent4330');
+  if(sh&&conversation){
+    /* O click normal numa conversa é a única ação interna que deve fechar a sidebar.
+       O handler original da Stage 3 abre a conversa e fecha a sidebar em bubble phase. */
+    setTimeout(syncOpenState,0);
+    return;
+  }
   if(sh){keepSidebarForInternalAction(e.target);setTimeout(()=>{forceOpen();refreshRecentLabels()},0)}
   else setTimeout(syncOpenState,0);
 },true);
@@ -78,8 +89,8 @@ document.addEventListener('touchend',e=>{cancel();if(fired){e.preventDefault();e
 document.addEventListener('touchcancel',cancel,{passive:true,capture:true});
 document.addEventListener('contextmenu',e=>{const r=e.target?.closest?.('.alphaChatOlenRecent4330');if(!r)return;e.preventDefault();openMenu(r,e.clientX,e.clientY)},true);
 
-function fixMoreButton(){const sh=sidebar(),more=sh?.querySelector('.alphaChatOlenMore4330');if(!more||more.dataset.stage33)return;more.dataset.stage33='1';const clone=more.cloneNode(true);clone.dataset.stage33='1';more.replaceWith(clone);clone.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const expanded=clone.dataset.expanded==='1';clone.dataset.expanded=expanded?'0':'1';refreshRecentLabels();forceOpen()})}
+function fixMoreButton(){const sh=sidebar(),more=sh?.querySelector('.alphaChatOlenMore4330');if(!more||more.dataset.stage34)return;more.dataset.stage34='1';const clone=more.cloneNode(true);clone.dataset.stage34='1';more.replaceWith(clone);clone.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const expanded=clone.dataset.expanded==='1';clone.dataset.expanded=expanded?'0':'1';refreshRecentLabels();forceOpen()})}
 function install(){style();fixMoreButton();refreshRecentLabels();syncOpenState()}
 window.addEventListener('pageshow',()=>setTimeout(install,80),{passive:true});document.addEventListener('touchend',()=>setTimeout(install,0),{passive:true});document.addEventListener('click',()=>setTimeout(install,0),true);setTimeout(install,100);
-console.info('[ALPHA 4.3.30] chat sidebar stage3.3 interaction fix ativo');
+console.info('[ALPHA 4.3.30] chat sidebar stage3.4 selection + scrollbar fix ativo');
 })();
