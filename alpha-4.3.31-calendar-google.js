@@ -1,0 +1,204 @@
+/* ALPHA 4.3.31 · CALENDAR GOOGLE SYNC
+   - Google OAuth connect/status
+   - Google events merged into ALPHA Agenda
+   - Create/edit/delete Google events
+   - Compact month grid: only necessary complete weeks
+   - Provider chips keep horizontal swipe but hide scrollbar
+*/
+(()=>{
+'use strict';
+if(window.__alphaCalendarGoogle431)return;window.__alphaCalendarGoogle431=true;
+
+const BACKEND=(typeof window.alphaBackendUrl==='function'?window.alphaBackendUrl():'https://alpha-ai-backend-m6l3.onrender.com').replace(/\/+$/,'');
+const SESSION_KEY='alpha_google_calendar_session_v431';
+const CACHE_KEY='alpha_google_calendar_events_v431';
+let googleConnected=false;
+let googleEmail='';
+let lastSyncKey='';
+let syncing=false;
+
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
+const isoDate=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const sessionId=(()=>{
+  let s=localStorage.getItem(SESSION_KEY)||'';
+  if(!/^[A-Za-z0-9._:-]{16,160}$/.test(s)){
+    s='gcal_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,12);
+    localStorage.setItem(SESSION_KEY,s);
+  }
+  return s;
+})();
+
+function style(){
+  if(document.getElementById('alphaCalendarGoogle431Style'))return;
+  const s=document.createElement('style');s.id='alphaCalendarGoogle431Style';s.textContent=`
+.alphaCalendarProviderRow{scrollbar-width:none;-ms-overflow-style:none}.alphaCalendarProviderRow::-webkit-scrollbar{display:none}
+.alphaCalendarProviderRow .a431provider{white-space:nowrap;border:1px solid #294149;border-radius:999px;padding:7px 10px;color:var(--muted);font-size:12px;background:transparent;font:inherit;cursor:pointer}
+.alphaCalendarProviderRow .a431provider.ready{color:#dffff2;border-color:#287b62;background:#10352d}.alphaCalendarProviderRow .a431provider.busy{opacity:.7}.alphaCalendarProviderRow .a431provider.error{color:#ffd4d4;border-color:#754848;background:#2b1717}
+.alphaCalendarDot.google{background:#68a8ff}.alphaCalendarEvent[data-provider="google"]{border-color:#315b7e}.alphaCalendarEvent[data-provider="google"] .alphaCalendarEventTime{color:#8fc4ff}
+`;
+  document.head.appendChild(s);
+}
+
+function cachedGoogle(){try{const a=JSON.parse(localStorage.getItem(CACHE_KEY)||'[]');return Array.isArray(a)?a:[]}catch{return[]}}
+function saveGoogle(a){localStorage.setItem(CACHE_KEY,JSON.stringify((a||[]).slice(0,500)))}
+function googleToAlpha(e){
+  const raw=e?.start?.dateTime||e?.start?.date||'';
+  const endRaw=e?.end?.dateTime||e?.end?.date||'';
+  const allDay=Boolean(e?.allDay||e?.start?.date);
+  let date='',time='',endTime='';
+  if(allDay){date=String(raw).slice(0,10)}else{
+    const d=new Date(raw);if(Number.isFinite(d.getTime())){date=isoDate(d);time=`${pad(d.getHours())}:${pad(d.getMinutes())}`}
+    const ed=new Date(endRaw);if(Number.isFinite(ed.getTime()))endTime=`${pad(ed.getHours())}:${pad(ed.getMinutes())}`;
+  }
+  return {id:'gcal:'+String(e.id||''),remoteId:String(e.id||''),title:e.title||'(Sem título)',date,time,endTime,location:e.location||'',notes:e.description||'',provider:'google',htmlLink:e.htmlLink||'',updatedAt:e.updated||'',allDay};
+}
+
+const localEventsFn=typeof window.alphaCalendarEvents==='function'?window.alphaCalendarEvents:null;
+const localSaveFn=typeof window.alphaCalendarSaveEvents==='function'?window.alphaCalendarSaveEvents:null;
+if(localEventsFn){
+  window.alphaCalendarEvents=function(){
+    const local=localEventsFn().filter(e=>e?.provider!=='google'&&!String(e?.id||'').startsWith('gcal:'));
+    const remote=googleConnected?cachedGoogle().map(googleToAlpha).filter(e=>e.date):[];
+    return [...local,...remote];
+  };
+}
+if(localSaveFn){
+  window.alphaCalendarSaveEvents=function(a){return localSaveFn((a||[]).filter(e=>e?.provider!=='google'&&!String(e?.id||'').startsWith('gcal:')))};
+}
+
+function providerButton(){
+  const row=document.querySelector('.alphaCalendarProviderRow');if(!row)return null;
+  let b=row.querySelector('#alphaGoogleCalendarProvider');
+  if(!b){
+    const old=[...row.querySelectorAll('span')].find(x=>/^Google\s*·/i.test(x.textContent||''));
+    b=document.createElement('button');b.type='button';b.id='alphaGoogleCalendarProvider';b.className='a431provider';
+    if(old)old.replaceWith(b);else row.appendChild(b);
+    b.addEventListener('click',()=>googleConnected?syncGoogle(true):connectGoogle());
+  }
+  b.classList.toggle('ready',googleConnected);b.classList.remove('busy','error');
+  b.textContent=googleConnected?`Google · ligado${googleEmail?' ✓':''}`:'Google · ligar';
+  b.title=googleConnected?(googleEmail||'Google Calendar ligado'):'Ligar Google Calendar';
+  return b;
+}
+function setProviderBusy(text){const b=providerButton();if(b){b.classList.add('busy');b.textContent=text}}
+function setProviderError(){const b=providerButton();if(b){b.classList.add('error');b.textContent='Google · erro'}}
+
+async function json(url,opt){const r=await fetch(url,opt);const d=await r.json().catch(()=>({}));if(!r.ok||d?.ok===false)throw new Error(d?.error||`HTTP ${r.status}`);return d}
+async function status(){
+  try{
+    const d=await json(`${BACKEND}/api/google/calendar/status?sessionId=${encodeURIComponent(sessionId)}`);
+    googleConnected=Boolean(d.connected);googleEmail=String(d.email||'');providerButton();enableGoogleOption();
+    if(googleConnected)await syncGoogle(true);
+  }catch(e){console.warn('[ALPHA Calendar] status',e);providerButton()}
+}
+async function connectGoogle(){
+  try{
+    setProviderBusy('Google · a ligar…');
+    const returnTo=location.href.split('#')[0];
+    const d=await json(`${BACKEND}/api/google/calendar/auth-url?sessionId=${encodeURIComponent(sessionId)}&returnTo=${encodeURIComponent(returnTo)}`);
+    location.href=d.url;
+  }catch(e){console.error('[ALPHA Calendar] auth',e);setProviderError();window.toast?.('Não foi possível iniciar a ligação ao Google Calendar.')}
+}
+
+function monthWindow(){
+  const c=window.alphaCalendarCursor instanceof Date?window.alphaCalendarCursor:new Date();
+  const y=c.getFullYear(),m=c.getMonth();
+  return {key:`${y}-${m}`,timeMin:new Date(y,m-1,1,0,0,0).toISOString(),timeMax:new Date(y,m+2,1,0,0,0).toISOString()};
+}
+async function syncGoogle(force=false){
+  if(!googleConnected||syncing)return;
+  const w=monthWindow();if(!force&&lastSyncKey===w.key)return;
+  syncing=true;setProviderBusy('Google · sincronizar…');
+  try{
+    const d=await json(`${BACKEND}/api/google/calendar/events?sessionId=${encodeURIComponent(sessionId)}&timeMin=${encodeURIComponent(w.timeMin)}&timeMax=${encodeURIComponent(w.timeMax)}`);
+    saveGoogle(d.events||[]);lastSyncKey=w.key;providerButton();
+    renderNoSync();
+  }catch(e){
+    console.warn('[ALPHA Calendar] sync',e);
+    if(/NOT_CONNECTED|SESSION_EXPIRED|401/i.test(String(e.message||''))){googleConnected=false;saveGoogle([]);providerButton();enableGoogleOption()}
+    else setProviderError();
+  }finally{syncing=false}
+}
+
+const nativeRender=typeof window.alphaCalendarRender==='function'?window.alphaCalendarRender:null;
+function compactGrid(){
+  const grid=$('alphaCalendarGrid');if(!grid)return;
+  const c=window.alphaCalendarCursor instanceof Date?window.alphaCalendarCursor:new Date();
+  const y=c.getFullYear(),m=c.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,days=new Date(y,m+1,0).getDate();
+  const needed=Math.ceil((offset+days)/7)*7;
+  [...grid.children].forEach((el,i)=>{if(i>=needed)el.remove()});
+  // provider-specific dot colour
+  [...grid.querySelectorAll('.alphaCalendarDay')].forEach(day=>{
+    const iso=day.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];if(!iso)return;
+    const events=window.alphaCalendarEvents?.().filter(e=>e.date===iso)||[];
+    const dots=[...day.querySelectorAll('.alphaCalendarDot')];
+    events.slice(0,dots.length).forEach((e,i)=>{if(e.provider==='google')dots[i].classList.add('google')});
+  });
+}
+function tagAgenda(){
+  const agenda=$('alphaCalendarAgenda');if(!agenda)return;
+  [...agenda.querySelectorAll('.alphaCalendarEvent')].forEach(el=>{
+    const id=el.getAttribute('onclick')?.match(/'([^']+)'/)?.[1]||'';
+    const e=window.alphaCalendarEvents?.().find(x=>x.id===id);if(e?.provider==='google')el.dataset.provider='google';
+  });
+}
+function renderNoSync(){if(!nativeRender)return;nativeRender();compactGrid();tagAgenda();providerButton();updateCopy()}
+if(nativeRender){window.alphaCalendarRender=function(){renderNoSync();syncGoogle(false)}}
+
+const nativeMove=window.alphaCalendarMove;
+if(typeof nativeMove==='function')window.alphaCalendarMove=function(n){lastSyncKey='';nativeMove(n);syncGoogle(true)};
+const nativeToday=window.alphaCalendarToday;
+if(typeof nativeToday==='function')window.alphaCalendarToday=function(){lastSyncKey='';nativeToday();syncGoogle(true)};
+
+function enableGoogleOption(){
+  const sel=$('alphaCalProvider');if(!sel)return;
+  const opt=[...sel.options].find(o=>o.value==='google');if(opt){opt.disabled=!googleConnected;opt.textContent=googleConnected?'Google Calendar':'Google · ligar primeiro'}
+}
+function updateCopy(){
+  const p=document.querySelector('.alphaCalendarHubHead .muted');if(p)p.textContent=googleConnected?'A tua agenda ALPHA com Google Calendar sincronizado.':'A tua agenda na ALPHA. Liga o Google Calendar para veres e gerires os teus eventos num só lugar.';
+}
+
+function toGoogleRange(date,time,endTime){
+  if(!time){return {start:{date},end:{date:isoDate(new Date(date+'T12:00:00').setDate?(()=>{const d=new Date(date+'T12:00:00');d.setDate(d.getDate()+1);return d})():new Date())}}}
+  const start=new Date(`${date}T${time}:00`);let end=endTime?new Date(`${date}T${endTime}:00`):new Date(start.getTime()+60*60*1000);if(end<=start)end=new Date(start.getTime()+60*60*1000);
+  const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'Europe/Lisbon';
+  return {start:{dateTime:start.toISOString(),timeZone:tz},end:{dateTime:end.toISOString(),timeZone:tz}};
+}
+function allDayRange(date){const d=new Date(date+'T12:00:00');d.setDate(d.getDate()+1);return {start:{date},end:{date:isoDate(d)}}}
+
+const nativeOpen=window.alphaCalendarOpenEditor;
+if(typeof nativeOpen==='function')window.alphaCalendarOpenEditor=function(id=''){nativeOpen(id);enableGoogleOption()};
+const nativeSaveEditor=window.alphaCalendarSaveEditor;
+if(typeof nativeSaveEditor==='function')window.alphaCalendarSaveEditor=async function(){
+  const sel=$('alphaCalProvider');if(sel?.value!=='google')return nativeSaveEditor();
+  if(!googleConnected)return window.toast?.('Liga primeiro o Google Calendar.');
+  const title=$('alphaCalTitle')?.value.trim(),date=$('alphaCalDate')?.value;if(!title||!date)return window.toast?.('Indica o título e a data.');
+  const id=$('alphaCalEventId')?.value||'';
+  const time=$('alphaCalTime')?.value||'',endTime=$('alphaCalEndTime')?.value||'';
+  const range=time?(()=>{const start=new Date(`${date}T${time}:00`);let end=endTime?new Date(`${date}T${endTime}:00`):new Date(start.getTime()+3600000);if(end<=start)end=new Date(start.getTime()+3600000);const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'Europe/Lisbon';return {start:{dateTime:start.toISOString(),timeZone:tz},end:{dateTime:end.toISOString(),timeZone:tz}}})():allDayRange(date);
+  const body={title,description:$('alphaCalNotes')?.value.trim()||'',location:$('alphaCalLocation')?.value.trim()||'',...range};
+  try{
+    const remoteId=id.startsWith('gcal:')?id.slice(5):'';
+    if(remoteId)await json(`${BACKEND}/api/google/calendar/events/${encodeURIComponent(remoteId)}?sessionId=${encodeURIComponent(sessionId)}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    else await json(`${BACKEND}/api/google/calendar/events?sessionId=${encodeURIComponent(sessionId)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    window.alphaCalendarSelectedDate=date;window.alphaCalendarCursor=new Date(date+'T12:00:00');window.alphaCalendarCloseEditor?.();lastSyncKey='';await syncGoogle(true);window.toast?.(remoteId?'Evento atualizado no Google Calendar.':'Evento criado no Google Calendar.');
+  }catch(e){console.error('[ALPHA Calendar] save google',e);window.toast?.('Não foi possível guardar no Google Calendar.')}
+};
+const nativeDelete=window.alphaCalendarDeleteCurrent;
+if(typeof nativeDelete==='function')window.alphaCalendarDeleteCurrent=async function(){
+  const id=$('alphaCalEventId')?.value||'';if(!id.startsWith('gcal:'))return nativeDelete();
+  try{await json(`${BACKEND}/api/google/calendar/events/${encodeURIComponent(id.slice(5))}?sessionId=${encodeURIComponent(sessionId)}`,{method:'DELETE'});window.alphaCalendarCloseEditor?.();lastSyncKey='';await syncGoogle(true);window.toast?.('Evento eliminado do Google Calendar.')}catch(e){console.error('[ALPHA Calendar] delete google',e);window.toast?.('Não foi possível eliminar o evento do Google Calendar.')}
+};
+
+function handleReturn(){
+  const u=new URL(location.href),v=u.searchParams.get('alphaGoogleCalendar');if(!v)return;
+  u.searchParams.delete('alphaGoogleCalendar');history.replaceState(null,'',u.pathname+u.search+u.hash);
+  if(v==='connected')window.toast?.('Google Calendar ligado à ALPHA.');
+  else if(v==='denied')window.toast?.('Ligação ao Google Calendar cancelada.');
+  else window.toast?.('Não foi possível ligar o Google Calendar.');
+}
+
+function install(){style();handleReturn();providerButton();enableGoogleOption();renderNoSync();status();console.info('[ALPHA 4.3.31] Calendar Google frontend sync ativo')}
+setTimeout(install,0);
+})();
