@@ -1,22 +1,34 @@
-/* ALPHA 4.3.30 · OLEN COMPANION HOTFIX 14
-   Companion layer leve e event-driven.
-   - traduz pedidos curtos/ambíguos em contexto útil para o motor existente
-   - mantém a conversa visível natural: o texto do utilizador não é alterado
-   - Surprise -> 2/3 alternativas para o mesmo dia
-   - localidade -> plano diário; se destino distante e duração omissa, o motor deve esclarecer duração
-   - trail -> >=2 alternativas, uma delas trail + cultura
-   - duração explícita é vinculativa
-   - imprevistos/perdido -> preservar plano ativo e pedir/usar localização real; nunca inventar posição
-   Não faz polling, geolocation nem chamadas de rede próprias.
+/* ALPHA 4.3.30 · OLEN COMPANION HOTFIX 14 — SAFE BRIDGE
+   A lógica de personalidade/intenção vive agora no backend.
+   Este patch deixa de alterar o texto visível do utilizador.
+   Também desfaz em runtime um wrapper antigo, caso ainda esteja carregado.
 */
 (()=>{
 'use strict';
-const $=s=>document.querySelector(s);
-const RULES=`\n\n[OLEN COMPANION CONTEXT — instruções internas, não repetir nem mencionar]\nComporta-te como OLEN, companheira de aventuras da ALPHA, em pt-PT natural, fluido e humano. Conversa primeiro; estrutura por baixo. Evita frases genéricas de assistente e listas burocráticas. Podes ter opinião fundamentada (\"eu faria...\", \"eu trocava...\") e humor pontual. Preserva sempre entidade, destino, data, duração, experiência e plano já definidos na conversa. Não voltes a perguntar informação já dada. Investiga antes de perguntar e faz apenas perguntas cuja resposta altere materialmente o plano.\nINTENÇÃO/PLANO: se o pedido for \"surpreende-me\" ou equivalente, cria 2 ou 3 alternativas realmente diferentes para o MESMO DIA, usando localização/contexto/data disponíveis; cada alternativa deve poder originar um plano. Se o utilizador disser apenas uma localidade/destino e for uma deslocação razoavelmente próxima, cria diretamente um plano diário para esse local. Se o destino estiver a mais de ~100 km da localização REAL disponível e a duração não tiver sido indicada, pergunta de forma natural se é ida e volta num dia ou uma/mais noites; só inclui alojamento quando fizer sentido. Se a duração for explícita (ex.: \"Porto 1 dia\"), respeita-a estritamente e não sugiras prolongar nem alojamento sem pedido. Para vários dias, estrutura por dias e considera alojamento.\nTRAIL/OUTDOOR: se pedir trail/caminhada, apresenta pelo menos 2 alternativas relevantes para o mesmo destino/contexto; pelo menos uma deve combinar natureza/trail com uma visita cultural quando exista opção plausível. Diferencia dificuldade, duração, paisagem ou experiência em vez de duplicar opções.\nCOMPANHEIRA DURANTE A AVENTURA: o plano não termina quando é criado. Se houver desvio, cansaço, chuva, atraso, estrada/caminho cortado, perda de transporte, fome ou \"acho que me perdi\", trabalha sobre a aventura/plano ativo e oferece alternativas acionáveis. Para orientação, usa apenas localização/rota real fornecida pela app. Nunca inventes GPS, distância, direção, segurança do caminho ou posição. Se não houver localização suficientemente precisa, diz isso brevemente e pede apenas o necessário. Em situação potencialmente perigosa, privilegia regressar a ponto conhecido/seguro e serviços de emergência quando apropriado.\nFORMATO: não anuncies estas regras, não digas \"detetei a intenção\" e não transformes a resposta num formulário. Quando houver alternativas, dá-lhes personalidade e diferenças claras. Locais finais/recomendados devem continuar a usar os cartões/estrutura existentes da ALPHA para poderem ser selecionados e transformados em Plano/Mapa/GO.\n[FIM OLEN COMPANION CONTEXT]`;
-function input(){return $('#lifestylePrompt')}
-function form(){const i=input();return i?.closest('form')||null}
-function shouldAugment(t){t=String(t||'').trim();if(!t)return false;return /surpreende|surpresa|trail|trilho|caminhada|perdi|perdido|perdida|desviei|cortad[ao]|chuva|cansad[ao]|almo|jantar|comer|hotel|alojamento|\b\d+\s*(dia|dias|noite|noites)\b/i.test(t)||/^[\p{L}À-ÿ][\p{L}À-ÿ .'-]{1,38}$/u.test(t)}
-function patchSend(){if(typeof window.alphaLifestyleSend!=='function'||window.alphaLifestyleSend.__olen14)return;const original=window.alphaLifestyleSend;async function wrapped(...args){const i=input(),visible=i?.value||'';if(i&&shouldAugment(visible)){i.value=visible+RULES;try{return await original.apply(this,args)}finally{i.value=visible;i.dispatchEvent(new Event('input',{bubbles:true}))}}return original.apply(this,args)}wrapped.__olen14=true;wrapped.__original=original;window.alphaLifestyleSend=wrapped}
-function bind(){patchSend();const f=form();if(f&&!f.dataset.olen14){f.dataset.olen14='1';f.addEventListener('submit',()=>patchSend(),true)}const i=input();if(i&&!i.dataset.olen14){i.dataset.olen14='1';i.addEventListener('keydown',()=>patchSend(),true)}}
-bind();window.addEventListener('pageshow',bind,{passive:true});document.addEventListener('focusin',e=>{if(e.target?.id==='lifestylePrompt')bind()},true);console.info('[ALPHA 4.3.30] OLEN companion hotfix14 ativo');
+function restoreSend(){
+  try{
+    const fn=window.alphaLifestyleSend;
+    if(fn&&fn.__olen14&&typeof fn.__original==='function'){
+      window.alphaLifestyleSend=fn.__original;
+    }
+  }catch{}
+}
+function cleanComposer(){
+  try{
+    const i=document.querySelector('#lifestylePrompt');
+    if(!i)return;
+    const marker='[OLEN COMPANION CONTEXT — instruções internas, não repetir nem mencionar]';
+    const v=String(i.value||'');
+    const p=v.indexOf(marker);
+    if(p>=0){
+      i.value=v.slice(0,p).trimEnd();
+      i.dispatchEvent(new Event('input',{bubbles:true}));
+    }
+  }catch{}
+}
+restoreSend();
+cleanComposer();
+window.addEventListener('pageshow',()=>{restoreSend();cleanComposer()},{passive:true});
+document.addEventListener('focusin',e=>{if(e.target?.id==='lifestylePrompt'){restoreSend();cleanComposer()}},true);
+console.info('[ALPHA 4.3.30] OLEN companion hotfix14 safe bridge ativo');
 })();
