@@ -2,6 +2,7 @@
    A lógica de personalidade/intenção vive agora no backend.
    Este patch deixa de alterar o texto visível do utilizador.
    Também desfaz em runtime um wrapper antigo, caso ainda esteja carregado.
+   Carrega o pequeno lifecycle fix do plano sem acrescentar observers/polling.
 */
 (()=>{
 'use strict';
@@ -26,9 +27,18 @@ function cleanComposer(){
     }
   }catch{}
 }
+function loadPlanStateFix(){
+  if(document.querySelector('script[data-alpha-plan-state15]'))return;
+  const s=document.createElement('script');
+  s.src='./alpha-4.3.30-olen-plan-state-hotfix15.js?v=4.3.30-hotfix15';
+  s.dataset.alphaPlanState15='1';
+  s.async=true;
+  document.head.appendChild(s);
+}
 restoreSend();
 cleanComposer();
-window.addEventListener('pageshow',()=>{restoreSend();cleanComposer()},{passive:true});
+loadPlanStateFix();
+window.addEventListener('pageshow',()=>{restoreSend();cleanComposer();loadPlanStateFix()},{passive:true});
 document.addEventListener('focusin',e=>{if(e.target?.id==='lifestylePrompt'){restoreSend();cleanComposer()}},true);
 console.info('[ALPHA 4.3.30] OLEN companion hotfix14 safe bridge ativo');
 })();
