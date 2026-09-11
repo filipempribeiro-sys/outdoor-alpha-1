@@ -1,61 +1,11 @@
-const CACHE_NAME="project-alpha-v4.3.29-version-align-fix";
-const BASE_PATCH_URL="./alpha-4.3.17-fixes.js?v=4.3.29";
-const SPOTIFY_PATCH_URL="./alpha-4.3.22-spotify-global.js?v=4.3.29";
-const SHELL=["./","./index.html","./manifest.webmanifest","./icon-192.png","./icon-512.png","./alpha-4.3.17-fixes.js","./alpha-4.3.22-spotify-global.js"];
+const CACHE_NAME="project-alpha-v4.3.30-calendar-stage1";
+const BASE_PATCH_URL="./alpha-4.3.17-fixes.js?v=4.3.30";
+const SPOTIFY_PATCH_URL="./alpha-4.3.22-spotify-global.js?v=4.3.30";
+const CALENDAR_GOOGLE_URL="./alpha-4.3.30-calendar-google.js?v=4.3.30-stage1";
+const CALENDAR_TIME_URL="./alpha-4.3.30-calendar-timepicker.js?v=4.3.30-stage1";
+const SHELL=["./","./index.html","./manifest.webmanifest","./icon-192.png","./icon-512.png","./alpha-4.3.17-fixes.js","./alpha-4.3.22-spotify-global.js","./alpha-4.3.30-calendar-google.js","./alpha-4.3.30-calendar-timepicker.js"];
 self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(SHELL).catch(()=>{})))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
-
-function rewrittenScriptResponse(response,kind){
- if(!response||!response.ok)return response;
- return response.text().then(js=>{
-   if(kind==='base')js=js.replace("const VERSION='4.3.18';","const VERSION='4.3.29';");
-   if(kind==='spotify')js=js.replace(/4\.3\.28/g,'4.3.29');
-   const headers=new Headers(response.headers);headers.delete('content-length');headers.set('Cache-Control','no-store');
-   return new Response(js,{status:response.status,statusText:response.statusText,headers});
- });
-}
-
-function with4329Patch(response){
- if(!response||!response.ok)return response;const type=String(response.headers.get("content-type")||"").toLowerCase();if(!type.includes("text/html"))return response;
- return response.text().then(html=>{
-   const baseTag='<script src="'+BASE_PATCH_URL+'"><\/script>';
-   const spotifyTag='<script src="'+SPOTIFY_PATCH_URL+'"><\/script>';
-   const alignStyle='<style id="alphaSpotifyExactAlign4329">'+
-     'body:not([data-alpha-view="home"]):not(.alphaChatMode):not(.alphaComposeMode) #alphaGlobalSpotify4324{'+
-     'top:calc(env(safe-area-inset-top) + 10px)!important;right:14px!important;width:50px!important;height:50px!important;min-width:50px!important;min-height:50px!important}'+
-     '@media(max-width:620px){body:not([data-alpha-view="home"]):not(.alphaChatMode):not(.alphaComposeMode) #alphaGlobalSpotify4324{width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important}}'+
-     '</style>';
-   html=html.replace(/<script src="\.\/alpha-4\.3\.17-fixes\.js\?v=[^"]+"><\/script>/g,'')
-            .replace(/<script src="\.\/alpha-4\.3\.19-chat-spotify\.js\?v=[^"]+"><\/script>/g,'')
-            .replace(/<script src="\.\/alpha-4\.3\.22-spotify-global\.js\?v=[^"]+"><\/script>/g,'')
-            .replace(/<style id="alphaSpotifyExactAlign4329">[\s\S]*?<\/style>/g,'');
-   const tags=alignStyle+baseTag+spotifyTag;
-   html=html.includes("</body>")?html.replace("</body>",tags+"</body>"):html+tags;
-   html=html.replace(/<meta name="alpha-version" content="[^"]*">/,'<meta name="alpha-version" content="4.3.29">')
-            .replace(/<title>Project Alpha [^<]*<\/title>/,'<title>Project Alpha 4.3.29 — Version + Exact Top Align</title>')
-            .replace(/const APP_VERSION='4\.3\.16'/g,"const APP_VERSION='4.3.29'")
-            .replace(/const ALPHA_VISIBLE_VERSION='v4\.3\.16'/g,"const ALPHA_VISIBLE_VERSION='v4.3.29'")
-            .replace(/window\.ALPHA_DOMAIN_GATE_BUILD='4\.3\.16-full-system-hardening'/g,"window.ALPHA_DOMAIN_GATE_BUILD='4.3.29-version-align-fix'")
-            .replace(/A iniciar a ALPHA 4\.3\.18…/g,'A iniciar a ALPHA 4.3.29…')
-            .replace(/A iniciar a ALPHA 4\.3\.18\.\.\./g,'A iniciar a ALPHA 4.3.29…');
-   const headers=new Headers(response.headers);headers.delete("content-length");headers.set("Cache-Control","no-store");headers.set("X-Alpha-Patch","4.3.29-version-align-fix");return new Response(html,{status:response.status,statusText:response.statusText,headers})
- })
-}
-
-self.addEventListener("fetch",e=>{
- if(e.request.method!=="GET")return;
- const u=new URL(e.request.url);
- if(e.request.mode==="navigate"){
-   e.respondWith(fetch(e.request,{cache:"no-store"}).then(r=>with4329Patch(r)).then(r=>{const cp=r.clone();caches.open(CACHE_NAME).then(c=>c.put("./index.html",cp)).catch(()=>{});return r}).catch(async()=>{const cached=await caches.match("./index.html");return cached?with4329Patch(cached):cached}));
-   return;
- }
- if(u.origin===location.origin&&u.pathname.endsWith('/alpha-4.3.17-fixes.js')){
-   e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>rewrittenScriptResponse(r,'base')).catch(()=>caches.match(e.request)));
-   return;
- }
- if(u.origin===location.origin&&u.pathname.endsWith('/alpha-4.3.22-spotify-global.js')){
-   e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>rewrittenScriptResponse(r,'spotify')).catch(()=>caches.match(e.request)));
-   return;
- }
- if(u.origin===location.origin)e.respondWith(fetch(e.request,{cache:"no-store"}).then(r=>{const cp=r.clone();caches.open(CACHE_NAME).then(c=>c.put(e.request,cp)).catch(()=>{});return r}).catch(()=>caches.match(e.request)));
-});
+function rewrittenScriptResponse(response,kind){if(!response||!response.ok)return response;return response.text().then(js=>{if(kind==='base')js=js.replace("const VERSION='4.3.18';","const VERSION='4.3.30';");if(kind==='spotify')js=js.replace(/4\.3\.28/g,'4.3.30');const headers=new Headers(response.headers);headers.delete('content-length');headers.set('Cache-Control','no-store');return new Response(js,{status:response.status,statusText:response.statusText,headers})})}
+function with4330Patch(response){if(!response||!response.ok)return response;const type=String(response.headers.get("content-type")||"").toLowerCase();if(!type.includes("text/html"))return response;return response.text().then(html=>{const baseTag='<script src="'+BASE_PATCH_URL+'"><\/script>',spotifyTag='<script src="'+SPOTIFY_PATCH_URL+'"><\/script>',calendarGoogleTag='<script src="'+CALENDAR_GOOGLE_URL+'"><\/script>',calendarTimeTag='<script src="'+CALENDAR_TIME_URL+'"><\/script>';const alignStyle='<style id="alphaSpotifyExactAlign4329">body:not([data-alpha-view="home"]):not(.alphaChatMode):not(.alphaComposeMode) #alphaGlobalSpotify4324{top:calc(env(safe-area-inset-top) + 10px)!important;right:14px!important;width:50px!important;height:50px!important;min-width:50px!important;min-height:50px!important}@media(max-width:620px){body:not([data-alpha-view="home"]):not(.alphaChatMode):not(.alphaComposeMode) #alphaGlobalSpotify4324{width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important}}</style>';html=html.replace(/<script src="\.\/alpha-4\.3\.17-fixes\.js\?v=[^"]+"><\/script>/g,'').replace(/<script src="\.\/alpha-4\.3\.19-chat-spotify\.js\?v=[^"]+"><\/script>/g,'').replace(/<script src="\.\/alpha-4\.3\.22-spotify-global\.js\?v=[^"]+"><\/script>/g,'').replace(/<script src="\.\/alpha-4\.3\.30-calendar-(?:google|timepicker)\.js\?v=[^"]+"><\/script>/g,'').replace(/<style id="alphaSpotifyExactAlign4329">[\s\S]*?<\/style>/g,'');const tags=alignStyle+baseTag+spotifyTag+calendarGoogleTag+calendarTimeTag;html=html.includes("</body>")?html.replace("</body>",tags+"</body>"):html+tags;html=html.replace(/<meta name="alpha-version" content="[^"]*">/,'<meta name="alpha-version" content="4.3.30">').replace(/<title>Project Alpha [^<]*<\/title>/,'<title>Project Alpha 4.3.30 — Calendar Stage 1</title>').replace(/const APP_VERSION='4\.3\.16'/g,"const APP_VERSION='4.3.30'").replace(/const ALPHA_VISIBLE_VERSION='v4\.3\.16'/g,"const ALPHA_VISIBLE_VERSION='v4.3.30'").replace(/window\.ALPHA_DOMAIN_GATE_BUILD='4\.3\.16-full-system-hardening'/g,"window.ALPHA_DOMAIN_GATE_BUILD='4.3.30-calendar-stage1'").replace(/A iniciar a ALPHA 4\.3\.18…/g,'A iniciar a ALPHA 4.3.30…').replace(/A iniciar a ALPHA 4\.3\.18\.\.\./g,'A iniciar a ALPHA 4.3.30…');const headers=new Headers(response.headers);headers.delete("content-length");headers.set("Cache-Control","no-store");headers.set("X-Alpha-Patch","4.3.30-calendar-stage1");return new Response(html,{status:response.status,statusText:response.statusText,headers})})}
+self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;const u=new URL(e.request.url);if(e.request.mode==="navigate"){e.respondWith(fetch(e.request,{cache:"no-store"}).then(r=>with4330Patch(r)).then(r=>{const cp=r.clone();caches.open(CACHE_NAME).then(c=>c.put("./index.html",cp)).catch(()=>{});return r}).catch(async()=>{const cached=await caches.match("./index.html");return cached?with4330Patch(cached):cached}));return}if(u.origin===location.origin&&u.pathname.endsWith('/alpha-4.3.17-fixes.js')){e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>rewrittenScriptResponse(r,'base')).catch(()=>caches.match(e.request)));return}if(u.origin===location.origin&&u.pathname.endsWith('/alpha-4.3.22-spotify-global.js')){e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>rewrittenScriptResponse(r,'spotify')).catch(()=>caches.match(e.request)));return}if(u.origin===location.origin)e.respondWith(fetch(e.request,{cache:"no-store"}).then(r=>{const cp=r.clone();caches.open(CACHE_NAME).then(c=>c.put(e.request,cp)).catch(()=>{});return r}).catch(()=>caches.match(e.request)))});
