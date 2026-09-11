@@ -4,6 +4,8 @@
    - Projetos / Planos: agrega conversas com estado, cartões ou eventos
    - Agendados: lê alphaCalendarEvents() real / localStorage do utilizador
    - Sem dados inventados: mostra vazio quando não existe conteúdo real
+   - Place details: deduplica e compacta horários/preços/campos práticos
+   - Attribution: mostra Google Maps apenas quando o cartão veio do Google
 */
 (()=>{
 'use strict';
@@ -34,5 +36,79 @@ function render(kind){const shell=$('.alphaOlenSidebar'),p=ensurePanel();if(!she
  if(kind==='scheduled'){title='Agendados';const a=scheduled().filter(e=>e&&e.start).sort((a,b)=>new Date(a.start)-new Date(b.start));html=a.length?`<div class="alphaOlenDataList6">${a.map(e=>`<article class="alphaOlenDataCard6"><b>${esc(e.title||'Experiência ALPHA')}</b><small>${esc(fmtDate(e.start))}${e.location?' · '+esc(e.location):''}</small>${e.notes||e.description?`<small>${esc(e.notes||e.description)}</small>`:''}</article>`).join('')}</div>`:`<div class="alphaOlenEmpty6">Não existem eventos ALPHA guardados no calendário deste utilizador.</div>`}
  p.innerHTML=`<div class="alphaOlenDataHead6"><button type="button" aria-label="Voltar">‹</button><b>${esc(title)}</b></div>${html}`;p.querySelector('.alphaOlenDataHead6 button')?.addEventListener('click',closePanel);p.querySelectorAll('[data-conv]').forEach(b=>b.addEventListener('click',()=>openConversation(b.dataset.conv)));shell.classList.add('alphaDataOpen6');p.classList.add('show')}
 function bind(){ensureStyle();$$('.alphaOlenItem[data-kind]').forEach(b=>{const k=b.dataset.kind;if(!['images','library','projects','scheduled'].includes(k)||b.dataset.data6)return;b.dataset.data6='1';b.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();$$('.alphaOlenItem').forEach(x=>x.classList.remove('active'));b.classList.add('active');render(k)},true)})}
-new MutationObserver(()=>requestAnimationFrame(bind)).observe(document.documentElement,{subtree:true,childList:true});setTimeout(bind,180);setInterval(bind,1200);console.info('[ALPHA 4.3.30] OLEN data hotfix6 ativo');
+
+/* PLACE DETAIL NORMALIZER — deliberately no observer/polling. */
+const placeSources={google:false,open:false};
+function alphaCompactText(v){return String(v??'').replace(/\s+/g,' ').trim()}
+function alphaCompareKey(v){return alphaCompactText(v).toLocaleLowerCase('pt-PT').replace(/https?:\/\/\S+/g,'').replace(/\[[^\]]*\]\([^)]*\)/g,'').replace(/[^\p{L}\p{N}€%]+/gu,' ').trim()}
+function alphaUniqueValues(value,limit=6){
+  const src=Array.isArray(value)?value:(value?[value]:[]),out=[];
+  for(const raw of src){
+    const s=alphaCompactText(raw);if(!s)continue;
+    const k=alphaCompareKey(s);if(!k)continue;
+    if(out.some(x=>{const q=alphaCompareKey(x);return q===k||(Math.min(q.length,k.length)>48&&(q.includes(k)||k.includes(q)))}))continue;
+    out.push(s);if(out.length>=limit)break;
+  }
+  return out;
+}
+function alphaCompactHours(value){
+  const src=alphaUniqueValues(value,16),week=[],today=[],other=[];
+  for(const s of src){
+    if(/^(segunda|terça|terca|quarta|quinta|sexta|sábado|sabado|domingo)(-feira)?\s*:/i.test(s))week.push(s);
+    else if(/^hoje\b/i.test(s))today.push(s);
+    else other.push(s);
+  }
+  return [...week.slice(0,7),...today.slice(0,2),...other.slice(0,2)];
+}
+function alphaPractical(value){
+  const out=[];
+  for(const s0 of alphaUniqueValues(value,5)){
+    let s=alphaCompactText(s0);
+    const menuHits=(s.match(/horários? e preços?|como chegar|aberto para obras|visitas guiadas|roteiros|lojas|cafetarias?|restaurantes?|perguntas frequentes/gi)||[]).length;
+    if(menuHits>=3)continue;
+    if(s.length>100&&/^\p{Ll}/u.test(s))continue;
+    if(s.length>280){const cut=s.slice(0,280);const end=Math.max(cut.lastIndexOf('.'),cut.lastIndexOf(';'));s=(end>90?cut.slice(0,end+1):cut.replace(/\s+\S*$/,'')+'…')}
+    if(s)out.push(s);
+    if(out.length>=3)break;
+  }
+  return out;
+}
+function alphaNormalizePlace(p){
+  if(!p||typeof p!=='object')return p;
+  const q={...p};
+  q.openingHours=alphaCompactHours(q.openingHours);
+  q.prices=alphaUniqueValues(q.prices,4);
+  q.discounts=alphaUniqueValues(q.discounts,4);
+  q.freeEntry=alphaUniqueValues(q.freeEntry,3);
+  q.ageBands=alphaUniqueValues(q.ageBands,4);
+  q.services=alphaUniqueValues(q.services,5);
+  q.rules=alphaUniqueValues(q.rules,5);
+  q.accessibility=alphaPractical(q.accessibility);
+  q.parking=alphaPractical(q.parking);
+  q.publicTransport=alphaPractical(q.publicTransport);
+  q.sourceUrls=alphaUniqueValues(q.sourceUrls,24);
+  const maps=String(q.maps||'');
+  const google=/google\.[^/]+\/maps|maps\.google/i.test(maps)||/^ChI/i.test(String(q.id||''))||q.rating!=null||q.reviews!=null||q.priceLevel;
+  if(google)placeSources.google=true;else placeSources.open=true;
+  return q;
+}
+function alphaRefreshAttribution(){
+  const bits=[];if(placeSources.google)bits.push('Google Maps');if(placeSources.open)bits.push('OpenStreetMap','Wikidata/Wikimedia');
+  const text=bits.length?bits.join(' · '):'OpenStreetMap · Wikidata/Wikimedia';
+  document.querySelectorAll('.alphaPlaceAttribution').forEach(x=>x.textContent=text);
+}
+if(typeof window.alphaRegisterPlaceCard==='function'&&!window.__alphaPlaceNormalizer6){
+  window.__alphaPlaceNormalizer6=true;
+  const originalRegister=window.alphaRegisterPlaceCard;
+  window.alphaRegisterPlaceCard=function(p){const key=originalRegister(alphaNormalizePlace(p));setTimeout(alphaRefreshAttribution,0);return key};
+  if(typeof window.alphaOpenPlaceDetail==='function'){
+    const originalOpen=window.alphaOpenPlaceDetail;
+    window.alphaOpenPlaceDetail=function(key){const r=originalOpen(key);setTimeout(()=>{
+      const host=document.getElementById('alphaPlaceDetailContent');
+      host?.querySelectorAll('.alphaPlaceModalMeta').forEach(el=>{if(/fontes? usadas? na investigação/i.test(el.textContent||''))el.textContent=(el.textContent||'').replace(/fontes? usadas? na investigação/i,'fontes verificadas')});
+    },0);return r};
+  }
+}
+
+new MutationObserver(()=>requestAnimationFrame(bind)).observe(document.documentElement,{subtree:true,childList:true});setTimeout(bind,180);setInterval(bind,1200);console.info('[ALPHA 4.3.30] OLEN data hotfix6 ativo · place details compactos');
 })();
