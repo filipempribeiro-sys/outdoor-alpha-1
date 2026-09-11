@@ -1,17 +1,18 @@
-/* ALPHA 4.3.30 · CHAT SIDEBAR STAGE 3.4 FIX
+/* ALPHA 4.3.30 · CHAT SIDEBAR STAGE 3.5 FIX
    Chat sidebar only.
    - keeps sidebar open during search and long-press actions
-   - closes sidebar only when selecting a conversation
+   - closes sidebar only when a Recent/Afixada conversation is selected
    - hides the actual visible top-left chat menu trigger while sidebar is open
    - long press: Fixar/Desafixar, Renomear, Eliminar
    - pinned conversation shows green “Afixada” marker
    - Recentes: Mostrar todas / Ver menos
-   - conversation lists remain scrollable without a visible scrollbar
+   - restores a footer mirror of the real bottom navigation
+   - hides conversation scrollbars while preserving scrolling
    Event-driven only: no polling / no global MutationObserver.
 */
 (()=>{
 'use strict';
-if(window.__alphaChatSidebarStage34Fix)return;window.__alphaChatSidebarStage34Fix=true;
+if(window.__alphaChatSidebarStage35Fix)return;window.__alphaChatSidebarStage35Fix=true;
 const META_KEY='alpha_olen_conversation_meta_v4330',HOLD=520,MOVE=12;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const svg=d=>`<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
@@ -21,35 +22,44 @@ function save(m){try{localStorage.setItem(META_KEY,JSON.stringify(m))}catch{}}
 function key(row){return row.dataset.convKey||row.dataset.alphaConvKey||row.querySelector('.alphaChatOlenRecentText4330')?.textContent?.replace(/\s*•\s*Afixada\s*$/i,'').trim().slice(0,160)||row.dataset.convId||'conversation'}
 function opened(){return document.body.classList.contains('alphaChatOlenOpen4330')}
 function sidebar(){return $('.alphaChatOlenSidebar4330')}
-function style(){if($('#alphaChatSidebarStage34FixStyle'))return;const s=document.createElement('style');s.id='alphaChatSidebarStage34FixStyle';s.textContent=`
+function style(){if($('#alphaChatSidebarStage35FixStyle'))return;const s=document.createElement('style');s.id='alphaChatSidebarStage35FixStyle';s.textContent=`
 body.alphaChatOlenOpen4330 [data-alpha-chat-menu-trigger="1"]{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
 body.alphaChatOlenOpen4330 .alphaChatActions4324{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+.alphaChatOlenRecents4330,.alphaChatPinned4330{scrollbar-width:none!important;-ms-overflow-style:none!important}
+.alphaChatOlenRecents4330::-webkit-scrollbar,.alphaChatPinned4330::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
 .alphaChatConvActionScrim4330{position:fixed;inset:0;z-index:9800;background:rgba(0,0,0,.14)}
 .alphaChatConvActionMenu4330{position:fixed;z-index:9801;min-width:220px;max-width:calc(100vw - 28px);background:rgba(31,31,33,.985);border:1px solid rgba(255,255,255,.13);border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.45);padding:8px;backdrop-filter:blur(18px)}
 .alphaChatConvActionMenu4330 button{width:100%;height:54px;border:0;background:transparent;color:#f7f7f7;display:flex;align-items:center;gap:14px;padding:0 16px;border-radius:14px;text-align:left;font:700 16px/1.2 system-ui}.alphaChatConvActionMenu4330 button:active{background:rgba(255,255,255,.08)}.alphaChatConvActionMenu4330 svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.alphaChatConvActionMenu4330 .danger{color:#ff858c}
 .alphaChatOlenRecent4330.alphaPinned4330 .alphaChatOlenRecentText4330:after{content:' • Afixada';font-size:11px;color:#72ddb5;font-weight:800}
-.alphaChatOlenRecents4330,.alphaChatPinned4330{scrollbar-width:none!important;-ms-overflow-style:none!important}
-.alphaChatOlenRecents4330::-webkit-scrollbar,.alphaChatPinned4330::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+.alphaChatOlenBottom4330{margin-top:auto!important;padding:10px 0 0!important;border-top:1px solid rgba(255,255,255,.08)!important;flex:0 0 auto!important}
+.alphaChatSidebarDock4330{display:grid!important;grid-template-columns:repeat(var(--alpha-chat-dock-count,5),minmax(0,1fr));gap:4px;align-items:stretch;width:100%}
+.alphaChatSidebarDock4330 button{min-width:0;min-height:48px;border:0;border-radius:12px;background:transparent;color:#8fa39d;padding:6px 2px;font:700 10px/1.15 system-ui;display:grid;place-items:center;text-align:center;overflow:hidden}
+.alphaChatSidebarDock4330 button.active{background:#17372f;color:#e7fff5}.alphaChatSidebarDock4330 button:active{background:rgba(255,255,255,.08)}
+.alphaChatSidebarDock4330 .alphaDockLabel4330{display:block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 `;document.head.appendChild(s)}
 
 const hidden=new Set();
 function likelyMenuButton(el){
   if(!(el instanceof HTMLElement)||el.closest('.alphaChatOlenSidebar4330'))return false;
   const r=el.getBoundingClientRect();if(r.width<24||r.height<24||r.width>90||r.height>90||r.left>95||r.top>145)return false;
-  const s=getComputedStyle(el);if(s.display==='none'||s.visibility==='hidden'||Number(s.opacity)===0)return false;
+  const st=getComputedStyle(el);if(st.display==='none'||st.visibility==='hidden'||Number(st.opacity)===0)return false;
   const label=((el.getAttribute('aria-label')||'')+' '+(el.getAttribute('title')||'')+' '+(el.textContent||'')).toLocaleLowerCase('pt-PT');
   if(/menu|conversas|navega/.test(label))return true;
-  const svg=el.querySelector('svg');if(svg){const paths=svg.querySelectorAll('path,line');if(paths.length>=2)return true}
+  const icon=el.querySelector('svg');if(icon){const paths=icon.querySelectorAll('path,line');if(paths.length>=2)return true}
   return false;
 }
 function hideVisibleMenu(){
   if(!opened())return;
-  $$('button,[role="button"]').forEach(el=>{if(!likelyMenuButton(el))return;if(!el.dataset.alphaStage34Display)el.dataset.alphaStage34Display=el.style.display||'';el.dataset.alphaChatMenuTrigger='1';el.style.setProperty('display','none','important');hidden.add(el)});
+  $$('button,[role="button"]').forEach(el=>{if(!likelyMenuButton(el))return;if(!el.dataset.alphaStage35Display)el.dataset.alphaStage35Display=el.style.display||'';el.dataset.alphaChatMenuTrigger='1';el.style.setProperty('display','none','important');hidden.add(el)});
 }
-function restoreHidden(){for(const el of hidden){if(!el?.isConnected)continue;el.style.removeProperty('display');const old=el.dataset.alphaStage34Display;if(old)el.style.display=old;delete el.dataset.alphaStage34Display}hidden.clear()}
-function forceOpen(){
-  const s=$('#aiChatMenu')||$('.alphaConversationSidebar');if(!s)return;
-  document.body.classList.add('alphaChatOlenOpen4330');s.hidden=false;s.removeAttribute('hidden');s.setAttribute('aria-hidden','false');s.classList.add('show');hideVisibleMenu();
+function restoreHidden(){for(const el of hidden){if(!el?.isConnected)continue;el.style.removeProperty('display');const old=el.dataset.alphaStage35Display;if(old)el.style.display=old;delete el.dataset.alphaStage35Display}hidden.clear()}
+function forceOpen(){const s=$('#aiChatMenu')||$('.alphaConversationSidebar');if(!s)return;document.body.classList.add('alphaChatOlenOpen4330');s.hidden=false;s.removeAttribute('hidden');s.setAttribute('aria-hidden','false');s.classList.add('show');hideVisibleMenu()}
+function forceClose(){
+  closeMenu();
+  document.body.classList.remove('alphaChatOlenOpen4330');
+  const s=$('#aiChatMenu')||$('.alphaConversationSidebar');
+  if(s){s.setAttribute('aria-hidden','true');s.classList.remove('show')}
+  restoreHidden();
 }
 function syncOpenState(){if(opened())hideVisibleMenu();else restoreHidden()}
 
@@ -60,23 +70,34 @@ function rename(row){const span=row.querySelector('.alphaChatOlenRecentText4330'
 function del(row){const name=row.querySelector('.alphaChatOlenRecentText4330')?.textContent?.trim()||'esta conversa';if(!confirm(`Eliminar "${name}"?`)){forceOpen();return}const m=meta(),k=key(row);m[k]={...(m[k]||{}),deleted:true};save(m);row.remove();refreshRecentLabels();forceOpen()}
 function openMenu(row,x,y){closeMenu();forceOpen();const sc=document.createElement('div');sc.className='alphaChatConvActionScrim4330';sc.onclick=()=>{closeMenu();forceOpen()};document.body.appendChild(sc);const m=document.createElement('div');m.className='alphaChatConvActionMenu4330';const k=key(row),pinned=!!meta()[k]?.pinned;m.innerHTML=`<button data-a="pin">${ICON.pin}<span>${pinned?'Desafixar':'Fixar'}</span></button><button data-a="rename">${ICON.edit}<span>Renomear</span></button><button class="danger" data-a="delete">${ICON.trash}<span>Eliminar</span></button>`;document.body.appendChild(m);const w=Math.min(270,innerWidth-28);m.style.width=w+'px';m.style.left=Math.max(14,Math.min(x-w/2,innerWidth-w-14))+'px';m.style.top=Math.max(14,Math.min(y-18,innerHeight-m.offsetHeight-14))+'px';m.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;e.preventDefault();e.stopPropagation();const a=b.dataset.a;closeMenu();if(a==='pin')pin(row);if(a==='rename')rename(row);if(a==='delete')del(row)})}
 
-function keepSidebarForInternalAction(target){
-  if(!opened())return;const sh=target?.closest?.('.alphaChatOlenSidebar4330');if(!sh)return;
-  if(target.closest('.alphaChatOlenRecent4330'))return;
-  requestAnimationFrame(()=>{forceOpen();refreshRecentLabels()});
+function ensureFooter(){
+  const sh=sidebar(),bottom=sh?.querySelector('.alphaChatOlenBottom4330');if(!bottom)return;
+  let dock=bottom.querySelector('.alphaChatSidebarDock4330');if(!dock){dock=document.createElement('div');dock.className='alphaChatSidebarDock4330';bottom.replaceChildren(dock)}
+  const native=[...document.querySelectorAll('.bottom .nav')].filter(n=>!n.closest('.alphaChatOlenSidebar4330'));
+  if(!native.length){dock.hidden=true;return}
+  dock.hidden=false;dock.style.setProperty('--alpha-chat-dock-count',String(native.length));dock.replaceChildren();
+  native.forEach((src,i)=>{
+    const b=document.createElement('button');b.type='button';b.dataset.nativeIndex=String(i);b.classList.toggle('active',src.classList.contains('active'));
+    const label=(src.getAttribute('aria-label')||src.textContent||src.title||'').trim();
+    b.innerHTML=`<span class="alphaDockLabel4330"></span>`;b.querySelector('span').textContent=label||`Aba ${i+1}`;
+    b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();forceClose();src.click()});dock.appendChild(b)
+  })
 }
+function keepSidebarForInternalAction(target){if(!opened())return;const sh=target?.closest?.('.alphaChatOlenSidebar4330');if(!sh)return;if(target.closest('.alphaChatOlenRecent4330'))return;requestAnimationFrame(()=>{forceOpen();refreshRecentLabels();ensureFooter()})}
 
 document.addEventListener('click',e=>{
   const sh=e.target?.closest?.('.alphaChatOlenSidebar4330');
-  const conversation=e.target?.closest?.('.alphaChatOlenRecent4330');
-  if(sh&&conversation){
-    /* O click normal numa conversa é a única ação interna que deve fechar a sidebar.
-       O handler original da Stage 3 abre a conversa e fecha a sidebar em bubble phase. */
-    setTimeout(syncOpenState,0);
-    return;
-  }
-  if(sh){keepSidebarForInternalAction(e.target);setTimeout(()=>{forceOpen();refreshRecentLabels()},0)}
-  else setTimeout(syncOpenState,0);
+  if(sh){
+    const row=e.target.closest('.alphaChatOlenRecent4330');
+    if(row){
+      /* A seleção de conversa é a única ação interna que deve fechar a sidebar.
+         Não fazemos preventDefault para deixar o handler original abrir a conversa. */
+      setTimeout(forceClose,0);
+      return;
+    }
+    keepSidebarForInternalAction(e.target);
+    setTimeout(()=>{forceOpen();refreshRecentLabels();ensureFooter()},0);
+  }else setTimeout(syncOpenState,0);
 },true);
 document.addEventListener('input',e=>{if(e.target?.closest?.('.alphaChatOlenSearchBox4330'))requestAnimationFrame(forceOpen)},true);
 document.addEventListener('focusin',e=>{if(e.target?.closest?.('.alphaChatOlenSidebar4330'))requestAnimationFrame(forceOpen)},true);
@@ -89,8 +110,8 @@ document.addEventListener('touchend',e=>{cancel();if(fired){e.preventDefault();e
 document.addEventListener('touchcancel',cancel,{passive:true,capture:true});
 document.addEventListener('contextmenu',e=>{const r=e.target?.closest?.('.alphaChatOlenRecent4330');if(!r)return;e.preventDefault();openMenu(r,e.clientX,e.clientY)},true);
 
-function fixMoreButton(){const sh=sidebar(),more=sh?.querySelector('.alphaChatOlenMore4330');if(!more||more.dataset.stage34)return;more.dataset.stage34='1';const clone=more.cloneNode(true);clone.dataset.stage34='1';more.replaceWith(clone);clone.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const expanded=clone.dataset.expanded==='1';clone.dataset.expanded=expanded?'0':'1';refreshRecentLabels();forceOpen()})}
-function install(){style();fixMoreButton();refreshRecentLabels();syncOpenState()}
+function fixMoreButton(){const sh=sidebar(),more=sh?.querySelector('.alphaChatOlenMore4330');if(!more||more.dataset.stage35)return;const clone=more.cloneNode(true);clone.dataset.stage35='1';more.replaceWith(clone);clone.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const expanded=clone.dataset.expanded==='1';clone.dataset.expanded=expanded?'0':'1';refreshRecentLabels();forceOpen()})}
+function install(){style();fixMoreButton();refreshRecentLabels();ensureFooter();syncOpenState()}
 window.addEventListener('pageshow',()=>setTimeout(install,80),{passive:true});document.addEventListener('touchend',()=>setTimeout(install,0),{passive:true});document.addEventListener('click',()=>setTimeout(install,0),true);setTimeout(install,100);
-console.info('[ALPHA 4.3.30] chat sidebar stage3.4 selection + scrollbar fix ativo');
+console.info('[ALPHA 4.3.30] chat sidebar stage3.5 interaction + footer fix ativo');
 })();
