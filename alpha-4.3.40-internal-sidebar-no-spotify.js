@@ -1,23 +1,37 @@
-/* ALPHA 4.3.40 · INTERNAL SIDEBAR NO SPOTIFY
-   Removes Spotify only from the internal sidebar used on views 3–7.
-   Chat sidebar is untouched.
+/* ALPHA 4.3.40 · INTERNAL SIDEBAR CLEANUP
+   ONLY the internal sidebar used outside Chat (views 3–7):
+   - remove Spotify entry
+   - rename sidebar header ALPHA -> OLSEN
+   Chat sidebar is deliberately untouched.
 */
 (()=>{
 'use strict';
 if(window.__alphaInternalSidebarNoSpotify440)return;
 window.__alphaInternalSidebarNoSpotify440=true;
 
-const style=document.createElement('style');
-style.id='alphaInternalSidebarNoSpotify440';
-style.textContent=`
-#alphaInternalSidebar .alphaInternalNavList button[onclick*="alphaSpotifyFooterAction"]{
-  display:none!important;
+function apply(){
+  const sidebar=document.getElementById('alphaInternalSidebar');
+  if(!sidebar)return;
+
+  const brand=sidebar.querySelector('.alphaInternalBrand b');
+  if(brand&&brand.textContent.trim()!=='OLSEN') brand.textContent='OLSEN';
+
+  sidebar.querySelectorAll('.alphaInternalNavList button').forEach(btn=>{
+    const text=String(btn.textContent||'').trim().toLocaleLowerCase('pt-PT');
+    const action=String(btn.getAttribute('onclick')||'').toLocaleLowerCase('pt-PT');
+    if(text==='spotify'||action.includes('alphaspotifyfooteraction')) btn.remove();
+  });
 }
-`;
-document.head.appendChild(style);
 
-const spotifyBtn=document.querySelector('#alphaInternalSidebar .alphaInternalNavList button[onclick*="alphaSpotifyFooterAction"]');
-if(spotifyBtn)spotifyBtn.hidden=true;
+apply();
+window.addEventListener('pageshow',()=>requestAnimationFrame(apply),{passive:true});
+document.addEventListener('click',e=>{
+  if(e.target?.closest?.('[onclick*="alphaOpenInternalSidebar"],[onclick*="alphaToggleInternalSidebar"],.alphaInternalMenuBtn')){
+    requestAnimationFrame(apply);
+  }
+},true);
+document.addEventListener('touchend',()=>requestAnimationFrame(apply),{passive:true,capture:true});
+setTimeout(apply,100);
 
-console.info('[ALPHA 4.3.40] Spotify removed from internal sidebar only');
+console.info('[ALPHA 4.3.40] Internal sidebar: Spotify removed, brand renamed to OLSEN');
 })();
