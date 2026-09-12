@@ -102,7 +102,10 @@ function with440Patch(response){
       .replace(/const APP_VERSION='4\.3\.16'/g,"const APP_VERSION='4.3.43'")
       .replace(/const ALPHA_VISIBLE_VERSION='v4\.3\.16'/g,"const ALPHA_VISIBLE_VERSION='v4.3.43'")
       .replace(/window\.ALPHA_DOMAIN_GATE_BUILD='4\.3\.16-full-system-hardening'/g,"window.ALPHA_DOMAIN_GATE_BUILD='4.3.43'")
-      .replace(/A iniciar a ALPHA(?:\s*4\.3\.(?:18|43))?(?:…|\.\.\.)/g,'A iniciar a OLEN…');
+      .replace(/A iniciar a ALPHA(?:\s*4\.3\.(?:18|43))?(?:…|\.\.\.)/g,'A iniciar a OLEN…')
+      .replace(/PROJECT\s+ALPHA/g,'OLEN')
+      .replace(/\bALPHA\b/g,'OLEN')
+      .replace(/\bAlpha\b/g,'OLEN');
 
     const headers=new Headers(response.headers);
     headers.delete("content-length");
