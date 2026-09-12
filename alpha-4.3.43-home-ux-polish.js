@@ -72,3 +72,96 @@ setTimeout(refit,100);setTimeout(fitHome,350);
 
 console.info('[ALPHA 4.3.43] Home container extended to target height');
 })();
+
+/* ALPHA 4.3.43 · SPOTIFY PLAYLIST OPEN RELIABILITY
+   Keeps the existing Spotify flow intact. The only behavioural change is that
+   an already-connected Spotify session reserves a browser target during the
+   user's tap, so Android does not reject the later open after the async playlist
+   build. HTTPS is preferred because Android can hand the link to the Spotify app.
+*/
+(()=>{
+'use strict';
+if(window.__alphaSpotifyPlaylistOpen443)return;
+
+let installTries=0;
+function install(){
+  const originalEnsure=window.alphaEnsureSpotifyPlaylist;
+  const originalOpen=window.alphaOpenSpotifyPlaylist;
+  if(typeof originalEnsure!=='function'||typeof originalOpen!=='function'){
+    if(++installTries<30)setTimeout(install,100);
+    return;
+  }
+  window.__alphaSpotifyPlaylistOpen443=true;
+
+  let knownConnected=false;
+  let preparedWindow=null;
+
+  function refreshConnected(){
+    try{
+      if(typeof window.alphaSpotifyStatus==='function'){
+        Promise.resolve(window.alphaSpotifyStatus()).then(s=>{knownConnected=!!s?.connected}).catch(()=>{});
+      }
+    }catch{}
+  }
+
+  function playlistUrl(p){
+    if(p?.url)return String(p.url);
+    if(p?.id)return 'https://open.spotify.com/playlist/'+encodeURIComponent(String(p.id));
+    return '';
+  }
+
+  function closePrepared(){
+    try{if(preparedWindow&&!preparedWindow.closed)preparedWindow.close()}catch{}
+    preparedWindow=null;
+  }
+
+  window.alphaOpenSpotifyPlaylist=function(p){
+    if(!p)return;
+    const url=playlistUrl(p);
+    if(url){
+      try{
+        if(preparedWindow&&!preparedWindow.closed){
+          preparedWindow.location.replace(url);
+          preparedWindow=null;
+          return;
+        }
+      }catch{preparedWindow=null}
+      /* Same-page HTTPS navigation is not subject to async popup blocking and,
+         on Android with Spotify installed, can be resolved directly by the app. */
+      try{window.location.assign(url);return}catch{}
+    }
+    return originalOpen.call(this,p);
+  };
+
+  window.alphaEnsureSpotifyPlaylist=function(i,opts){
+    const options=opts||{};
+    const openAfter=options.openAfter!==false;
+
+    if(openAfter&&knownConnected){
+      closePrepared();
+      try{
+        preparedWindow=window.open('about:blank','alphaSpotifyPlaylist');
+        if(preparedWindow){
+          preparedWindow.document.title='Spotify · ALPHA';
+          preparedWindow.document.body.style.cssText='margin:0;background:#071116;color:#eff7f3;font:600 16px system-ui;display:grid;place-items:center;min-height:100vh;text-align:center;padding:24px';
+          preparedWindow.document.body.textContent='A ALPHA está a criar a tua playlist…';
+        }
+      }catch{preparedWindow=null}
+    }
+
+    let result;
+    try{result=originalEnsure.call(this,i,opts)}catch(e){closePrepared();throw e}
+    return Promise.resolve(result).then(p=>{
+      if(!p)closePrepared();
+      else knownConnected=true;
+      return p;
+    }).catch(e=>{closePrepared();throw e});
+  };
+
+  refreshConnected();
+  window.addEventListener('focus',refreshConnected,{passive:true});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshConnected()});
+  console.info('[ALPHA 4.3.43] Spotify playlist open-after-create fix active');
+}
+setTimeout(install,0);
+})();
