@@ -1,4 +1,4 @@
-const CACHE_NAME="olen-v4.4.0";
+const CACHE_NAME="olen-v4.4.0-splash2";
 const BASE_PATCH_URL="./alpha-4.3.17-fixes.js?v=4.3.43";
 const SPOTIFY_PATCH_URL="./alpha-4.3.22-spotify-global.js?v=4.3.43";
 const CALENDAR_GOOGLE_URL="./alpha-4.3.30-calendar-google.js?v=4.3.43";
@@ -17,11 +17,13 @@ const HOME_NO_SPOTIFY_URL="./alpha-4.3.38-home-no-spotify-footer.js?v=4.3.43";
 const HOME_FOOTER_SIX_GRID_URL="./alpha-4.3.39-home-footer-six-grid.js?v=4.3.43";
 const INTERNAL_SIDEBAR_NO_SPOTIFY_URL="./alpha-4.3.40-internal-sidebar-no-spotify.js?v=4.4.0";
 const OLEN_IDENTITY_URL="./olen-4.4.0-identity.js?v=4.4.0";
+const SPLASH_POLISH_URL="./olen-4.4.0-splash-polish.js?v=4.4.0-splash2";
 const HOME_UX_POLISH_URL="./alpha-4.3.43-home-ux-polish.js?v=4.4.0";
 
 const SHELL=[
   "./","./index.html","./manifest.webmanifest","./icon-192.png","./icon-512.png",
-  "./assets/olen-ui.jpg","./assets/olen-splash.jpg","./olen-4.4.0-identity.js",
+  "./assets/olen-ui.jpg","./assets/olen-splash.jpg","./assets/olen-ui.png","./assets/olen-splash.png",
+  "./olen-4.4.0-identity.js","./olen-4.4.0-splash-polish.js",
   "./alpha-4.3.17-fixes.js","./alpha-4.3.22-spotify-global.js",
   "./alpha-4.3.30-calendar-google.js","./alpha-4.3.30-calendar-timepicker.js",
   "./alpha-4.3.30-place-experience.js","./alpha-4.3.30-place-detail-cleanup.js",
@@ -69,7 +71,7 @@ function with440Patch(response){
       CHAT_FOOTER_ICONS_URL,HOME_BUTTONS_ONLY_URL,CHAT_FOOTER_IMMEDIATE_URL,
       CHAT_SIDEBAR_FULL_SCROLL_URL,CHAT_SIDEBAR_FIXED_ENDS_URL,CHAT_FOOTER_ICONS_LOCK_URL,
       HOME_NO_SPOTIFY_URL,HOME_FOOTER_SIX_GRID_URL,INTERNAL_SIDEBAR_NO_SPOTIFY_URL,
-      OLEN_IDENTITY_URL,HOME_UX_POLISH_URL
+      OLEN_IDENTITY_URL,SPLASH_POLISH_URL,HOME_UX_POLISH_URL
     ].map(u=>'<script src="'+u+'"><\/script>').join('');
 
     const alignStyle='<style id="alphaSpotifyExactAlign4329">body:not([data-alpha-view="home"]):not(.alphaChatMode):not(.alphaComposeMode) #alphaGlobalSpotify4324{top:calc(env(safe-area-inset-top) + 10px)!important;right:14px!important;width:50px!important;height:50px!important;min-width:50px!important;min-height:50px!important}@media(max-width:620px){body:not([data-alpha-view="home"]):not(.alphaChatMode):not(.alphaComposeMode) #alphaGlobalSpotify4324{width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important}}</style>';
@@ -91,6 +93,7 @@ function with440Patch(response){
       .replace(/<script src="\.\/alpha-4\.3\.41-internal-sidebar-cleanup\.js\?v=[^"]+"><\/script>/g,'')
       .replace(/<script src="\.\/alpha-4\.3\.43-home-ux-polish\.js\?v=[^"]+"><\/script>/g,'')
       .replace(/<script src="\.\/olen-4\.4\.0-identity\.js\?v=[^"]+"><\/script>/g,'')
+      .replace(/<script src="\.\/olen-4\.4\.0-splash-polish\.js\?v=[^"]+"><\/script>/g,'')
       .replace(/<style id="alphaSpotifyExactAlign4329">[\s\S]*?<\/style>/g,'');
 
     const allTags=alignStyle+tags;
@@ -110,7 +113,7 @@ function with440Patch(response){
     const headers=new Headers(response.headers);
     headers.delete("content-length");
     headers.set("Cache-Control","no-store");
-    headers.set("X-OLEN-Patch","4.4.0");
+    headers.set("X-OLEN-Patch","4.4.0-splash2");
     return new Response(html,{status:response.status,statusText:response.statusText,headers});
   });
 }
