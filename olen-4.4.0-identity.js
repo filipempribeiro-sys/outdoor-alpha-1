@@ -6,7 +6,6 @@ if(window.__olenIdentity440)return;
 window.__olenIdentity440=true;
 
 const UI_LOGO='assets/olen-ui.png';
-const SPLASH_LOGO='assets/olen-splash.png';
 const norm=s=>String(s||'').replace(/\s+/g,' ').trim();
 
 const style=document.createElement('style');
@@ -20,7 +19,6 @@ style.textContent=`
 #alphaInternalSidebar .alphaInternalBrand .olen440-internal-logo>*{visibility:hidden!important}
 .alphaChatOlenBrand4330 .olen440-chat-menu-logo{background:url('${UI_LOGO}') center/cover no-repeat!important;color:transparent!important;font-size:0!important}
 .alphaChatOlenBrand4330 .olen440-chat-menu-logo svg,.alphaChatOlenBrand4330 .olen440-chat-menu-logo i,.alphaChatOlenBrand4330 .olen440-chat-menu-logo span{display:none!important}
-#alphaWelcomeOverlay .olen440-splash-poster{display:block!important;width:min(72vw,330px)!important;height:auto!important;max-height:40vh!important;object-fit:contain!important;margin:0 auto 18px!important;border:0!important;border-radius:0!important;box-shadow:none!important}
 `;
 document.head.appendChild(style);
 
@@ -53,9 +51,9 @@ function brandAuth(){document.querySelectorAll('#authGate .logo').forEach(el=>el
 
 function brandSplash(){
  const overlay=document.getElementById('alphaWelcomeOverlay');const inner=overlay?.querySelector('.alphaWelcomeInner');if(!overlay||!inner)return;
- const compass=document.getElementById('alphaWelcomeCompass');const eyebrow=inner.querySelector('.alphaWelcomeEyebrow');let poster=inner.querySelector('.olen440-splash-poster');
- if(!poster){poster=document.createElement('img');poster.src=SPLASH_LOGO;poster.alt='OLEN — Outdoor • Lifestyle • Experience — Navega à tua medida';poster.className='olen440-splash-poster';const title=document.getElementById('alphaWelcomeTitle');if(title)inner.insertBefore(poster,title);else inner.prepend(poster)}else if(!poster.src.endsWith('/assets/olen-splash.png')){poster.src=SPLASH_LOGO}
+ const compass=document.getElementById('alphaWelcomeCompass');const eyebrow=inner.querySelector('.alphaWelcomeEyebrow');
  if(compass)compass.style.display='none';if(eyebrow)eyebrow.style.display='none';
+ inner.querySelectorAll('.olen440-splash-poster').forEach(el=>el.remove());
  const title=document.getElementById('alphaWelcomeTitle');if(title)title.textContent=title.textContent.replace(/\bAlpha\b|\bALPHA\b/g,'OLEN');
  const sub=document.getElementById('alphaWelcomeSub');if(sub)sub.textContent=sub.textContent.replace(/\bAlpha\b|\bALPHA\b/g,'OLEN');
  const status=document.getElementById('alphaCompassStatus');if(status&&/Alpha|ALPHA|orientar|iniciar/i.test(status.textContent))status.textContent='A iniciar a OLEN…';
@@ -66,5 +64,5 @@ function publicActiveText(){const roots=[document.querySelector('.view.active'),
 function apply(){brandHome();brandChatSidebar();brandInternalSidebar();brandAuth();brandSplash();publicActiveText()}
 function delayed(){requestAnimationFrame(apply);setTimeout(apply,80);setTimeout(apply,260)}
 document.addEventListener('DOMContentLoaded',delayed,{once:true});window.addEventListener('pageshow',delayed,{passive:true});document.addEventListener('click',delayed,true);document.addEventListener('touchend',()=>requestAnimationFrame(apply),{passive:true,capture:true});apply();setTimeout(apply,120);setTimeout(apply,500);setTimeout(apply,1100);
-console.info('[OLEN 4.4.0] Approved PNG identity active');
+console.info('[OLEN 4.4.0] Background splash identity active');
 })();
