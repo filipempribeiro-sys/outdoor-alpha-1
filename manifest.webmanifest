@@ -6,8 +6,5 @@
   "background_color": "#071116",
   "theme_color": "#071116",
   "description": "OLEN — Outdoor • Lifestyle • Experience. Navega à tua medida.",
-  "icons": [
-    {"src":"assets/olen-ui.jpg","sizes":"192x192","type":"image/jpeg","purpose":"any maskable"},
-    {"src":"assets/olen-ui.jpg","sizes":"512x512","type":"image/jpeg","purpose":"any maskable"}
-  ]
+  "icons": [{"src":"assets/olen-ui.jpg","sizes":"192x192","type":"image/jpeg","purpose":"any maskable"},{"src":"assets/olen-ui.jpg","sizes":"512x512","type":"image/jpeg","purpose":"any maskable"}]
 }
