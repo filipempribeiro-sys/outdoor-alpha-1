@@ -1,0 +1,1 @@
+OLEN 4.4.0 splash adaptation uses the existing approved OLEN splash artwork as-is and adds only CSS atmosphere + animated loading bar. No logo pixels are modified.
