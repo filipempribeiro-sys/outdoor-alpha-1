@@ -1,111 +1,118 @@
-/* OLEN 4.4.0 · CINEMATIC SPLASH POLISH */
+/* OLEN 4.4.0 · CINEMATIC BACKGROUND SPLASH */
 (()=>{
 'use strict';
 if(window.__olenSplashPolish440)return;
 window.__olenSplashPolish440=true;
 
+const BG='assets/olen-splash-background.png';
 const style=document.createElement('style');
 style.id='olenSplashPolish440';
 style.textContent=`
 #alphaWelcomeOverlay{
-  background:
-    radial-gradient(circle at 50% 18%,rgba(0,255,188,.14),transparent 26%),
-    radial-gradient(circle at 78% 30%,rgba(0,139,255,.10),transparent 28%),
-    linear-gradient(180deg,#07191a 0%,#041114 54%,#02090d 100%)!important;
+  background:#02090d url('${BG}') center top/cover no-repeat!important;
   overflow:hidden!important;
 }
-#alphaWelcomeOverlay::before,
-#alphaWelcomeOverlay::after{
-  content:"";
-  position:absolute;
-  left:-12vw;right:-12vw;
-  height:180px;
-  pointer-events:none;
-  opacity:.8;
-  filter:blur(.2px);
-}
 #alphaWelcomeOverlay::before{
-  top:6vh;
-  border-top:2px solid rgba(62,255,196,.72);
-  border-radius:50%;
-  box-shadow:0 -2px 24px rgba(0,255,188,.22),0 0 52px rgba(0,142,255,.14);
-  transform:rotate(-2deg);
+  content:"";
+  position:absolute;inset:0;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,8,10,.02) 0%,rgba(0,8,10,.04) 47%,rgba(0,8,10,.18) 69%,rgba(0,8,10,.54) 100%);
 }
-#alphaWelcomeOverlay::after{
-  bottom:-38px;
-  background:
-    radial-gradient(ellipse at 16% 54%,rgba(0,255,166,.16),transparent 22%),
-    radial-gradient(ellipse at 77% 44%,rgba(0,128,255,.19),transparent 28%);
-  border-top:1px solid rgba(0,225,255,.26);
-  transform:skewY(-4deg);
-}
+#alphaWelcomeOverlay::after{display:none!important;content:none!important}
 #alphaWelcomeOverlay .alphaWelcomeInner{
   position:relative!important;
   z-index:2!important;
-  width:min(92vw,480px)!important;
-  max-width:480px!important;
-  padding:4vh 18px 5vh!important;
+  width:100%!important;
+  max-width:none!important;
+  height:100%!important;
+  min-height:100dvh!important;
+  padding:0 22px calc(env(safe-area-inset-bottom) + 40px)!important;
+  display:block!important;
+  text-align:center!important;
 }
-#alphaWelcomeOverlay .olen440-splash-poster{
-  width:min(72vw,370px)!important;
-  max-height:47vh!important;
-  object-fit:contain!important;
-  margin:0 auto 18px!important;
-  filter:drop-shadow(0 0 18px rgba(0,255,188,.18)) drop-shadow(0 0 28px rgba(0,128,255,.10));
+#alphaWelcomeOverlay .olen440-splash-poster,
+#alphaWelcomeOverlay #alphaWelcomeCompass,
+#alphaWelcomeOverlay .alphaWelcomeEyebrow{display:none!important}
+#alphaWelcomeOverlay #alphaWelcomeTitle{
+  position:absolute!important;
+  left:50%!important;top:65.2%!important;
+  transform:translateX(-50%)!important;
+  width:min(92vw,620px)!important;
+  margin:0!important;
+  color:#fff!important;
+  font-size:clamp(32px,7.6vw,48px)!important;
+  line-height:1.05!important;
+  font-weight:800!important;
+  letter-spacing:-.02em!important;
+  text-shadow:0 2px 18px rgba(0,0,0,.68),0 0 22px rgba(255,255,255,.06)!important;
 }
-#alphaWelcomeOverlay .alphaWelcomeTitle{
-  color:#f8fbfb!important;
-  text-shadow:0 0 18px rgba(255,255,255,.08)!important;
-  margin-top:10px!important;
-}
-#alphaWelcomeOverlay .alphaWelcomeSub{
-  color:rgba(223,238,236,.70)!important;
-  margin-top:4px!important;
-}
-#alphaWelcomeOverlay .alphaCompassStatus{
-  margin-top:18px!important;
-  color:rgba(214,232,229,.72)!important;
-  font-size:14px!important;
+#alphaWelcomeOverlay #alphaWelcomeSub{
+  position:absolute!important;
+  left:50%!important;top:71.7%!important;
+  transform:translateX(-50%)!important;
+  width:min(92vw,700px)!important;
+  margin:0!important;
+  color:rgba(222,234,233,.72)!important;
+  font-size:clamp(18px,4.2vw,28px)!important;
+  line-height:1.35!important;
+  font-weight:400!important;
+  text-shadow:0 2px 14px rgba(0,0,0,.7)!important;
 }
 #alphaWelcomeOverlay .olen440-loader{
-  width:min(61vw,300px);
-  height:5px;
-  margin:22px auto 0;
-  border-radius:999px;
-  background:rgba(255,255,255,.08);
-  overflow:visible;
-  position:relative;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.025);
+  position:absolute!important;
+  left:50%!important;top:79.2%!important;
+  transform:translateX(-50%)!important;
+  width:min(61vw,430px)!important;
+  height:6px!important;
+  margin:0!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.10)!important;
+  overflow:visible!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.025)!important;
 }
 #alphaWelcomeOverlay .olen440-loaderFill{
   position:absolute;left:0;top:0;bottom:0;width:0;
   border-radius:inherit;
-  background:linear-gradient(90deg,#11e88a 0%,#10e7d0 48%,#1ca8ff 100%);
-  box-shadow:0 0 14px rgba(18,226,205,.30);
-  animation:olen440Load 2.6s cubic-bezier(.22,.7,.22,1) forwards;
+  background:linear-gradient(90deg,#18ed8c 0%,#17e8c8 48%,#22a9ff 100%);
+  box-shadow:0 0 12px rgba(18,226,205,.32);
+  animation:olen440Load 2.8s cubic-bezier(.22,.7,.22,1) forwards;
 }
 #alphaWelcomeOverlay .olen440-loaderDot{
-  position:absolute;top:50%;left:0;width:11px;height:11px;
-  margin:-5.5px 0 0 -5.5px;border-radius:50%;
+  position:absolute;top:50%;left:0;width:18px;height:18px;
+  margin:-9px 0 0 -9px;border-radius:50%;
   background:#fff;
-  box-shadow:0 0 9px #fff,0 0 18px rgba(0,230,255,.95);
-  animation:olen440Dot 2.6s cubic-bezier(.22,.7,.22,1) forwards;
+  box-shadow:0 0 10px #fff,0 0 22px rgba(0,230,255,.95);
+  animation:olen440Dot 2.8s cubic-bezier(.22,.7,.22,1) forwards;
 }
-@keyframes olen440Load{0%{width:0}18%{width:24%}55%{width:63%}78%{width:82%}100%{width:100%}}
-@keyframes olen440Dot{0%{left:0}18%{left:24%}55%{left:63%}78%{left:82%}100%{left:100%}}
+#alphaWelcomeOverlay #alphaCompassStatus{
+  position:absolute!important;
+  left:50%!important;top:82.1%!important;
+  transform:translateX(-50%)!important;
+  width:min(90vw,620px)!important;
+  margin:0!important;
+  color:rgba(214,229,227,.76)!important;
+  font-size:clamp(17px,4vw,24px)!important;
+  line-height:1.25!important;
+  text-shadow:0 2px 12px rgba(0,0,0,.72)!important;
+}
+@keyframes olen440Load{0%{width:0}16%{width:20%}48%{width:57%}76%{width:81%}100%{width:100%}}
+@keyframes olen440Dot{0%{left:0}16%{left:20%}48%{left:57%}76%{left:81%}100%{left:100%}}
 @media(max-height:760px){
-  #alphaWelcomeOverlay .alphaWelcomeInner{padding-top:2vh!important;padding-bottom:3vh!important}
-  #alphaWelcomeOverlay .olen440-splash-poster{width:min(64vw,300px)!important;max-height:40vh!important;margin-bottom:10px!important}
-  #alphaWelcomeOverlay .olen440-loader{margin-top:14px!important}
-  #alphaWelcomeOverlay .alphaCompassStatus{margin-top:12px!important}
+ #alphaWelcomeOverlay #alphaWelcomeTitle{top:63.5%!important;font-size:clamp(28px,7vw,40px)!important}
+ #alphaWelcomeOverlay #alphaWelcomeSub{top:70.3%!important;font-size:clamp(16px,4vw,22px)!important}
+ #alphaWelcomeOverlay .olen440-loader{top:78.2%!important;width:min(62vw,360px)!important}
+ #alphaWelcomeOverlay #alphaCompassStatus{top:81.6%!important;font-size:16px!important}
 }
 `;
 document.head.appendChild(style);
 
 function install(){
-  const inner=document.querySelector('#alphaWelcomeOverlay .alphaWelcomeInner');
+  const overlay=document.getElementById('alphaWelcomeOverlay');
+  const inner=overlay?.querySelector('.alphaWelcomeInner');
   const status=document.getElementById('alphaCompassStatus');
-  if(!inner||!status)return;
+  if(!overlay||!inner||!status)return;
+
+  inner.querySelectorAll('.olen440-splash-poster').forEach(el=>el.remove());
   if(!inner.querySelector('.olen440-loader')){
     const loader=document.createElement('div');
     loader.className='olen440-loader';
@@ -113,12 +120,12 @@ function install(){
     loader.innerHTML='<span class="olen440-loaderFill"></span><span class="olen440-loaderDot"></span>';
     status.before(loader);
   }
-  if(/A iniciar a OLEN(?:\s*4\.3\.43)?/i.test(status.textContent||''))status.textContent='A iniciar a OLEN…';
+  status.textContent='A iniciar a OLEN…';
 }
 
 function apply(){requestAnimationFrame(install)}
 document.addEventListener('DOMContentLoaded',apply,{once:true});
 window.addEventListener('pageshow',apply,{passive:true});
 apply();setTimeout(install,80);setTimeout(install,300);
-console.info('[OLEN 4.4.0] Cinematic splash polish active');
+console.info('[OLEN 4.4.0] Cinematic background splash active');
 })();
