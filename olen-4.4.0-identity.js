@@ -13,8 +13,10 @@ style.id='olenIdentity440';
 style.textContent=`
 .olen440-ui-logo{background:url('${UI_LOGO}') center/cover no-repeat!important;color:transparent!important;text-shadow:none!important;overflow:hidden!important}
 .olen440-ui-logo::before,.olen440-ui-logo::after{display:none!important;content:none!important}
-.top .brand .logo,.legacyAuthBrand .logo,.authWelcomeBrand .logo,.alphaChatOlenBrand4330 .alphaSidebarLogo.logo{background:url('${UI_LOGO}') center/cover no-repeat!important}
-.top .brand .logo::before,.top .brand .logo::after,.legacyAuthBrand .logo::before,.legacyAuthBrand .logo::after,.authWelcomeBrand .logo::before,.authWelcomeBrand .logo::after,.alphaChatOlenBrand4330 .alphaSidebarLogo.logo::before,.alphaChatOlenBrand4330 .alphaSidebarLogo.logo::after{display:none!important;content:none!important}
+.top .brand .logo{background:url('${UI_LOGO}') center/contain no-repeat!important;border-radius:0!important;overflow:visible!important}
+.top .brand .logo::before,.top .brand .logo::after{display:none!important;content:none!important}
+.legacyAuthBrand .logo,.authWelcomeBrand .logo,.alphaChatOlenBrand4330 .alphaSidebarLogo.logo{background:url('${UI_LOGO}') center/cover no-repeat!important}
+.legacyAuthBrand .logo::before,.legacyAuthBrand .logo::after,.authWelcomeBrand .logo::before,.authWelcomeBrand .logo::after,.alphaChatOlenBrand4330 .alphaSidebarLogo.logo::before,.alphaChatOlenBrand4330 .alphaSidebarLogo.logo::after{display:none!important;content:none!important}
 #alphaInternalSidebar .alphaInternalBrand .olen440-internal-logo{width:44px!important;height:44px!important;min-width:44px!important;border-radius:14px!important;background:url('${UI_LOGO}') center/cover no-repeat!important;display:block!important;overflow:hidden!important}
 #alphaInternalSidebar .alphaInternalBrand .olen440-internal-logo>*{visibility:hidden!important}
 .alphaChatOlenBrand4330 .olen440-chat-menu-logo{background:url('${UI_LOGO}') center/cover no-repeat!important;color:transparent!important;font-size:0!important}
