@@ -49,20 +49,18 @@ function isHome(){
 function fitHome(){
   if(!isHome()){document.body.classList.remove('alphaHomeFixed443');return}
   const body=document.body, home=document.getElementById('home'), card=document.getElementById('lifestyleAI');
-  const header=document.querySelector('header,.header,.topbar,.appHeader');
   const footer=document.querySelector('.bottom');
   if(!home||!card||!footer)return;
   body.classList.add('alphaHomeFixed443');
   const gap=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--alpha-shell-gap'))||10;
   const cardRect=card.getBoundingClientRect();
   const footerRect=footer.getBoundingClientRect();
-  /* Keep the container's current top edge. Increase only its bottom edge until
-     the distance to the footer equals the existing header→container gap. */
   const top=cardRect.top;
   const bottom=footerRect.top-gap;
-  const height=Math.max(260,Math.floor(bottom-top));
+  /* Target screenshot is ~40 px taller than the current Home card on the same viewport.
+     Change only the Home card height; keep every other position/style untouched. */
+  const height=Math.max(260,Math.floor(bottom-top)+40);
   body.style.setProperty('--alpha-home-chat-height443',height+'px');
-  /* No scroll position is meaningful on Home. */
   if(window.scrollY)window.scrollTo(0,0);
 }
 function refit(){requestAnimationFrame(()=>{window.alphaFitShell?.();requestAnimationFrame(fitHome)})}
@@ -72,5 +70,5 @@ window.addEventListener('orientationchange',refit,{passive:true});
 document.addEventListener('click',()=>requestAnimationFrame(fitHome),true);
 setTimeout(refit,100);setTimeout(fitHome,350);
 
-console.info('[ALPHA 4.3.43] Home fixed + chat container fills to equal footer gap');
+console.info('[ALPHA 4.3.43] Home container extended to target height');
 })();
