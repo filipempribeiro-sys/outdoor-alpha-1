@@ -14,11 +14,11 @@ style.id='olenIdentity440';
 style.textContent=`
 .olen440-ui-logo{background-image:url('${UI_LOGO}')!important;background-position:center!important;background-repeat:no-repeat!important;background-size:cover!important;color:transparent!important;text-shadow:none!important;overflow:hidden!important}
 .olen440-ui-logo::before,.olen440-ui-logo::after{display:none!important;content:none!important}
-.alphaChatOlenBrand4330 .alphaSidebarLogo.logo,.top .brand .logo{background-image:url('${UI_LOGO}')!important;background-position:center!important;background-repeat:no-repeat!important;background-size:cover!important}
-.alphaChatOlenBrand4330 .alphaSidebarLogo.logo::before,.alphaChatOlenBrand4330 .alphaSidebarLogo.logo::after,.top .brand .logo::before,.top .brand .logo::after{display:none!important;content:none!important}
+.alphaChatOlenBrand4330 .alphaSidebarLogo.logo,.top .brand .logo,.legacyAuthBrand .logo,.authWelcomeBrand .logo{background-image:url('${UI_LOGO}')!important;background-position:center!important;background-repeat:no-repeat!important;background-size:cover!important}
+.alphaChatOlenBrand4330 .alphaSidebarLogo.logo::before,.alphaChatOlenBrand4330 .alphaSidebarLogo.logo::after,.top .brand .logo::before,.top .brand .logo::after,.legacyAuthBrand .logo::before,.legacyAuthBrand .logo::after,.authWelcomeBrand .logo::before,.authWelcomeBrand .logo::after{display:none!important;content:none!important}
 #alphaInternalSidebar .alphaInternalBrand .olen440-internal-logo{width:44px;height:44px;min-width:44px;border-radius:14px;background:url('${UI_LOGO}') center/cover no-repeat!important;display:block;overflow:hidden}
 #alphaInternalSidebar .alphaInternalBrand .olen440-internal-logo>*{visibility:hidden!important}
-.olen440-splash-poster{display:block!important;width:min(74vw,360px)!important;height:auto!important;max-height:42vh!important;object-fit:contain!important;margin:0 auto 20px!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+#alphaWelcomeOverlay .olen440-splash-poster{display:block!important;width:min(86vw,440px)!important;height:auto!important;max-height:48vh!important;object-fit:contain!important;margin:0 auto 18px!important;border:0!important;border-radius:0!important;box-shadow:none!important}
 `;
 document.head.appendChild(style);
 
@@ -33,13 +33,18 @@ function brandHome(){
     brand.querySelector('.logo')?.classList.add('olen440-ui-logo');
     const b=brand.querySelector('b');
     if(b)b.textContent='OLEN';
-    brand.querySelectorAll('small').forEach(s=>{if(/alpha|project/i.test(norm(s.textContent))){s.textContent='';s.style.display='none'}});
+    brand.querySelectorAll('small').forEach(s=>{s.style.display='none'});
   }
   document.querySelectorAll('input[placeholder],textarea[placeholder]').forEach(el=>{
     const p=el.getAttribute('placeholder')||'';
-    if(/Pergunta à Alpha/i.test(p))el.setAttribute('placeholder',p.replace(/Pergunta à Alpha/gi,'Pergunta à OLEN'));
+    if(/Pergunta à (?:Alpha|OLEN)/i.test(p))el.setAttribute('placeholder','Pergunta à OLEN...');
   });
-  document.querySelectorAll('.bottom *').forEach(el=>{if(el.children.length===0&&/^Alpha$/i.test(norm(el.textContent)))el.textContent='OLEN'});
+  document.querySelectorAll('[aria-label],[title]').forEach(el=>{
+    for(const attr of ['aria-label','title']){
+      const v=el.getAttribute(attr);if(v&&/\bAlpha\b|\bALPHA\b/.test(v))el.setAttribute(attr,v.replace(/PROJECT\s+ALPHA/g,'OLEN').replace(/\bALPHA\b/g,'OLEN').replace(/\bAlpha\b/g,'OLEN'));
+    }
+  });
+  document.querySelectorAll('.bottom *').forEach(el=>{if(el.children.length===0&&/^(?:Alpha|OLEN)$/i.test(norm(el.textContent)))el.textContent='OLEN'});
 }
 
 function brandChatSidebar(){
@@ -66,44 +71,50 @@ function brandInternalSidebar(){
     }
   }
   const first=side.querySelector('.alphaInternalNavList button');
-  if(first){setLeafText(first,/^Alpha$/i,'OLEN')}
+  if(first)setLeafText(first,/^(?:Alpha|OLEN)$/i,'OLEN');
 }
 
-function workingText(){
-  const root=document.getElementById('lifestyleAI')||document.body;
-  setLeafText(root,/^(?:A\s+)?Alpha está a trabalhar(?:\.\.\.|…)?$/i,'OLEN está a trabalhar…');
-}
-
-function findSplash(){
-  const all=[...document.querySelectorAll('body div,body section,body main')];
-  return all.find(el=>{const t=norm(el.textContent);return /Bem-vindo de volta/i.test(t)&&/(?:A iniciar a (?:ALPHA|OLEN)|OUTDOOR LIFESTYLE AI)/i.test(t)})||null;
+function brandAuth(){
+  document.querySelectorAll('#authGate .logo').forEach(el=>el.classList.add('olen440-ui-logo'));
 }
 
 function brandSplash(){
-  const splash=findSplash();
-  if(!splash||splash.dataset.olen440Splash==='1')return;
-  const r=splash.getBoundingClientRect();
-  if(r.width<innerWidth*.5||r.height<innerHeight*.3)return;
-  const leaves=[...splash.querySelectorAll('*')].filter(el=>el.children.length===0);
-  const brandLine=leaves.find(el=>/^(?:ALPHA|OLEN)\s*[·•-]\s*OUTDOOR\s+LIFESTYLE(?:\s+AI|\s*[·•-]\s*EXPERIENCE)?$/i.test(norm(el.textContent)));
-  const startLine=leaves.find(el=>/^A iniciar a (?:ALPHA|OLEN)/i.test(norm(el.textContent)));
-  const icon=[...splash.querySelectorAll('img,.logo,[class*="logo"],[class*="mark"],[class*="icon"]')].find(el=>{const x=el.getBoundingClientRect();return x.width>=48&&x.height>=48&&x.top<r.top+r.height*.58});
-  if(icon)icon.style.display='none';
-  if(brandLine){
-    const poster=document.createElement('img');
+  const overlay=document.getElementById('alphaWelcomeOverlay');
+  const inner=overlay?.querySelector('.alphaWelcomeInner');
+  if(!overlay||!inner)return;
+
+  const compass=document.getElementById('alphaWelcomeCompass');
+  const eyebrow=inner.querySelector('.alphaWelcomeEyebrow');
+  let poster=inner.querySelector('.olen440-splash-poster');
+  if(!poster){
+    poster=document.createElement('img');
     poster.src=SPLASH_LOGO;
     poster.alt='OLEN — Outdoor • Lifestyle • Experience — Navega à tua medida';
     poster.className='olen440-splash-poster';
-    brandLine.before(poster);
-    brandLine.style.display='none';
-  }else if(icon?.parentElement){
-    const poster=document.createElement('img');poster.src=SPLASH_LOGO;poster.alt='OLEN';poster.className='olen440-splash-poster';icon.parentElement.insertBefore(poster,icon.nextSibling);
+    const title=document.getElementById('alphaWelcomeTitle');
+    if(title)inner.insertBefore(poster,title);else inner.prepend(poster);
   }
-  if(startLine)startLine.textContent='A iniciar a OLEN…';
-  splash.dataset.olen440Splash='1';
+  if(compass)compass.style.display='none';
+  if(eyebrow)eyebrow.style.display='none';
+
+  const title=document.getElementById('alphaWelcomeTitle');
+  if(title)title.textContent=title.textContent.replace(/\bAlpha\b|\bALPHA\b/g,'OLEN');
+  const sub=document.getElementById('alphaWelcomeSub');
+  if(sub)sub.textContent=sub.textContent.replace(/\bAlpha\b|\bALPHA\b/g,'OLEN');
+  const status=document.getElementById('alphaCompassStatus');
+  if(status&&/Alpha|ALPHA|orientar|iniciar/i.test(status.textContent))status.textContent='A iniciar a OLEN…';
 }
 
-function apply(){brandHome();brandChatSidebar();brandInternalSidebar();workingText();brandSplash()}
+function publicActiveText(){
+  const roots=[document.querySelector('.view.active'),document.getElementById('alphaDecisionOverlay'),document.querySelector('.sharePreview')].filter(Boolean);
+  roots.forEach(root=>root.querySelectorAll('*').forEach(el=>{
+    if(el.children.length||/^(SCRIPT|STYLE)$/i.test(el.tagName))return;
+    const t=el.textContent||'';
+    if(/\bAlpha\b|\bALPHA\b/.test(t))el.textContent=t.replace(/PROJECT\s+ALPHA/g,'OLEN').replace(/\bALPHA\b/g,'OLEN').replace(/\bAlpha\b/g,'OLEN');
+  }));
+}
+
+function apply(){brandHome();brandChatSidebar();brandInternalSidebar();brandAuth();brandSplash();publicActiveText()}
 function delayed(){requestAnimationFrame(apply);setTimeout(apply,80);setTimeout(apply,260)}
 
 document.addEventListener('DOMContentLoaded',delayed,{once:true});
@@ -111,5 +122,5 @@ window.addEventListener('pageshow',delayed,{passive:true});
 document.addEventListener('click',delayed,true);
 document.addEventListener('touchend',()=>requestAnimationFrame(apply),{passive:true,capture:true});
 apply();setTimeout(apply,120);setTimeout(apply,500);setTimeout(apply,1100);
-console.info('[OLEN 4.4.0] Lightweight identity active');
+console.info('[OLEN 4.4.0] Exact lightweight identity active');
 })();
