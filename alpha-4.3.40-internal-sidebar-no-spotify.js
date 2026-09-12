@@ -1,6 +1,8 @@
 /* ALPHA 4.3.42 · INTERNAL SIDEBAR + CHAT CAPSULE
    Preserves the stable internal sidebar cleanup.
-   Chat top-right capsule only: Spotify is replaced by three dots.
+   Chat top-right capsule only:
+   - New chat occupies Spotify's former left position
+   - vertical three-dots menu occupies New chat's former right position
 */
 (()=>{
 'use strict';
@@ -20,12 +22,14 @@ function applyInternal(){
 }
 
 function isChat(){return document.body.classList.contains('alphaChatMode')||document.body.classList.contains('alphaComposeMode')}
-function dotsIcon(){return '<svg viewBox="0 0 24 24" aria-hidden="true" style="width:27px;height:27px;fill:currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>'}
+function dotsIcon(){return '<svg viewBox="0 0 24 24" aria-hidden="true" style="width:27px;height:27px;fill:currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>'}
 function applyChatCapsule(){
   if(!isChat())return;
   const cap=document.querySelector('#lifestyleAI .alphaChatActions4324');
   if(!cap)return;
   cap.querySelectorAll('.alphaChatSpotify4324,.alphaSpotifyToggle4324,[aria-label="Spotify Remote"]').forEach(el=>el.remove());
+  const newChat=cap.querySelector('.alphaNewChatBtn');
+  if(!newChat)return;
   let dots=cap.querySelector('.alphaChatMore442');
   if(!dots){
     dots=document.createElement('button');
@@ -34,10 +38,9 @@ function applyChatCapsule(){
     dots.setAttribute('aria-label','Mais opções');
     dots.title='Mais opções';
     dots.innerHTML=dotsIcon();
-    cap.prepend(dots);
   }
-  const newChat=cap.querySelector('.alphaNewChatBtn');
-  if(newChat&&dots.nextElementSibling!==newChat)cap.insertBefore(dots,newChat);
+  // Exact capsule order: New chat on the left, vertical ellipsis on the right.
+  cap.replaceChildren(newChat,dots);
 }
 function apply(){applyInternal();applyChatCapsule()}
 
@@ -48,5 +51,5 @@ document.addEventListener('touchend',()=>requestAnimationFrame(apply),{passive:t
 setTimeout(apply,100);
 setTimeout(apply,500);
 
-console.info('[ALPHA 4.3.42] Internal sidebar preserved; Chat capsule Spotify replaced by three dots');
+console.info('[ALPHA 4.3.42] Chat capsule: New chat left + vertical ellipsis right');
 })();
