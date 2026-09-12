@@ -1,9 +1,6 @@
 /* ALPHA 4.3.41 · INTERNAL SIDEBAR CLEANUP
-   ONLY the internal sidebar used outside Chat (views 3–7):
-   - remove Spotify entry
-   - rename ONLY the sidebar header ALPHA -> OLSEN
-   - keep the first navigation item "Alpha" unchanged
-   Chat sidebar is deliberately untouched.
+   Internal sidebar used outside Chat (views 3–7).
+   Public branding is OLEN; technical ALPHA identifiers remain internal.
 */
 (()=>{
 'use strict';
@@ -14,20 +11,21 @@ function apply(){
   const sidebar=document.getElementById('alphaInternalSidebar');
   if(!sidebar)return;
 
-  // Remove Spotify from this internal sidebar only.
   sidebar.querySelectorAll('button').forEach(btn=>{
     const text=String(btn.textContent||'').trim().toLocaleLowerCase('pt-PT');
     const action=String(btn.getAttribute('onclick')||'').toLocaleLowerCase('pt-PT');
     if(text==='spotify'||action.includes('alphaspotifyfooteraction')) btn.remove();
   });
 
-  // Header is the brand area before the navigation list. Do not touch nav buttons.
-  const nav=sidebar.querySelector('.alphaInternalNavList');
-  const candidates=[...sidebar.querySelectorAll('b,strong,h1,h2,h3,span,div')]
-    .filter(el=>!el.closest('button')&&!el.closest('.alphaInternalNavList'))
-    .filter(el=>String(el.textContent||'').trim()==='ALPHA');
-  const brand=candidates.find(el=>!nav||!nav.contains(el));
-  if(brand) brand.textContent='OLSEN';
+  const brand=sidebar.querySelector('.alphaInternalBrand b');
+  if(brand)brand.textContent='OLEN';
+
+  const first=sidebar.querySelector('.alphaInternalNavList button');
+  if(first){
+    const leaf=[...first.querySelectorAll('*')].find(el=>el.children.length===0&&/^Alpha$/i.test(String(el.textContent||'').trim()));
+    if(leaf)leaf.textContent='OLEN';
+    else if(/^Alpha$/i.test(String(first.textContent||'').trim()))first.textContent='OLEN';
+  }
 }
 
 apply();
@@ -38,5 +36,5 @@ document.addEventListener('click',e=>{
 document.addEventListener('touchend',()=>requestAnimationFrame(apply),{passive:true,capture:true});
 setTimeout(apply,100);
 
-console.info('[ALPHA 4.3.41] Internal sidebar: header OLSEN; Alpha navigation item preserved');
+console.info('[OLEN 4.4.0] Internal sidebar public branding active');
 })();
