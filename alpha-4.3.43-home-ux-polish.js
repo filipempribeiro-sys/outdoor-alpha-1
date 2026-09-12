@@ -52,14 +52,15 @@ function fitHome(){
   const footer=document.querySelector('.bottom');
   if(!home||!card||!footer)return;
   body.classList.add('alphaHomeFixed443');
-  const gap=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--alpha-shell-gap'))||10;
+  const fallbackGap=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--alpha-shell-gap'))||10;
   const cardRect=card.getBoundingClientRect();
   const footerRect=footer.getBoundingClientRect();
+  const header=document.querySelector('.top');
+  const headerRect=header?.getBoundingClientRect?.();
+  const topGap=headerRect?Math.max(0,Math.round(cardRect.top-headerRect.bottom)):fallbackGap;
   const top=cardRect.top;
-  const bottom=footerRect.top-gap;
-  /* Target screenshot is ~40 px taller than the current Home card on the same viewport.
-     Change only the Home card height; keep every other position/style untouched. */
-  const height=Math.max(260,Math.floor(bottom-top)+40);
+  const bottom=footerRect.top-topGap;
+  const height=Math.max(260,Math.floor(bottom-top));
   body.style.setProperty('--alpha-home-chat-height443',height+'px');
   if(window.scrollY)window.scrollTo(0,0);
 }
@@ -70,7 +71,7 @@ window.addEventListener('orientationchange',refit,{passive:true});
 document.addEventListener('click',()=>requestAnimationFrame(fitHome),true);
 setTimeout(refit,100);setTimeout(fitHome,350);
 
-console.info('[ALPHA 4.3.43] Home container extended to target height');
+console.info('[ALPHA 4.3.43] Home footer gap matched to header gap');
 })();
 
 /* ALPHA 4.3.43 · SPOTIFY PLAYLIST OPEN RELIABILITY
