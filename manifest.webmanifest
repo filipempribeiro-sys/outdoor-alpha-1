@@ -7,6 +7,6 @@
   "theme_color": "#071116",
   "description": "OLEN — Outdoor • Lifestyle • Experience. Navega à tua medida.",
   "icons": [
-    {"src":"assets/olen-ui.jpg","sizes":"256x256","type":"image/jpeg","purpose":"any maskable"}
+    {"src":"assets/olen-ui.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
   ]
 }

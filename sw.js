@@ -1,4 +1,4 @@
-const CACHE_NAME="olen-v4.4.0-v107-video";
+const CACHE_NAME="olen-v4.4.0-v107-center-icon";
 const BASE_PATCH_URL="./alpha-4.3.17-fixes.js?v=4.3.43";
 const SPOTIFY_PATCH_URL="./alpha-4.3.22-spotify-global.js?v=4.3.43";
 const CALENDAR_GOOGLE_URL="./alpha-4.3.30-calendar-google.js?v=4.3.43";
@@ -17,12 +17,11 @@ const HOME_NO_SPOTIFY_URL="./alpha-4.3.38-home-no-spotify-footer.js?v=4.3.43";
 const HOME_FOOTER_SIX_GRID_URL="./alpha-4.3.39-home-footer-six-grid.js?v=4.3.43";
 const INTERNAL_SIDEBAR_NO_SPOTIFY_URL="./alpha-4.3.40-internal-sidebar-no-spotify.js?v=4.4.0";
 const OLEN_IDENTITY_URL="./olen-4.4.0-identity.js?v=4.4.0-bg";
-const SPLASH_POLISH_URL="./olen-4.4.0-splash-polish.js?v=4.4.0-v107-video";
+const SPLASH_POLISH_URL="./olen-4.4.0-splash-polish.js?v=4.4.0-v107-center-icon";
 const HOME_UX_POLISH_URL="./alpha-4.3.43-home-ux-polish.js?v=4.4.0";
 
 const SHELL=[
-  "./","./index.html","./manifest.webmanifest","./icon-192.png","./icon-512.png",
-  "./assets/olen-ui.jpg","./assets/olen-ui.png","./assets/olen-background.png","./assets/olen-v10.7-final.mp4",
+  "./","./index.html","./manifest.webmanifest","./assets/olen-ui.png","./assets/olen-background.png","./assets/olen-v10.7-final.mp4",
   "./olen-4.4.0-identity.js","./olen-4.4.0-splash-polish.js",
   "./alpha-4.3.17-fixes.js","./alpha-4.3.22-spotify-global.js",
   "./alpha-4.3.30-calendar-google.js","./alpha-4.3.30-calendar-timepicker.js",
@@ -113,7 +112,7 @@ function with440Patch(response){
     const headers=new Headers(response.headers);
     headers.delete("content-length");
     headers.set("Cache-Control","no-store");
-    headers.set("X-OLEN-Patch","4.4.0-v107-video");
+    headers.set("X-OLEN-Patch","4.4.0-v107-center-icon");
     return new Response(html,{status:response.status,statusText:response.statusText,headers});
   });
 }

@@ -38,6 +38,10 @@ def alpha_scaled(im, opacity):
     out=im.copy(); a=out.getchannel('A').point(lambda p:int(p*opacity)); out.putalpha(a); return out
 
 def paste_center(base, im, cx, cy, opacity=1, scale=1):
+    # Centre by the visible artwork, not by transparent crop margins.
+    bb=im.getchannel('A').getbbox()
+    if bb:
+        im=im.crop(bb)
     if scale!=1:
         im=im.resize((max(1,round(im.width*scale)),max(1,round(im.height*scale))),Image.Resampling.LANCZOS)
     im=alpha_scaled(im,opacity)
@@ -127,9 +131,9 @@ for fi in range(N):
         if t<=4.2:
             ang=math.radians(90+360*prog); draw_3d_star(frame,cx+R*math.cos(ang),cy+R*math.sin(ang),12)
     if 4.2<=t<=5.55:
-        q=ease((t-4.2)/1.0); sy=(cy+R)*(1-q)+cy*q; size=11*(1-q)+125*q; op=1 if t<5.2 else 1-fade(t,5.2,5.55); draw_3d_star(frame,cx,sy,size,int(255*op))
+        q=ease((t-4.2)/1.0); sy=(cy+R)*(1-q)+cy*q; size=11*(1-q)+105*q; op=1 if t<5.2 else 1-fade(t,5.2,5.55); draw_3d_star(frame,cx,sy,size,int(255*op))
     if t>=5.15:
-        op=fade(t,5.15,5.95); sc=1.16-(0.16*ease((t-5.15)/0.8)); paste_center(frame,emblem,cx,300,op,sc)
+        op=fade(t,5.15,5.95); sc=1.16-(0.16*ease((t-5.15)/0.8)); paste_center(frame,emblem,cx,cy,op,sc)
     if t>=6.0: paste_center(frame,olen,360,565,fade(t,6.0,6.9),1)
     if t>=7.0: paste_center(frame,tag,360,665,fade(t,7.0,7.75),1)
     if t>=7.8: paste_center(frame,sig,360,730,fade(t,7.8,8.55),1)
