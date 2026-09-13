@@ -7,9 +7,12 @@ if(window.__olenV107CanvasSplash)return;
 window.__olenV107CanvasSplash=true;
 
 const W=720,H=1280,DUR=12;
-const CX=360,CY=300,R=155;
-const BAR_X=92,BAR_Y=1170,BAR_W=536;
-const V='4.4.0-v107-individual-assets';
+const CX=360,CY=300;
+const SYMBOL_BOX=390;
+const R=SYMBOL_BOX/2;
+const BAR_X=58,BAR_Y=1158,BAR_W=604;
+const V='4.4.0-v107-individual-assets-welcome2';
+const WELCOME_DAY_KEY='olen:lastWelcomeDay';
 
 const ASSETS={
   bg:'assets/olen-background.png',
@@ -38,6 +41,7 @@ let running=false,finished=false,ready=false;
 let originalHide=null,hideWrapped=false,observer=null;
 let raf=0,startAt=0,watchdog=0;
 let img={};
+let welcomeCopy=null;
 
 const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
 const ease=x=>{x=clamp(x);return x*x*(3-2*x)};
@@ -78,12 +82,12 @@ function drawStarImage(x,y,size,opacity=1){
 
 function drawRingReveal(prog,opacity=1){
   prog=clamp(prog);
-  const size=R*2.22;
+  const size=SYMBOL_BOX;
   ctx.save();
   ctx.globalAlpha=opacity;
   if(prog<.9999){
     const start=Math.PI/2,end=start+Math.PI*2*prog;
-    ctx.beginPath();ctx.moveTo(CX,CY);ctx.arc(CX,CY,size*.62,start,end,false);ctx.closePath();ctx.clip();
+    ctx.beginPath();ctx.moveTo(CX,CY);ctx.arc(CX,CY,size*.68,start,end,false);ctx.closePath();ctx.clip();
   }
   drawFit(img.ring,CX,CY,size,size,1,1);
   ctx.restore();
@@ -97,6 +101,76 @@ function drawPillars(t){
     drawFit(img.icons[k],x,812,82,74,op,1);
     drawFit(img.labels[k],x,870,118,30,op,1);
   });
+}
+
+function localDayStamp(d=new Date()){
+  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+function dayGreeting(d=new Date()){
+  const h=d.getHours();
+  if(h<12)return 'Bom dia';
+  if(h<20)return 'Boa tarde';
+  return 'Boa noite';
+}
+
+function resolveWelcomeCopy(){
+  const now=new Date(),today=localDayStamp(now),greeting=dayGreeting(now);
+  let previous='';
+  try{previous=localStorage.getItem(WELCOME_DAY_KEY)||''}catch(_){ }
+  const firstToday=previous!==today;
+  try{localStorage.setItem(WELCOME_DAY_KEY,today)}catch(_){ }
+  return firstToday
+    ? {title:`${greeting}, Filipe`,subtitle:'O que queres viver hoje?'}
+    : {title:'Bem-vindo de volta, Filipe',subtitle:'O que queres viver agora?'};
+}
+
+function drawWelcome(t){
+  if(!welcomeCopy)return;
+  if(t>=9.78){
+    ctx.save();
+    ctx.globalAlpha=fade(t,9.78,10.38);
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.font='700 35px "Segoe UI", Arial, Helvetica, sans-serif';
+    const g=ctx.createLinearGradient(205,0,515,0);
+    g.addColorStop(0,'#f8ffff');g.addColorStop(.52,'#eafffb');g.addColorStop(1,'#8feeff');
+    ctx.fillStyle=g;
+    ctx.shadowColor='rgba(40,220,235,.18)';ctx.shadowBlur=8;
+    ctx.fillText(welcomeCopy.title,W/2,970);
+    ctx.restore();
+  }
+  if(t>=10.08){
+    ctx.save();
+    ctx.globalAlpha=fade(t,10.08,10.70);
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.font='400 18px "Segoe UI", Arial, Helvetica, sans-serif';
+    ctx.fillStyle='rgba(224,241,239,.92)';
+    ctx.fillText(welcomeCopy.subtitle,W/2,1014);
+    ctx.restore();
+  }
+}
+
+function drawLoading(t){
+  const prog=clamp(t/DUR),fw=Math.round(BAR_W*prog);
+  ctx.save();
+  ctx.lineCap='round';
+  ctx.strokeStyle='rgba(196,244,239,.18)';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(BAR_X,BAR_Y);ctx.lineTo(BAR_X+BAR_W,BAR_Y);ctx.stroke();
+  if(fw>0){
+    const g=ctx.createLinearGradient(BAR_X,0,BAR_X+BAR_W,0);
+    g.addColorStop(0,'#19f29a');g.addColorStop(.48,'#1dd8d8');g.addColorStop(1,'#2498ff');
+    ctx.strokeStyle=g;ctx.lineWidth=4;
+    ctx.shadowColor='rgba(35,221,236,.50)';ctx.shadowBlur=7;
+    ctx.beginPath();ctx.moveTo(BAR_X,BAR_Y);ctx.lineTo(BAR_X+fw,BAR_Y);ctx.stroke();
+    ctx.shadowBlur=0;
+    drawStarImage(BAR_X+fw,BAR_Y,7.5,1);
+  }
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.font='400 15px "Segoe UI", Arial, Helvetica, sans-serif';
+  ctx.fillStyle='rgba(211,235,232,.82)';
+  ctx.fillText('A iniciar a OLEN...',W/2,1195);
+  ctx.restore();
 }
 
 function drawScene(t){
@@ -127,7 +201,7 @@ function drawScene(t){
   /* Final symbol: exact approved PNG, no crop, no reconstruction. */
   if(t>=5.15){
     const op=fade(t,5.15,5.95),sc=1.12-.12*ease((t-5.15)/.8);
-    drawFit(img.symbol,CX,CY,390,390,op,sc);
+    drawFit(img.symbol,CX,CY,SYMBOL_BOX,SYMBOL_BOX,op,sc);
   }
 
   if(t>=6.0)drawFit(img.olen,360,565,430,150,fade(t,6.0,6.85),1);
@@ -135,28 +209,16 @@ function drawScene(t){
   if(t>=7.65)drawFit(img.slogan,360,724,480,88,fade(t,7.65,8.40),1);
   if(t>=8.55)drawPillars(t);
 
-  ctx.textAlign='center';ctx.textBaseline='middle';
-  if(t>=9.78){ctx.save();ctx.globalAlpha=fade(t,9.78,10.42);ctx.font='700 41px Arial, Helvetica, sans-serif';ctx.fillStyle='#fff';ctx.fillText('Boa tarde, Filipe',W/2,970);ctx.restore()}
-  if(t>=10.08){ctx.save();ctx.globalAlpha=fade(t,10.08,10.78);ctx.font='21px Arial, Helvetica, sans-serif';ctx.fillStyle='rgb(210,225,222)';ctx.fillText('Bem-vindo de volta · O que queres viver hoje?',W/2,1025);ctx.restore()}
-
-  const prog=clamp(t/DUR);
-  ctx.fillStyle='rgba(255,255,255,.19)';roundRect(BAR_X,BAR_Y,BAR_W,4,2);ctx.fill();
-  const fw=Math.round(BAR_W*prog);
-  if(fw>0){
-    const g=ctx.createLinearGradient(BAR_X,0,BAR_X+BAR_W,0);g.addColorStop(0,'#23e77f');g.addColorStop(.52,'#22d7df');g.addColorStop(1,'#168fff');
-    ctx.fillStyle=g;roundRect(BAR_X,BAR_Y,fw,4,2);ctx.fill();
-    drawStarImage(BAR_X+fw,BAR_Y+2,7,1);
-  }
-  ctx.font='16px Arial, Helvetica, sans-serif';ctx.fillStyle='rgba(195,235,225,.9)';ctx.fillText('A iniciar a OLEN...',W/2,1205);
+  drawWelcome(t);
+  drawLoading(t);
 }
 
-function roundRect(x,y,w,h,r){ctx.beginPath();ctx.roundRect?ctx.roundRect(x,y,w,h,r):ctx.rect(x,y,w,h)}
 function resizeCanvas(){if(!canvas||!stage)return;const rect=stage.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.max(1,Math.round(rect.width*dpr));canvas.height=Math.max(1,Math.round(rect.height*dpr));const sx=canvas.width/W,sy=canvas.height/H,s=Math.max(sx,sy),ox=(canvas.width-W*s)/2,oy=(canvas.height-H*s)/2;ctx.setTransform(s,0,0,s,ox,oy)}
 function wrapOriginalHide(){if(hideWrapped||typeof window.alphaHideWelcome!=='function')return;originalHide=window.alphaHideWelcome.bind(window);window.alphaHideWelcome=function(){if(running)return;return originalHide()};hideWrapped=true}
 function overlayVisible(){return !!overlay&&overlay.classList.contains('show')&&overlay.getAttribute('aria-hidden')!=='true'}
 function finish(){if(finished)return;finished=true;running=false;cancelAnimationFrame(raf);clearTimeout(watchdog);window.removeEventListener('resize',resizeCanvas);if(overlay)overlay.classList.remove('olen-v107-canvas-running');if(stage)stage.remove();if(typeof originalHide==='function')requestAnimationFrame(()=>originalHide());else if(overlay){overlay.classList.add('leaving');setTimeout(()=>{overlay.classList.remove('show','leaving');overlay.setAttribute('aria-hidden','true')},320)}}
 function frame(now){if(!running)return;const t=(now-startAt)/1000;drawScene(Math.min(t,DUR));if(t>=DUR){finish();return}raf=requestAnimationFrame(frame)}
-function start(){if(!ready||running||finished||!overlayVisible()||!stage)return;wrapOriginalHide();if(!hideWrapped)return;running=true;overlay.classList.add('olen-v107-canvas-running');resizeCanvas();window.addEventListener('resize',resizeCanvas,{passive:true});startAt=performance.now();watchdog=setTimeout(finish,13500);raf=requestAnimationFrame(frame)}
+function start(){if(!ready||running||finished||!overlayVisible()||!stage)return;wrapOriginalHide();if(!hideWrapped)return;welcomeCopy=resolveWelcomeCopy();running=true;overlay.classList.add('olen-v107-canvas-running');resizeCanvas();window.addEventListener('resize',resizeCanvas,{passive:true});startAt=performance.now();watchdog=setTimeout(finish,13500);raf=requestAnimationFrame(frame)}
 
 async function prepare(){
   try{
@@ -172,5 +234,5 @@ async function prepare(){
 function install(){overlay=document.getElementById('alphaWelcomeOverlay');if(!overlay)return;wrapOriginalHide();if(!stage){stage=document.createElement('div');stage.className='olen-v107-canvas-stage';canvas=document.createElement('canvas');canvas.className='olen-v107-canvas';canvas.setAttribute('aria-hidden','true');ctx=canvas.getContext('2d');stage.appendChild(canvas);overlay.appendChild(stage);prepare()}if(!observer){observer=new MutationObserver(()=>{if(overlayVisible()){if(ready)start()}else if(running){running=false;cancelAnimationFrame(raf)}});observer.observe(overlay,{attributes:true,attributeFilter:['class','aria-hidden']})}if(overlayVisible()&&ready)start()}
 function boot(){requestAnimationFrame(install);setTimeout(install,80);setTimeout(install,300);setTimeout(install,900)}
 document.addEventListener('DOMContentLoaded',boot,{once:true});window.addEventListener('pageshow',boot,{passive:true});boot();
-console.info('[OLEN 4.4.0] V10.7 native Canvas · individual approved PNG assets');
+console.info('[OLEN 4.4.0] V10.7 native Canvas · exact ring · contextual welcome · refined loading');
 })();
