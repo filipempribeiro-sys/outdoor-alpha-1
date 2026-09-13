@@ -1,4 +1,4 @@
-const CACHE_NAME="olen-v4.4.0-pillar-text-refresh-20260913";
+const CACHE_NAME="olen-v4.4.0-chat-sidebar-header-fix-20260913";
 const BASE_PATCH_URL="./alpha-4.3.17-fixes.js?v=4.3.43";
 const SPOTIFY_PATCH_URL="./alpha-4.3.22-spotify-global.js?v=4.3.43";
 const CALENDAR_GOOGLE_URL="./alpha-4.3.30-calendar-google.js?v=4.3.43";
@@ -7,6 +7,7 @@ const PLACE_EXPERIENCE_URL="./alpha-4.3.30-place-experience.js?v=4.3.43";
 const PLACE_CLEANUP_URL="./alpha-4.3.30-place-detail-cleanup.js?v=4.3.43";
 const CHAT_SIDEBAR_URL="./alpha-4.3.30-chat-sidebar-stage3.js?v=4.3.43";
 const CHAT_SIDEBAR_FIX_URL="./alpha-4.3.30-chat-sidebar-stage3-fix2.js?v=4.3.43";
+const CHAT_FULLSCREEN_SIDEBAR_FIX_URL="./olen-4.4.0-chat-sidebar-fullscreen-fix.js?v=4.4.0-sidebar-header-20260913";
 const CHAT_FOOTER_ICONS_URL="./alpha-4.3.32-chat-footer-icons-only.js?v=4.3.43";
 const HOME_BUTTONS_ONLY_URL="./alpha-4.3.33-home-buttons-only.js?v=4.3.43";
 const CHAT_FOOTER_IMMEDIATE_URL="./alpha-4.3.34-chat-footer-immediate.js?v=4.3.43";
@@ -28,7 +29,7 @@ const SHELL=[
   "./assets/olen/olen-tagline.png","./assets/olen/olen-slogan.png",
   "./assets/olen/olen-icon-planeia.png","./assets/olen/olen-icon-explora.png","./assets/olen/olen-icon-descobre.png","./assets/olen/olen-icon-vive.png",
   "./assets/olen/olen-text-planeia.png","./assets/olen/olen-text-explora.png","./assets/olen/olen-text-descobre.png","./assets/olen/olen-text-vive.png",
-  "./olen-4.4.0-identity.js","./olen-4.4.0-splash-guard.js","./olen-4.4.0-splash-polish.js",
+  "./olen-4.4.0-identity.js","./olen-4.4.0-splash-guard.js","./olen-4.4.0-splash-polish.js","./olen-4.4.0-chat-sidebar-fullscreen-fix.js",
   "./alpha-4.3.17-fixes.js","./alpha-4.3.22-spotify-global.js",
   "./alpha-4.3.30-calendar-google.js","./alpha-4.3.30-calendar-timepicker.js",
   "./alpha-4.3.30-place-experience.js","./alpha-4.3.30-place-detail-cleanup.js",
@@ -72,7 +73,7 @@ function with440Patch(response){
   return response.text().then(html=>{
     const tags=[
       BASE_PATCH_URL,SPOTIFY_PATCH_URL,CALENDAR_GOOGLE_URL,CALENDAR_TIME_URL,
-      PLACE_EXPERIENCE_URL,PLACE_CLEANUP_URL,CHAT_SIDEBAR_URL,CHAT_SIDEBAR_FIX_URL,
+      PLACE_EXPERIENCE_URL,PLACE_CLEANUP_URL,CHAT_SIDEBAR_URL,CHAT_SIDEBAR_FIX_URL,CHAT_FULLSCREEN_SIDEBAR_FIX_URL,
       CHAT_FOOTER_ICONS_URL,HOME_BUTTONS_ONLY_URL,CHAT_FOOTER_IMMEDIATE_URL,
       CHAT_SIDEBAR_FULL_SCROLL_URL,CHAT_SIDEBAR_FIXED_ENDS_URL,CHAT_FOOTER_ICONS_LOCK_URL,
       HOME_NO_SPOTIFY_URL,HOME_FOOTER_SIX_GRID_URL,INTERNAL_SIDEBAR_NO_SPOTIFY_URL,
@@ -100,6 +101,7 @@ function with440Patch(response){
       .replace(/<script src="\.\/olen-4\.4\.0-identity\.js\?v=[^"]+"><\/script>/g,'')
       .replace(/<script src="\.\/olen-4\.4\.0-splash-guard\.js\?v=[^"]+"><\/script>/g,'')
       .replace(/<script src="\.\/olen-4\.4\.0-splash-polish\.js\?v=[^"]+"><\/script>/g,'')
+      .replace(/<script src="\.\/olen-4\.4\.0-chat-sidebar-fullscreen-fix\.js\?v=[^"]+"><\/script>/g,'')
       .replace(/<style id="alphaSpotifyExactAlign4329">[\s\S]*?<\/style>/g,'');
 
     const allTags=alignStyle+tags;
@@ -119,7 +121,7 @@ function with440Patch(response){
     const headers=new Headers(response.headers);
     headers.delete("content-length");
     headers.set("Cache-Control","no-store");
-    headers.set("X-OLEN-Patch","4.4.0-pillar-text-refresh-20260913");
+    headers.set("X-OLEN-Patch","4.4.0-chat-sidebar-header-fix-20260913");
     return new Response(html,{status:response.status,statusText:response.statusText,headers});
   });
 }
