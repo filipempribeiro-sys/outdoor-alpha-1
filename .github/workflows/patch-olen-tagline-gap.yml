@@ -1,0 +1,51 @@
+name: Patch OLEN Navigator tagline and spacing
+
+on:
+  push:
+    paths:
+      - '.github/workflows/patch-olen-tagline-gap.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Patch splash and service worker
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p=Path('olen-4.4.0-splash-polish.js')
+          s=p.read_text()
+          s=s.replace("const BAR_X=58,BAR_Y=1158,BAR_W=604;", "const BAR_X=58,BAR_Y=1080,BAR_W=604;")
+          s=s.replace("const V='4.4.0-v107-welcome-bold-bar20';", "const V='4.4.0-v107-navigator-tight-gap-bar20';")
+          s=s.replace("ctx.fillStyle='rgba(230,246,244,.96)';ctx.shadowColor='rgba(0,0,0,.38)';ctx.shadowBlur=4;ctx.fillText('A iniciar a OLEN...',W/2,1198);ctx.restore();", "ctx.fillStyle='rgba(230,246,244,.96)';ctx.shadowColor='rgba(0,0,0,.38)';ctx.shadowBlur=4;ctx.fillText('A iniciar a OLEN...',W/2,1122);ctx.restore();")
+          old="if(t>=6.95)drawFit(img.tagline,360,655,560,68,fade(t,6.95,7.65),1);"
+          new="""if(t>=6.95){\n    ctx.save();ctx.globalAlpha=fade(t,6.95,7.65);ctx.textAlign='center';ctx.textBaseline='middle';\n    ctx.font='700 15px \\\"Segoe UI\\\", Arial, Helvetica, sans-serif';\n    const tg=ctx.createLinearGradient(90,0,630,0);tg.addColorStop(0,'#f7ffff');tg.addColorStop(.42,'#7fffe0');tg.addColorStop(1,'#73cfff');\n    ctx.fillStyle=tg;ctx.shadowColor='rgba(35,220,235,.24)';ctx.shadowBlur=6;ctx.fillText('OUTDOOR • LIFESTYLE • EXPERIENCE • NAVIGATOR',360,655);ctx.restore();\n  }"""
+          if old not in s:
+              raise SystemExit('tagline target not found')
+          s=s.replace(old,new)
+          s=s.replace("loading bar uses a heavier 20px progress stroke with stronger welcome typography.", "loading bar uses a heavier 20px progress stroke, tighter welcome spacing, and the full OLEN expansion.")
+          s=s.replace("stronger welcome · loading 20px", "full Navigator tagline · tighter welcome/loading gap · loading 20px")
+          p.write_text(s)
+
+          p=Path('sw.js')
+          s=p.read_text()
+          s=s.replace('olen-v4.4.0-v107-star-below-chevron-bar15','olen-v4.4.0-v107-navigator-tight-gap-bar20')
+          s=s.replace('./olen-4.4.0-splash-polish.js?v=4.4.0-star-below-chevron-bar15','./olen-4.4.0-splash-polish.js?v=4.4.0-navigator-tight-gap-bar20')
+          s=s.replace('4.4.0-star-below-chevron-bar15','4.4.0-navigator-tight-gap-bar20')
+          p.write_text(s)
+          PY
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add olen-4.4.0-splash-polish.js sw.js
+          git diff --cached --quiet && exit 0
+          git commit -m "OLEN 4.4.0: full Navigator identity and tighter welcome spacing"
+          git push origin main
