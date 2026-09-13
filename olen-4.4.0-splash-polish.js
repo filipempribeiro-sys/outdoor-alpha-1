@@ -14,7 +14,7 @@ const FINAL_STAR_SIZE=27;
 const FINAL_STAR_Y=CY+66;
 const CHEVRON_W=246,CHEVRON_H=228;
 const BAR_X=140,BAR_Y=1080,BAR_W=440;
-const V='4.4.0-v107-columns-width-tagline19-bar20';
+const V='4.4.0-v107-pillars-planeia-explora-descobre-vive';
 const WELCOME_DAY_KEY='olen:lastWelcomeDay';
 
 const ASSETS={
@@ -26,16 +26,16 @@ const ASSETS={
   tagline:'assets/olen/olen-tagline.png',
   slogan:'assets/olen/olen-slogan.png',
   icons:[
+    'assets/olen/olen-icon-planeia.png',
     'assets/olen/olen-icon-explora.png',
     'assets/olen/olen-icon-descobre.png',
-    'assets/olen/olen-icon-vive.png',
-    'assets/olen/olen-icon-repete.png'
+    'assets/olen/olen-icon-vive.png'
   ],
   labels:[
+    'assets/olen/olen-text-planeia.png',
     'assets/olen/olen-text-explora.png',
     'assets/olen/olen-text-descobre.png',
-    'assets/olen/olen-text-vive.png',
-    'assets/olen/olen-text-repete.png'
+    'assets/olen/olen-text-vive.png'
   ]
 };
 
@@ -229,7 +229,7 @@ function drawScene(t){
   if(t>=6.0)drawFit(img.olen,360,565,430,150,fade(t,6.0,6.85),1);
   if(t>=6.95){
     ctx.save();ctx.globalAlpha=fade(t,6.95,7.65);ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.font='700 19px \"Segoe UI\", Arial, Helvetica, sans-serif';
+    ctx.font='700 19px "Segoe UI", Arial, Helvetica, sans-serif';
     const tg=ctx.createLinearGradient(90,0,630,0);tg.addColorStop(0,'#f7ffff');tg.addColorStop(.42,'#7fffe0');tg.addColorStop(1,'#73cfff');
     ctx.fillStyle=tg;ctx.shadowColor='rgba(35,220,235,.24)';ctx.shadowBlur=6;ctx.fillText('OUTDOOR • LIFESTYLE • EXPERIENCE • NAVIGATOR',360,655);ctx.restore();
   }
@@ -264,5 +264,5 @@ async function prepare(){
 function install(){overlay=document.getElementById('alphaWelcomeOverlay');if(!overlay)return;wrapOriginalHide();if(!stage){stage=document.createElement('div');stage.className='olen-v107-canvas-stage';canvas=document.createElement('canvas');canvas.className='olen-v107-canvas';canvas.setAttribute('aria-hidden','true');ctx=canvas.getContext('2d');stage.appendChild(canvas);overlay.appendChild(stage);prepare()}if(!observer){observer=new MutationObserver(()=>{if(overlayVisible()){if(ready)start()}else if(running){running=false;cancelAnimationFrame(raf)}});observer.observe(overlay,{attributes:true,attributeFilter:['class','aria-hidden']})}if(overlayVisible()&&ready)start()}
 function boot(){requestAnimationFrame(install);setTimeout(install,80);setTimeout(install,300);setTimeout(install,900)}
 document.addEventListener('DOMContentLoaded',boot,{once:true});window.addEventListener('pageshow',boot,{passive:true});boot();
-console.info('[OLEN 4.4.0] V10.7 native Canvas · star below chevron · full Navigator tagline · tighter welcome/loading gap · loading 20px');
+console.info('[OLEN 4.4.0] V10.7 native Canvas · PLANEA → EXPLORA → DESCOBRE → VIVE · star below chevron · full Navigator tagline · loading 20px');
 })();
