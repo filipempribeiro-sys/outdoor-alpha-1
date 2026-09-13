@@ -1,6 +1,7 @@
 /* OLEN 4.4.0 · V10.7 NATIVE CANVAS SPLASH
    Individual approved PNG assets only. No master crop extraction.
-   Star now integrates into the final OLEN symbol instead of crossfading to a prebuilt logo. */
+   Star follows the optical centreline of the OLEN ring, settles below the chevron,
+   and the loading bar uses a heavier 10px progress stroke. */
 (()=>{
 'use strict';
 if(window.__olenV107CanvasSplash)return;
@@ -9,11 +10,10 @@ window.__olenV107CanvasSplash=true;
 const W=720,H=1280,DUR=12;
 const CX=360,CY=300;
 const SYMBOL_BOX=390;
-const R=SYMBOL_BOX/2;
 const FINAL_STAR_SIZE=27;
 const CHEVRON_W=246,CHEVRON_H=228;
 const BAR_X=58,BAR_Y=1158,BAR_W=604;
-const V='4.4.0-v107-star-chevron-integration';
+const V='4.4.0-v107-optical-star-track-bar10';
 const WELCOME_DAY_KEY='olen:lastWelcomeDay';
 
 const ASSETS={
@@ -44,6 +44,7 @@ let originalHide=null,hideWrapped=false,observer=null;
 let raf=0,startAt=0,watchdog=0;
 let img={};
 let welcomeCopy=null;
+let ringTrackRadius=SYMBOL_BOX*.455;
 
 const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
 const ease=x=>{x=clamp(x);return x*x*(3-2*x)};
@@ -69,6 +70,41 @@ function loadImage(src){
   });
 }
 
+function alphaTightCanvas(source,threshold=4){
+  const c=document.createElement('canvas');c.width=source.width;c.height=source.height;
+  const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(source,0,0);
+  const d=x.getImageData(0,0,c.width,c.height).data;
+  let minX=c.width,minY=c.height,maxX=-1,maxY=-1;
+  for(let yy=0;yy<c.height;yy++)for(let xx=0;xx<c.width;xx++){
+    if(d[(yy*c.width+xx)*4+3]>threshold){
+      if(xx<minX)minX=xx;if(xx>maxX)maxX=xx;if(yy<minY)minY=yy;if(yy>maxY)maxY=yy;
+    }
+  }
+  if(maxX<0)return c;
+  const out=document.createElement('canvas');out.width=maxX-minX+1;out.height=maxY-minY+1;
+  out.getContext('2d').drawImage(c,minX,minY,out.width,out.height,0,0,out.width,out.height);
+  return out;
+}
+
+function analyseRingTrack(ring){
+  try{
+    const c=document.createElement('canvas');c.width=ring.width;c.height=ring.height;
+    const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(ring,0,0);
+    const id=x.getImageData(0,0,c.width,c.height),d=id.data;
+    const cx=c.width/2,cy=c.height/2,dist=[];
+    for(let yy=0;yy<c.height;yy+=2)for(let xx=0;xx<c.width;xx+=2){
+      const a=d[(yy*c.width+xx)*4+3];
+      if(a>56)dist.push(Math.hypot(xx+.5-cx,yy+.5-cy));
+    }
+    if(dist.length<100)return;
+    dist.sort((a,b)=>a-b);
+    const q=(p)=>dist[Math.min(dist.length-1,Math.max(0,Math.floor((dist.length-1)*p)))];
+    const mid=(q(.18)+q(.82))/2;
+    const scale=Math.min(SYMBOL_BOX/ring.width,SYMBOL_BOX/ring.height);
+    ringTrackRadius=mid*scale;
+  }catch(_){ }
+}
+
 function coverRect(iw,ih,tw,th){const s=Math.max(tw/iw,th/ih);return{w:iw*s,h:ih*s,x:(tw-iw*s)/2,y:(th-ih*s)/2}}
 
 function drawFit(image,cx,cy,maxW,maxH,opacity=1,scale=1){
@@ -87,7 +123,7 @@ function drawRingReveal(prog,opacity=1){
   ctx.save();ctx.globalAlpha=opacity;
   if(prog<.9999){
     const start=Math.PI/2,end=start+Math.PI*2*prog;
-    ctx.beginPath();ctx.moveTo(CX,CY);ctx.arc(CX,CY,R+8,start,end,false);ctx.closePath();ctx.clip();
+    ctx.beginPath();ctx.moveTo(CX,CY);ctx.arc(CX,CY,SYMBOL_BOX*.56,start,end,false);ctx.closePath();ctx.clip();
   }
   drawFit(img.ring,CX,CY,SYMBOL_BOX,SYMBOL_BOX,1,1);
   ctx.restore();
@@ -99,8 +135,7 @@ function drawChevronReveal(progress,opacity=1){
   const s=Math.min(CHEVRON_W/img.chevron.width,CHEVRON_H/img.chevron.height);
   const w=img.chevron.width*s,h=img.chevron.height*s;
   const x=CX-w/2,y=CY-h/2;
-  ctx.save();
-  ctx.globalAlpha=opacity;
+  ctx.save();ctx.globalAlpha=opacity;
   const revealH=h*progress;
   ctx.beginPath();ctx.rect(x,y+h-revealH,w,revealH);ctx.clip();
   ctx.shadowColor='rgba(50,225,241,.28)';ctx.shadowBlur=8;
@@ -122,23 +157,15 @@ function localDayStamp(d=new Date()){
   const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
   return `${y}-${m}-${day}`;
 }
-
 function dayGreeting(d=new Date()){
-  const h=d.getHours();
-  if(h<12)return 'Bom dia';
-  if(h<20)return 'Boa tarde';
-  return 'Boa noite';
+  const h=d.getHours();if(h<12)return 'Bom dia';if(h<20)return 'Boa tarde';return 'Boa noite';
 }
-
 function resolveWelcomeCopy(){
-  const now=new Date(),today=localDayStamp(now),greeting=dayGreeting(now);
-  let previous='';
+  const now=new Date(),today=localDayStamp(now),greeting=dayGreeting(now);let previous='';
   try{previous=localStorage.getItem(WELCOME_DAY_KEY)||''}catch(_){ }
   const firstToday=previous!==today;
   try{localStorage.setItem(WELCOME_DAY_KEY,today)}catch(_){ }
-  return firstToday
-    ? {title:`${greeting}, Filipe`,subtitle:'O que queres viver hoje?'}
-    : {title:'Bem-vindo de volta, Filipe',subtitle:'O que queres viver agora?'};
+  return firstToday?{title:`${greeting}, Filipe`,subtitle:'O que queres viver hoje?'}:{title:'Bem-vindo de volta, Filipe',subtitle:'O que queres viver agora?'};
 }
 
 function drawWelcome(t){
@@ -151,21 +178,20 @@ function drawWelcome(t){
   }
   if(t>=10.08){
     ctx.save();ctx.globalAlpha=fade(t,10.08,10.70);ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.font='400 18px "Segoe UI", Arial, Helvetica, sans-serif';ctx.fillStyle='rgba(224,241,239,.92)';
-    ctx.fillText(welcomeCopy.subtitle,W/2,1014);ctx.restore();
+    ctx.font='400 18px "Segoe UI", Arial, Helvetica, sans-serif';ctx.fillStyle='rgba(224,241,239,.92)';ctx.fillText(welcomeCopy.subtitle,W/2,1014);ctx.restore();
   }
 }
 
 function drawLoading(t){
   const prog=clamp(t/DUR),fw=Math.round(BAR_W*prog);
   ctx.save();ctx.lineCap='round';
-  ctx.strokeStyle='rgba(196,244,239,.20)';ctx.lineWidth=4;
+  ctx.strokeStyle='rgba(196,244,239,.20)';ctx.lineWidth=6;
   ctx.beginPath();ctx.moveTo(BAR_X,BAR_Y);ctx.lineTo(BAR_X+BAR_W,BAR_Y);ctx.stroke();
   if(fw>0){
     const g=ctx.createLinearGradient(BAR_X,0,BAR_X+BAR_W,0);g.addColorStop(0,'#19f29a');g.addColorStop(.48,'#1dd8d8');g.addColorStop(1,'#2498ff');
-    ctx.strokeStyle=g;ctx.lineWidth=6;ctx.shadowColor='rgba(35,221,236,.52)';ctx.shadowBlur=8;
+    ctx.strokeStyle=g;ctx.lineWidth=10;ctx.shadowColor='rgba(35,221,236,.56)';ctx.shadowBlur=10;
     ctx.beginPath();ctx.moveTo(BAR_X,BAR_Y);ctx.lineTo(BAR_X+fw,BAR_Y);ctx.stroke();ctx.shadowBlur=0;
-    drawStarImage(BAR_X+fw,BAR_Y,8,1);
+    drawStarImage(BAR_X+fw,BAR_Y,10,1);
   }
   ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='400 15px "Segoe UI", Arial, Helvetica, sans-serif';
   ctx.fillStyle='rgba(211,235,232,.82)';ctx.fillText('A iniciar a OLEN...',W/2,1195);ctx.restore();
@@ -173,43 +199,40 @@ function drawLoading(t){
 
 function drawScene(t){
   ctx.clearRect(0,0,W,H);
-  const bg=coverRect(img.bg.width,img.bg.height,W,H);
-  ctx.drawImage(img.bg,bg.x,bg.y,bg.w,bg.h);
+  const bg=coverRect(img.bg.width,img.bg.height,W,H);ctx.drawImage(img.bg,bg.x,bg.y,bg.w,bg.h);
   ctx.fillStyle='rgba(0,0,0,.055)';ctx.fillRect(0,0,W,H);
 
-  /* 0–4.2s: star rides exactly on the leading edge of the revealed ring. */
+  /* 0–4.2s: the optical centre of the real star sits on the optical centreline of the real ring. */
   const ringProg=clamp(t/4.2);
   drawRingReveal(ringProg,1);
   if(t<=4.2){
     const ang=(90+360*ringProg)*Math.PI/180;
-    drawStarImage(CX+R*Math.cos(ang),CY+R*Math.sin(ang),15,1);
+    drawStarImage(CX+ringTrackRadius*Math.cos(ang),CY+ringTrackRadius*Math.sin(ang),15,1);
   }
 
-  /* 4.2–5.1s: same star flies from 6 o'clock to centre and zooms in. */
+  /* 4.2–5.1s: the same star leaves the 6 o'clock point and flies to centre while zooming in. */
   if(t>4.2&&t<=5.1){
     const q=ease((t-4.2)/.9);
-    const sy=(CY+R)*(1-q)+CY*q;
+    const sy=(CY+ringTrackRadius)*(1-q)+CY*q;
     const size=15*(1-q)+112*q;
     drawStarImage(CX,sy,size,1);
   }
 
-  /* 5.1–5.7s: no logo transition; star zooms back out into its final centre position. */
+  /* 5.1–5.7s: star zooms out and settles in its final position. */
   if(t>5.1){
     const q=ease((t-5.1)/.6);
     const size=t<5.7?112*(1-q)+FINAL_STAR_SIZE*q:FINAL_STAR_SIZE;
     drawStarImage(CX,CY,size,1);
   }
 
-  /* 5.28–5.95s: approved chevron is drawn over the settled star. Ring + star remain live. */
-  if(t>=5.28)drawChevronReveal(fade(t,5.28,5.95),1);
+  /* Only after the star is settled, draw the approved chevron above it. */
+  if(t>=5.72)drawChevronReveal(fade(t,5.72,6.25),1);
 
   if(t>=6.0)drawFit(img.olen,360,565,430,150,fade(t,6.0,6.85),1);
   if(t>=6.95)drawFit(img.tagline,360,655,560,68,fade(t,6.95,7.65),1);
   if(t>=7.65)drawFit(img.slogan,360,724,480,88,fade(t,7.65,8.40),1);
   if(t>=8.55)drawPillars(t);
-
-  drawWelcome(t);
-  drawLoading(t);
+  drawWelcome(t);drawLoading(t);
 }
 
 function resizeCanvas(){if(!canvas||!stage)return;const rect=stage.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.max(1,Math.round(rect.width*dpr));canvas.height=Math.max(1,Math.round(rect.height*dpr));const sx=canvas.width/W,sy=canvas.height/H,s=Math.max(sx,sy),ox=(canvas.width-W*s)/2,oy=(canvas.height-H*s)/2;ctx.setTransform(s,0,0,s,ox,oy)}
@@ -224,8 +247,13 @@ async function prepare(){
     const flat=[ASSETS.bg,ASSETS.ring,ASSETS.star,ASSETS.chevron,ASSETS.olen,ASSETS.tagline,ASSETS.slogan,...ASSETS.icons,...ASSETS.labels];
     const loaded=await Promise.all(flat.map(loadImage));
     let i=0;
-    img.bg=loaded[i++];img.ring=loaded[i++];img.star=loaded[i++];img.chevron=loaded[i++];img.olen=loaded[i++];img.tagline=loaded[i++];img.slogan=loaded[i++];
+    img.bg=loaded[i++];
+    img.ring=alphaTightCanvas(loaded[i++],6);
+    img.star=alphaTightCanvas(loaded[i++],6);
+    img.chevron=alphaTightCanvas(loaded[i++],6);
+    img.olen=loaded[i++];img.tagline=loaded[i++];img.slogan=loaded[i++];
     img.icons=loaded.slice(i,i+4);i+=4;img.labels=loaded.slice(i,i+4);
+    analyseRingTrack(img.ring);
     ready=true;if(overlayVisible())start();
   }catch(err){console.warn('[OLEN 4.4.0] Individual Canvas assets unavailable; preserving original welcome.',err)}
 }
@@ -233,5 +261,5 @@ async function prepare(){
 function install(){overlay=document.getElementById('alphaWelcomeOverlay');if(!overlay)return;wrapOriginalHide();if(!stage){stage=document.createElement('div');stage.className='olen-v107-canvas-stage';canvas=document.createElement('canvas');canvas.className='olen-v107-canvas';canvas.setAttribute('aria-hidden','true');ctx=canvas.getContext('2d');stage.appendChild(canvas);overlay.appendChild(stage);prepare()}if(!observer){observer=new MutationObserver(()=>{if(overlayVisible()){if(ready)start()}else if(running){running=false;cancelAnimationFrame(raf)}});observer.observe(overlay,{attributes:true,attributeFilter:['class','aria-hidden']})}if(overlayVisible()&&ready)start()}
 function boot(){requestAnimationFrame(install);setTimeout(install,80);setTimeout(install,300);setTimeout(install,900)}
 document.addEventListener('DOMContentLoaded',boot,{once:true});window.addEventListener('pageshow',boot,{passive:true});boot();
-console.info('[OLEN 4.4.0] V10.7 native Canvas · star/chevron integration · thicker loading');
+console.info('[OLEN 4.4.0] V10.7 native Canvas · optical star track · chevron over settled star · loading 10px');
 })();
