@@ -1,4 +1,4 @@
-const CACHE_NAME="olen-v4.4.0-pillar-text-refresh-20260913";
+const CACHE_NAME="olen-v4.4.0-home-return-height-fix-20260913";
 const BASE_PATCH_URL="./alpha-4.3.17-fixes.js?v=4.3.43";
 const SPOTIFY_PATCH_URL="./alpha-4.3.22-spotify-global.js?v=4.3.43";
 const CALENDAR_GOOGLE_URL="./alpha-4.3.30-calendar-google.js?v=4.3.43";
@@ -19,7 +19,7 @@ const INTERNAL_SIDEBAR_NO_SPOTIFY_URL="./alpha-4.3.40-internal-sidebar-no-spotif
 const OLEN_IDENTITY_URL="./olen-4.4.0-identity.js?v=4.4.0-bg";
 const SPLASH_GUARD_URL="./olen-4.4.0-splash-guard.js?v=4.4.0-startup-guard";
 const SPLASH_POLISH_URL="./olen-4.4.0-splash-polish.js?v=4.4.0-planeia-pillars-text-refresh-20260913";
-const HOME_UX_POLISH_URL="./alpha-4.3.43-home-ux-polish.js?v=4.4.0-home-balanced-gap";
+const HOME_UX_POLISH_URL="./alpha-4.3.43-home-ux-polish.js?v=4.4.0-home-return-height-fix-20260913";
 const PILLAR_TEXT_REFRESH="20260913-white-pillars-v2";
 
 const SHELL=[
@@ -119,7 +119,7 @@ function with440Patch(response){
     const headers=new Headers(response.headers);
     headers.delete("content-length");
     headers.set("Cache-Control","no-store");
-    headers.set("X-OLEN-Patch","4.4.0-pillar-text-refresh-20260913");
+    headers.set("X-OLEN-Patch","4.4.0-home-return-height-fix-20260913");
     return new Response(html,{status:response.status,statusText:response.statusText,headers});
   });
 }
