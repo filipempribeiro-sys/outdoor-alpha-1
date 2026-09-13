@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/build-olen-v107.yml'
       - 'tools/render_olen_v107.py'
+      - 'assets/olen-background.png'
   workflow_dispatch:
 
 permissions:
@@ -29,17 +30,23 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ffmpeg fonts-dejavu-core fonts-liberation
 
+      - name: Point splash to clean OLEN background
+        run: |
+          sed -i "s#assets/olen-splash-background.png#assets/olen-background.png#g" tools/render_olen_v107.py
+          sed -i "s#assets/olen-splash-background.png#assets/olen-background.png#g" olen-4.4.0-splash-polish.js
+          sed -i "s#assets/olen-splash-background.png#assets/olen-background.png#g" sw.js
+
       - name: Render V10.7 final splash
         run: python tools/render_olen_v107.py
 
-      - name: Commit generated MP4
+      - name: Commit clean-background integration and generated MP4
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/olen-v10.7-final.mp4
+          git add tools/render_olen_v107.py olen-4.4.0-splash-polish.js sw.js assets/olen-v10.7-final.mp4
           if git diff --cached --quiet; then
             echo "No generated video change"
             exit 0
           fi
-          git commit -m "OLEN 4.4.0: add V10.7 final splash video"
+          git commit -m "OLEN 4.4.0: use clean background in V10.7 splash"
           git push
