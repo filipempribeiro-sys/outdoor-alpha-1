@@ -1,0 +1,45 @@
+name: Build OLEN V10.7 splash
+
+on:
+  push:
+    paths:
+      - '.github/workflows/build-olen-v107.yml'
+      - 'tools/render_olen_v107.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install renderer dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pillow numpy
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core fonts-liberation
+
+      - name: Render V10.7 final splash
+        run: python tools/render_olen_v107.py
+
+      - name: Commit generated MP4
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/olen-v10.7-final.mp4
+          if git diff --cached --quiet; then
+            echo "No generated video change"
+            exit 0
+          fi
+          git commit -m "OLEN 4.4.0: add V10.7 final splash video"
+          git push
