@@ -6,6 +6,10 @@ on:
       - '.github/workflows/build-olen-v107.yml'
       - 'tools/render_olen_v107.py'
       - 'assets/olen-background.png'
+      - 'assets/olen-ui.png'
+      - 'manifest.webmanifest'
+      - 'index.html'
+      - 'sw.js'
   workflow_dispatch:
 
 permissions:
@@ -30,23 +34,68 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ffmpeg fonts-dejavu-core fonts-liberation
 
-      - name: Point splash to clean OLEN background
+      - name: Apply OLEN icon and centering corrections
         run: |
-          sed -i "s#assets/olen-splash-background.png#assets/olen-background.png#g" tools/render_olen_v107.py
-          sed -i "s#assets/olen-splash-background.png#assets/olen-background.png#g" olen-4.4.0-splash-polish.js
-          sed -i "s#assets/olen-splash-background.png#assets/olen-background.png#g" sw.js
+          python - <<'PY'
+          from pathlib import Path
 
-      - name: Render V10.7 final splash
+          # Renderer: keep the initial ring where it already is, but center every raster
+          # element by its visible alpha bounds. This prevents the post-zoom logo from
+          # appearing shifted because of transparent margins in the source crops.
+          p = Path('tools/render_olen_v107.py')
+          s = p.read_text()
+          s = s.replace("BG='assets/olen-splash-background.png'", "BG='assets/olen-background.png'")
+          old = "def paste_center(base, im, cx, cy, opacity=1, scale=1):\n    if scale!=1:\n        im=im.resize((max(1,round(im.width*scale)),max(1,round(im.height*scale))),Image.Resampling.LANCZOS)\n    im=alpha_scaled(im,opacity)\n    base.alpha_composite(im,(round(cx-im.width/2),round(cy-im.height/2)))"
+          new = "def paste_center(base, im, cx, cy, opacity=1, scale=1):\n    # Centre by the visible artwork, not by transparent crop margins.\n    bb=im.getchannel('A').getbbox()\n    if bb:\n        im=im.crop(bb)\n    if scale!=1:\n        im=im.resize((max(1,round(im.width*scale)),max(1,round(im.height*scale))),Image.Resampling.LANCZOS)\n    im=alpha_scaled(im,opacity)\n    base.alpha_composite(im,(round(cx-im.width/2),round(cy-im.height/2)))"
+          if old in s:
+              s = s.replace(old, new)
+          s = s.replace("size=11*(1-q)+125*q", "size=11*(1-q)+105*q")
+          s = s.replace("paste_center(frame,emblem,cx,300,op,sc)", "paste_center(frame,emblem,cx,cy,op,sc)")
+          p.write_text(s)
+
+          # Splash fallback background.
+          p = Path('olen-4.4.0-splash-polish.js')
+          s = p.read_text().replace("assets/olen-splash-background.png", "assets/olen-background.png")
+          p.write_text(s)
+
+          # PWA identity: use current OLEN compact artwork instead of the old JPG icon.
+          p = Path('manifest.webmanifest')
+          s = p.read_text().replace(
+              '{"src":"assets/olen-ui.jpg","sizes":"256x256","type":"image/jpeg","purpose":"any maskable"}',
+              '{"src":"assets/olen-ui.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}'
+          )
+          p.write_text(s)
+
+          # Browser/tab + installed shortcut identity.
+          p = Path('index.html')
+          s = p.read_text()
+          marker = '<link rel="manifest" href="manifest.webmanifest">'
+          additions = marker + '\n<link rel="icon" type="image/png" href="assets/olen-ui.png">\n<link rel="apple-touch-icon" href="assets/olen-ui.png">'
+          if '<link rel="icon" type="image/png" href="assets/olen-ui.png">' not in s:
+              s = s.replace(marker, additions)
+          p.write_text(s)
+
+          # Force a fresh shell/video/icon cache after this visual correction.
+          p = Path('sw.js')
+          s = p.read_text()
+          s = s.replace('olen-v4.4.0-v107-video', 'olen-v4.4.0-v107-center-icon')
+          s = s.replace('4.4.0-v107-video', '4.4.0-v107-center-icon')
+          s = s.replace('"./icon-192.png","./icon-512.png",\n  "./assets/olen-ui.jpg","./assets/olen-ui.png"', '"./assets/olen-ui.png"')
+          s = s.replace('assets/olen-splash-background.png', 'assets/olen-background.png')
+          p.write_text(s)
+          PY
+
+      - name: Render corrected V10.7 splash
         run: python tools/render_olen_v107.py
 
-      - name: Commit clean-background integration and generated MP4
+      - name: Commit corrected identity, geometry and generated MP4
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add tools/render_olen_v107.py olen-4.4.0-splash-polish.js sw.js assets/olen-v10.7-final.mp4
+          git add tools/render_olen_v107.py olen-4.4.0-splash-polish.js manifest.webmanifest index.html sw.js assets/olen-v10.7-final.mp4
           if git diff --cached --quiet; then
-            echo "No generated video change"
+            echo "No generated change"
             exit 0
           fi
-          git commit -m "OLEN 4.4.0: use clean background in V10.7 splash"
+          git commit -m "OLEN 4.4.0: center splash identity and refresh app icon"
           git push
