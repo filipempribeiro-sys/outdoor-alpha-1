@@ -13,8 +13,8 @@ const SYMBOL_BOX=390;
 const FINAL_STAR_SIZE=27;
 const FINAL_STAR_Y=CY+66;
 const CHEVRON_W=246,CHEVRON_H=228;
-const BAR_X=58,BAR_Y=1080,BAR_W=604;
-const V='4.4.0-v107-navigator-tight-gap-bar20';
+const BAR_X=140,BAR_Y=1080,BAR_W=440;
+const V='4.4.0-v107-columns-width-tagline19-bar20';
 const WELCOME_DAY_KEY='olen:lastWelcomeDay';
 
 const ASSETS={
@@ -229,7 +229,7 @@ function drawScene(t){
   if(t>=6.0)drawFit(img.olen,360,565,430,150,fade(t,6.0,6.85),1);
   if(t>=6.95){
     ctx.save();ctx.globalAlpha=fade(t,6.95,7.65);ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.font='700 15px \"Segoe UI\", Arial, Helvetica, sans-serif';
+    ctx.font='700 19px \"Segoe UI\", Arial, Helvetica, sans-serif';
     const tg=ctx.createLinearGradient(90,0,630,0);tg.addColorStop(0,'#f7ffff');tg.addColorStop(.42,'#7fffe0');tg.addColorStop(1,'#73cfff');
     ctx.fillStyle=tg;ctx.shadowColor='rgba(35,220,235,.24)';ctx.shadowBlur=6;ctx.fillText('OUTDOOR • LIFESTYLE • EXPERIENCE • NAVIGATOR',360,655);ctx.restore();
   }
