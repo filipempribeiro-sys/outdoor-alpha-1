@@ -1,7 +1,7 @@
 /* OLEN 4.4.0 · V10.7 NATIVE CANVAS SPLASH
    Individual approved PNG assets only. No master crop extraction.
-   Star follows the optical centreline of the OLEN ring, settles below the chevron,
-   and the loading bar uses a heavier 10px progress stroke. */
+   Star follows the optical centreline of the OLEN ring, settles spatially below the chevron,
+   and the loading bar uses a heavier 15px progress stroke. */
 (()=>{
 'use strict';
 if(window.__olenV107CanvasSplash)return;
@@ -11,9 +11,10 @@ const W=720,H=1280,DUR=12;
 const CX=360,CY=300;
 const SYMBOL_BOX=390;
 const FINAL_STAR_SIZE=27;
+const FINAL_STAR_Y=CY+66;
 const CHEVRON_W=246,CHEVRON_H=228;
 const BAR_X=58,BAR_Y=1158,BAR_W=604;
-const V='4.4.0-v107-optical-star-track-bar10';
+const V='4.4.0-v107-star-below-chevron-bar15';
 const WELCOME_DAY_KEY='olen:lastWelcomeDay';
 
 const ASSETS={
@@ -185,13 +186,13 @@ function drawWelcome(t){
 function drawLoading(t){
   const prog=clamp(t/DUR),fw=Math.round(BAR_W*prog);
   ctx.save();ctx.lineCap='round';
-  ctx.strokeStyle='rgba(196,244,239,.20)';ctx.lineWidth=6;
+  ctx.strokeStyle='rgba(196,244,239,.20)';ctx.lineWidth=8;
   ctx.beginPath();ctx.moveTo(BAR_X,BAR_Y);ctx.lineTo(BAR_X+BAR_W,BAR_Y);ctx.stroke();
   if(fw>0){
     const g=ctx.createLinearGradient(BAR_X,0,BAR_X+BAR_W,0);g.addColorStop(0,'#19f29a');g.addColorStop(.48,'#1dd8d8');g.addColorStop(1,'#2498ff');
-    ctx.strokeStyle=g;ctx.lineWidth=10;ctx.shadowColor='rgba(35,221,236,.56)';ctx.shadowBlur=10;
+    ctx.strokeStyle=g;ctx.lineWidth=15;ctx.shadowColor='rgba(35,221,236,.60)';ctx.shadowBlur=12;
     ctx.beginPath();ctx.moveTo(BAR_X,BAR_Y);ctx.lineTo(BAR_X+fw,BAR_Y);ctx.stroke();ctx.shadowBlur=0;
-    drawStarImage(BAR_X+fw,BAR_Y,10,1);
+    drawStarImage(BAR_X+fw,BAR_Y,12,1);
   }
   ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='400 15px "Segoe UI", Arial, Helvetica, sans-serif';
   ctx.fillStyle='rgba(211,235,232,.82)';ctx.fillText('A iniciar a OLEN...',W/2,1195);ctx.restore();
@@ -210,7 +211,7 @@ function drawScene(t){
     drawStarImage(CX+ringTrackRadius*Math.cos(ang),CY+ringTrackRadius*Math.sin(ang),15,1);
   }
 
-  /* 4.2–5.1s: the same star leaves the 6 o'clock point and flies to centre while zooming in. */
+  /* 4.2–5.1s: same star leaves 6 o'clock and flies to centre while zooming in. */
   if(t>4.2&&t<=5.1){
     const q=ease((t-4.2)/.9);
     const sy=(CY+ringTrackRadius)*(1-q)+CY*q;
@@ -218,14 +219,15 @@ function drawScene(t){
     drawStarImage(CX,sy,size,1);
   }
 
-  /* 5.1–5.7s: star zooms out and settles in its final position. */
+  /* 5.1–5.7s: zoom out while moving the star to its final position below the chevron. */
   if(t>5.1){
     const q=ease((t-5.1)/.6);
     const size=t<5.7?112*(1-q)+FINAL_STAR_SIZE*q:FINAL_STAR_SIZE;
-    drawStarImage(CX,CY,size,1);
+    const starY=t<5.7?CY*(1-q)+FINAL_STAR_Y*q:FINAL_STAR_Y;
+    drawStarImage(CX,starY,size,1);
   }
 
-  /* Only after the star is settled, draw the approved chevron above it. */
+  /* Only after the star is settled below it, draw the approved chevron above. */
   if(t>=5.72)drawChevronReveal(fade(t,5.72,6.25),1);
 
   if(t>=6.0)drawFit(img.olen,360,565,430,150,fade(t,6.0,6.85),1);
@@ -261,5 +263,5 @@ async function prepare(){
 function install(){overlay=document.getElementById('alphaWelcomeOverlay');if(!overlay)return;wrapOriginalHide();if(!stage){stage=document.createElement('div');stage.className='olen-v107-canvas-stage';canvas=document.createElement('canvas');canvas.className='olen-v107-canvas';canvas.setAttribute('aria-hidden','true');ctx=canvas.getContext('2d');stage.appendChild(canvas);overlay.appendChild(stage);prepare()}if(!observer){observer=new MutationObserver(()=>{if(overlayVisible()){if(ready)start()}else if(running){running=false;cancelAnimationFrame(raf)}});observer.observe(overlay,{attributes:true,attributeFilter:['class','aria-hidden']})}if(overlayVisible()&&ready)start()}
 function boot(){requestAnimationFrame(install);setTimeout(install,80);setTimeout(install,300);setTimeout(install,900)}
 document.addEventListener('DOMContentLoaded',boot,{once:true});window.addEventListener('pageshow',boot,{passive:true});boot();
-console.info('[OLEN 4.4.0] V10.7 native Canvas · optical star track · chevron over settled star · loading 10px');
+console.info('[OLEN 4.4.0] V10.7 native Canvas · optical star track · star below chevron · loading 15px');
 })();
