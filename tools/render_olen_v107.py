@@ -5,7 +5,7 @@ W,H=720,1280
 FPS=24
 DUR=12.0
 N=int(FPS*DUR)
-BG='assets/olen-splash-background.png'
+BG='assets/olen-background.png'
 MASTER='assets/olen-splash.png'
 OUT='assets/olen-v10.7-final.mp4'
 

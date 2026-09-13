@@ -22,7 +22,7 @@ const HOME_UX_POLISH_URL="./alpha-4.3.43-home-ux-polish.js?v=4.4.0";
 
 const SHELL=[
   "./","./index.html","./manifest.webmanifest","./icon-192.png","./icon-512.png",
-  "./assets/olen-ui.jpg","./assets/olen-ui.png","./assets/olen-splash-background.png","./assets/olen-v10.7-final.mp4",
+  "./assets/olen-ui.jpg","./assets/olen-ui.png","./assets/olen-background.png","./assets/olen-v10.7-final.mp4",
   "./olen-4.4.0-identity.js","./olen-4.4.0-splash-polish.js",
   "./alpha-4.3.17-fixes.js","./alpha-4.3.22-spotify-global.js",
   "./alpha-4.3.30-calendar-google.js","./alpha-4.3.30-calendar-timepicker.js",

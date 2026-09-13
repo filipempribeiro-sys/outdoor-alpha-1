@@ -7,7 +7,7 @@ if(window.__olenV107VideoSplash)return;
 window.__olenV107VideoSplash=true;
 
 const VIDEO='assets/olen-v10.7-final.mp4';
-const BG='assets/olen-splash-background.png';
+const BG='assets/olen-background.png';
 const READY_TIMEOUT=3000;
 const PLAY_WATCHDOG=13500;
 
