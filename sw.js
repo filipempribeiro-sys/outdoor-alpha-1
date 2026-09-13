@@ -1,4 +1,4 @@
-const CACHE_NAME="olen-v4.4.0-intro-startup-guard";
+const CACHE_NAME="olen-v4.4.0-pillar-text-refresh-20260913";
 const BASE_PATCH_URL="./alpha-4.3.17-fixes.js?v=4.3.43";
 const SPOTIFY_PATCH_URL="./alpha-4.3.22-spotify-global.js?v=4.3.43";
 const CALENDAR_GOOGLE_URL="./alpha-4.3.30-calendar-google.js?v=4.3.43";
@@ -18,8 +18,9 @@ const HOME_FOOTER_SIX_GRID_URL="./alpha-4.3.39-home-footer-six-grid.js?v=4.3.43"
 const INTERNAL_SIDEBAR_NO_SPOTIFY_URL="./alpha-4.3.40-internal-sidebar-no-spotify.js?v=4.4.0";
 const OLEN_IDENTITY_URL="./olen-4.4.0-identity.js?v=4.4.0-bg";
 const SPLASH_GUARD_URL="./olen-4.4.0-splash-guard.js?v=4.4.0-startup-guard";
-const SPLASH_POLISH_URL="./olen-4.4.0-splash-polish.js?v=4.4.0-planeia-pillars-startup-guard";
+const SPLASH_POLISH_URL="./olen-4.4.0-splash-polish.js?v=4.4.0-planeia-pillars-text-refresh-20260913";
 const HOME_UX_POLISH_URL="./alpha-4.3.43-home-ux-polish.js?v=4.4.0-home-balanced-gap";
+const PILLAR_TEXT_REFRESH="20260913-white-pillars-v2";
 
 const SHELL=[
   "./","./index.html","./manifest.webmanifest","./assets/olen-ui.png","./assets/olen-background.png","./assets/olen-splash.png",
@@ -118,7 +119,7 @@ function with440Patch(response){
     const headers=new Headers(response.headers);
     headers.delete("content-length");
     headers.set("Cache-Control","no-store");
-    headers.set("X-OLEN-Patch","4.4.0-intro-startup-guard");
+    headers.set("X-OLEN-Patch","4.4.0-pillar-text-refresh-20260913");
     return new Response(html,{status:response.status,statusText:response.statusText,headers});
   });
 }
@@ -133,6 +134,17 @@ self.addEventListener("fetch",e=>{
         .then(r=>with440Patch(r))
         .then(r=>{const cp=r.clone();caches.open(CACHE_NAME).then(c=>c.put("./index.html",cp)).catch(()=>{});return r})
         .catch(async()=>{const cached=await caches.match("./index.html");return cached?with440Patch(cached):cached})
+    );
+    return;
+  }
+
+  if(u.origin===location.origin&&/\/assets\/olen\/olen-text-(?:planeia|explora|descobre|vive)\.png$/.test(u.pathname)){
+    const freshUrl=new URL(e.request.url);
+    freshUrl.search='?v='+PILLAR_TEXT_REFRESH;
+    e.respondWith(
+      fetch(new Request(freshUrl.toString(),{cache:'reload',credentials:'same-origin'}))
+        .then(r=>{const cp=r.clone();caches.open(CACHE_NAME).then(c=>c.put(e.request,cp)).catch(()=>{});return r})
+        .catch(()=>caches.match(e.request))
     );
     return;
   }
