@@ -14,6 +14,16 @@ window.__olenChatFullscreenSidebarHeaderFix440=true;
 const style=document.createElement('style');
 style.id='olenChatFullscreenSidebarHeaderFix440Style';
 style.textContent=`
+/* Exact Chat fullscreen hamburger override.
+   Includes #lifestyleAI so it outranks the legacy
+   "hamburger never disappears" rule without changing layout. */
+body.alphaChatOlenOpen4330.alphaChatMode #lifestyleAI .aiChatMenuBtn.alphaFloatingMenu,
+body.alphaChatOlenOpen4330.alphaComposeMode #lifestyleAI .aiChatMenuBtn.alphaFloatingMenu{
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+
 body.alphaChatOlenOpen4330.alphaChatMode #chatMenuBtn,
 body.alphaChatOlenOpen4330.alphaComposeMode #chatMenuBtn,
 body.alphaChatOlenOpen4330.alphaChatMode .alphaChatMenuBtn,
@@ -40,7 +50,6 @@ body.alphaChatOlenOpen4330.alphaChatMode button[aria-label="Abrir navegação"],
 body.alphaChatOlenOpen4330.alphaComposeMode button[aria-label="Abrir navegação"],
 body.alphaChatOlenOpen4330.alphaChatMode button[aria-label="Abrir conversas"],
 body.alphaChatOlenOpen4330.alphaComposeMode button[aria-label="Abrir conversas"]{
-  display:none!important;
   visibility:hidden!important;
   opacity:0!important;
   pointer-events:none!important;
