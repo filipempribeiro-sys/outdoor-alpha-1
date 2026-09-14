@@ -1,4 +1,4 @@
-/* OLEN 4.5.2 · CLEAN CHAT FULLSCREEN CORE
+/* OLEN 4.5.3 · CLEAN CHAT FULLSCREEN CORE
    Scope: Chat/Compose fullscreen presentation + conversation actions.
    One owner for: topbar, capsule, sidebar search entry, search overlay and 3-dot menu.
    Chat data remains owned by the existing conversation engine.
@@ -49,8 +49,8 @@ body.olenChatFs451.olenSidebarOpen451 #lifestyleAI .olenChatCapsule451,body.olen
 body.olenChatFs451 .alphaChatOlenSidebar4330 .alphaChatOlenHead4330{position:relative!important;display:flex!important;align-items:center!important;min-height:60px!important;padding:0 60px 10px 4px!important}
 body.olenChatFs451 .alphaChatOlenSidebar4330 .alphaChatOlenBrand4330{width:60px!important;height:60px!important;min-width:60px!important;display:grid!important;place-items:center!important}
 body.olenChatFs451 .alphaChatOlenSidebar4330 .olenChatSidebarUiLogo451{display:block!important;width:60px!important;height:60px!important;min-width:60px!important;object-fit:contain!important;margin:0!important}
-body.olenChatFs451 .alphaChatOlenSidebar4330 .alphaChatOlenSearch4330{position:absolute!important;top:8px!important;right:0!important;width:44px!important;height:44px!important;margin:0!important;z-index:8!important;display:grid!important;place-items:center!important;background:#10231f!important;border:1px solid #315149!important;color:#eff7f3!important}
-body.olenChatFs451 .alphaChatOlenSidebar4330 .alphaChatOlenSearch4330:active{background:#17372f!important}
+body.olenChatFs451 .alphaChatOlenSidebar4330 .alphaChatOlenSearch4330{position:absolute!important;top:8px!important;right:0!important;width:44px!important;height:44px!important;margin:0!important;padding:0!important;z-index:8!important;display:grid!important;place-items:center!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;outline:0!important;color:#eff7f3!important;-webkit-tap-highlight-color:transparent!important}
+body.olenChatFs451 .alphaChatOlenSidebar4330 .alphaChatOlenSearch4330:active{background:transparent!important;box-shadow:none!important}
 body.olenChatFs451 .alphaChatOlenSidebar4330 .alphaChatOlenSearchBox4330{display:none!important}
 
 .alphaChatConvActionScrim4330{position:fixed!important;inset:0!important;z-index:2147483000!important;pointer-events:auto!important}.alphaChatConvActionMenu4330{position:fixed!important;z-index:2147483001!important;pointer-events:auto!important}
@@ -112,5 +112,5 @@ const bodyObs=new MutationObserver(schedule);bodyObs.observe(document.body,{attr
 let sideObs=null,sideEl=null;function bindSide(){const s=sidebar();if(!s||s===sideEl)return;sideEl=s;sideObs?.disconnect();sideObs=new MutationObserver(schedule);sideObs.observe(s,{attributes:true,attributeFilter:['class','aria-hidden','hidden']})}bindSide();
 const host=qs('#lifestyleAI');if(host)new MutationObserver(()=>{if(CHAT()){bindSide();ensureCapsule();schedule()}}).observe(host,{childList:true,subtree:true});
 window.addEventListener('pageshow',schedule,{passive:true});window.addEventListener('popstate',()=>{closeAll();schedule()},{passive:true});window.addEventListener('pagehide',closeAll,{passive:true});document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(qs('.olenChatSearch451'))closeSearch();else if(qs('.olenFiles451'))closeFiles();else closeFloating()}});
-console.info('[OLEN 4.5.2] clean fullscreen with native ALPHA visual identity active');
+console.info('[OLEN 4.5.3] clean fullscreen with native ALPHA visual identity active');
 })();
