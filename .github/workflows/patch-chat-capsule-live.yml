@@ -1,0 +1,114 @@
+name: Patch live chat fullscreen capsule
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/patch-chat-capsule-live.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch index.html
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          marker='OLEN_CHAT_CAPSULE_LIVE_PATCH_440'
+          if marker in s:
+              print('Patch already present')
+              raise SystemExit(0)
+          block=r'''
+<!-- OLEN_CHAT_CAPSULE_LIVE_PATCH_440 -->
+<style id="olenChatCapsuleLivePatch440Style">
+body.alphaChatMode #lifestyleAI .alphaChatActions4324,
+body.alphaComposeMode #lifestyleAI .alphaChatActions4324{
+  width:126px!important;min-width:126px!important;max-width:126px!important;
+  height:48px!important;min-height:48px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  gap:0!important;padding:0!important;overflow:hidden!important;
+  border-radius:999px!important;background:#222325!important;
+  border:1px solid rgba(255,255,255,.14)!important;box-shadow:none!important;
+}
+body.alphaChatMode #lifestyleAI .alphaChatActions4324 .alphaNewChatBtn,
+body.alphaComposeMode #lifestyleAI .alphaChatActions4324 .alphaNewChatBtn,
+body.alphaChatMode #lifestyleAI .alphaChatActions4324 .alphaChatMore442,
+body.alphaComposeMode #lifestyleAI .alphaChatActions4324 .alphaChatMore442{
+  width:62px!important;min-width:62px!important;max-width:62px!important;
+  height:46px!important;min-height:46px!important;flex:0 0 62px!important;
+  margin:0!important;padding:0!important;display:grid!important;place-items:center!important;
+  background:transparent!important;border:0!important;border-radius:0!important;
+  color:#fff!important;box-shadow:none!important;outline:0!important;
+}
+body.alphaChatMode #lifestyleAI .alphaChatActions4324 .alphaNewChatBtn::before,
+body.alphaComposeMode #lifestyleAI .alphaChatActions4324 .alphaNewChatBtn::before,
+body.alphaChatMode #lifestyleAI .alphaChatActions4324 .alphaNewChatBtn::after,
+body.alphaComposeMode #lifestyleAI .alphaChatActions4324 .alphaNewChatBtn::after,
+body.alphaChatMode #lifestyleAI .alphaChatActions4324 .alphaChatMore442::before,
+body.alphaComposeMode #lifestyleAI .alphaChatActions4324 .alphaChatMore442::before,
+body.alphaChatMode #lifestyleAI .alphaChatActions4324 .alphaChatMore442::after,
+body.alphaComposeMode #lifestyleAI .alphaChatActions4324 .alphaChatMore442::after{
+  display:none!important;content:none!important;border:0!important;
+}
+body.alphaChatMode #lifestyleAI .alphaChatActions4324 svg,
+body.alphaComposeMode #lifestyleAI .alphaChatActions4324 svg{
+  width:27px!important;height:27px!important;display:block!important;
+}
+</style>
+<script>
+(()=>{
+ const isChat=()=>document.body.classList.contains('alphaChatMode')||document.body.classList.contains('alphaComposeMode');
+ const compose='<svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round"><path d="M5 4.75H4.5A2.5 2.5 0 0 0 2 7.25v12A2.5 2.5 0 0 0 4.5 21h12a2.5 2.5 0 0 0 2.5-2.5V18"/><path d="M8 16l1.2-4.25L17.6 3.35a2.25 2.25 0 0 1 3.18 3.18l-8.4 8.4L8 16Z"/><path d="m15.9 5.05 3.05 3.05"/></svg>';
+ const dots='<svg viewBox="0 0 24 24" aria-hidden="true" style="fill:currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>';
+ function apply(){
+   if(!isChat())return;
+   const cap=document.querySelector('#lifestyleAI .alphaChatActions4324');
+   if(!cap)return;
+   cap.style.setProperty('width','126px','important');
+   cap.style.setProperty('min-width','126px','important');
+   cap.style.setProperty('max-width','126px','important');
+   cap.style.setProperty('height','48px','important');
+   cap.style.setProperty('border-radius','999px','important');
+   cap.style.setProperty('overflow','hidden','important');
+   cap.style.setProperty('gap','0','important');
+   cap.style.setProperty('padding','0','important');
+   cap.style.setProperty('background','#222325','important');
+   cap.style.setProperty('border','1px solid rgba(255,255,255,.14)','important');
+   const n=cap.querySelector('.alphaNewChatBtn');
+   if(n){n.innerHTML=compose;n.setAttribute('aria-label','Nova conversa');}
+   let m=cap.querySelector('.alphaChatMore442');
+   if(!m){m=document.createElement('button');m.type='button';m.className='alphaChatMore442';m.setAttribute('aria-label','Mais opções');cap.appendChild(m)}
+   m.innerHTML=dots;
+   [n,m].filter(Boolean).forEach(b=>{
+      for(const [k,v] of Object.entries({width:'62px','min-width':'62px','max-width':'62px',height:'46px','min-height':'46px',flex:'0 0 62px',margin:'0',padding:'0',background:'transparent',border:'0','border-radius':'0','box-shadow':'none',outline:'0'})) b.style.setProperty(k,v,'important');
+   });
+ }
+ window.addEventListener('pageshow',()=>requestAnimationFrame(apply),{passive:true});
+ document.addEventListener('click',()=>requestAnimationFrame(apply),true);
+ document.addEventListener('touchend',()=>requestAnimationFrame(apply),{passive:true,capture:true});
+ setTimeout(apply,100);setTimeout(apply,500);setTimeout(apply,1200);
+})();
+</script>
+'''
+          if '</body>' not in s:
+              raise SystemExit('No </body> found')
+          s=s.replace('</body>',block+'\n</body>',1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit patch
+        run: |
+          if git diff --quiet -- index.html; then
+            echo 'No changes'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Apply live OLEN chat capsule patch'
+          git push
