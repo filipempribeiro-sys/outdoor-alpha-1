@@ -59,7 +59,8 @@ body.alphaComposeMode #lifestyleAI .olenChatCapsule440{
   display:flex!important;align-items:center!important;justify-content:center!important;
   overflow:hidden!important;border-radius:999px!important;
   background:#222325!important;border:1px solid rgba(255,255,255,.14)!important;
-  box-shadow:none!important;position:relative!important;z-index:45!important
+  box-shadow:none!important;position:relative!important;z-index:45!important;
+  pointer-events:auto!important;touch-action:manipulation!important
 }
 body.alphaChatMode #lifestyleAI .olenChatCapsule440>button,
 body.alphaComposeMode #lifestyleAI .olenChatCapsule440>button{
@@ -68,7 +69,8 @@ body.alphaComposeMode #lifestyleAI .olenChatCapsule440>button{
   height:46px!important;min-height:46px!important;flex:0 0 62px!important;
   margin:0!important;padding:0!important;display:grid!important;place-items:center!important;
   background:transparent!important;border:0!important;border-radius:0!important;
-  box-shadow:none!important;outline:0!important;color:#fff!important
+  box-shadow:none!important;outline:0!important;color:#fff!important;
+  pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important
 }
 body.alphaChatMode #lifestyleAI .olenChatCapsule440>button:active,
 body.alphaComposeMode #lifestyleAI .olenChatCapsule440>button:active{
@@ -76,7 +78,7 @@ body.alphaComposeMode #lifestyleAI .olenChatCapsule440>button:active{
 }
 body.alphaChatMode #lifestyleAI .olenChatCapsule440 svg,
 body.alphaComposeMode #lifestyleAI .olenChatCapsule440 svg{
-  width:27px!important;height:27px!important;display:block!important
+  width:27px!important;height:27px!important;display:block!important;pointer-events:none!important
 }
 body.alphaChatMode #lifestyleAI .olenChatCompose440 svg,
 body.alphaComposeMode #lifestyleAI .olenChatCompose440 svg{
@@ -88,7 +90,7 @@ body.alphaComposeMode #lifestyleAI .olenChatMore440 svg{
 }
 
 .olenChatMoreScrim440{
-  position:fixed;inset:0;z-index:2147483010;background:transparent
+  position:fixed;inset:0;z-index:2147483010;background:transparent;pointer-events:auto
 }
 .olenChatMoreMenu440{
   position:fixed;z-index:2147483011;
@@ -98,7 +100,7 @@ body.alphaComposeMode #lifestyleAI .olenChatMore440 svg{
   border:1px solid rgba(255,255,255,.13);
   box-shadow:0 18px 50px rgba(0,0,0,.45);
   backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  color:#f7f7f7
+  color:#f7f7f7;pointer-events:auto
 }
 .olenChatMoreMenu440 .olenChatMoreTitle440{
   min-height:44px;display:flex;align-items:center;padding:0 14px;
@@ -157,7 +159,7 @@ const openOwnMoreMenu=anchor=>{
   closeOwnMoreMenu();
   const scrim=document.createElement('div');
   scrim.className='olenChatMoreScrim440';
-  scrim.addEventListener('click',closeOwnMoreMenu,{once:true});
+  scrim.addEventListener('pointerup',e=>{e.preventDefault();e.stopPropagation();closeOwnMoreMenu()},{once:true});
   document.body.appendChild(scrim);
 
   const menu=document.createElement('div');
@@ -175,9 +177,49 @@ const openOwnMoreMenu=anchor=>{
   menu.style.top=Math.max(14,top)+'px';
 };
 
+const runNewChat=()=>{
+  closeOwnMoreMenu();
+  if(typeof window.alphaStartFreshConversation==='function'){
+    window.alphaStartFreshConversation({focus:true,compose:true});
+    return;
+  }
+  if(typeof window.alphaNewConversation==='function'){
+    window.alphaNewConversation();
+    return;
+  }
+  document.querySelector('#lifestyleAI .alphaNewChatBtn')?.click();
+};
+
+const toggleOwnMoreMenu=anchor=>{
+  if(document.querySelector('.olenChatMoreMenu440'))closeOwnMoreMenu();
+  else openOwnMoreMenu(anchor);
+};
+
+const bindCapsuleButton=(button,action)=>{
+  if(!button||button.dataset.olenActionBound440==='1')return;
+  button.dataset.olenActionBound440='1';
+  let pointerHandled=false;
+  button.addEventListener('pointerup',e=>{
+    if(e.button!=null&&e.button!==0)return;
+    e.preventDefault();
+    e.stopPropagation();
+    pointerHandled=true;
+    action();
+    setTimeout(()=>{pointerHandled=false},350);
+  });
+  button.addEventListener('click',e=>{
+    e.preventDefault();
+    e.stopPropagation();
+    if(pointerHandled)return;
+    action();
+  });
+};
+
 const ensureOwnCapsule=()=>{
   const bar=document.querySelector('#lifestyleAI .aiTopbar.alphaFloatingHeader');
   if(!bar)return null;
+
+  setImp(bar,'pointer-events','auto');
 
   let cap=bar.querySelector('.olenChatCapsule440');
   if(!cap){
@@ -191,16 +233,6 @@ const ensureOwnCapsule=()=>{
     compose.setAttribute('aria-label','Nova conversa');
     compose.title='Nova conversa';
     compose.innerHTML=composeSvg;
-    compose.addEventListener('click',e=>{
-      e.preventDefault();
-      e.stopPropagation();
-      closeOwnMoreMenu();
-      if(typeof window.alphaStartFreshConversation==='function'){
-        window.alphaStartFreshConversation({focus:true,compose:true});
-      }else{
-        document.querySelector('#lifestyleAI .alphaNewChatBtn')?.click();
-      }
-    });
 
     const more=document.createElement('button');
     more.type='button';
@@ -208,16 +240,16 @@ const ensureOwnCapsule=()=>{
     more.setAttribute('aria-label','Mais opções');
     more.title='Mais opções';
     more.innerHTML=dotsSvg;
-    more.addEventListener('click',e=>{
-      e.preventDefault();
-      e.stopPropagation();
-      const open=document.querySelector('.olenChatMoreMenu440');
-      if(open)closeOwnMoreMenu();
-      else openOwnMoreMenu(more);
-    });
+
+    bindCapsuleButton(compose,runNewChat);
+    bindCapsuleButton(more,()=>toggleOwnMoreMenu(more));
 
     cap.append(compose,more);
     bar.appendChild(cap);
+  }else{
+    bindCapsuleButton(cap.querySelector('.olenChatCompose440'),runNewChat);
+    const more=cap.querySelector('.olenChatMore440');
+    bindCapsuleButton(more,()=>toggleOwnMoreMenu(more));
   }
   return cap;
 };
@@ -263,5 +295,5 @@ setTimeout(()=>{wrapSidebarApi();syncAll();},0);
 setTimeout(()=>{wrapSidebarApi();syncAll();},120);
 setTimeout(syncAll,500);
 
-console.info('[OLEN 4.4.0] independent Chat capsule active');
+console.info('[OLEN 4.4.0] independent Chat capsule buttons active');
 })();
