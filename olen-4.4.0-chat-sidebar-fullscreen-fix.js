@@ -1,6 +1,6 @@
 /* OLEN 4.4.0 · CHAT FULLSCREEN SIDEBAR HEADER FIX
    Scope: OLEN/Chat fullscreen sidebar only.
-   - hides the floating hamburger while the chat sidebar is open
+   - hides the actual Chat hamburger/menu trigger while the sidebar is open
    - keeps the sidebar OLEN logo/header above any remaining overlays
    No Home/intro/footer/other-tab behavior is changed.
 */
@@ -12,6 +12,12 @@ window.__olenChatFullscreenSidebarHeaderFix440=true;
 const style=document.createElement('style');
 style.id='olenChatFullscreenSidebarHeaderFix440Style';
 style.textContent=`
+body.alphaChatOlenOpen4330.alphaChatMode #chatMenuBtn,
+body.alphaChatOlenOpen4330.alphaComposeMode #chatMenuBtn,
+body.alphaChatOlenOpen4330.alphaChatMode .alphaChatMenuBtn,
+body.alphaChatOlenOpen4330.alphaComposeMode .alphaChatMenuBtn,
+body.alphaChatOlenOpen4330.alphaChatMode .chatMenuBtn,
+body.alphaChatOlenOpen4330.alphaComposeMode .chatMenuBtn,
 body.alphaChatOlenOpen4330.alphaChatMode .aiChatMenuBtn,
 body.alphaChatOlenOpen4330.alphaComposeMode .aiChatMenuBtn,
 body.alphaChatOlenOpen4330.alphaChatMode #aiChatMenuBtn,
@@ -32,6 +38,7 @@ body.alphaChatOlenOpen4330.alphaChatMode button[aria-label="Abrir navegação"],
 body.alphaChatOlenOpen4330.alphaComposeMode button[aria-label="Abrir navegação"],
 body.alphaChatOlenOpen4330.alphaChatMode button[aria-label="Abrir conversas"],
 body.alphaChatOlenOpen4330.alphaComposeMode button[aria-label="Abrir conversas"]{
+  display:none!important;
   visibility:hidden!important;
   opacity:0!important;
   pointer-events:none!important;
