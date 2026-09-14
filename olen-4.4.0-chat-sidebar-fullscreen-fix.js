@@ -3,7 +3,7 @@
    Authoritative ownership:
    - hamburger/sidebar visibility
    - sidebar OLEN logo
-   - top-right action capsule
+   - independent top-right OLEN capsule
    - long-press overlay stacking above sidebar
 */
 (()=>{
@@ -43,39 +43,66 @@ body.alphaComposeMode .alphaChatOlenSidebar4330 .olenChatSidebarUiLogo440{
 .alphaChatConvActionMenu4330{
   position:fixed!important;z-index:2147483001!important;pointer-events:auto!important
 }
+
+/* Legacy capsule remains in DOM only for rollback/reference; it is no longer the visual owner. */
 body.alphaChatMode #lifestyleAI .alphaChatActions4324,
 body.alphaComposeMode #lifestyleAI .alphaChatActions4324{
+  display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important
+}
+
+body.alphaChatMode #lifestyleAI .olenChatCapsule440,
+body.alphaComposeMode #lifestyleAI .olenChatCapsule440{
+  margin-left:auto!important;
   width:126px!important;min-width:126px!important;max-width:126px!important;
   height:48px!important;min-height:48px!important;
-  padding:0!important;margin-left:auto!important;gap:0!important;
-  display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;
+  padding:0!important;gap:0!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
   overflow:hidden!important;border-radius:999px!important;
-  background:#222325!important;border:1px solid rgba(255,255,255,.14)!important;box-shadow:none!important
+  background:#222325!important;border:1px solid rgba(255,255,255,.14)!important;
+  box-shadow:none!important;position:relative!important;z-index:45!important
 }
-body.alphaChatMode #lifestyleAI .alphaChatActions4324>.alphaNewChatBtn,
-body.alphaComposeMode #lifestyleAI .alphaChatActions4324>.alphaNewChatBtn,
-body.alphaChatMode #lifestyleAI .alphaChatActions4324>.alphaChatMore442,
-body.alphaComposeMode #lifestyleAI .alphaChatActions4324>.alphaChatMore442{
+body.alphaChatMode #lifestyleAI .olenChatCapsule440>button,
+body.alphaComposeMode #lifestyleAI .olenChatCapsule440>button{
   position:static!important;inset:auto!important;transform:none!important;float:none!important;
   width:62px!important;min-width:62px!important;max-width:62px!important;
   height:46px!important;min-height:46px!important;flex:0 0 62px!important;
   margin:0!important;padding:0!important;display:grid!important;place-items:center!important;
-  background:transparent!important;border:0!important;border-left:0!important;border-right:0!important;
-  border-radius:0!important;box-shadow:none!important;outline:0!important;color:#fff!important
+  background:transparent!important;border:0!important;border-radius:0!important;
+  box-shadow:none!important;outline:0!important;color:#fff!important
 }
-body.alphaChatMode #lifestyleAI .alphaChatActions4324>.alphaNewChatBtn::before,
-body.alphaComposeMode #lifestyleAI .alphaChatActions4324>.alphaNewChatBtn::before,
-body.alphaChatMode #lifestyleAI .alphaChatActions4324>.alphaNewChatBtn::after,
-body.alphaComposeMode #lifestyleAI .alphaChatActions4324>.alphaNewChatBtn::after,
-body.alphaChatMode #lifestyleAI .alphaChatActions4324>.alphaChatMore442::before,
-body.alphaComposeMode #lifestyleAI .alphaChatActions4324>.alphaChatMore442::before,
-body.alphaChatMode #lifestyleAI .alphaChatActions4324>.alphaChatMore442::after,
-body.alphaComposeMode #lifestyleAI .alphaChatActions4324>.alphaChatMore442::after{
-  display:none!important;content:none!important;border:0!important
+body.alphaChatMode #lifestyleAI .olenChatCapsule440>button:active,
+body.alphaComposeMode #lifestyleAI .olenChatCapsule440>button:active{
+  background:rgba(255,255,255,.055)!important
 }
-body.alphaChatMode #lifestyleAI .alphaChatActions4324 svg,
-body.alphaComposeMode #lifestyleAI .alphaChatActions4324 svg{
+body.alphaChatMode #lifestyleAI .olenChatCapsule440 svg,
+body.alphaComposeMode #lifestyleAI .olenChatCapsule440 svg{
   width:27px!important;height:27px!important;display:block!important
+}
+body.alphaChatMode #lifestyleAI .olenChatCompose440 svg,
+body.alphaComposeMode #lifestyleAI .olenChatCompose440 svg{
+  fill:none!important;stroke:currentColor!important;stroke-width:1.9!important;stroke-linecap:round!important;stroke-linejoin:round!important
+}
+body.alphaChatMode #lifestyleAI .olenChatMore440 svg,
+body.alphaComposeMode #lifestyleAI .olenChatMore440 svg{
+  fill:currentColor!important;stroke:none!important
+}
+
+.olenChatMoreScrim440{
+  position:fixed;inset:0;z-index:2147483010;background:transparent
+}
+.olenChatMoreMenu440{
+  position:fixed;z-index:2147483011;
+  min-width:220px;max-width:calc(100vw - 28px);
+  padding:8px;border-radius:20px;
+  background:rgba(31,31,33,.985);
+  border:1px solid rgba(255,255,255,.13);
+  box-shadow:0 18px 50px rgba(0,0,0,.45);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  color:#f7f7f7
+}
+.olenChatMoreMenu440 .olenChatMoreTitle440{
+  min-height:44px;display:flex;align-items:center;padding:0 14px;
+  font:700 15px/1.2 system-ui,-apple-system,sans-serif;color:#dce7e3
 }
 `;
 document.head.appendChild(style);
@@ -118,70 +145,90 @@ const syncHamburger=()=>{
   }
 };
 
-const composeSvg='<svg class="olenComposeIcon440" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 3.5H4.75A2.75 2.75 0 0 0 2 6.25v13A2.75 2.75 0 0 0 4.75 22h13A2.75 2.75 0 0 0 20.5 19.25V18"/><path d="M8 16l1.2-4.4 8.45-8.45a2.15 2.15 0 0 1 3.05 3.05l-8.45 8.45L8 16Z"/><path d="m15.9 4.9 3.2 3.2"/></svg>';
-const dotsSvg='<svg class="olenMoreIcon440" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>';
+const composeSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 3.5H4.75A2.75 2.75 0 0 0 2 6.25v13A2.75 2.75 0 0 0 4.75 22h13A2.75 2.75 0 0 0 20.5 19.25V18"/><path d="M8 16l1.2-4.4 8.45-8.45a2.15 2.15 0 0 1 3.05 3.05l-8.45 8.45L8 16Z"/><path d="m15.9 4.9 3.2 3.2"/></svg>';
+const dotsSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>';
 
-const bindMore=more=>{
-  if(!more||more.dataset.olenMoreBound440==='1')return;
-  more.dataset.olenMoreBound440='1';
-  more.addEventListener('click',e=>{
-    e.preventDefault();
-    e.stopPropagation();
-    const native=document.querySelector('.alphaChatMoreBtn,[data-alpha-chat-more],button[aria-label="Mais opções" i]:not(.alphaChatMore442),button[title="Mais opções" i]:not(.alphaChatMore442)');
-    if(native)native.click();
-  });
+const closeOwnMoreMenu=()=>{
+  document.querySelector('.olenChatMoreMenu440')?.remove();
+  document.querySelector('.olenChatMoreScrim440')?.remove();
+};
+
+const openOwnMoreMenu=anchor=>{
+  closeOwnMoreMenu();
+  const scrim=document.createElement('div');
+  scrim.className='olenChatMoreScrim440';
+  scrim.addEventListener('click',closeOwnMoreMenu,{once:true});
+  document.body.appendChild(scrim);
+
+  const menu=document.createElement('div');
+  menu.className='olenChatMoreMenu440';
+  menu.setAttribute('role','menu');
+  menu.innerHTML='<div class="olenChatMoreTitle440">Mais opções</div>';
+  document.body.appendChild(menu);
+
+  const r=anchor.getBoundingClientRect();
+  const w=Math.min(260,innerWidth-28);
+  menu.style.width=w+'px';
+  const left=Math.max(14,Math.min(r.right-w,innerWidth-w-14));
+  const top=Math.min(innerHeight-menu.offsetHeight-14,r.bottom+10);
+  menu.style.left=left+'px';
+  menu.style.top=Math.max(14,top)+'px';
+};
+
+const ensureOwnCapsule=()=>{
+  const bar=document.querySelector('#lifestyleAI .aiTopbar.alphaFloatingHeader');
+  if(!bar)return null;
+
+  let cap=bar.querySelector('.olenChatCapsule440');
+  if(!cap){
+    cap=document.createElement('div');
+    cap.className='olenChatCapsule440';
+    cap.setAttribute('aria-label','Ações do Chat');
+
+    const compose=document.createElement('button');
+    compose.type='button';
+    compose.className='olenChatCompose440';
+    compose.setAttribute('aria-label','Nova conversa');
+    compose.title='Nova conversa';
+    compose.innerHTML=composeSvg;
+    compose.addEventListener('click',e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      closeOwnMoreMenu();
+      if(typeof window.alphaStartFreshConversation==='function'){
+        window.alphaStartFreshConversation({focus:true,compose:true});
+      }else{
+        document.querySelector('#lifestyleAI .alphaNewChatBtn')?.click();
+      }
+    });
+
+    const more=document.createElement('button');
+    more.type='button';
+    more.className='olenChatMore440';
+    more.setAttribute('aria-label','Mais opções');
+    more.title='Mais opções';
+    more.innerHTML=dotsSvg;
+    more.addEventListener('click',e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      const open=document.querySelector('.olenChatMoreMenu440');
+      if(open)closeOwnMoreMenu();
+      else openOwnMoreMenu(more);
+    });
+
+    cap.append(compose,more);
+    bar.appendChild(cap);
+  }
+  return cap;
 };
 
 const syncCapsule=()=>{
-  if(!isChat())return;
-  const bar=document.querySelector('#lifestyleAI .aiTopbar.alphaFloatingHeader');
-  if(!bar)return;
-
-  let cap=bar.querySelector('.alphaChatActions4324');
-  const newChat=cap?.querySelector('.alphaNewChatBtn')||bar.querySelector('.alphaNewChatBtn');
-  if(!newChat)return;
-
-  if(!cap){
-    cap=document.createElement('div');
-    cap.className='alphaChatActions4324';
-    bar.appendChild(cap);
+  if(!isChat()){
+    closeOwnMoreMenu();
+    document.querySelector('.olenChatCapsule440')?.remove();
+    return;
   }
-
-  cap.querySelectorAll('.alphaChatSpotify4324,.alphaSpotifyToggle4324,[aria-label="Spotify Remote"],[title="Spotify"]').forEach(el=>el.remove());
-
-  newChat.setAttribute('aria-label','Nova conversa');
-  newChat.title='Nova conversa';
-  if(!newChat.querySelector('.olenComposeIcon440'))newChat.innerHTML=composeSvg;
-
-  const existingMore=[...bar.querySelectorAll('.alphaChatMore442')];
-  let more=existingMore[0]||null;
-  existingMore.slice(1).forEach(el=>el.remove());
-  if(!more){
-    more=document.createElement('button');
-    more.type='button';
-    more.className='alphaChatMore442';
-    more.setAttribute('aria-label','Mais opções');
-    more.title='Mais opções';
-  }
-  if(!more.querySelector('.olenMoreIcon440'))more.innerHTML=dotsSvg;
-  bindMore(more);
-
-  cap.replaceChildren(newChat,more);
-
-  [newChat,more].forEach(btn=>{
-    [['position','static'],['inset','auto'],['transform','none'],['float','none'],['width','62px'],['min-width','62px'],['max-width','62px'],['height','46px'],['min-height','46px'],['flex','0 0 62px'],['margin','0'],['padding','0'],['display','grid'],['place-items','center'],['background','transparent'],['border','0'],['border-left','0'],['border-right','0'],['border-radius','0'],['box-shadow','none'],['outline','0'],['color','#fff']].forEach(([p,v])=>setImp(btn,p,v));
-  });
-
-  const nsvg=newChat.querySelector('svg');
-  if(nsvg){
-    setImp(nsvg,'width','27px');setImp(nsvg,'height','27px');setImp(nsvg,'display','block');
-    setImp(nsvg,'fill','none');setImp(nsvg,'stroke','currentColor');setImp(nsvg,'stroke-width','1.9');setImp(nsvg,'stroke-linecap','round');setImp(nsvg,'stroke-linejoin','round');
-  }
-  const msvg=more.querySelector('svg');
-  if(msvg){
-    setImp(msvg,'width','27px');setImp(msvg,'height','27px');setImp(msvg,'display','block');
-    setImp(msvg,'fill','currentColor');setImp(msvg,'stroke','none');
-  }
+  ensureOwnCapsule();
 };
 
 const syncAll=()=>{
@@ -193,7 +240,9 @@ const syncAll=()=>{
 document.addEventListener('click',()=>requestAnimationFrame(syncAll),true);
 document.addEventListener('touchend',()=>requestAnimationFrame(syncAll),{capture:true,passive:true});
 window.addEventListener('pageshow',()=>requestAnimationFrame(syncAll),{passive:true});
-window.addEventListener('popstate',()=>requestAnimationFrame(syncAll),{passive:true});
+window.addEventListener('popstate',()=>{closeOwnMoreMenu();requestAnimationFrame(syncAll)},{passive:true});
+window.addEventListener('pagehide',closeOwnMoreMenu,{passive:true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeOwnMoreMenu()});
 
 const wrapSidebarApi=()=>{
   ['alphaOpenChatOlenSidebar','alphaCloseChatOlenSidebar','alphaToggleChatOlenSidebar'].forEach(name=>{
@@ -214,5 +263,5 @@ setTimeout(()=>{wrapSidebarApi();syncAll();},0);
 setTimeout(()=>{wrapSidebarApi();syncAll();},120);
 setTimeout(syncAll,500);
 
-console.info('[OLEN 4.4.0] Chat fullscreen authoritative capsule + long-press overlay active');
+console.info('[OLEN 4.4.0] independent Chat capsule active');
 })();
