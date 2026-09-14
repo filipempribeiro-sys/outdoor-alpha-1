@@ -24,25 +24,38 @@ style.textContent=`
 }
 .olen440-ui-logo::before,.olen440-ui-logo::after{display:none!important;content:none!important}
 
-/* HOME: show only the approved OLEN asset at 60x60px */
+/* HOME: direct PNG, exactly like the working Chat sidebar approach */
 .top .brand{gap:0!important}
 .top .brand .logo{
   width:60px!important;
   height:60px!important;
   min-width:60px!important;
   flex:0 0 60px!important;
-  background:url('${UI_LOGO}') center/contain no-repeat!important;
+  background:none!important;
   border:0!important;
   outline:0!important;
   border-radius:0!important;
   box-shadow:none!important;
   padding:0!important;
   overflow:visible!important;
+  display:block!important;
 }
 .top .brand .logo::before,.top .brand .logo::after{display:none!important;content:none!important}
-.top .brand>b,.top .brand>strong,.top .brand>div> b,.top .brand>div>strong,.top .brand small{display:none!important}
+.top .brand .olen440-home-img{
+  display:block!important;
+  width:60px!important;
+  height:60px!important;
+  min-width:60px!important;
+  object-fit:contain!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+.top .brand>b,.top .brand>strong,.top .brand>div>b,.top .brand>div>strong,.top .brand small{display:none!important}
 
-/* CHAT SIDEBAR HEADER: image only, no frame, no duplicate OLEN text */
+/* CHAT SIDEBAR HEADER: unchanged */
 .alphaChatOlenBrand4330{gap:0!important}
 .alphaChatOlenBrand4330 .alphaSidebarLogo.logo,
 .alphaChatOlenBrand4330 .olen440-chat-menu-logo{
@@ -62,23 +75,22 @@ style.textContent=`
 .alphaChatOlenBrand4330 .olen440-chat-menu-logo svg,.alphaChatOlenBrand4330 .olen440-chat-menu-logo i,.alphaChatOlenBrand4330 .olen440-chat-menu-logo span{display:none!important}
 .alphaChatOlenName4330{display:none!important}
 
-/* INTERNAL SIDEBAR HEADER: image only, no frame, no duplicate OLEN text */
+/* INTERNAL SIDEBAR HEADER: direct PNG, no legacy container artwork */
 #alphaInternalSidebar .alphaInternalBrand{gap:0!important}
-#alphaInternalSidebar .alphaInternalBrand .olen440-internal-logo{
+#alphaInternalSidebar .alphaInternalBrand .olen440-internal-img{
+  display:block!important;
   width:60px!important;
   height:60px!important;
   min-width:60px!important;
   flex:0 0 60px!important;
-  background:url('${UI_LOGO}') center/contain no-repeat!important;
-  display:block!important;
+  object-fit:contain!important;
+  margin:0!important;
+  padding:0!important;
   border:0!important;
   outline:0!important;
   border-radius:0!important;
   box-shadow:none!important;
-  padding:0!important;
-  overflow:visible!important;
 }
-#alphaInternalSidebar .alphaInternalBrand .olen440-internal-logo>*{visibility:hidden!important}
 #alphaInternalSidebar .alphaInternalBrand>b,#alphaInternalSidebar .alphaInternalBrand>strong{display:none!important}
 
 /* auth keeps same artwork without forced frame */
@@ -86,9 +98,10 @@ style.textContent=`
 .legacyAuthBrand .logo::before,.legacyAuthBrand .logo::after,.authWelcomeBrand .logo::before,.authWelcomeBrand .logo::after{display:none!important;content:none!important}
 
 @media(max-width:620px){
-  .top .brand .logo{width:60px!important;height:60px!important;min-width:60px!important;flex-basis:60px!important}
-  .alphaChatOlenBrand4330 .alphaSidebarLogo.logo,.alphaChatOlenBrand4330 .olen440-chat-menu-logo,
-  #alphaInternalSidebar .alphaInternalBrand .olen440-internal-logo{width:60px!important;height:60px!important;min-width:60px!important;flex-basis:60px!important}
+  .top .brand .logo,.top .brand .olen440-home-img,
+  #alphaInternalSidebar .alphaInternalBrand .olen440-internal-img{
+    width:60px!important;height:60px!important;min-width:60px!important;
+  }
 }
 `;
 document.head.appendChild(style);
@@ -98,7 +111,21 @@ function setLeafText(root,re,value){if(!root)return;root.querySelectorAll('*').f
 function brandHome(){
  const brand=document.querySelector('.top .brand');
  if(brand){
-   brand.querySelector('.logo')?.classList.add('olen440-ui-logo');
+   const host=brand.querySelector('.logo');
+   if(host){
+     let img=host.querySelector('.olen440-home-img');
+     if(!img){
+       img=document.createElement('img');
+       img.className='olen440-home-img';
+       img.src=UI_LOGO;
+       img.alt='OLEN';
+       img.width=60;
+       img.height=60;
+       host.replaceChildren(img);
+     }
+     host.removeAttribute('data-olen-logo');
+     host.setAttribute('aria-label','OLEN');
+   }
    brand.querySelectorAll('small').forEach(s=>{s.style.display='none'});
    brand.querySelectorAll('b,strong').forEach(el=>{if(/^(?:PROJECT\s+ALPHA|ALPHA|OLEN)$/i.test(norm(el.textContent)))el.style.display='none'});
  }
@@ -119,10 +146,16 @@ function brandInternalSidebar(){
  const side=document.getElementById('alphaInternalSidebar');if(!side)return;
  const brand=side.querySelector('.alphaInternalBrand');
  if(brand){
-   const name=brand.querySelector('b,strong');
-   if(name){name.textContent='OLEN';name.style.display='none'}
-   let mark=brand.querySelector('.olen440-internal-logo');
-   if(!mark){const candidate=[...brand.children].find(el=>el!==name&&!/^(B|STRONG)$/i.test(el.tagName));if(candidate){candidate.classList.add('olen440-internal-logo');mark=candidate}else if(name){mark=document.createElement('span');mark.className='olen440-internal-logo';mark.setAttribute('aria-hidden','true');name.before(mark)}}
+   let img=brand.querySelector('.olen440-internal-img');
+   if(!img){
+     img=document.createElement('img');
+     img.className='olen440-internal-img';
+     img.src=UI_LOGO;
+     img.alt='OLEN';
+     img.width=60;
+     img.height=60;
+     brand.replaceChildren(img);
+   }
  }
  const first=side.querySelector('.alphaInternalNavList button');if(first)setLeafText(first,/^(?:Alpha|OLEN)$/i,'OLEN');
 }
@@ -144,5 +177,5 @@ function publicActiveText(){const roots=[document.querySelector('.view.active'),
 function apply(){brandHome();brandChatSidebar();brandInternalSidebar();brandAuth();brandSplash();publicActiveText()}
 function delayed(){requestAnimationFrame(apply);setTimeout(apply,80);setTimeout(apply,260)}
 document.addEventListener('DOMContentLoaded',delayed,{once:true});window.addEventListener('pageshow',delayed,{passive:true});document.addEventListener('click',delayed,true);document.addEventListener('touchend',()=>requestAnimationFrame(apply),{passive:true,capture:true});apply();setTimeout(apply,120);setTimeout(apply,500);setTimeout(apply,1100);
-console.info('[OLEN 4.4.0] Clean OLEN logo presentation active');
+console.info('[OLEN 4.4.0] Direct PNG on Home + internal sidebar active');
 })();
