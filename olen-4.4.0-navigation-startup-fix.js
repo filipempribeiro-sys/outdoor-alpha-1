@@ -4,12 +4,31 @@
    - request the existing Home owner to reapply its saved geometry
    - detect Android/web swipe-back completion and restore that exact geometry
    - keep chat-sidebar state sync event-driven only
+   - release first-paint guard as soon as the OLEN intro overlay is actually visible
 */
 (()=>{
 'use strict';
 if(window.__olenNavigationStartupFix440)return;
 window.__olenNavigationStartupFix440=true;
 const OPEN='alphaChatOlenOpen4330';
+const BOOT='olenBootPending440';
+
+function introVisible(){
+ const w=document.getElementById('alphaWelcomeOverlay');
+ if(!w)return false;
+ const cs=getComputedStyle(w);
+ return cs.display!=='none'&&cs.visibility!=='hidden'&&Number(cs.opacity||1)>0;
+}
+function releaseBootGuard(){
+ if(introVisible())document.documentElement.classList.remove(BOOT);
+}
+function releaseBootGuardSoon(){
+ requestAnimationFrame(()=>requestAnimationFrame(releaseBootGuard));
+ setTimeout(releaseBootGuard,80);
+ setTimeout(releaseBootGuard,220);
+ /* Fail-open only: never leave the application shell permanently hidden. */
+ setTimeout(()=>document.documentElement.classList.remove(BOOT),1600);
+}
 
 function isHome(){
  const b=document.body;
@@ -33,9 +52,9 @@ function syncSidebar(){
 }
 
 window.addEventListener('popstate',()=>{syncSidebar();restoreSoon()},{passive:true});
-window.addEventListener('pageshow',()=>{syncSidebar();restoreSoon()},{passive:true});
+window.addEventListener('pageshow',()=>{releaseBootGuardSoon();syncSidebar();restoreSoon()},{passive:true});
 window.addEventListener('hashchange',restoreSoon,{passive:true});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden){syncSidebar();restoreSoon()}},{passive:true});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){releaseBootGuardSoon();syncSidebar();restoreSoon()}},{passive:true});
 document.addEventListener('click',e=>{
  if(e.target?.closest?.('.bottom .nav,[data-view]'))setTimeout(restoreSoon,0);
 },true);
@@ -55,6 +74,7 @@ document.addEventListener('touchend',e=>{
  if(dx>=70&&dx>dy*1.35)setTimeout(restoreSoon,30);
 },{passive:true,capture:true});
 
+releaseBootGuardSoon();
 setTimeout(()=>{syncSidebar();restoreSoon()},80);
-console.info('[OLEN 4.4.0] navigation consistency · stable Home geometry preserved');
+console.info('[OLEN 4.4.0] navigation consistency · startup guard release fixed');
 })();
