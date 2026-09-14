@@ -2,6 +2,7 @@
    Scope: OLEN/Chat fullscreen sidebar only.
    - hides the actual Chat hamburger/menu trigger while the sidebar is open
    - keeps the sidebar OLEN logo/header above any remaining overlays
+   - pins the sidebar search button to the top-right of its header
    No Home/intro/footer/other-tab behavior is changed.
 */
 (()=>{
@@ -47,6 +48,15 @@ body.alphaChatMode .alphaChatOlenSidebar4330 .alphaChatOlenHead4330,
 body.alphaComposeMode .alphaChatOlenSidebar4330 .alphaChatOlenHead4330{
   position:relative!important;
   z-index:5!important;
+  padding-right:52px!important;
+}
+body.alphaChatMode .alphaChatOlenSidebar4330 .alphaChatOlenSearch4330,
+body.alphaComposeMode .alphaChatOlenSidebar4330 .alphaChatOlenSearch4330{
+  position:absolute!important;
+  top:0!important;
+  right:0!important;
+  margin:0!important;
+  z-index:7!important;
 }
 body.alphaChatMode .alphaChatOlenSidebar4330 .alphaChatOlenBrand4330,
 body.alphaComposeMode .alphaChatOlenSidebar4330 .alphaChatOlenBrand4330,
