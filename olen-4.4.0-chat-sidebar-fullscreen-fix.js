@@ -3,7 +3,7 @@
    - hides the actual Chat hamburger/menu trigger while the sidebar is open
    - keeps the sidebar OLEN logo/header above any remaining overlays
    - pins the sidebar search button to the top-right of its header
-   - uses the shared OLEN UI logo at 50x50px in the chat sidebar only
+   - uses the shared OLEN UI logo at 60x60px in the chat sidebar only
    No Home/intro/footer/other-tab behavior is changed.
 */
 (()=>{
@@ -61,9 +61,9 @@ body.alphaComposeMode .alphaChatOlenSidebar4330 .alphaChatOlenSearch4330{
 }
 body.alphaChatMode .alphaChatOlenSidebar4330 .alphaChatOlenBrand4330,
 body.alphaComposeMode .alphaChatOlenSidebar4330 .alphaChatOlenBrand4330{
-  width:50px!important;
-  height:50px!important;
-  min-width:50px!important;
+  width:60px!important;
+  height:60px!important;
+  min-width:60px!important;
   visibility:visible!important;
   opacity:1!important;
   z-index:6!important;
@@ -72,9 +72,9 @@ body.alphaComposeMode .alphaChatOlenSidebar4330 .alphaChatOlenBrand4330{
 body.alphaChatMode .alphaChatOlenSidebar4330 .olenChatSidebarUiLogo440,
 body.alphaComposeMode .alphaChatOlenSidebar4330 .olenChatSidebarUiLogo440{
   display:block!important;
-  width:50px!important;
-  height:50px!important;
-  min-width:50px!important;
+  width:60px!important;
+  height:60px!important;
+  min-width:60px!important;
   object-fit:contain!important;
   margin:0!important;
   visibility:visible!important;
@@ -93,8 +93,8 @@ const applySidebarLogo=()=>{
     logo.className='olenChatSidebarUiLogo440';
     logo.src='assets/olen-ui.png';
     logo.alt='OLEN';
-    logo.width=50;
-    logo.height=50;
+    logo.width=60;
+    logo.height=60;
     brand.replaceChildren(logo);
   }
 };
