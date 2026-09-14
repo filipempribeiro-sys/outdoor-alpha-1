@@ -1,94 +1,37 @@
-/* OLEN 4.4.0 · CHAT FULLSCREEN SIDEBAR HEADER FIX
-   Scope: OLEN/Chat fullscreen sidebar only.
-   - hides the actual Chat hamburger/menu trigger while the sidebar is open
-   - keeps the sidebar OLEN logo/header above any remaining overlays
-   - pins the sidebar search button to the top-right of its header
-   - uses the shared OLEN UI logo at 60x60px in the chat sidebar only
-   No Home/intro/footer/other-tab behavior is changed.
+/* OLEN 4.4.0 · CHAT FULLSCREEN FIX
+   Scope: Chat fullscreen only.
+   Preserves sidebar logo/hamburger behavior and enforces the top-right action capsule.
 */
 (()=>{
 'use strict';
 if(window.__olenChatFullscreenSidebarHeaderFix440)return;
 window.__olenChatFullscreenSidebarHeaderFix440=true;
 
+const isChat=()=>document.body?.classList.contains('alphaChatMode')||document.body?.classList.contains('alphaComposeMode');
+const setImp=(el,prop,val)=>el?.style?.setProperty(prop,val,'important');
+
 const style=document.createElement('style');
 style.id='olenChatFullscreenSidebarHeaderFix440Style';
 style.textContent=`
-/* Exact Chat fullscreen hamburger override.
-   Includes #lifestyleAI so it outranks the legacy
-   "hamburger never disappears" rule without changing layout. */
 body.alphaChatOlenOpen4330.alphaChatMode #lifestyleAI .aiChatMenuBtn.alphaFloatingMenu,
 body.alphaChatOlenOpen4330.alphaComposeMode #lifestyleAI .aiChatMenuBtn.alphaFloatingMenu{
-  visibility:hidden!important;
-  opacity:0!important;
-  pointer-events:none!important;
-}
-
-body.alphaChatOlenOpen4330.alphaChatMode #chatMenuBtn,
-body.alphaChatOlenOpen4330.alphaComposeMode #chatMenuBtn,
-body.alphaChatOlenOpen4330.alphaChatMode .alphaChatMenuBtn,
-body.alphaChatOlenOpen4330.alphaComposeMode .alphaChatMenuBtn,
-body.alphaChatOlenOpen4330.alphaChatMode .chatMenuBtn,
-body.alphaChatOlenOpen4330.alphaComposeMode .chatMenuBtn,
-body.alphaChatOlenOpen4330.alphaChatMode .aiChatMenuBtn,
-body.alphaChatOlenOpen4330.alphaComposeMode .aiChatMenuBtn,
-body.alphaChatOlenOpen4330.alphaChatMode #aiChatMenuBtn,
-body.alphaChatOlenOpen4330.alphaComposeMode #aiChatMenuBtn,
-body.alphaChatOlenOpen4330.alphaChatMode #alphaChatMenuBtn,
-body.alphaChatOlenOpen4330.alphaComposeMode #alphaChatMenuBtn,
-body.alphaChatOlenOpen4330.alphaChatMode .alphaFloatingMenu,
-body.alphaChatOlenOpen4330.alphaComposeMode .alphaFloatingMenu,
-body.alphaChatOlenOpen4330.alphaChatMode .alphaMenuBtn,
-body.alphaChatOlenOpen4330.alphaComposeMode .alphaMenuBtn,
-body.alphaChatOlenOpen4330.alphaChatMode .menuBtn,
-body.alphaChatOlenOpen4330.alphaComposeMode .menuBtn,
-body.alphaChatOlenOpen4330.alphaChatMode button[aria-label="Abrir menu"],
-body.alphaChatOlenOpen4330.alphaComposeMode button[aria-label="Abrir menu"],
-body.alphaChatOlenOpen4330.alphaChatMode button[aria-label="Menu"],
-body.alphaChatOlenOpen4330.alphaComposeMode button[aria-label="Menu"],
-body.alphaChatOlenOpen4330.alphaChatMode button[aria-label="Abrir navegação"],
-body.alphaChatOlenOpen4330.alphaComposeMode button[aria-label="Abrir navegação"],
-body.alphaChatOlenOpen4330.alphaChatMode button[aria-label="Abrir conversas"],
-body.alphaChatOlenOpen4330.alphaComposeMode button[aria-label="Abrir conversas"]{
-  visibility:hidden!important;
-  opacity:0!important;
-  pointer-events:none!important;
+  visibility:hidden!important;opacity:0!important;pointer-events:none!important
 }
 body.alphaChatMode .alphaChatOlenSidebar4330 .alphaChatOlenHead4330,
 body.alphaComposeMode .alphaChatOlenSidebar4330 .alphaChatOlenHead4330{
-  position:relative!important;
-  z-index:5!important;
-  padding-right:52px!important;
+  position:relative!important;z-index:5!important;padding-right:52px!important
 }
 body.alphaChatMode .alphaChatOlenSidebar4330 .alphaChatOlenSearch4330,
 body.alphaComposeMode .alphaChatOlenSidebar4330 .alphaChatOlenSearch4330{
-  position:absolute!important;
-  top:0!important;
-  right:0!important;
-  margin:0!important;
-  z-index:7!important;
+  position:absolute!important;top:0!important;right:0!important;margin:0!important;z-index:7!important
 }
 body.alphaChatMode .alphaChatOlenSidebar4330 .alphaChatOlenBrand4330,
 body.alphaComposeMode .alphaChatOlenSidebar4330 .alphaChatOlenBrand4330{
-  width:60px!important;
-  height:60px!important;
-  min-width:60px!important;
-  visibility:visible!important;
-  opacity:1!important;
-  z-index:6!important;
-  pointer-events:none!important;
+  width:60px!important;height:60px!important;min-width:60px!important;visibility:visible!important;opacity:1!important;z-index:6!important;pointer-events:none!important
 }
 body.alphaChatMode .alphaChatOlenSidebar4330 .olenChatSidebarUiLogo440,
 body.alphaComposeMode .alphaChatOlenSidebar4330 .olenChatSidebarUiLogo440{
-  display:block!important;
-  width:60px!important;
-  height:60px!important;
-  min-width:60px!important;
-  object-fit:contain!important;
-  margin:0!important;
-  visibility:visible!important;
-  opacity:1!important;
-  pointer-events:none!important;
+  display:block!important;width:60px!important;height:60px!important;min-width:60px!important;object-fit:contain!important;margin:0!important;visibility:visible!important;opacity:1!important;pointer-events:none!important
 }
 `;
 document.head.appendChild(style);
@@ -102,74 +45,84 @@ const applySidebarLogo=()=>{
     logo.className='olenChatSidebarUiLogo440';
     logo.src='assets/olen-ui.png';
     logo.alt='OLEN';
-    logo.width=60;
-    logo.height=60;
+    logo.width=60;logo.height=60;
     brand.replaceChildren(logo);
   }
 };
 
-/*
-  The legacy index stylesheet contains an !important rule that explicitly keeps
-  the hamburger visible.  CSS specificity alone is therefore not trusted here.
-  While the Chat sidebar is open we set the three visual properties directly on
-  the real button as inline !important declarations.  Inline !important wins
-  over every author stylesheet rule.  On close, only the properties written by
-  this fix are removed, restoring the original Chat trigger untouched.
-*/
-const hamburgerSelector='#lifestyleAI .aiChatMenuBtn.alphaFloatingMenu';
 const sidebarIsOpen=()=>{
-  const body=document.body;
-  if(!body)return false;
-  const inChat=body.classList.contains('alphaChatMode')||body.classList.contains('alphaComposeMode');
-  if(!inChat)return false;
-  if(body.classList.contains('alphaChatOlenOpen4330'))return true;
+  if(!isChat())return false;
+  if(document.body.classList.contains('alphaChatOlenOpen4330'))return true;
   const side=document.querySelector('#aiChatMenu, .alphaConversationSidebar');
-  return !!side && (side.classList.contains('show') || side.getAttribute('aria-hidden')==='false');
+  return !!side&&(side.classList.contains('show')||side.getAttribute('aria-hidden')==='false');
 };
+
 const syncHamburger=()=>{
-  const btn=document.querySelector(hamburgerSelector);
+  const btn=document.querySelector('#lifestyleAI .aiChatMenuBtn.alphaFloatingMenu');
   if(!btn)return;
   if(sidebarIsOpen()){
-    btn.style.setProperty('visibility','hidden','important');
-    btn.style.setProperty('opacity','0','important');
-    btn.style.setProperty('pointer-events','none','important');
+    setImp(btn,'visibility','hidden');setImp(btn,'opacity','0');setImp(btn,'pointer-events','none');
     btn.dataset.olenSidebarHidden='1';
   }else if(btn.dataset.olenSidebarHidden==='1'){
-    btn.style.removeProperty('visibility');
-    btn.style.removeProperty('opacity');
-    btn.style.removeProperty('pointer-events');
-    delete btn.dataset.olenSidebarHidden;
+    btn.style.removeProperty('visibility');btn.style.removeProperty('opacity');btn.style.removeProperty('pointer-events');delete btn.dataset.olenSidebarHidden;
   }
 };
-const syncHeader=()=>{
-  applySidebarLogo();
-  syncHamburger();
+
+const composeSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 3.5H4.75A2.75 2.75 0 0 0 2 6.25v13A2.75 2.75 0 0 0 4.75 22h13A2.75 2.75 0 0 0 20.5 19.25V18"/><path d="M8 16l1.2-4.4 8.45-8.45a2.15 2.15 0 0 1 3.05 3.05l-8.45 8.45L8 16Z"/><path d="m15.9 4.9 3.2 3.2"/></svg>';
+const dotsSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>';
+
+const syncCapsule=()=>{
+  if(!isChat())return;
+  const cap=document.querySelector('#lifestyleAI .alphaChatActions4324');
+  if(!cap)return;
+  cap.querySelectorAll('.alphaChatSpotify4324,.alphaSpotifyToggle4324,[aria-label="Spotify Remote"]').forEach(el=>el.remove());
+  const newChat=cap.querySelector('.alphaNewChatBtn');
+  if(newChat){
+    newChat.setAttribute('aria-label','Nova conversa');
+    newChat.title='Nova conversa';
+    if(newChat.dataset.olenComposeIcon440!=='1'){
+      newChat.innerHTML=composeSvg;
+      newChat.dataset.olenComposeIcon440='1';
+    }
+  }
+  let more=cap.querySelector('.alphaChatMore442');
+  if(!more){
+    more=document.createElement('button');more.type='button';more.className='alphaChatMore442';more.setAttribute('aria-label','Mais opções');more.title='Mais opções';more.innerHTML=dotsSvg;
+  }else more.innerHTML=dotsSvg;
+  if(newChat&&newChat.nextElementSibling!==more)newChat.after(more);
+  else if(!newChat&&!more.isConnected)cap.appendChild(more);
+
+  [['width','126px'],['min-width','126px'],['max-width','126px'],['height','48px'],['min-height','48px'],['padding','0'],['gap','0'],['display','flex'],['align-items','center'],['justify-content','center'],['overflow','hidden'],['border-radius','999px'],['background','#222325'],['border','1px solid rgba(255,255,255,.14)'],['box-shadow','none']].forEach(([p,v])=>setImp(cap,p,v));
+  [newChat,more].filter(Boolean).forEach(btn=>{
+    [['width','62px'],['min-width','62px'],['max-width','62px'],['height','46px'],['min-height','46px'],['flex','0 0 62px'],['margin','0'],['padding','0'],['display','grid'],['place-items','center'],['background','transparent'],['border','0'],['border-left','0'],['border-right','0'],['border-radius','0'],['box-shadow','none'],['outline','0'],['color','#fff']].forEach(([p,v])=>setImp(btn,p,v));
+    const svg=btn.querySelector('svg');
+    if(svg){setImp(svg,'width','27px');setImp(svg,'height','27px');setImp(svg,'display','block');}
+  });
+  const nsvg=newChat?.querySelector('svg');
+  if(nsvg){setImp(nsvg,'fill','none');setImp(nsvg,'stroke','currentColor');setImp(nsvg,'stroke-width','1.9');setImp(nsvg,'stroke-linecap','round');setImp(nsvg,'stroke-linejoin','round');}
+  const msvg=more?.querySelector('svg');
+  if(msvg){setImp(msvg,'fill','currentColor');setImp(msvg,'stroke','none');}
 };
 
-document.addEventListener('click',()=>requestAnimationFrame(syncHeader),true);
-document.addEventListener('touchend',()=>requestAnimationFrame(syncHeader),{capture:true,passive:true});
-window.addEventListener('pageshow',()=>requestAnimationFrame(syncHeader),{passive:true});
-window.addEventListener('popstate',()=>requestAnimationFrame(syncHeader),{passive:true});
+const syncAll=()=>{applySidebarLogo();syncHamburger();syncCapsule();};
 
-/* Wrap the public Chat sidebar API so open/close synchronise the trigger even
-   when the sidebar was opened by swipe instead of by clicking the hamburger. */
+document.addEventListener('click',()=>requestAnimationFrame(syncAll),true);
+document.addEventListener('touchend',()=>requestAnimationFrame(syncAll),{capture:true,passive:true});
+window.addEventListener('pageshow',()=>requestAnimationFrame(syncAll),{passive:true});
+window.addEventListener('popstate',()=>requestAnimationFrame(syncAll),{passive:true});
+
 const wrapSidebarApi=()=>{
   ['alphaOpenChatOlenSidebar','alphaCloseChatOlenSidebar','alphaToggleChatOlenSidebar'].forEach(name=>{
     const fn=window[name];
     if(typeof fn!=='function'||fn.__olenHamburgerSync440)return;
-    const wrapped=function(...args){
-      const result=fn.apply(this,args);
-      requestAnimationFrame(syncHeader);
-      return result;
-    };
-    wrapped.__olenHamburgerSync440=true;
-    window[name]=wrapped;
+    const wrapped=function(...args){const result=fn.apply(this,args);requestAnimationFrame(syncAll);return result;};
+    wrapped.__olenHamburgerSync440=true;window[name]=wrapped;
   });
 };
-
 wrapSidebarApi();
-setTimeout(()=>{wrapSidebarApi();syncHeader();},0);
-setTimeout(()=>{wrapSidebarApi();syncHeader();},120);
+setTimeout(()=>{wrapSidebarApi();syncAll();},0);
+setTimeout(()=>{wrapSidebarApi();syncAll();},120);
+setTimeout(syncAll,500);
 
-console.info('[OLEN 4.4.0] chat fullscreen sidebar header fix active');
+console.info('[OLEN 4.4.0] chat fullscreen loaded fix active');
 })();
