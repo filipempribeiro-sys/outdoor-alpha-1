@@ -106,19 +106,18 @@ function apply(){
 
   cap.querySelectorAll('.alphaChatSpotify4324,.alphaSpotifyToggle4324,[aria-label="Spotify Remote"]').forEach(el=>el.remove());
 
-  const newChat=cap.querySelector('.alphaNewChatBtn');
+  const newChat=cap.querySelector('.alphaNewChatBtn')||cap.querySelector('button:not(.alphaChatMore442)')||cap.querySelector('button');
   if(newChat){
     newChat.setAttribute('aria-label','Nova conversa');
     newChat.title='Nova conversa';
-    if(newChat.dataset.olenComposeIcon!=='1'){
-      newChat.replaceChildren();
-      newChat.innerHTML=composeIcon();
-      newChat.dataset.olenComposeIcon='1';
-    }
+    newChat.replaceChildren();
+    newChat.innerHTML=composeIcon();
+    newChat.dataset.olenComposeIcon='1';
   }
 
   let dots=cap.querySelector('.alphaChatMore442');
-  if(!dots){
+  if(!dots||dots===newChat){
+    if(dots===newChat)dots.classList.remove('alphaChatMore442');
     dots=document.createElement('button');
     dots.type='button';
     dots.className='alphaChatMore442';
@@ -146,5 +145,5 @@ document.addEventListener('touchend',()=>requestAnimationFrame(apply),{passive:t
 setTimeout(apply,100);
 setTimeout(apply,500);
 
-console.info('[ALPHA 4.3.42] Chat capsule geometry + compose icon forced');
+console.info('[ALPHA 4.3.42] Chat capsule compose icon restored');
 })();
