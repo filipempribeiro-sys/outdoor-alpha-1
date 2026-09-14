@@ -24,13 +24,13 @@ style.textContent=`
 }
 .olen440-ui-logo::before,.olen440-ui-logo::after{display:none!important;content:none!important}
 
-/* HOME: show only the approved OLEN asset, slightly larger */
+/* HOME: show only the approved OLEN asset at 60x60px */
 .top .brand{gap:0!important}
 .top .brand .logo{
-  width:52px!important;
-  height:52px!important;
-  min-width:52px!important;
-  flex:0 0 52px!important;
+  width:60px!important;
+  height:60px!important;
+  min-width:60px!important;
+  flex:0 0 60px!important;
   background:url('${UI_LOGO}') center/contain no-repeat!important;
   border:0!important;
   outline:0!important;
@@ -46,10 +46,10 @@ style.textContent=`
 .alphaChatOlenBrand4330{gap:0!important}
 .alphaChatOlenBrand4330 .alphaSidebarLogo.logo,
 .alphaChatOlenBrand4330 .olen440-chat-menu-logo{
-  width:54px!important;
-  height:54px!important;
-  min-width:54px!important;
-  flex:0 0 54px!important;
+  width:60px!important;
+  height:60px!important;
+  min-width:60px!important;
+  flex:0 0 60px!important;
   background:url('${UI_LOGO}') center/contain no-repeat!important;
   border:0!important;
   outline:0!important;
@@ -65,10 +65,10 @@ style.textContent=`
 /* INTERNAL SIDEBAR HEADER: image only, no frame, no duplicate OLEN text */
 #alphaInternalSidebar .alphaInternalBrand{gap:0!important}
 #alphaInternalSidebar .alphaInternalBrand .olen440-internal-logo{
-  width:54px!important;
-  height:54px!important;
-  min-width:54px!important;
-  flex:0 0 54px!important;
+  width:60px!important;
+  height:60px!important;
+  min-width:60px!important;
+  flex:0 0 60px!important;
   background:url('${UI_LOGO}') center/contain no-repeat!important;
   display:block!important;
   border:0!important;
@@ -86,9 +86,9 @@ style.textContent=`
 .legacyAuthBrand .logo::before,.legacyAuthBrand .logo::after,.authWelcomeBrand .logo::before,.authWelcomeBrand .logo::after{display:none!important;content:none!important}
 
 @media(max-width:620px){
-  .top .brand .logo{width:48px!important;height:48px!important;min-width:48px!important;flex-basis:48px!important}
+  .top .brand .logo{width:60px!important;height:60px!important;min-width:60px!important;flex-basis:60px!important}
   .alphaChatOlenBrand4330 .alphaSidebarLogo.logo,.alphaChatOlenBrand4330 .olen440-chat-menu-logo,
-  #alphaInternalSidebar .alphaInternalBrand .olen440-internal-logo{width:52px!important;height:52px!important;min-width:52px!important;flex-basis:52px!important}
+  #alphaInternalSidebar .alphaInternalBrand .olen440-internal-logo{width:60px!important;height:60px!important;min-width:60px!important;flex-basis:60px!important}
 }
 `;
 document.head.appendChild(style);
