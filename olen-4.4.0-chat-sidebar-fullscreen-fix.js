@@ -3,6 +3,7 @@
    - hides the actual Chat hamburger/menu trigger while the sidebar is open
    - keeps the sidebar OLEN logo/header above any remaining overlays
    - pins the sidebar search button to the top-right of its header
+   - uses the shared OLEN UI logo at 50x50px in the chat sidebar only
    No Home/intro/footer/other-tab behavior is changed.
 */
 (()=>{
@@ -59,15 +60,50 @@ body.alphaComposeMode .alphaChatOlenSidebar4330 .alphaChatOlenSearch4330{
   z-index:7!important;
 }
 body.alphaChatMode .alphaChatOlenSidebar4330 .alphaChatOlenBrand4330,
-body.alphaComposeMode .alphaChatOlenSidebar4330 .alphaChatOlenBrand4330,
-body.alphaChatMode .alphaChatOlenSidebar4330 .alphaSidebarLogo.logo,
-body.alphaComposeMode .alphaChatOlenSidebar4330 .alphaSidebarLogo.logo{
+body.alphaComposeMode .alphaChatOlenSidebar4330 .alphaChatOlenBrand4330{
+  width:50px!important;
+  height:50px!important;
+  min-width:50px!important;
   visibility:visible!important;
   opacity:1!important;
   z-index:6!important;
   pointer-events:none!important;
 }
+body.alphaChatMode .alphaChatOlenSidebar4330 .olenChatSidebarUiLogo440,
+body.alphaComposeMode .alphaChatOlenSidebar4330 .olenChatSidebarUiLogo440{
+  display:block!important;
+  width:50px!important;
+  height:50px!important;
+  min-width:50px!important;
+  object-fit:contain!important;
+  margin:0!important;
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:none!important;
+}
 `;
+document.head.appendChild(style);
+
+const applySidebarLogo=()=>{
+  const brand=document.querySelector('.alphaChatOlenSidebar4330 .alphaChatOlenBrand4330');
+  if(!brand)return;
+  let logo=brand.querySelector('.olenChatSidebarUiLogo440');
+  if(!logo){
+    logo=document.createElement('img');
+    logo.className='olenChatSidebarUiLogo440';
+    logo.src='assets/olen-ui.png';
+    logo.alt='OLEN';
+    logo.width=50;
+    logo.height=50;
+    brand.replaceChildren(logo);
+  }
+};
+
+document.addEventListener('click',applySidebarLogo,true);
+document.addEventListener('touchend',applySidebarLogo,{capture:true,passive:true});
+window.addEventListener('pageshow',applySidebarLogo,{passive:true});
+applySidebarLogo();
+
 document.head.appendChild(style);
 
 console.info('[OLEN 4.4.0] chat fullscreen sidebar header fix active');
