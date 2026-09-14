@@ -108,12 +108,68 @@ const applySidebarLogo=()=>{
   }
 };
 
-document.addEventListener('click',applySidebarLogo,true);
-document.addEventListener('touchend',applySidebarLogo,{capture:true,passive:true});
-window.addEventListener('pageshow',applySidebarLogo,{passive:true});
-applySidebarLogo();
+/*
+  The legacy index stylesheet contains an !important rule that explicitly keeps
+  the hamburger visible.  CSS specificity alone is therefore not trusted here.
+  While the Chat sidebar is open we set the three visual properties directly on
+  the real button as inline !important declarations.  Inline !important wins
+  over every author stylesheet rule.  On close, only the properties written by
+  this fix are removed, restoring the original Chat trigger untouched.
+*/
+const hamburgerSelector='#lifestyleAI .aiChatMenuBtn.alphaFloatingMenu';
+const sidebarIsOpen=()=>{
+  const body=document.body;
+  if(!body)return false;
+  const inChat=body.classList.contains('alphaChatMode')||body.classList.contains('alphaComposeMode');
+  if(!inChat)return false;
+  if(body.classList.contains('alphaChatOlenOpen4330'))return true;
+  const side=document.querySelector('#aiChatMenu, .alphaConversationSidebar');
+  return !!side && (side.classList.contains('show') || side.getAttribute('aria-hidden')==='false');
+};
+const syncHamburger=()=>{
+  const btn=document.querySelector(hamburgerSelector);
+  if(!btn)return;
+  if(sidebarIsOpen()){
+    btn.style.setProperty('visibility','hidden','important');
+    btn.style.setProperty('opacity','0','important');
+    btn.style.setProperty('pointer-events','none','important');
+    btn.dataset.olenSidebarHidden='1';
+  }else if(btn.dataset.olenSidebarHidden==='1'){
+    btn.style.removeProperty('visibility');
+    btn.style.removeProperty('opacity');
+    btn.style.removeProperty('pointer-events');
+    delete btn.dataset.olenSidebarHidden;
+  }
+};
+const syncHeader=()=>{
+  applySidebarLogo();
+  syncHamburger();
+};
 
-document.head.appendChild(style);
+document.addEventListener('click',()=>requestAnimationFrame(syncHeader),true);
+document.addEventListener('touchend',()=>requestAnimationFrame(syncHeader),{capture:true,passive:true});
+window.addEventListener('pageshow',()=>requestAnimationFrame(syncHeader),{passive:true});
+window.addEventListener('popstate',()=>requestAnimationFrame(syncHeader),{passive:true});
+
+/* Wrap the public Chat sidebar API so open/close synchronise the trigger even
+   when the sidebar was opened by swipe instead of by clicking the hamburger. */
+const wrapSidebarApi=()=>{
+  ['alphaOpenChatOlenSidebar','alphaCloseChatOlenSidebar','alphaToggleChatOlenSidebar'].forEach(name=>{
+    const fn=window[name];
+    if(typeof fn!=='function'||fn.__olenHamburgerSync440)return;
+    const wrapped=function(...args){
+      const result=fn.apply(this,args);
+      requestAnimationFrame(syncHeader);
+      return result;
+    };
+    wrapped.__olenHamburgerSync440=true;
+    window[name]=wrapped;
+  });
+};
+
+wrapSidebarApi();
+setTimeout(()=>{wrapSidebarApi();syncHeader();},0);
+setTimeout(()=>{wrapSidebarApi();syncHeader();},120);
 
 console.info('[OLEN 4.4.0] chat fullscreen sidebar header fix active');
 })();
