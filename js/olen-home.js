@@ -16,6 +16,7 @@ const VERSION='5.0.0';
 let initialized=false;
 let mounted=false;
 let unregister=null;
+let viewportOff=[];
 let selectors={root:'#lifestyleHome',container:null};
 let lastViewport='';
 
@@ -34,7 +35,6 @@ function render(reason='render'){
   const h=host();
   const p=panel();
   if(!h||!p) return false;
-
   document.documentElement.dataset.olenView='home';
   h.dataset.olenMounted='5.0';
   p.dataset.olenHomeOwner='5.0';
@@ -66,37 +66,23 @@ function init(options={}){
   if(initialized) return ROOT.home;
   initialized=true;
   selectors={...selectors,...(options.selectors||{})};
-
-  unregister=router.registerView('home',{
-    enter:mount,
-    leave:unmount,
-    afterEnter:(context)=>core.emit('home:ready',{context})
-  });
-
-  core.listen(window,'resize',onViewport,{passive:true});
-  core.listen(window,'orientationchange',onViewport,{passive:true});
-  if(window.visualViewport){
-    core.listen(window.visualViewport,'resize',onViewport,{passive:true});
-  }
+  unregister=router.registerView('home',{enter:mount,leave:unmount,afterEnter:(context)=>core.emit('home:ready',{context})});
+  viewportOff=[
+    core.listen(window,'resize',onViewport,{passive:true}),
+    core.listen(window,'orientationchange',onViewport,{passive:true})
+  ];
+  if(window.visualViewport) viewportOff.push(core.listen(window.visualViewport,'resize',onViewport,{passive:true}));
   core.emit('home:registered',{version:VERSION});
   return ROOT.home;
 }
 function destroy(){
+  viewportOff.forEach(off=>off?.());
+  viewportOff=[];
   unregister?.();
   unregister=null;
   unmount({reason:'destroy'});
   initialized=false;
 }
-
-ROOT.home=Object.freeze({
-  version:VERSION,
-  init,
-  destroy,
-  mount,
-  unmount,
-  render,
-  get mounted(){return mounted;}
-});
+ROOT.home=Object.freeze({version:VERSION,init,destroy,mount,unmount,render,get mounted(){return mounted;}});
 core.register('home',ROOT.home);
-
 })();
