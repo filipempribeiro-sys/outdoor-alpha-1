@@ -1,0 +1,47 @@
+name: OLEN 5.0 isolated browser test
+
+on:
+  push:
+    branches: [olen-5.0-from-scratch]
+    paths:
+      - 'olen-5-shell.html'
+      - 'css/olen-5-shell.css'
+      - 'js/olen-*.js'
+      - '.github/workflows/olen-5-isolated-browser-test.yml'
+  workflow_dispatch:
+
+jobs:
+  isolated-chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Run OLEN 5.0 isolated 5/5 harness
+        run: |
+          python3 -m http.server 4173 >/tmp/olen5-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          node <<'NODE'
+          const { chromium } = require('playwright');
+          (async()=>{
+            const browser = await chromium.launch({headless:true});
+            const page = await browser.newPage({viewport:{width:412,height:915}, deviceScaleFactor:2, isMobile:true, hasTouch:true});
+            const errors=[];
+            page.on('pageerror',e=>errors.push(String(e)));
+            page.on('console',m=>console.log(`[browser:${m.type()}] ${m.text()}`));
+            await page.goto('http://127.0.0.1:4173/olen-5-shell.html?test=1',{waitUntil:'load'});
+            await page.waitForFunction(()=>window.__OLEN5_TEST_REPORT__,null,{timeout:10000});
+            const report=await page.evaluate(()=>window.__OLEN5_TEST_REPORT__);
+            console.log('OLEN5_REPORT='+JSON.stringify(report));
+            if(errors.length) console.log('OLEN5_PAGE_ERRORS='+JSON.stringify(errors));
+            await browser.close();
+            if(errors.length || !report || report.score!=='5/5' || report.ok!==true) process.exit(1);
+          })().catch(err=>{console.error(err);process.exit(1)});
+          NODE
