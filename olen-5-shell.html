@@ -74,9 +74,12 @@
   <script src="./js/olen-account.js"></script>
   <script src="./js/olen-bootstrap.js"></script>
   <script src="./js/olen-integration-shell.js"></script>
+  <script src="./js/olen-test-harness.js"></script>
   <script>
-    window.addEventListener('DOMContentLoaded',()=>{
+    window.addEventListener('DOMContentLoaded',async()=>{
       window.OLEN5.integrationShell.start({initialView:'home',replaceHistory:true});
+      const params=new URLSearchParams(location.search);
+      if(params.get('test')==='1') window.__OLEN5_TEST_REPORT__=await window.OLEN5.testHarness.run();
     },{once:true});
   </script>
 </body>
