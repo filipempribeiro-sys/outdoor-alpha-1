@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07110d">
+  <title>OLEN 5.0 · Integration Shell</title>
+  <link rel="stylesheet" href="./css/olen-5-shell.css">
+</head>
+<body>
+  <div class="olen5-shell" id="olen5Shell">
+    <header class="olen5-topbar">
+      <button class="olen5-icon-btn" type="button" data-olen5-action="back" aria-label="Voltar">‹</button>
+      <div class="olen5-brand"><strong>OLEN</strong><span>5.0</span></div>
+      <button class="olen5-icon-btn" type="button" data-olen5-action="chat-sidebar" aria-label="Menu do Chat">☰</button>
+    </header>
+
+    <main class="olen5-stage">
+      <section id="lifestyleHome" class="olen5-view olen5-home" aria-label="Home">
+        <div class="olen5-hero">
+          <p class="olen5-kicker">OUTDOOR INTELLIGENCE</p>
+          <h1>O que queres fazer hoje?</h1>
+          <p>Uma shell limpa para validar navegação, geometria e lifecycle da OLEN 5.0.</p>
+          <button class="olen5-primary" type="button" data-olen5-nav="chat">Falar com OLEN</button>
+        </div>
+        <div class="olen5-grid">
+          <button class="olen5-card" type="button" data-olen5-nav="map"><strong>Mapa</strong><span>Explorar e preparar percurso</span></button>
+          <button class="olen5-card" type="button" data-olen5-nav="go"><strong>GO</strong><span>Iniciar experiência</span></button>
+          <button class="olen5-card" type="button" data-olen5-nav="live"><strong>LIVE</strong><span>Registar o que acontece</span></button>
+          <button class="olen5-card" type="button" data-olen5-nav="account"><strong>Perfil</strong><span>Conta e preferências</span></button>
+        </div>
+      </section>
+
+      <section id="lifestyleAI" class="olen5-view" aria-label="Chat">
+        <div class="olen5-section-head"><p class="olen5-kicker">CHAT</p><h2>OLEN</h2></div>
+        <div class="lifestyleThread olen5-thread" aria-live="polite"><div class="olen5-bubble">Como posso ajudar na tua próxima experiência?</div></div>
+        <div class="lifestyleComposer olen5-composer"><input type="text" placeholder="Pergunta à OLEN…" aria-label="Mensagem"><button type="button">Enviar</button></div>
+        <button class="olen5-secondary" type="button" data-olen5-action="chat-new">Nova conversa</button>
+      </section>
+
+      <section id="field" class="olen5-view" aria-label="Mapa e GO">
+        <div class="olen5-section-head"><p class="olen5-kicker">MAPA / GO</p><h2>Explorar</h2></div>
+        <div class="olen5-map-placeholder"><span>MAP</span><p>Canvas reservado para o adapter de mapas 5.0.</p></div>
+        <div class="olen5-row"><button class="olen5-secondary" type="button" data-olen5-nav="map">Mapa</button><button class="olen5-primary" type="button" data-olen5-nav="go">GO</button></div>
+      </section>
+
+      <section id="report" class="olen5-view" aria-label="LIVE">
+        <div class="olen5-section-head"><p class="olen5-kicker">LIVE</p><h2>Ocorrência</h2></div>
+        <div class="olen5-panel"><label>Descrição<textarea rows="5" placeholder="O que está a acontecer?"></textarea></label><button class="olen5-primary" type="button">Registar</button></div>
+      </section>
+
+      <section id="profile" class="olen5-view" aria-label="Perfil">
+        <div class="olen5-section-head"><p class="olen5-kicker">ACCOUNT</p><h2>Perfil</h2></div>
+        <div class="olen5-panel"><div class="olen5-avatar">O</div><strong>OLEN Explorer</strong><span>Conta, preferências e serviços ligados.</span></div>
+      </section>
+    </main>
+
+    <nav class="olen5-dock" aria-label="Navegação principal">
+      <button type="button" data-olen5-nav="home"><span>⌂</span>Home</button>
+      <button type="button" data-olen5-nav="chat"><span>✦</span>Chat</button>
+      <button type="button" data-olen5-nav="map"><span>⌖</span>Mapa</button>
+      <button type="button" data-olen5-nav="live"><span>●</span>LIVE</button>
+      <button type="button" data-olen5-nav="account"><span>○</span>Perfil</button>
+    </nav>
+  </div>
+
+  <script src="./js/olen-core.js"></script>
+  <script src="./js/olen-router.js"></script>
+  <script src="./js/olen-home.js"></script>
+  <script src="./js/olen-chat.js"></script>
+  <script src="./js/olen-map-go.js"></script>
+  <script src="./js/olen-live.js"></script>
+  <script src="./js/olen-media.js"></script>
+  <script src="./js/olen-account.js"></script>
+  <script src="./js/olen-bootstrap.js"></script>
+  <script src="./js/olen-integration-shell.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded',()=>{
+      window.OLEN5.integrationShell.start({initialView:'home',replaceHistory:true});
+    },{once:true});
+  </script>
+</body>
+</html>
