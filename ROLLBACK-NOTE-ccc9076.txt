@@ -1,2 +1,0 @@
-Rollback source for the pre-Navigator intro test: ccc9076a368e20a7e667e8eb5ed034fb8d6a3b03
-Existing branch: checkpoint-olen-4.4.0-20260913-before-tagline-gap-review
