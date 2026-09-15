@@ -127,7 +127,8 @@ function start(next={}){
   return ROOT.integrationShell;
 }
 function stop(reason='shell-stop'){
-  if(!initialized) return false;
+  if(!initialized&&!started&&!bootstrap.started) return false;
+  if(bootstrap.started) bootstrap.destroy();
   while(disposers.length){
     const off=disposers.pop();
     try{off?.()}catch{}
