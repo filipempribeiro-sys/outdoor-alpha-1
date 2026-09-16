@@ -8,6 +8,8 @@
    - An Experience is structured data and does not depend on AI.
    - UI modules consume the same Experience instead of rebuilding it.
    - Updates are explicit, immutable at the public boundary and observable.
+   - Nested domain state is merged by contract so one module cannot erase
+     sibling state owned by another module with a partial update.
    - State is persisted locally so an Experience survives reload/reopen.
    - No network/provider/research calls live in this module.
    - No legacy runtime is modified by loading this file alone.
@@ -18,7 +20,7 @@
   const root=global.OLEN5=global.OLEN5||{};
   if(root.experienceEngine)return;
 
-  const VERSION='0.2.0';
+  const VERSION='0.3.0';
   const STORAGE_KEY='olen5.experience-engine.v1';
   const LIFECYCLE=Object.freeze([
     'IDEA',
@@ -27,6 +29,19 @@
     'ACTIVE',
     'COMPLETED',
     'ARCHIVED'
+  ]);
+  const MERGED_DOMAINS=Object.freeze([
+    'intent',
+    'time',
+    'mobility',
+    'route',
+    'plan',
+    'research',
+    'map',
+    'go',
+    'live',
+    'integrations',
+    'context'
   ]);
 
   const listeners=new Set();
@@ -52,6 +67,26 @@
 
   function cleanObject(value){
     return value&&typeof value==='object'&&!Array.isArray(value)?clone(value):{};
+  }
+
+  function mergeObject(current,patch){
+    const base=cleanObject(current);
+    const incoming=cleanObject(patch);
+    const next={...base};
+
+    Object.keys(incoming).forEach(key=>{
+      const value=incoming[key];
+      if(
+        value&&typeof value==='object'&&!Array.isArray(value)&&
+        base[key]&&typeof base[key]==='object'&&!Array.isArray(base[key])
+      ){
+        next[key]=mergeObject(base[key],value);
+      }else{
+        next[key]=clone(value);
+      }
+    });
+
+    return next;
   }
 
   function makeId(){
@@ -206,27 +241,44 @@
       .sort((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt)));
   }
 
+  function buildUpdate(current,patch){
+    const input={...current,...clone(patch)};
+
+    MERGED_DOMAINS.forEach(domain=>{
+      if(Object.prototype.hasOwnProperty.call(patch,domain)){
+        input[domain]=mergeObject(current[domain],patch[domain]);
+      }
+    });
+
+    input.id=current.id;
+    input.createdAt=current.createdAt;
+    input.lifecycle=patch.lifecycle===undefined
+      ?current.lifecycle
+      :normalizeLifecycle(patch.lifecycle,current.lifecycle);
+    input.updatedAt=nowIso();
+
+    return baseExperience(input);
+  }
+
   function update(id,patch={},meta={}){
     const key=cleanString(id)||activeExperienceId;
     if(!key||!experiences.has(key))throw new Error('Experience não encontrada.');
     if(!patch||typeof patch!=='object'||Array.isArray(patch))throw new TypeError('Patch inválido.');
 
     const current=experiences.get(key);
-    const next=baseExperience({
-      ...current,
-      ...clone(patch),
-      id:current.id,
-      createdAt:current.createdAt,
-      lifecycle:patch.lifecycle===undefined?current.lifecycle:normalizeLifecycle(patch.lifecycle,current.lifecycle),
-      mobility:patch.mobility===undefined?current.mobility:{...current.mobility,...cleanObject(patch.mobility)},
-      research:patch.research===undefined?current.research:{...current.research,...cleanObject(patch.research)},
-      updatedAt:nowIso()
-    });
+    const next=assertExperience(buildUpdate(current,patch));
 
-    experiences.set(key,assertExperience(next));
+    experiences.set(key,next);
     persist();
     emit('experience:updated',next,meta);
     return clone(next);
+  }
+
+  function updateDomain(id,domain,patch={},meta={}){
+    const name=cleanString(domain);
+    if(!MERGED_DOMAINS.includes(name))throw new Error('Domínio Experience inválido: '+name);
+    if(!patch||typeof patch!=='object'||Array.isArray(patch))throw new TypeError('Patch de domínio inválido.');
+    return update(id,{[name]:patch},{...meta,domain:name});
   }
 
   function transition(id,nextLifecycle,meta={}){
@@ -294,11 +346,13 @@
   root.experienceEngine=Object.freeze({
     version:VERSION,
     lifecycle:LIFECYCLE,
+    mergedDomains:MERGED_DOMAINS,
     create,
     get,
     getActive,
     list,
     update,
+    updateDomain,
     transition,
     activate,
     clearActive,
