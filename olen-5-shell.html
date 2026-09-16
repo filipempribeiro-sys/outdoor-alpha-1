@@ -66,6 +66,7 @@
 
   <script src="./js/olen-core.js"></script>
   <script src="./js/olen-experience.js"></script>
+  <script src="./js/olen-context.js"></script>
   <script src="./js/olen-router.js"></script>
   <script src="./js/olen-home.js"></script>
   <script src="./js/olen-chat.js"></script>
@@ -77,12 +78,14 @@
   <script src="./js/olen-integration-shell.js"></script>
   <script src="./js/olen-test-harness.js"></script>
   <script src="./js/olen-experience-test.js"></script>
+  <script src="./js/olen-context-test.js"></script>
   <script>
     window.addEventListener('DOMContentLoaded',async()=>{
       window.OLEN5.integrationShell.start({initialView:'home',replaceHistory:true});
       const params=new URLSearchParams(location.search);
       if(params.get('test')==='1') window.__OLEN5_TEST_REPORT__=await window.OLEN5.testHarness.run();
       if(params.get('experienceTest')==='1') window.__OLEN5_EXPERIENCE_TEST_REPORT__=await window.OLEN5.experienceTest.run();
+      if(params.get('contextTest')==='1') window.__OLEN5_CONTEXT_TEST_REPORT__=await window.OLEN5.contextTest.run();
     },{once:true});
   </script>
 </body>
