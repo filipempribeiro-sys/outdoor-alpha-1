@@ -8,6 +8,7 @@
    - An Experience is structured data and does not depend on AI.
    - UI modules consume the same Experience instead of rebuilding it.
    - Updates are explicit, immutable at the public boundary and observable.
+   - State is persisted locally so an Experience survives reload/reopen.
    - No network/provider/research calls live in this module.
    - No legacy runtime is modified by loading this file alone.
    ========================================================= */
@@ -17,7 +18,8 @@
   const root=global.OLEN5=global.OLEN5||{};
   if(root.experienceEngine)return;
 
-  const VERSION='0.1.0';
+  const VERSION='0.2.0';
+  const STORAGE_KEY='olen5.experience-engine.v1';
   const LIFECYCLE=Object.freeze([
     'IDEA',
     'PLANNING',
@@ -110,6 +112,56 @@
     return value;
   }
 
+  function storageAvailable(){
+    try{
+      return !!global.localStorage;
+    }catch(_error){
+      return false;
+    }
+  }
+
+  function persist(){
+    if(!storageAvailable())return false;
+    try{
+      global.localStorage.setItem(STORAGE_KEY,JSON.stringify({
+        schemaVersion:1,
+        activeExperienceId,
+        experiences:Array.from(experiences.values())
+      }));
+      return true;
+    }catch(error){
+      console.warn('OLEN Experience persistence unavailable',error);
+      return false;
+    }
+  }
+
+  function hydrate(){
+    if(!storageAvailable())return false;
+    try{
+      const raw=global.localStorage.getItem(STORAGE_KEY);
+      if(!raw)return false;
+      const stored=JSON.parse(raw);
+      const items=Array.isArray(stored?.experiences)?stored.experiences:[];
+
+      experiences.clear();
+      items.forEach(item=>{
+        try{
+          const experience=assertExperience(baseExperience(item));
+          experiences.set(experience.id,experience);
+        }catch(error){
+          console.warn('OLEN ignored invalid persisted Experience',error);
+        }
+      });
+
+      const requestedActive=cleanString(stored?.activeExperienceId);
+      activeExperienceId=requestedActive&&experiences.has(requestedActive)?requestedActive:'';
+      return experiences.size>0;
+    }catch(error){
+      console.warn('OLEN Experience hydration unavailable',error);
+      return false;
+    }
+  }
+
   function emit(type,experience,meta={}){
     const event=Object.freeze({
       type,
@@ -134,6 +186,7 @@
       activeExperienceId=experience.id;
     }
 
+    persist();
     emit('experience:created',experience,{activated:activeExperienceId===experience.id});
     return clone(experience);
   }
@@ -171,6 +224,7 @@
     });
 
     experiences.set(key,assertExperience(next));
+    persist();
     emit('experience:updated',next,meta);
     return clone(next);
   }
@@ -189,6 +243,7 @@
     if(!key||!experiences.has(key))throw new Error('Experience não encontrada.');
     activeExperienceId=key;
     const experience=experiences.get(key);
+    persist();
     emit('experience:activated',experience,meta);
     return clone(experience);
   }
@@ -196,6 +251,7 @@
   function clearActive(meta={}){
     const previous=getActive();
     activeExperienceId='';
+    persist();
     emit('experience:deactivated',previous,meta);
     return previous;
   }
@@ -206,6 +262,7 @@
     const previous=experiences.get(key);
     experiences.delete(key);
     if(activeExperienceId===key)activeExperienceId='';
+    persist();
     emit('experience:removed',previous,meta);
     return true;
   }
@@ -217,6 +274,7 @@
     }
     experiences.set(experience.id,experience);
     if(shouldActivate)activeExperienceId=experience.id;
+    persist();
     emit('experience:imported',experience,{activated:shouldActivate,replace});
     return clone(experience);
   }
@@ -230,6 +288,8 @@
     listeners.add(listener);
     return ()=>listeners.delete(listener);
   }
+
+  hydrate();
 
   root.experienceEngine=Object.freeze({
     version:VERSION,
