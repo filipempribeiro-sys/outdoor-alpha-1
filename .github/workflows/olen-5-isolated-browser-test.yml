@@ -23,7 +23,7 @@ jobs:
         run: |
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
-      - name: Run OLEN 5.0 isolated UI 5/5 + Experience 7/7 + Context 6/6 + Entitlement 8/8 + Mobility 8/8 contracts
+      - name: Run OLEN 5.0 isolated UI 5/5 + Experience 7/7 + Context 6/6 + Entitlement 8/8 + Mobility 8/8 + Research 8/8 contracts
         run: |
           python3 -m http.server 4173 >/tmp/olen5-http.log 2>&1 &
           SERVER_PID=$!
@@ -36,14 +36,15 @@ jobs:
             const errors=[];
             page.on('pageerror',e=>errors.push(String(e)));
             page.on('console',m=>console.log(`[browser:${m.type()}] ${m.text()}`));
-            await page.goto('http://127.0.0.1:4173/olen-5-shell.html?test=1&experienceTest=1&contextTest=1&entitlementTest=1&mobilityTest=1',{waitUntil:'load'});
-            await page.waitForFunction(()=>window.__OLEN5_TEST_REPORT__&&window.__OLEN5_EXPERIENCE_TEST_REPORT__&&window.__OLEN5_CONTEXT_TEST_REPORT__&&window.__OLEN5_ENTITLEMENT_TEST_REPORT__&&window.__OLEN5_MOBILITY_TEST_REPORT__,null,{timeout:10000});
-            const reports=await page.evaluate(()=>({ui:window.__OLEN5_TEST_REPORT__,experience:window.__OLEN5_EXPERIENCE_TEST_REPORT__,context:window.__OLEN5_CONTEXT_TEST_REPORT__,entitlement:window.__OLEN5_ENTITLEMENT_TEST_REPORT__,mobility:window.__OLEN5_MOBILITY_TEST_REPORT__}));
+            await page.goto('http://127.0.0.1:4173/olen-5-shell.html?test=1&experienceTest=1&contextTest=1&entitlementTest=1&mobilityTest=1&researchTest=1',{waitUntil:'load'});
+            await page.waitForFunction(()=>window.__OLEN5_TEST_REPORT__&&window.__OLEN5_EXPERIENCE_TEST_REPORT__&&window.__OLEN5_CONTEXT_TEST_REPORT__&&window.__OLEN5_ENTITLEMENT_TEST_REPORT__&&window.__OLEN5_MOBILITY_TEST_REPORT__&&window.__OLEN5_RESEARCH_TEST_REPORT__,null,{timeout:10000});
+            const reports=await page.evaluate(()=>({ui:window.__OLEN5_TEST_REPORT__,experience:window.__OLEN5_EXPERIENCE_TEST_REPORT__,context:window.__OLEN5_CONTEXT_TEST_REPORT__,entitlement:window.__OLEN5_ENTITLEMENT_TEST_REPORT__,mobility:window.__OLEN5_MOBILITY_TEST_REPORT__,research:window.__OLEN5_RESEARCH_TEST_REPORT__}));
             console.log('OLEN5_UI_REPORT='+JSON.stringify(reports.ui));
             console.log('OLEN5_EXPERIENCE_REPORT='+JSON.stringify(reports.experience));
             console.log('OLEN5_CONTEXT_REPORT='+JSON.stringify(reports.context));
             console.log('OLEN5_ENTITLEMENT_REPORT='+JSON.stringify(reports.entitlement));
             console.log('OLEN5_MOBILITY_REPORT='+JSON.stringify(reports.mobility));
+            console.log('OLEN5_RESEARCH_REPORT='+JSON.stringify(reports.research));
             if(errors.length) console.log('OLEN5_PAGE_ERRORS='+JSON.stringify(errors));
             await browser.close();
             const uiOk=reports.ui&&reports.ui.score==='5/5'&&reports.ui.ok===true;
@@ -51,6 +52,7 @@ jobs:
             const contextOk=reports.context&&reports.context.score==='6/6'&&reports.context.ok===true;
             const entitlementOk=reports.entitlement&&reports.entitlement.score==='8/8'&&reports.entitlement.ok===true;
             const mobilityOk=reports.mobility&&reports.mobility.score==='8/8'&&reports.mobility.ok===true;
-            if(errors.length || !uiOk || !experienceOk || !contextOk || !entitlementOk || !mobilityOk) process.exit(1);
+            const researchOk=reports.research&&reports.research.score==='8/8'&&reports.research.ok===true;
+            if(errors.length || !uiOk || !experienceOk || !contextOk || !entitlementOk || !mobilityOk || !researchOk) process.exit(1);
           })().catch(err=>{console.error(err);process.exit(1)});
           NODE
