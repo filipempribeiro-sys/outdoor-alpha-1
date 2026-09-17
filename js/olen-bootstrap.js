@@ -10,10 +10,11 @@
 
 const ROOT=window.OLEN5;
 if(!ROOT?.core) throw new Error('OLEN 5.0 bootstrap requires olen-core.js');
-if(ROOT.bootstrap?.version==='5.0.0') return;
+if(ROOT.bootstrap?.version==='5.0.1') return;
 
-const VERSION='5.0.0';
+const VERSION='5.0.1';
 const REQUIRED=Object.freeze(['router','home','chat','mapGo','live','media','account']);
+const DOMAIN_ORDER=Object.freeze(['home','chat','mapGo','live','media','account']);
 let started=false;
 let starting=false;
 
@@ -29,12 +30,14 @@ function moduleOptions(options,name){
 }
 
 function initDomains(options={}){
-  ROOT.home.init(moduleOptions(options,'home'));
-  ROOT.chat.init(moduleOptions(options,'chat'));
-  ROOT.mapGo.init(moduleOptions(options,'mapGo'));
-  ROOT.live.init(moduleOptions(options,'live'));
-  ROOT.media.init(moduleOptions(options,'media'));
-  ROOT.account.init(moduleOptions(options,'account'));
+  for(const name of DOMAIN_ORDER) ROOT[name].init(moduleOptions(options,name));
+}
+
+function releaseRuntime(){
+  try{ROOT.router?.destroy?.()}catch{}
+  for(const name of [...DOMAIN_ORDER].reverse()){
+    try{ROOT[name]?.destroy?.()}catch{}
+  }
 }
 
 function start(options={}){
@@ -64,6 +67,9 @@ function start(options={}){
     });
     return ROOT.bootstrap;
   }catch(error){
+    /* Startup is transactional: release every owner/router touched by this attempt. */
+    releaseRuntime();
+    started=false;
     ROOT.core.emit('bootstrap:error',{message:String(error?.message||error)});
     throw error;
   }finally{
@@ -73,16 +79,7 @@ function start(options={}){
 
 function destroy(){
   if(!started&&!starting) return false;
-
-  /* Stop routing first, then release domain owners in reverse composition order. */
-  ROOT.router.destroy();
-  ROOT.account.destroy();
-  ROOT.media.destroy();
-  ROOT.live.destroy();
-  ROOT.mapGo.destroy();
-  ROOT.chat.destroy();
-  ROOT.home.destroy();
-
+  releaseRuntime();
   started=false;
   starting=false;
   ROOT.core.emit('bootstrap:destroyed',{version:VERSION});
