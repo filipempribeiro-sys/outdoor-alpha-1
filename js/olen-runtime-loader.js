@@ -4,10 +4,28 @@
    No Render/network calls are performed here. */
 (function(global){
 'use strict';
-if(global.OLEN5?.runtimeLoader?.version==='5.0.1')return;
+if(global.OLEN5?.runtimeLoader?.version==='5.0.2')return;
 
-const VERSION='5.0.1';
-const MODULES=Object.freeze(['./js/olen-core.js','./js/olen-experience.js','./js/olen-context.js','./js/olen-entitlement.js','./js/olen-mobility.js','./js/olen-research.js','./js/olen-provider.js','./js/olen-router.js','./js/olen-bootstrap.js','./js/olen-legacy-dom-adapter.js','./js/olen-integration-shell.js']);
+const VERSION='5.0.2';
+const MODULES=Object.freeze([
+ './js/olen-core.js',
+ './js/olen-experience.js',
+ './js/olen-context.js',
+ './js/olen-entitlement.js',
+ './js/olen-mobility.js',
+ './js/olen-research.js',
+ './js/olen-provider.js',
+ './js/olen-router.js',
+ './js/olen-home.js',
+ './js/olen-chat.js',
+ './js/olen-map-go.js',
+ './js/olen-live.js',
+ './js/olen-media.js',
+ './js/olen-account.js',
+ './js/olen-bootstrap.js',
+ './js/olen-legacy-dom-adapter.js',
+ './js/olen-integration-shell.js'
+]);
 let loadPromise=null,loaded=false,active=false,activationPromise=null;
 
 function script(src){
@@ -27,8 +45,15 @@ function script(src){
 
 async function load(){
  if(loaded)return api;if(loadPromise)return loadPromise;
- loadPromise=(async()=>{for(const src of MODULES)await script(src);if(!global.OLEN5?.integrationShell||!global.OLEN5?.legacyDom)throw new Error('olen5_runtime_contract_missing');loaded=true;document.documentElement.dataset.olen5Loaded='true';return api})()
- .catch(err=>{document.documentElement.dataset.olen5Loaded='failed';throw err})
+ loadPromise=(async()=>{
+  for(const src of MODULES)await script(src);
+  const root=global.OLEN5;
+  const required=['router','home','chat','mapGo','live','media','account','bootstrap','legacyDom','integrationShell'];
+  const missing=required.filter(name=>!root?.[name]);
+  if(missing.length)throw new Error('olen5_runtime_contract_missing:'+missing.join(','));
+  root.bootstrap.assertRuntime();
+  loaded=true;document.documentElement.dataset.olen5Loaded='true';return api;
+ })().catch(err=>{document.documentElement.dataset.olen5Loaded='failed';throw err})
  .finally(()=>{loadPromise=null});
  return loadPromise;
 }
