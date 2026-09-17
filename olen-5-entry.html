@@ -11,24 +11,31 @@
 <iframe id="olenLegacyApp" src="./index.html" title="OLEN" allow="geolocation; clipboard-write; web-share"></iframe>
 <script>
 /* Reversible production cutover host.
-   The existing index.html remains byte-for-byte untouched. OLEN 5 runtime is
-   injected only into the same-origin legacy document after it has loaded.
-   No Render wake, provider call or Reality request is performed here. */
+   index.html remains untouched. OLEN 5 is loaded and activated inside the
+   same-origin production document only after its legacy runtime has loaded.
+   Activation remains fail-safe: missing DOM owners refuse cutover and the
+   legacy application stays available in the frame. No Reality/Render call. */
 (()=>{
 'use strict';
 const frame=document.getElementById('olenLegacyApp');
 const runtime=['js/olen-runtime-loader.js','js/olen-production-entry.js'];
 function inject(doc,src){return new Promise((resolve,reject)=>{const s=doc.createElement('script');s.src=src;s.async=false;s.onload=resolve;s.onerror=()=>reject(new Error('olen5_entry_load_failed:'+src));doc.head.appendChild(s)})}
+function setState(state){document.documentElement.dataset.olen5Host=state}
 frame.addEventListener('load',async()=>{
  try{
   const win=frame.contentWindow,doc=frame.contentDocument;
   if(!win||!doc)throw new Error('olen5_legacy_document_unavailable');
+  setState('loading');
   for(const src of runtime)await inject(doc,src);
-  win.dispatchEvent(new CustomEvent('olen5:production-entry-ready',{detail:{host:'olen-5-entry.html'}}));
-  document.documentElement.dataset.olen5Host='ready';
+  const entry=win.OLEN5?.productionEntry;
+  if(!entry?.boot)throw new Error('olen5_production_entry_missing');
+  const result=await entry.boot({force:true,legacyDom:true,initialView:'home',replaceHistory:true});
+  if(!result?.ok||!result?.active)throw new Error(result?.reason||'olen5_cutover_refused');
+  setState('active');
+  win.dispatchEvent(new win.CustomEvent('olen5:production-entry-active',{detail:{host:'olen-5-entry.html',version:result.version}}));
  }catch(error){
-  document.documentElement.dataset.olen5Host='failed';
-  console.error('[OLEN 5 entry]',error);
+  setState('legacy');
+  console.error('[OLEN 5 entry] cutover refused; legacy runtime preserved',error);
  }
 },{once:true});
 })();
