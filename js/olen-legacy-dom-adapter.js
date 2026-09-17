@@ -1,19 +1,22 @@
 /* OLEN 5.0 - LEGACY DOM CUTOVER ADAPTER
    Compatibility boundary for the real ALPHA/OLEN 4.x DOM.
    No auto-start. No network. No legacy monkey-patching.
-   The adapter only describes and resolves existing DOM owners so OLEN 5 can
-   cut over deliberately without duplicating the production interface. */
+   The adapter resolves existing production owners and translates them to the
+   OLEN 5 view contract without creating or replacing legacy DOM nodes. */
 (function(global){
 'use strict';
 
-const VERSION='5.0.0';
+const VERSION='5.0.1';
 const VIEW_SELECTORS=Object.freeze({
-  home:['#home'],
+  home:['#lifestyleHome','#home'],
   chat:['#lifestyleAI','#home'],
   map:['#field'],
-  report:['#report'],
-  profile:['#profile']
+  go:['#field'],
+  live:['#report'],
+  account:['#profile']
 });
+const REQUIRED=Object.freeze(['home','chat','map','live','account']);
+const LEGACY_VIEW_MAP=Object.freeze({report:'live',profile:'account'});
 
 function first(selectors,root){
   const scope=root||global.document;
@@ -25,38 +28,38 @@ function first(selectors,root){
   return null;
 }
 
-function resolve(view,root){
+function normalizeView(view){
   const id=String(view||'').trim().toLowerCase();
+  return LEGACY_VIEW_MAP[id]||id;
+}
+
+function resolve(view,root){
+  const id=normalizeView(view);
   const selectors=VIEW_SELECTORS[id];
-  if(!selectors) return null;
-  return first(selectors,root);
+  return selectors?first(selectors,root):null;
 }
 
 function inventory(root){
   const result={};
   for(const view of Object.keys(VIEW_SELECTORS)){
     const node=resolve(view,root);
-    result[view]=Object.freeze({
-      present:!!node,
-      id:node&&node.id?node.id:null,
-      selectors:VIEW_SELECTORS[view].slice()
-    });
+    result[view]=Object.freeze({present:!!node,id:node&&node.id?node.id:null,selectors:VIEW_SELECTORS[view].slice()});
   }
   return Object.freeze(result);
 }
 
 function ready(root){
   const state=inventory(root);
-  return Object.keys(VIEW_SELECTORS).every(view=>state[view].present);
+  return REQUIRED.every(view=>state[view]?.present);
 }
 
 function active(root){
   const scope=root||global.document;
   if(!scope) return null;
   const body=scope.body||null;
-  const declared=body&&body.dataset?String(body.dataset.alphaView||'').trim().toLowerCase():'';
+  const declared=normalizeView(body&&body.dataset?body.dataset.alphaView:'');
   if(declared&&VIEW_SELECTORS[declared]) return declared;
-  for(const view of Object.keys(VIEW_SELECTORS)){
+  for(const view of REQUIRED){
     const node=resolve(view,scope);
     if(node&&node.classList&&(node.classList.contains('active')||node.classList.contains('show'))) return view;
   }
@@ -64,15 +67,10 @@ function active(root){
 }
 
 function contract(root){
-  return Object.freeze({
-    version:VERSION,
-    ready:ready(root),
-    activeView:active(root),
-    views:inventory(root)
-  });
+  return Object.freeze({version:VERSION,ready:ready(root),activeView:active(root),required:REQUIRED.slice(),views:inventory(root)});
 }
 
-const api=Object.freeze({VERSION,VIEW_SELECTORS,resolve,inventory,ready,active,contract});
+const api=Object.freeze({VERSION,VIEW_SELECTORS,REQUIRED,normalizeView,resolve,inventory,ready,active,contract});
 global.OLEN5=global.OLEN5||{};
 global.OLEN5.legacyDom=api;
 })(typeof window!=='undefined'?window:globalThis);
