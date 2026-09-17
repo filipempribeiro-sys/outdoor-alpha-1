@@ -1,13 +1,6 @@
 name: OLEN 5.0 isolated browser test
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'olen-5-shell.html'
-      - 'css/olen-5-shell.css'
-      - 'js/olen-*.js'
-      - '.github/workflows/olen-5-isolated-browser-test.yml'
   workflow_dispatch:
 
 jobs:
