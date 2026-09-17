@@ -10,15 +10,15 @@
 <body>
 <iframe id="olenLegacyApp" src="./index.html" title="OLEN" allow="geolocation; clipboard-write; web-share"></iframe>
 <script>
-/* Reversible production cutover host.
-   index.html remains untouched. OLEN 5 is loaded and activated inside the
-   same-origin production document only after its legacy runtime has loaded.
-   Activation remains fail-safe: missing DOM owners refuse cutover and the
-   legacy application stays available in the frame. No Reality/Render call. */
+/* Reversible production cutover host. index.html remains untouched.
+   ?cutoverTest=1 runs deterministic browser contracts after activation and
+   intentionally rolls OLEN 5 back to the exact legacy presentation state.
+   No Reality/Render/provider request is performed by this validation path. */
 (()=>{
 'use strict';
 const frame=document.getElementById('olenLegacyApp');
 const runtime=['js/olen-runtime-loader.js','js/olen-production-entry.js'];
+const wantsContractTest=()=>{try{return new URLSearchParams(location.search).get('cutoverTest')==='1'}catch{return false}};
 function inject(doc,src){return new Promise((resolve,reject)=>{const s=doc.createElement('script');s.src=src;s.async=false;s.onload=resolve;s.onerror=()=>reject(new Error('olen5_entry_load_failed:'+src));doc.head.appendChild(s)})}
 function setState(state){document.documentElement.dataset.olen5Host=state}
 frame.addEventListener('load',async()=>{
@@ -33,6 +33,14 @@ frame.addEventListener('load',async()=>{
   if(!result?.ok||!result?.active)throw new Error(result?.reason||'olen5_cutover_refused');
   setState('active');
   win.dispatchEvent(new win.CustomEvent('olen5:production-entry-active',{detail:{host:'olen-5-entry.html',version:result.version}}));
+  if(wantsContractTest()){
+   await inject(doc,'js/olen-cutover-contract-test.js');
+   const report=await win.OLEN5?.cutoverContractTest?.run?.();
+   win.__OLEN5_CUTOVER_TEST__=report||{ok:false,score:'0/0',results:[]};
+   document.documentElement.dataset.olen5Contract=report?.ok?'passed':'failed';
+   setState('legacy-tested');
+   console.info('[OLEN 5 cutover contract]',report);
+  }
  }catch(error){
   setState('legacy');
   console.error('[OLEN 5 entry] cutover refused; legacy runtime preserved',error);
