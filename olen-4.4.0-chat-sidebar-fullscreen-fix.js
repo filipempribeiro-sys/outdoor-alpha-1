@@ -1,120 +1,18 @@
-/* OLEN 4.5.4 · CLEAN CHAT FULLSCREEN CORE
-   Scope: Chat/Compose fullscreen presentation + conversation actions.
-   One owner for: topbar, capsule, sidebar search entry, search overlay and 3-dot menu.
-   Chat data remains owned by the existing conversation engine.
-*/
-(()=>{
+/* OLEN 5.0 guarded production bridge.
+   Preserve the existing chat fullscreen runtime first, then load the inert
+   OLEN 5 production entrypoint. The entrypoint does not cut over unless the
+   explicit OLEN 5 opt-in is present. */
+(function(){
 'use strict';
-if(window.__olenChatFullscreen451)return;
-window.__olenChatFullscreen451=true;
-
-const CHAT=()=>document.body.classList.contains('alphaChatMode')||document.body.classList.contains('alphaComposeMode');
-const qs=(s,r=document)=>r.querySelector(s);
-const qsa=(s,r=document)=>[...r.querySelectorAll(s)];
-const META_KEY='alpha_olen_conversation_meta_v4330';
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const svg=d=>`<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
-const ICON={
- compose:svg('<path d="M5.5 3.5H4.75A2.75 2.75 0 0 0 2 6.25v13A2.75 2.75 0 0 0 4.75 22h13A2.75 2.75 0 0 0 20.5 19.25V18"/><path d="M8 16l1.2-4.4 8.45-8.45a2.15 2.15 0 0 1 3.05 3.05l-8.45 8.45L8 16Z"/><path d="m15.9 4.9 3.2 3.2"/>'),
- dots:svg('<circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/>'),
- share:svg('<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.5-4.4M8.2 13.2l7.5 4.4"/>'),
- pin:svg('<path d="m9 3 6 6-2 2 3 4-1 1-4-3-2 2-6-6 6-6Z"/><path d="m8 16-5 5"/>'),
- project:svg('<path d="M3 7h7l2 2h9v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/><path d="M12 12v6M9 15h6"/>'),
- clip:svg('<path d="M8 12.5v-5a4 4 0 0 1 8 0v8a6 6 0 0 1-12 0V7a2 2 0 0 1 4 0v8.5a2 2 0 0 0 4 0V8"/>'),
- search:svg('<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.2 4.2"/>'),
- home:svg('<path d="M4 11 12 4l8 7v9H4v-9Z"/><path d="M9 20v-6h6v6"/>'),
- archive:svg('<rect x="4" y="7" width="16" height="13" rx="2"/><path d="M3 4h18v4H3zM9 12h6"/>'),
- trash:svg('<path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/>'),
- back:svg('<path d="m15 18-6-6 6-6"/>'),
- close:svg('<path d="M6 6l12 12M18 6 6 18"/>')
-};
-
-function ensureStyle(){
- if(qs('#olenChatFullscreen451Style'))return;
- const s=document.createElement('style');s.id='olenChatFullscreen451Style';s.textContent=`
-body.olenChatFs451.alphaChatMode #lifestyleAI,body.olenChatFs451.alphaComposeMode #lifestyleAI{position:relative!important}
-body.olenChatFs451 #lifestyleAI .aiTopbar.alphaFloatingHeader{position:absolute!important;top:calc(env(safe-area-inset-top) + 10px)!important;left:12px!important;right:12px!important;height:52px!important;min-height:52px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;z-index:100!important;background:transparent!important;border:0!important;padding:0!important;margin:0!important;pointer-events:none!important}
-body.olenChatFs451 #lifestyleAI .aiChatMenuBtn.alphaFloatingMenu{display:grid!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;place-items:center!important;background:#10231f!important;border:1px solid #315149!important;color:#eff7f3!important;box-shadow:0 8px 24px rgba(0,0,0,.24)!important}
-body.olenChatFs451 #lifestyleAI .aiChatMenuBtn.alphaFloatingMenu:active{background:#17372f!important}
-body.olenChatFs451 #lifestyleAI .alphaChatActions4324,body.olenChatFs451 #lifestyleAI .olenChatCapsule440,body.olenChatFs451 #lifestyleAI .olenChatCapsule450{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
-body.olenChatFs451 #lifestyleAI .olenChatCapsule451{width:126px!important;height:48px!important;min-width:126px!important;min-height:48px!important;margin-left:auto!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:0!important;overflow:hidden!important;border-radius:999px!important;background:#10231f!important;border:1px solid #315149!important;box-shadow:0 8px 24px rgba(0,0,0,.24)!important;pointer-events:auto!important;touch-action:manipulation!important;position:relative!important;z-index:101!important}
-body.olenChatFs451 #lifestyleAI .olenChatCapsule451>button{appearance:none!important;-webkit-appearance:none!important;width:62px!important;height:46px!important;min-width:62px!important;min-height:46px!important;flex:0 0 62px!important;margin:0!important;padding:0!important;display:grid!important;place-items:center!important;border:0!important;border-radius:0!important;background:transparent!important;color:#eff7f3!important;box-shadow:none!important;outline:0!important;cursor:pointer!important;pointer-events:auto!important;touch-action:manipulation!important}
-body.olenChatFs451 #lifestyleAI .olenChatCapsule451>button:active{background:#17372f!important}
-body.olenChatFs451 #lifestyleAI .olenChatCapsule451 svg{width:27px!important;height:27px!important;display:block!important;pointer-events:none!important}
-body.olenChatFs451 #lifestyleAI .olenChatCompose451 svg{fill:none!important;stroke:currentColor!important;stroke-width:1.9!important;stroke-linecap:round!important;stroke-linejoin:round!important}
-body.olenChatFs451 #lifestyleAI .olenChatMore451 svg{fill:currentColor!important;stroke:none!important}
-body.olenChatFs451.olenSidebarOpen451 #lifestyleAI .olenChatCapsule451,body.olenChatFs451.olenSidebarOpen451 #lifestyleAI .aiChatMenuBtn.alphaFloatingMenu{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
-
-/* Sidebar header: logo left, search permanently fixed in the defined top-right corner. */
-body.olenChatFs451 .alphaChatOlenSidebar4330 .alphaChatOlenHead4330{position:relative!important;display:flex!important;align-items:center!important;min-height:60px!important;padding:0 60px 10px 4px!important}
-body.olenChatFs451 .alphaChatOlenSidebar4330 .alphaChatOlenBrand4330{width:60px!important;height:60px!important;min-width:60px!important;display:grid!important;place-items:center!important}
-body.olenChatFs451 .alphaChatOlenSidebar4330 .olenChatSidebarUiLogo451{display:block!important;width:60px!important;height:60px!important;min-width:60px!important;object-fit:contain!important;margin:0!important}
-body.olenChatFs451 .alphaChatOlenSidebar4330 .alphaChatOlenSearch4330{position:absolute!important;top:8px!important;right:0!important;width:44px!important;height:44px!important;margin:0!important;padding:0!important;z-index:8!important;display:grid!important;place-items:center!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;outline:0!important;color:#eff7f3!important;-webkit-tap-highlight-color:transparent!important}
-body.olenChatFs451 .alphaChatOlenSidebar4330 .alphaChatOlenSearch4330:active{background:transparent!important;box-shadow:none!important}
-body.olenChatFs451 .alphaChatOlenSidebar4330 .alphaChatOlenSearchBox4330{display:none!important}
-
-.alphaChatConvActionScrim4330{position:fixed!important;inset:0!important;z-index:2147483000!important;pointer-events:auto!important}.alphaChatConvActionMenu4330{position:fixed!important;z-index:2147483001!important;pointer-events:auto!important}
-.olenChatOverlay451{position:fixed;inset:0;z-index:2147483010;background:rgba(7,17,22,.46);backdrop-filter:blur(2px);pointer-events:auto}
-.olenChatMenu451{position:fixed;z-index:2147483011;width:min(330px,calc(100vw - 28px));padding:8px;border-radius:22px;background:linear-gradient(180deg,#11242b,#0b1c22);color:#eff7f3;border:1px solid #294149;box-shadow:0 18px 50px rgba(0,0,0,.42);pointer-events:auto}
-.olenChatMenu451 .olenMenuTitle451{padding:10px 14px 8px;color:#93a9a2;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.olenChatMenu451 button{width:100%;height:52px;border:0;border-radius:13px;background:transparent;color:#eff7f3;display:flex;align-items:center;gap:14px;padding:0 14px;text-align:left;font:650 16px/1.2 system-ui,-apple-system,sans-serif}.olenChatMenu451 button:active{background:#17372f}.olenChatMenu451 button.danger{color:#ff858c}.olenChatMenu451 button svg{width:25px;height:25px;flex:0 0 25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.olenChatMenu451 button .arrow{margin-left:auto;font-size:24px;color:#39d69b}
-
-.olenChatSearch451{position:fixed;inset:0;z-index:2147483020;background:linear-gradient(180deg,#071116,#0b1c22);color:#eff7f3;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 14px) 16px max(14px,env(safe-area-inset-bottom));font-family:system-ui,-apple-system,sans-serif}
-.olenSearchHead451{display:flex;align-items:center;gap:10px;flex:0 0 auto}.olenSearchBack451{width:44px;height:44px;border:1px solid #315149;border-radius:50%;background:#10231f;color:#eff7f3;display:grid;place-items:center}.olenSearchBack451:active{background:#17372f}.olenSearchBack451 svg{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.olenSearchField451{height:50px;flex:1;border:1px solid #29434b;border-radius:25px;background:#0d1a21;color:#eff7f3;padding:0 18px;font-size:17px;outline:none;box-shadow:inset 0 0 0 1px rgba(57,214,155,.02)}.olenSearchField451::placeholder{color:#93a9a2}.olenSearchField451:focus{border-color:#39d69b;box-shadow:0 0 0 2px rgba(57,214,155,.12)}.olenSearchMeta451{padding:18px 4px 10px;color:#93a9a2;font-size:13px}.olenSearchResults451{min-height:0;overflow:auto;display:grid;gap:8px;padding-bottom:16px}.olenSearchResult451{border:1px solid rgba(41,65,73,.72);border-radius:16px;background:#0d1a21;color:#eff7f3;text-align:left;padding:13px 14px}.olenSearchResult451:active{background:#11242b;border-color:#315149}.olenSearchResult451 b{display:block;font-size:15px;margin-bottom:5px;color:#eff7f3}.olenSearchResult451 span{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;color:#a9beb7;font-size:14px;line-height:1.4}.olenSearchEmpty451{padding:42px 12px;text-align:center;color:#93a9a2}
-.olenFiles451{position:fixed;inset:0;z-index:2147483020;background:linear-gradient(180deg,#071116,#0b1c22);color:#eff7f3;padding:calc(env(safe-area-inset-top) + 14px) 16px max(14px,env(safe-area-inset-bottom));overflow:auto;font-family:system-ui,-apple-system,sans-serif}.olenFiles451 header{display:flex;align-items:center;gap:10px;margin-bottom:18px}.olenFiles451 header button{width:44px;height:44px;border:1px solid #315149;border-radius:50%;background:#10231f;color:#eff7f3;display:grid;place-items:center}.olenFiles451 header button:active{background:#17372f}.olenFiles451 header svg{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:2}.olenFiles451 h2{margin:0;font-size:22px}.olenFileCard451{padding:14px;border-radius:15px;background:#0d1a21;border:1px solid #294149;margin:8px 0}.olenFileCard451 b{display:block}.olenFileCard451 small{color:#93a9a2}
-`;
- document.head.appendChild(s);
+function load(src,attrs){
+  const s=document.createElement('script');
+  s.src=src;
+  s.async=false;
+  if(attrs)Object.entries(attrs).forEach(([k,v])=>s.dataset[k]=v);
+  document.head.appendChild(s);
+  return s;
 }
-
-function meta(){try{return JSON.parse(localStorage.getItem(META_KEY)||'{}')||{}}catch{return{}}}
-function saveMeta(m){try{localStorage.setItem(META_KEY,JSON.stringify(m))}catch{}}
-function current(){try{return typeof window.alphaCurrentConversation==='function'?window.alphaCurrentConversation():null}catch{return null}}
-function all(){try{return typeof window.alphaConversations==='function'?window.alphaConversations():[]}catch{return[]}}
-function saveAll(a){try{window.alphaSaveConversations?.(a)}catch{}}
-function toastMsg(t){try{window.toast?.(t)}catch{}}
-function sidebar(){return qs('#aiChatMenu')||qs('.alphaConversationSidebar')}
-function sidebarOpen(){const s=sidebar();return CHAT()&&(document.body.classList.contains('alphaChatOlenOpen4330')||!!(s&&(s.classList.contains('show')||s.getAttribute('aria-hidden')==='false')))}
-function closeFloating(){qsa('.olenChatOverlay451,.olenChatMenu451').forEach(x=>x.remove())}
-function closeSearch(){qs('.olenChatSearch451')?.remove()}
-function closeFiles(){qs('.olenFiles451')?.remove()}
-function closeAll(){closeFloating();closeSearch();closeFiles()}
-
-function conversationKey(c){return String(c?.title||'').trim().slice(0,160)}
-function pinned(c){return !!meta()[conversationKey(c)]?.pinned}
-function togglePin(){const c=current();if(!c)return;const m=meta(),k=conversationKey(c),on=!m[k]?.pinned;m[k]={...(m[k]||{}),pinned:on};saveMeta(m);const row=qs(`.alphaChatOlenRecent4330[data-conv-id="${CSS.escape(String(c.id))}"]`);if(row){row.classList.toggle('alphaPinned4330',on);const sh=row.closest('.alphaChatOlenSidebar4330');const box=sh?.querySelector(on?'.alphaChatPinned4330':'.alphaChatOlenRecents4330');box?.prepend(row)}closeFloating();toastMsg(on?'Conversa afixada':'Conversa desafixada')}
-
-async function shareConversation(){const c=current();if(!c)return;const text=(c.messages||[]).map(m=>(m.role==='user'?'Tu':'OLEN')+': '+String(m.text||'')).join('\n\n');try{if(navigator.share)await navigator.share({title:c.title||'Conversa OLEN',text});else{await navigator.clipboard.writeText(text);toastMsg('Conversa copiada para partilhar')}}catch{}closeFloating()}
-function addProject(){const c=current();if(!c)return;const old=String(c.projectName||'');const name=prompt('Adicionar ao projeto',old);if(name===null)return;const v=name.trim();c.projectName=v;c.updatedAt=new Date().toISOString();window.alphaUpsertConversation?.(c);closeFloating();toastMsg(v?'Adicionada ao projeto · '+v:'Projeto removido')}
-function archiveConversation(){const c=current();if(!c)return;c.archived=true;c.archivedAt=new Date().toISOString();c.updatedAt=c.archivedAt;window.alphaUpsertConversation?.(c);qs(`.alphaChatOlenRecent4330[data-conv-id="${CSS.escape(String(c.id))}"]`)?.remove();closeFloating();window.alphaStartFreshConversation?.({focus:true,compose:true});toastMsg('Conversa arquivada')}
-function deleteConversation(){const c=current();if(!c)return;closeFloating();window.alphaDeleteConversation?.(c.id)}
-
-function showFiles(){closeFloating();closeFiles();const c=current();const files=[];(c?.messages||[]).forEach((m,mi)=>(m.attachments||[]).forEach(a=>files.push({...a,mi})));const p=document.createElement('section');p.className='olenFiles451';p.innerHTML=`<header><button type="button" aria-label="Voltar">${ICON.back}</button><h2>Ficheiros carregados</h2></header><div>${files.length?files.map(a=>`<div class="olenFileCard451"><b>${esc(a.name||'Anexo')}</b><small>${esc(a.type||'ficheiro')} · mensagem ${a.mi+1}</small></div>`).join(''):'<div class="olenSearchEmpty451">Esta conversa não tem ficheiros carregados.</div>'}</div>`;p.querySelector('button').onclick=()=>p.remove();document.body.appendChild(p)}
-
-function searchMatches(c,q){const low=String(q||'').trim().toLocaleLowerCase('pt-PT');if(!low)return[];const out=[];(c?.messages||[]).forEach((m,i)=>{const text=String(m.text||'');const names=(m.attachments||[]).map(a=>a.name||'').join(' ');if((text+' '+names).toLocaleLowerCase('pt-PT').includes(low))out.push({i,role:m.role,text:text||names})});return out}
-function openSearch(){closeFloating();closeSearch();const c=current();const p=document.createElement('section');p.className='olenChatSearch451';p.innerHTML=`<div class="olenSearchHead451"><button class="olenSearchBack451" type="button" aria-label="Voltar">${ICON.back}</button><input class="olenSearchField451" type="search" autocomplete="off" placeholder="Pesquisar na conversa"></div><div class="olenSearchMeta451">Pesquisa em todas as mensagens desta conversa</div><div class="olenSearchResults451"><div class="olenSearchEmpty451">Escreve uma palavra ou frase para pesquisar.</div></div>`;const input=qs('.olenSearchField451',p),host=qs('.olenSearchResults451',p),metaEl=qs('.olenSearchMeta451',p);qs('.olenSearchBack451',p).onclick=()=>p.remove();input.oninput=()=>{const q=input.value.trim(),hits=searchMatches(c,q);metaEl.textContent=q?(hits.length+' resultado'+(hits.length===1?'':'s')):'Pesquisa em todas as mensagens desta conversa';host.innerHTML=!q?'<div class="olenSearchEmpty451">Escreve uma palavra ou frase para pesquisar.</div>':!hits.length?'<div class="olenSearchEmpty451">Sem resultados nesta conversa.</div>':hits.map(h=>`<button class="olenSearchResult451" type="button" data-i="${h.i}"><b>${h.role==='user'?'Tu':'OLEN'} · mensagem ${h.i+1}</b><span>${esc(h.text)}</span></button>`).join('');qsa('[data-i]',host).forEach(b=>b.onclick=()=>{const i=Number(b.dataset.i),nodes=qsa('#lifestyleThread .lifestyleMsg');p.remove();const n=nodes[i];if(n){n.scrollIntoView({behavior:'smooth',block:'center'});n.animate?.([{background:'rgba(57,214,155,.18)'},{background:'transparent'}],{duration:1300})}})};document.body.appendChild(p);setTimeout(()=>input.focus(),30)}
-
-function conversationSearchMatches(q){const low=String(q||'').trim().toLocaleLowerCase('pt-PT');if(!low)return[];const m=meta();return all().filter(c=>{const mm=m[conversationKey(c)]||{};if(mm.deleted||c?.archived)return false;const title=String(mm.name||c?.title||'Conversa');const body=(c?.messages||[]).map(x=>String(x?.text||'')).join(' ');return (title+' '+body).toLocaleLowerCase('pt-PT').includes(low)}).map(c=>{const mm=m[conversationKey(c)]||{};const title=String(mm.name||c?.title||'Conversa');const body=(c?.messages||[]).map(x=>String(x?.text||'')).join(' ').trim();return{id:String(c?.id||''),title,preview:body.slice(0,180)}})}
-function openConversationResult(id,p){const row=qs(`.alphaChatOlenRecent4330[data-conv-id="${CSS.escape(String(id))}"]`);p?.remove();if(row){row.click();return}for(const fn of ['alphaOpenConversation','alphaLoadConversation','alphaSelectConversation']){try{if(typeof window[fn]==='function'){window[fn](id);return}}catch{}}}
-function openConversationSearch(){closeFloating();closeSearch();const p=document.createElement('section');p.className='olenChatSearch451';p.innerHTML=`<div class="olenSearchHead451"><button class="olenSearchBack451" type="button" aria-label="Voltar">${ICON.back}</button><input class="olenSearchField451" type="search" autocomplete="off" placeholder="Pesquisar conversas"></div><div class="olenSearchMeta451">Pesquisa em todas as conversas</div><div class="olenSearchResults451"><div class="olenSearchEmpty451">Escreve uma palavra ou frase para pesquisar.</div></div>`;const input=qs('.olenSearchField451',p),host=qs('.olenSearchResults451',p),metaEl=qs('.olenSearchMeta451',p);qs('.olenSearchBack451',p).onclick=()=>p.remove();input.oninput=()=>{const q=input.value.trim(),hits=conversationSearchMatches(q);metaEl.textContent=q?(hits.length+' conversa'+(hits.length===1?'':'s')):'Pesquisa em todas as conversas';host.innerHTML=!q?'<div class="olenSearchEmpty451">Escreve uma palavra ou frase para pesquisar.</div>':!hits.length?'<div class="olenSearchEmpty451">Sem conversas encontradas.</div>':hits.map(h=>`<button class="olenSearchResult451" type="button" data-conv-id="${esc(h.id)}"><b>${esc(h.title)}</b><span>${esc(h.preview||'Conversa guardada')}</span></button>`).join('');qsa('[data-conv-id]',host).forEach(b=>b.onclick=()=>openConversationResult(b.dataset.convId,p))};document.body.appendChild(p);setTimeout(()=>input.focus(),30)}
-
-let installPrompt=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});
-async function addHome(){closeFloating();if(installPrompt){try{installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;return}catch{}}toastMsg('Usa o menu do browser → Adicionar ao ecrã principal')}
-
-function menu(anchor){closeFloating();const c=current();const overlay=document.createElement('div');overlay.className='olenChatOverlay451';overlay.onclick=closeFloating;document.body.appendChild(overlay);const m=document.createElement('div');m.className='olenChatMenu451';m.setAttribute('role','menu');m.innerHTML=`<div class="olenMenuTitle451">${esc(c?.title||'Conversa')}</div><button data-a="share">${ICON.share}<span>Partilhar</span></button><button data-a="pin">${ICON.pin}<span>${pinned(c)?'Desafixar':'Afixar'}</span></button><button data-a="project">${ICON.project}<span>Adicionar ao projeto</span><span class="arrow">›</span></button><button data-a="files">${ICON.clip}<span>Ficheiros carregados</span></button><button data-a="search">${ICON.search}<span>Pesquisar na conversa</span></button><button data-a="home">${ICON.home}<span>Adicionar ao ecrã principal</span></button><button data-a="archive">${ICON.archive}<span>Arquivar</span></button><button class="danger" data-a="delete">${ICON.trash}<span>Eliminar</span></button>`;document.body.appendChild(m);const r=anchor.getBoundingClientRect(),mr=m.getBoundingClientRect();m.style.left=Math.max(14,Math.min(r.right-mr.width,innerWidth-mr.width-14))+'px';m.style.top=Math.max(14,Math.min(r.bottom+10,innerHeight-mr.height-14))+'px';m.onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;e.preventDefault();e.stopPropagation();({share:shareConversation,pin:togglePin,project:addProject,files:showFiles,search:openSearch,home:addHome,archive:archiveConversation,delete:deleteConversation}[b.dataset.a])?.()}}
-
-function startFresh(){closeFloating();if(typeof window.alphaStartFreshConversation==='function'){window.alphaStartFreshConversation({focus:true,compose:true});return}qs('#lifestyleAI .alphaNewChatBtn')?.click()}
-function ensureCapsule(){const bar=qs('#lifestyleAI .aiTopbar.alphaFloatingHeader');if(!bar)return;let cap=qs('.olenChatCapsule451',bar);if(cap)return;cap=document.createElement('div');cap.className='olenChatCapsule451';cap.setAttribute('aria-label','Ações da conversa');const compose=document.createElement('button');compose.type='button';compose.className='olenChatCompose451';compose.setAttribute('aria-label','Nova conversa');compose.innerHTML=ICON.compose;const more=document.createElement('button');more.type='button';more.className='olenChatMore451';more.setAttribute('aria-label','Mais opções');more.innerHTML=ICON.dots;compose.onclick=e=>{e.preventDefault();e.stopPropagation();startFresh()};more.onclick=e=>{e.preventDefault();e.stopPropagation();qs('.olenChatMenu451')?closeFloating():menu(more)};cap.append(compose,more);bar.appendChild(cap)}
-function ensureLogo(){const brand=qs('.alphaChatOlenSidebar4330 .alphaChatOlenBrand4330');if(!brand)return;let img=qs('.olenChatSidebarUiLogo451',brand);if(img)return;img=document.createElement('img');img.className='olenChatSidebarUiLogo451';img.src='assets/olen-ui.png';img.alt='OLEN';img.width=60;img.height=60;brand.replaceChildren(img)}
-
-/* Sidebar search owns global conversation search; 3-dot menu keeps in-conversation search. */
-document.addEventListener('click',e=>{const b=e.target?.closest?.('.alphaChatOlenSearch4330');if(!b||!CHAT()||!sidebarOpen())return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();openConversationSearch()},true);
-
-function sync(){const chat=CHAT();document.body.classList.toggle('olenChatFs451',chat);if(!chat){document.body.classList.remove('olenSidebarOpen451');closeAll();qs('.olenChatCapsule451')?.remove();return}ensureCapsule();ensureLogo();const open=sidebarOpen();document.body.classList.toggle('olenSidebarOpen451',open);if(open)closeFloating()}
-function schedule(){requestAnimationFrame(sync)}
-ensureStyle();sync();
-const bodyObs=new MutationObserver(schedule);bodyObs.observe(document.body,{attributes:true,attributeFilter:['class']});
-let sideObs=null,sideEl=null;function bindSide(){const s=sidebar();if(!s||s===sideEl)return;sideEl=s;sideObs?.disconnect();sideObs=new MutationObserver(schedule);sideObs.observe(s,{attributes:true,attributeFilter:['class','aria-hidden','hidden']})}bindSide();
-const host=qs('#lifestyleAI');if(host)new MutationObserver(()=>{if(CHAT()){bindSide();ensureCapsule();schedule()}}).observe(host,{childList:true,subtree:true});
-window.addEventListener('pageshow',schedule,{passive:true});window.addEventListener('popstate',()=>{closeAll();schedule()},{passive:true});window.addEventListener('pagehide',closeAll,{passive:true});document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(qs('.olenChatSearch451'))closeSearch();else if(qs('.olenFiles451'))closeFiles();else closeFloating()}});
-console.info('[OLEN 4.5.4] clean fullscreen with global conversation search active');
+const legacy=load('./olen-4.4.0-chat-sidebar-fullscreen-fix-legacy.js?v=451-preserved',{olenLegacyRuntime:'true'});
+legacy.addEventListener('load',()=>load('./js/olen-production-entry.js?v=500-cutover',{olen5ProductionEntry:'true'}),{once:true});
+legacy.addEventListener('error',()=>console.error('[OLEN] legacy chat runtime failed to load; OLEN 5 cutover not attempted'),{once:true});
 })();
