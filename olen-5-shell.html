@@ -72,6 +72,7 @@
   <script src="./js/olen-research.js"></script>
   <script src="./js/olen-provider.js"></script>
   <script src="./js/olen-reality-client.js"></script>
+  <script src="./js/olen-reality-bridge.js"></script>
   <script src="./js/olen-router.js"></script>
   <script src="./js/olen-home.js"></script>
   <script src="./js/olen-chat.js"></script>
@@ -89,6 +90,7 @@
   <script src="./js/olen-research-test.js"></script>
   <script src="./js/olen-provider-test.js"></script>
   <script src="./js/olen-reality-client-test.js"></script>
+  <script src="./js/olen-reality-bridge-test.js"></script>
   <script>
     window.addEventListener('DOMContentLoaded',async()=>{
       window.OLEN5.integrationShell.start({initialView:'home',replaceHistory:true});
@@ -101,6 +103,7 @@
       if(params.get('researchTest')==='1') window.__OLEN5_RESEARCH_TEST_REPORT__=await window.OLEN5.researchTest.run();
       if(params.get('providerTest')==='1') window.__OLEN5_PROVIDER_TEST_REPORT__=await window.OLEN5.providerTest.run();
       if(params.get('realityTest')==='1') window.__OLEN5_REALITY_TEST_REPORT__=await window.OlenRealityTest.run();
+      if(params.get('realityBridgeTest')==='1') window.__OLEN5_REALITY_BRIDGE_TEST_REPORT__=await window.OLEN5.realityBridgeTest.run();
     },{once:true});
   </script>
 </body>
