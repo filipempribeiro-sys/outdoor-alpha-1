@@ -69,6 +69,7 @@
   <script src="./js/olen-context.js"></script>
   <script src="./js/olen-entitlement.js"></script>
   <script src="./js/olen-mobility.js"></script>
+  <script src="./js/olen-research.js"></script>
   <script src="./js/olen-router.js"></script>
   <script src="./js/olen-home.js"></script>
   <script src="./js/olen-chat.js"></script>
@@ -83,6 +84,7 @@
   <script src="./js/olen-context-test.js"></script>
   <script src="./js/olen-entitlement-test.js"></script>
   <script src="./js/olen-mobility-test.js"></script>
+  <script src="./js/olen-research-test.js"></script>
   <script>
     window.addEventListener('DOMContentLoaded',async()=>{
       window.OLEN5.integrationShell.start({initialView:'home',replaceHistory:true});
@@ -92,6 +94,7 @@
       if(params.get('contextTest')==='1') window.__OLEN5_CONTEXT_TEST_REPORT__=await window.OLEN5.contextTest.run();
       if(params.get('entitlementTest')==='1') window.__OLEN5_ENTITLEMENT_TEST_REPORT__=await window.OLEN5.entitlementTest.run();
       if(params.get('mobilityTest')==='1') window.__OLEN5_MOBILITY_TEST_REPORT__=await window.OLEN5.mobilityTest.run();
+      if(params.get('researchTest')==='1') window.__OLEN5_RESEARCH_TEST_REPORT__=await window.OLEN5.researchTest.run();
     },{once:true});
   </script>
 </body>
