@@ -22,6 +22,7 @@ const VIEW_SELECTORS=Object.freeze({
   live:'#report',
   account:'#profile'
 });
+const LEGACY_VIEW_MAP=Object.freeze({home:'home',chat:'chat',map:'map',go:'map',live:'report',account:'profile'});
 
 let initialized=false;
 let started=false;
@@ -37,8 +38,21 @@ function listen(target,type,handler,opts){
   disposers.push(off);
   return off;
 }
+function legacyAdapter(){return ROOT?.legacyDom||null}
 function selectorFor(view){return options.views?.[view]||VIEW_SELECTORS[view]||null}
-function elementFor(view){const selector=selectorFor(view);return selector?core.qs(selector):null}
+function elementFor(view){
+  const explicit=options.views?.[view];
+  if(explicit) return core.qs(explicit);
+  if(options.legacyDom===true){
+    const adapter=legacyAdapter();
+    const mapped=LEGACY_VIEW_MAP[view];
+    const resolved=adapter?.resolve?.(mapped);
+    if(resolved) return resolved;
+  }
+  const selector=selectorFor(view);
+  return selector?core.qs(selector):null;
+}
+function presentationElements(){return new Set(Object.keys(VIEW_SELECTORS).map(elementFor).filter(Boolean))}
 function setVisible(el,visible){
   if(!el) return;
   el.hidden=!visible;
@@ -47,18 +61,18 @@ function setVisible(el,visible){
 }
 function renderView(view,reason='route'){
   const next=String(view||router.current||'home');
-  const unique=new Set(Object.keys(VIEW_SELECTORS).map(elementFor).filter(Boolean));
+  const unique=presentationElements();
   unique.forEach(el=>setVisible(el,false));
   const target=elementFor(next);
   setVisible(target,true);
   document.documentElement.dataset.olenView=next;
   document.body?.setAttribute('data-olen-view',next);
   activeView=next;
-  emit('view',{view:next,reason,found:!!target});
+  emit('view',{view:next,reason,found:!!target,legacyDom:options.legacyDom===true});
   return !!target;
 }
 function clearPresentation(){
-  const unique=new Set(Object.keys(VIEW_SELECTORS).map(elementFor).filter(Boolean));
+  const unique=presentationElements();
   unique.forEach(el=>{
     el.hidden=false;
     el.removeAttribute('aria-hidden');
@@ -98,23 +112,32 @@ function bindControls(){
   const offRoute=core.on('route:change',payload=>renderView(payload?.to||router.current,'route-change'));
   disposers.push(offRoute);
 }
+function assertLegacyBoundary(){
+  if(options.legacyDom!==true) return;
+  const adapter=legacyAdapter();
+  if(!adapter) throw new Error('OLEN 5.0 legacy DOM cutover requires olen-legacy-dom-adapter');
+  const state=adapter.contract?.();
+  if(!state?.ready) throw new Error('OLEN 5.0 legacy DOM cutover refused: required production owners are missing');
+}
 function configure(next={}){
   if(started) throw new Error('OLEN 5.0 Integration Shell cannot be reconfigured while started');
   options={...options,...next,views:{...(options.views||{}),...(next.views||{})}};
-  emit('configured',{views:{...VIEW_SELECTORS,...(options.views||{})}});
+  emit('configured',{views:{...VIEW_SELECTORS,...(options.views||{})},legacyDom:options.legacyDom===true});
   return ROOT.integrationShell;
 }
 function init(next={}){
   if(initialized) return ROOT.integrationShell;
   configure(next);
+  assertLegacyBoundary();
   initialized=true;
   bindControls();
-  emit('initialized',{version:VERSION});
+  emit('initialized',{version:VERSION,legacyDom:options.legacyDom===true});
   return ROOT.integrationShell;
 }
 function start(next={}){
   if(started) return ROOT.integrationShell;
   if(!initialized) init(next);
+  assertLegacyBoundary();
   bootstrap.start({
     initialView:next.initialView||options.initialView||'home',
     replaceHistory:next.replaceHistory??options.replaceHistory??true,
@@ -123,7 +146,7 @@ function start(next={}){
   started=true;
   renderView(router.current,'shell-start');
   document.documentElement.dataset.olenRuntime='5.0';
-  emit('started',{view:router.current});
+  emit('started',{view:router.current,legacyDom:options.legacyDom===true});
   return ROOT.integrationShell;
 }
 function stop(reason='shell-stop'){
