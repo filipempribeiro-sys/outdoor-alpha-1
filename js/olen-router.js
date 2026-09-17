@@ -10,9 +10,9 @@
 const ROOT=window.OLEN5;
 const core=ROOT?.core;
 if(!core)throw new Error('OLEN 5.0 router requires olen-core.js');
-if(ROOT.router?.version==='5.0.0')return;
+if(ROOT.router?.version==='5.0.1')return;
 
-const VERSION='5.0.0';
+const VERSION='5.0.1';
 const VALID_VIEWS=new Set(['intro','home','chat','map','go','live','account']);
 const HISTORY_KEY='__olen5';
 const viewHandlers=new Map();
@@ -20,6 +20,7 @@ let initialized=false;
 let handlingPop=false;
 let sequence=0;
 let popOff=null;
+let historySnapshot=null;
 
 function normalizeView(view){
   const value=String(view||'').trim().toLowerCase();
@@ -88,6 +89,7 @@ function init(options={}){
   const initial=normalizeView(options.initialView||current()||'home');
   core.setState(draft=>{draft.view=initial;draft.previousView=null;draft.overlay=null;if(draft.chat)draft.chat.sidebar=false},{source:'router',action:'init'});
   const existing=history.state;
+  historySnapshot={state:existing,url:location.href};
   if(!existing?.[HISTORY_KEY])history.replaceState(historyState(initial,{reason:'init'}),'',location.href);
   popOff=core.listen(window,'popstate',onPopState);
   core.emit('router:ready',{view:initial});return ROOT.router;
@@ -96,6 +98,10 @@ function destroy(){
   popOff?.();popOff=null;
   closeOverlay('router-destroy');
   viewHandlers.clear();
+  if(historySnapshot){
+    try{history.replaceState(historySnapshot.state,'',historySnapshot.url)}catch{}
+    historySnapshot=null;
+  }
   initialized=false;
 }
 ROOT.router=Object.freeze({version:VERSION,init,destroy,get current(){return current()},enter,replace,back,nativeBack,swipeBack,registerView,setOverlay,closeOverlay,validViews:Object.freeze([...VALID_VIEWS])});
