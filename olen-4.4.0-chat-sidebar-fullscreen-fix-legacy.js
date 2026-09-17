@@ -1,0 +1,1 @@
+/* This path is populated from the preserved legacy blob in the following atomic tree checkpoint. */
