@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="olen-runtime" content="5.0">
+<title>OLEN 5</title>
+<style>html,body{margin:0;width:100%;height:100%;background:#071116}iframe{display:block;border:0;width:100%;height:100dvh;background:#071116}</style>
+</head>
+<body>
+<iframe id="olenLegacyApp" src="./index.html" title="OLEN" allow="geolocation; clipboard-write; web-share"></iframe>
+<script>
+/* Reversible production cutover host.
+   The existing index.html remains byte-for-byte untouched. OLEN 5 runtime is
+   injected only into the same-origin legacy document after it has loaded.
+   No Render wake, provider call or Reality request is performed here. */
+(()=>{
+'use strict';
+const frame=document.getElementById('olenLegacyApp');
+const runtime=['js/olen-runtime-loader.js','js/olen-production-entry.js'];
+function inject(doc,src){return new Promise((resolve,reject)=>{const s=doc.createElement('script');s.src=src;s.async=false;s.onload=resolve;s.onerror=()=>reject(new Error('olen5_entry_load_failed:'+src));doc.head.appendChild(s)})}
+frame.addEventListener('load',async()=>{
+ try{
+  const win=frame.contentWindow,doc=frame.contentDocument;
+  if(!win||!doc)throw new Error('olen5_legacy_document_unavailable');
+  for(const src of runtime)await inject(doc,src);
+  win.dispatchEvent(new CustomEvent('olen5:production-entry-ready',{detail:{host:'olen-5-entry.html'}}));
+  document.documentElement.dataset.olen5Host='ready';
+ }catch(error){
+  document.documentElement.dataset.olen5Host='failed';
+  console.error('[OLEN 5 entry]',error);
+ }
+},{once:true});
+})();
+</script>
+</body>
+</html>
