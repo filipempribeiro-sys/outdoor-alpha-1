@@ -6,7 +6,7 @@
 (function(global){
 'use strict';
 
-const VERSION='5.0.1';
+const VERSION='5.0.2';
 const VIEW_SELECTORS=Object.freeze({
   home:['#lifestyleHome','#home'],
   chat:['#lifestyleAI','#home'],
@@ -57,6 +57,13 @@ function active(root){
   const scope=root||global.document;
   if(!scope) return null;
   const body=scope.body||null;
+
+  /* Legacy chat is a mode inside #home, not a standalone .view.
+     Detect it before data-alpha-view, which intentionally remains "home". */
+  if(body?.classList?.contains('alphaChatMode')||body?.classList?.contains('alphaComposeMode')){
+    if(resolve('chat',scope)) return 'chat';
+  }
+
   const declared=normalizeView(body&&body.dataset?body.dataset.alphaView:'');
   if(declared&&VIEW_SELECTORS[declared]) return declared;
   for(const view of REQUIRED){
