@@ -1,4 +1,4 @@
-const CACHE_NAME="olen-v4.5.2-chat-final-5of5-20260914";
+const CACHE_NAME="olen-v4.5.2-chat-final-5of5-20260914-ux-isolation-2";
 const BASE_PATCH_URL="./alpha-4.3.17-fixes.js?v=4.3.43";
 const SPOTIFY_PATCH_URL="./alpha-4.3.22-spotify-global.js?v=4.3.43";
 const CALENDAR_GOOGLE_URL="./alpha-4.3.30-calendar-google.js?v=4.3.43";
@@ -64,7 +64,7 @@ function with440Patch(response){
 self.addEventListener('fetch',e=>{
  if(e.request.method!=='GET')return;const u=new URL(e.request.url);
  if(e.request.mode==='navigate'){
-  if(u.pathname.endsWith('/olen-5-ux.html')){e.respondWith(fetch(e.request,{cache:'no-store'}));return}
+  if(u.pathname.endsWith('/olen-5-ux.html')){e.respondWith(fetch(e.request,{cache:'reload'}).then(r=>{const h=new Headers(r.headers);h.set('Cache-Control','no-store, no-cache, must-revalidate');return r.text().then(t=>new Response(t,{status:r.status,statusText:r.statusText,headers:h}))}));return}
   e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>with440Patch(r)).then(r=>{const cp=r.clone();caches.open(CACHE_NAME).then(c=>c.put('./index.html',cp)).catch(()=>{});return r}).catch(async()=>{const cached=await caches.match('./index.html');return cached?with440Patch(cached):cached}));return}
  if(u.origin===location.origin&&/\/assets\/olen\/olen-text-(?:planeia|explora|descobre|vive)\.png$/.test(u.pathname)){const freshUrl=new URL(e.request.url);freshUrl.search='?v='+PILLAR_TEXT_REFRESH;e.respondWith(fetch(new Request(freshUrl.toString(),{cache:'reload',credentials:'same-origin'})).then(r=>{const cp=r.clone();caches.open(CACHE_NAME).then(c=>c.put(e.request,cp)).catch(()=>{});return r}).catch(()=>caches.match(e.request)));return}
  if(u.origin===location.origin&&u.pathname.endsWith('/alpha-4.3.17-fixes.js')){e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>rewrittenScriptResponse(r,'base')).catch(()=>caches.match(e.request)));return}
