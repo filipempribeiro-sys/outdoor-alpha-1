@@ -28,9 +28,28 @@
 <button class="nav" data-index="3" data-view="agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/></svg><span>Agenda</span></button>
 <button class="nav" data-index="4" data-view="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4.5 3.5-7 8-7s7.2 2.5 8 7"/></svg><span>Perfil</span></button></nav></div>
 <script>
-const $=s=>document.querySelector(s),$=s=>[...document.querySelectorAll(s)],footer=$('#footer');const intro=$('#intro');if(intro)setTimeout(()=>intro.classList.add('done'),1350);
-function nav(view){const b=$('[data-view="'+view+'"]');$$('.nav').forEach(x=>x.classList.toggle('active',x===b));$$('[data-screen]').forEach(x=>x.classList.toggle('active',x.dataset.screen===view));footer.style.setProperty('--active',b.dataset.index);scrollTo({top:0,behavior:'smooth'})}
-$$('.nav').forEach(b=>b.onclick=()=>nav(b.dataset.view));$('#ask').onclick=()=>nav('chat');$('#profileTop').onclick=()=>nav('profile');
-$('#eventsBtn').onclick=()=>$('#events').classList.toggle('show');$('#premiumBtn').onclick=()=>$('#premium').classList.toggle('show');
-$('#reportBtn').onclick=()=>{const live=$('#liveBtn');live.classList.add('show');live.textContent='3 LIVE';$('#livePanel').classList.add('show')};$('#liveBtn').onclick=()=>$('#livePanel').classList.toggle('show');$('#closeLive').onclick=()=>$('#livePanel').classList.remove('show');
+(function(){
+"use strict";
+const one=(s)=>document.querySelector(s);
+const all=(s)=>Array.from(document.querySelectorAll(s));
+const footer=one("#footer");
+function go(view){
+  const button=one('[data-view="'+view+'"]');
+  if(!button||!footer)return;
+  all(".nav").forEach((x)=>x.classList.toggle("active",x===button));
+  all("[data-screen]").forEach((x)=>x.classList.toggle("active",x.dataset.screen===view));
+  footer.style.setProperty("--active",button.dataset.index);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+all(".nav").forEach((b)=>b.addEventListener("click",()=>go(b.dataset.view)));
+const ask=one("#ask"); if(ask)ask.addEventListener("click",()=>go("chat"));
+const profileTop=one("#profileTop"); if(profileTop)profileTop.addEventListener("click",()=>go("profile"));
+const eventsBtn=one("#eventsBtn"); if(eventsBtn)eventsBtn.addEventListener("click",()=>one("#events")?.classList.toggle("show"));
+const premiumBtn=one("#premiumBtn"); if(premiumBtn)premiumBtn.addEventListener("click",()=>one("#premium")?.classList.toggle("show"));
+const reportBtn=one("#reportBtn"); if(reportBtn)reportBtn.addEventListener("click",()=>{const live=one("#liveBtn");if(live){live.classList.add("show");live.textContent="3 LIVE"}one("#livePanel")?.classList.add("show")});
+const liveBtn=one("#liveBtn"); if(liveBtn)liveBtn.addEventListener("click",()=>one("#livePanel")?.classList.toggle("show"));
+const closeLive=one("#closeLive"); if(closeLive)closeLive.addEventListener("click",()=>one("#livePanel")?.classList.remove("show"));
+const intro=one("#intro");
+if(intro){requestAnimationFrame(()=>{intro.classList.add("play");window.setTimeout(()=>intro.remove(),1750)})}
+})();
 </script></body></html>
