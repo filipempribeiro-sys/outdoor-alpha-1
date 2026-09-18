@@ -4,29 +4,29 @@
    No Render/network calls are performed here. */
 (function(global){
 'use strict';
-if(global.OLEN5?.runtimeLoader?.version==='5.0.2')return;
+if(global.OLEN5?.runtimeLoader?.version==='5.0.3')return;
 
-const VERSION='5.0.2';
+const VERSION='5.0.3';
 const MODULES=Object.freeze([
- './js/olen-core.js',
- './js/olen-experience.js',
- './js/olen-context.js',
- './js/olen-entitlement.js',
- './js/olen-mobility.js',
- './js/olen-research.js',
- './js/olen-provider.js',
- './js/olen-router.js',
- './js/olen-home.js',
- './js/olen-chat.js',
- './js/olen-map-go.js',
- './js/olen-live.js',
- './js/olen-media.js',
- './js/olen-account.js',
- './js/olen-bootstrap.js',
- './js/olen-legacy-dom-adapter.js',
- './js/olen-integration-shell.js'
+ './js/olen-core.js','./js/olen-experience.js','./js/olen-context.js','./js/olen-entitlement.js',
+ './js/olen-mobility.js','./js/olen-research.js','./js/olen-provider.js','./js/olen-router.js',
+ './js/olen-home.js','./js/olen-chat.js','./js/olen-map-go.js','./js/olen-live.js',
+ './js/olen-media.js','./js/olen-account.js','./js/olen-bootstrap.js',
+ './js/olen-legacy-dom-adapter.js','./js/olen-integration-shell.js'
 ]);
 let loadPromise=null,loaded=false,active=false,activationPromise=null;
+let markerSnapshot=null;
+
+function snapshotMarkers(){
+ if(markerSnapshot)return;
+ const html=document.documentElement;
+ markerSnapshot={
+  loaded:html.getAttribute('data-olen5-loaded'),
+  cutover:html.getAttribute('data-olen5-cutover')
+ };
+}
+function restoreAttr(name,value){const html=document.documentElement;if(value===null)html.removeAttribute(name);else html.setAttribute(name,value)}
+function restoreMarkers(){if(!markerSnapshot)return;restoreAttr('data-olen5-loaded',markerSnapshot.loaded);restoreAttr('data-olen5-cutover',markerSnapshot.cutover);markerSnapshot=null}
 
 function script(src){
  return new Promise((resolve,reject)=>{
@@ -45,6 +45,7 @@ function script(src){
 
 async function load(){
  if(loaded)return api;if(loadPromise)return loadPromise;
+ snapshotMarkers();
  loadPromise=(async()=>{
   for(const src of MODULES)await script(src);
   const root=global.OLEN5;
@@ -78,9 +79,9 @@ async function activate(options={}){
 }
 
 function deactivate(reason='production-cutover-stop'){
- if(!active&&!global.OLEN5?.integrationShell?.started)return false;
+ if(!active&&!global.OLEN5?.integrationShell?.started){restoreMarkers();return false}
  const stopped=global.OLEN5?.integrationShell?.stop?.(reason)===true;
- active=false;document.documentElement.removeAttribute('data-olen5-cutover');return stopped;
+ active=false;restoreMarkers();return stopped;
 }
 
 const api=Object.freeze({version:VERSION,MODULES,load,activate,deactivate,get loaded(){return loaded},get active(){return active}});
